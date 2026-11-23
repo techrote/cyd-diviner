@@ -47,7 +47,11 @@ void enter() {
     net::snifferSetChannel(S->ch);
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    net::radioStop();
+#endif
+}
 
 bool onKey(const hal::Key &k) {
     State &s = *S;
@@ -112,7 +116,7 @@ void draw(uint32_t now) {
     textRight(b, 232, 22, s.rssi > -70 ? C_EMBER : C_DIM);
     snprintf(b, sizeof b, "mgmt %lu  data %lu", (unsigned long)s.mgmt[s.ch], (unsigned long)s.data[s.ch]);
     textCentre(b, 120, 30, C_DIM);
-    footer(s.mute ? "MUTED spc  ent hop/hold ;. ch" : "spc mute  ent hop/hold  ;. ch");
+    footer(s.mute ? "MUTED spc  ent hop/hold ;. ch" : "spc mute  ent hop/hold  ;. ch", s.mute ? "Muted" : nullptr);
 }
 } // namespace
 

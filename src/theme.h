@@ -45,6 +45,6 @@ void textRight(const char *s, int rx, int y, uint16_t c, int size = 1);
 
 // Top bar: Daedric name + latin name, battery; bottom hint line.
 void header(const char *daedric, const char *latin);
-void footer(const char *hint);
+void footer(const char *hint, const char *touchHint = nullptr);
 
 } // namespace theme

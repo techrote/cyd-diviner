@@ -1,10 +1,8 @@
-// Hardware seam: everything above this file is the same on the Cardputer ADV
-// (hal_device.cpp: M5Cardputer/M5Unified, ES8311 codec, TCA8418 keyboard) and
-// on the desktop (hal_native.cpp: LovyanGFX SDL panel, SDL audio or a WAV dump).
+// Hardware seam for the Cardputer ADV, ESP32 CYD, and SDL simulator.
 #pragma once
 #include <stdint.h>
 
-#ifdef GRIM_DEVICE
+#if defined(GRIM_DEVICE) && !defined(GRIM_CYD)
 #include <M5GFX.h>
 using Canvas = M5Canvas;
 #else

@@ -7,6 +7,12 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef GRIM_CYD
+#include "cyd_controls.h"
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
+#include <Arduino.h>
+#endif
 
 using namespace theme;
 
@@ -14,8 +20,15 @@ namespace {
 const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
                              &RITE_WIRED,  &RITE_VISIONS, &RITE_ORACLE,
                              &RITE_LINK,   &RITE_SCRY,   &RITE_LISTEN,
-                             &RITE_KIN,    &RITE_NET,    &RITE_GEMINI, &RITE_IR,
-                             &RITE_SENTINEL, &RITE_PULSE, &RITE_PROBE};
+                             &RITE_KIN,    &RITE_NET,    &RITE_GEMINI,
+#ifndef GRIM_CYD
+                             &RITE_IR,
+#endif
+                             &RITE_SENTINEL, &RITE_PULSE,
+#ifndef GRIM_CYD
+                             &RITE_PROBE,
+#endif
+};
 constexpr int N_RITES = sizeof(RITES) / sizeof(RITES[0]);
 constexpr uint32_t FRAME_MS = 33;
 
@@ -24,7 +37,10 @@ Mode mode = SPLASH;
 int sel = 0;
 float slide = 0; // animated carousel position, eases toward sel
 const Rite *active = nullptr;
-uint32_t t0 = 0, volShownAt = 0, escArmedAt = 0, selAt = 0;
+uint32_t t0 = 0, selAt = 0;
+#ifndef GRIM_CYD
+uint32_t volShownAt = 0, escArmedAt = 0;
+#endif
 
 struct Mote {
     float x, y, vy;
@@ -168,6 +184,7 @@ void drawMenu(uint32_t now) {
     textCentre(RITES[sel]->desc, hal::W / 2, 112, C_BONE);
     for (int i = 0; i < N_RITES; ++i) diamond(hal::W / 2 - (N_RITES - 1) * 5 + i * 10, 127, 2, i == sel ? C_EMBER : C_CLOT, i == sel);
 
+#ifndef GRIM_CYD
     if (now - volShownAt < 1200) {
         char b[24];
         snprintf(b, sizeof b, "vol %d", hal::volume() * 100 / 255);
@@ -183,13 +200,20 @@ void drawMenu(uint32_t now) {
         textCentre("again: to the shrine", 120, 56, C_GLOW);
         textCentre("(back to the launcher)", 120, 67, C_DIM);
     } else escArmedAt = 0;
+#endif
 }
 
 void open(int i) {
     uisfx::trigger(uisfx::OPEN);
     active = RITES[i];
     mode = RITE;
+#ifdef GRIM_CYD
+    cyd_controls::setRite(active);
+#endif
     if (active->enter) active->enter();
+#ifdef GRIM_CYD_DIAGNOSTICS
+    Serial.printf("Diviner rite %s heap=%u\n", active->name, ESP.getFreeHeap());
+#endif
 }
 void close() {
     // Silence the audio worker before a rite tears down its state/radio. This
@@ -201,13 +225,32 @@ void close() {
     active = nullptr;
     mode = MENU;
     selAt = hal::ms();
+#ifdef GRIM_CYD
+    cyd_controls::setRite(nullptr);
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
+    Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
+#endif
+}
+
+void finishSplash(uint32_t now) {
+    mode = MENU;
+    selAt = now;
+#ifdef GRIM_CYD
+    cyd_controls::setRite(nullptr);
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
+    Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
+#endif
 }
 
 bool volumeKey(const hal::Key &k) {
     if (k.ch == '-' || k.ch == '_' || k.ch == '=' || k.ch == '+') {
         int v = hal::volume() + ((k.ch == '-' || k.ch == '_') ? -16 : 16);
         hal::setVolume(v < 0 ? 0 : v > 255 ? 255 : v);
+#ifndef GRIM_CYD
         volShownAt = hal::ms();
+#endif
         return true;
     }
     return false;
@@ -227,13 +270,13 @@ void grimLoop() {
     hal::Key k;
     while (hal::pollKey(k)) {
         if (mode == SPLASH) {
-            mode = MENU;
-            selAt = hal::ms();
+            finishSplash(hal::ms());
             uisfx::trigger(uisfx::SELECT);
             continue;
         }
         if (mode == MENU) {
             if (volumeKey(k)) continue;
+#ifndef GRIM_CYD
             if (k.nav == hal::N_ESC) {
                 if (escArmedAt) hal::backToLauncher();
                 escArmedAt = hal::ms();
@@ -241,6 +284,7 @@ void grimLoop() {
                 continue;
             }
             escArmedAt = 0;
+#endif
             if (k.nav == hal::N_LEFT || k.nav == hal::N_UP) { sel = (sel + N_RITES - 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_RIGHT || k.nav == hal::N_DOWN) { sel = (sel + 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_ENTER) open(sel);
@@ -266,17 +310,19 @@ void grimLoop() {
     uint32_t now = hal::ms();
     if (mode == SPLASH) {
         drawSplash(now);
-        if (now - t0 > 2600) { mode = MENU; selAt = now; }
+        if (now - t0 > 2600) finishSplash(now);
     } else if (mode == MENU) {
         drawMenu(now);
     } else {
         active->frame(now);
+#ifndef GRIM_CYD
         if (now - volShownAt < 900) {
             Canvas &cv = hal::canvas();
             cv.fillRect(180, 2, 58, 13, C_DUSK);
             cv.drawRect(180, 2, 58, 13, C_RUST);
             cv.fillRect(182, 7, hal::volume() * 54 / 255, 3, C_EMBER);
         }
+#endif
     }
     hal::present();
     uint32_t spent = hal::ms() - start;

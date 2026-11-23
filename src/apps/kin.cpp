@@ -6,6 +6,7 @@
 #include "../net.h"
 #include "../rite.h"
 #include "../theme.h"
+#include <algorithm>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,6 +22,7 @@ struct State {
     std::vector<net::BleDev> devs;
     std::vector<Spirit> spirits;
     int sel = 0;
+    int scanStatus = -1;
     uint32_t lastScan = 0;
 } *S = nullptr;
 
@@ -40,9 +42,17 @@ const char *vendor(uint16_t c) {
 void enter() {
     if (!S) S = new State();
     net::bleBegin();
+    S->scanStatus = -1;
     S->lastScan = 0;
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    net::radioStop();
+    std::vector<net::BleDev>().swap(S->devs);
+    std::vector<Spirit>().swap(S->spirits);
+    S->sel = 0;
+#endif
+}
 
 bool onKey(const hal::Key &k) {
     State &s = *S;
@@ -58,19 +68,30 @@ void draw(uint32_t now) {
     cv.fillScreen(C_VOID);
     header("KIN", "familiars");
 
-    net::bleScan(s.devs);
-    // keep a spirit per device address, give new ones a spot
-    for (auto &d : s.devs) {
-        bool have = false;
-        for (auto &sp : s.spirits) if (sp.addr == d.addr) have = true;
-        if (!have) {
-            Spirit sp;
-            sp.addr = d.addr;
-            sp.x = sp.tx = 20 + rand() % 180;
-            sp.y = sp.ty = 28 + rand() % 70;
-            sp.ph = (rand() % 628) / 100.f;
-            s.spirits.push_back(sp);
+    if (!s.lastScan || now - s.lastScan >= 250) {
+        s.lastScan = now;
+        s.scanStatus = net::bleScan(s.devs);
+        if (s.scanStatus >= 0) {
+            // Age the animations out when the scanner ages out their devices.
+            s.spirits.erase(std::remove_if(s.spirits.begin(), s.spirits.end(), [&](const Spirit &sp) {
+                return std::none_of(s.devs.begin(), s.devs.end(), [&](const net::BleDev &d) { return d.addr == sp.addr; });
+            }), s.spirits.end());
+            for (const auto &d : s.devs) {
+                auto match = std::find_if(s.spirits.begin(), s.spirits.end(), [&](const Spirit &sp) { return sp.addr == d.addr; });
+                if (match != s.spirits.end()) continue;
+                Spirit sp;
+                sp.addr = d.addr;
+                sp.x = sp.tx = 20 + rand() % 180;
+                sp.y = sp.ty = 28 + rand() % 70;
+                sp.ph = (rand() % 628) / 100.f;
+                s.spirits.push_back(sp);
+            }
         }
+    }
+    if (s.scanStatus == net::BLE_UNAVAILABLE) {
+        textCentre("Bluetooth unavailable", 120, 58, C_EMBER);
+        textCentre("reopen Kin to retry", 120, 72, C_DIM);
+        return;
     }
     if (s.sel >= (int)s.devs.size()) s.sel = s.devs.empty() ? 0 : s.devs.size() - 1;
 

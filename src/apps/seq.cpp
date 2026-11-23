@@ -8,6 +8,10 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#ifdef GRIM_CYD
+#include "../cyd_controls.h"
+#endif
+#include <new>
 #include <stdio.h>
 #include <string.h>
 #ifdef GRIM_DEVICE
@@ -18,6 +22,8 @@ using namespace theme;
 
 namespace {
 constexpr int STEPS = 16, TRACKS = 4;
+constexpr int EchoSamples = 4500;
+using Echo = dsp::Delay<EchoSamples>;
 enum { KICK, SNARE, HAT, ACID };
 const char *TRACK_NAMES[TRACKS] = {"kick", "snar", "hat", "acid"};
 const int8_t MINOR[] = {0, 2, 3, 5, 7, 8, 10};
@@ -61,7 +67,13 @@ struct State {
     float acidHz = 55, acidTarget = 55, acidAccent = 0;
     bool acidSliding = false;
     float hatPrev = 0;
-    dsp::Delay<4500> echo;
+#ifdef GRIM_CYD
+    Echo *delay = nullptr;
+    Echo *echo() { return delay; }
+#else
+    Echo delay;
+    Echo *echo() { return &delay; }
+#endif
     dsp::Scope scope;
 } *S = nullptr;
 
@@ -103,6 +115,7 @@ void trigger(int t, const Step &st) {
 
 void render(int16_t *out, int n) {
     State &s = *S;
+    auto *echo = s.echo();
     for (int i = 0; i < n; ++i, ++s.sampleClock) {
         if (s.playing && s.sampleClock >= s.nextStepAt) {
             int next = (s.step + 1) % STEPS;
@@ -141,8 +154,8 @@ void render(int16_t *out, int n) {
         float acid = dsp::softclip(s.acidF.lp(s.acidOsc.saw()) * 2.2f) * s.acidAmp.tick() * 0.42f;
 
         float dry = kick * 0.9f + sn * 0.42f + hat + acid;
-        float wet = s.echo.tap(4499);
-        s.echo.put(acid * 0.5f + sn * 0.12f + wet * 0.38f);
+        float wet = echo ? echo->tap(EchoSamples - 1) : 0.f;
+        if (echo) echo->put(acid * 0.5f + sn * 0.12f + wet * 0.38f);
         int16_t p = dsp::toPcm((dry + wet * 0.35f) * 0.6f);
         out[i] = p;
         if ((i & 1) == 0) s.scope.put(p);
@@ -198,7 +211,12 @@ void loadSong() {}
 
 void enter() {
     if (!S) {
+#ifdef GRIM_CYD
+        static State state;
+        S = &state;
+#else
         S = new State();
+#endif
         S->kickAmp.time(0.32f);
         S->kickPitch.time(0.035f);
         S->snareF.set(1900, 0.4f);
@@ -217,9 +235,18 @@ void enter() {
         rollBass();
         loadSong(); // restore saved banks if any (device only)
     }
+#ifdef GRIM_CYD
+    if (!S->delay) S->delay = new (std::nothrow) Echo();
+#endif
     hal::setAudio(render);
 }
-void leave() { saveSong(); }
+void leave() {
+#ifdef GRIM_CYD
+    delete S->delay;
+    S->delay = nullptr;
+#endif
+    saveSong();
+}
 
 const char PIANO[] = "awsedftgyhujk";
 
@@ -236,7 +263,12 @@ bool onKey(const hal::Key &k) {
     case hal::N_TAB: s.cur = (s.cur + 1) % NPAT; return true; // next pattern
     default: break;
     }
-    if (s.cy == ACID && k.ch) {
+    bool noteKey = s.cy == ACID && k.ch;
+#ifdef GRIM_CYD
+    // The Song and Copy buttons share letters with the bass keyboard.
+    noteKey = noteKey && !k.fn;
+#endif
+    if (noteKey) {
         const char *p = strchr(PIANO, k.ch);
         if (p) {
             cell.note = (cell.note >= 12 ? 12 : 0) + (p - PIANO);
@@ -281,6 +313,20 @@ void draw(uint32_t now) {
     header("SEQ", "sequencer");
 
     const int gx = 30, gy = 24, cw = 13, ch = 17;
+#ifdef GRIM_CYD
+    constexpr int bankX = 4, bankY = 113, bankW = 30, bankH = 11, bankGap = 3;
+    int tx, ty;
+    if (cyd_controls::takeViewportTap(tx, ty)) {
+        if (ty >= gy && ty < gy + TRACKS * (ch + 2) && tx >= gx && tx < gx + STEPS * cw) {
+            s.cx = (tx - gx) / cw;
+            s.cy = (ty - gy) / (ch + 2);
+            Step &step = s.bank[s.cur].pat[s.cy][s.cx];
+            step.on = !step.on;
+        } else if (ty >= bankY && ty < bankY + bankH && tx >= bankX && tx < bankX + NPAT * (bankW + bankGap)) {
+            s.cur = (tx - bankX) / (bankW + bankGap);
+        }
+    }
+#endif
     int play = s.step;
     for (int t = 0; t < TRACKS; ++t) {
         int y = gy + t * (ch + 2);
@@ -315,16 +361,22 @@ void draw(uint32_t now) {
         int y = sy - a / 2600;
         cv.drawPixel(gx + i, y, C_BLOOD);
     }
-    // pattern banks A-D row (top-right), active highlighted, song chain lit
+    // Pattern banks A-D, active highlighted, song chain lit.
     for (int pi = 0; pi < NPAT; ++pi) {
-        int bx = 150 + pi * 15, by = 22;
+#ifdef GRIM_CYD
+        const int bx = bankX + pi * (bankW + bankGap), by = bankY, bw = bankW, bh = bankH;
+#else
+        const int bx = 150 + pi * 15, by = 22, bw = 12, bh = 10;
+#endif
         bool act = pi == s.cur;
-        cv.fillRect(bx, by, 12, 10, act ? C_RUST : C_DUSK);
-        if (s.song) cv.drawRect(bx, by, 12, 10, C_EMBER);
+        cv.fillRect(bx, by, bw, bh, act ? C_RUST : C_DUSK);
+        if (s.song) cv.drawRect(bx, by, bw, bh, C_EMBER);
         char L[2] = {(char)('A' + pi), 0};
-        text(L, bx + 3, by + 2, act ? C_GLOW : C_DIM);
+        textCentre(L, bx + bw / 2, by + 2, act ? C_GLOW : C_DIM);
     }
+#ifndef GRIM_CYD
     if (s.song) text("SONG", 150, 34, C_EMBER);
+#endif
 
     char b[48];
     snprintf(b, sizeof b, "%s %3dbpm sw%d", s.playing ? ">" : "#", s.bpm, (int)(s.swing * 100));

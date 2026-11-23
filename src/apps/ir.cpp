@@ -70,7 +70,7 @@ void sendCode(const Code &c) {
 void enter() {
     if (!S) S = new State();
 #ifdef GRIM_DEVICE
-    IrSender.begin(GRIM_IR_PIN);
+    IrSender.begin(); // IR_SEND_PIN is fixed above.
 #endif
 }
 void leave() { S->banish = -1; }

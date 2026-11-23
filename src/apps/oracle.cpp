@@ -8,6 +8,7 @@
 #include "../rite.h"
 #include "../theme.h"
 #include <math.h>
+#include <new>
 #include <stdio.h>
 #include <string.h>
 
@@ -38,6 +39,8 @@ const char *const UTTERANCES[] = {
 };
 constexpr int N_UTT = sizeof(UTTERANCES) / sizeof(UTTERANCES[0]);
 const char *POSITIONS[3] = {"past", "present", "wired"};
+constexpr int EchoSamples = 6000;
+using Echo = dsp::Delay<EchoSamples>;
 
 struct State {
     int runes[3] = {-1, -1, -1};
@@ -50,11 +53,18 @@ struct State {
     volatile int pendingChime = -1;
     float drone = 0;
     dsp::Osc low;
-    dsp::Delay<6000> dl;
+#ifdef GRIM_CYD
+    Echo *delay = nullptr;
+    Echo *echo() { return delay; }
+#else
+    Echo delay;
+    Echo *echo() { return &delay; }
+#endif
 } *S = nullptr;
 
 void render(int16_t *out, int n) {
     State &s = *S;
+    auto *echo = s.echo();
     if (s.pendingChime >= 0) {
         int i = s.pendingChime;
         s.pendingChime = -1;
@@ -70,8 +80,8 @@ void render(int16_t *out, int n) {
             float e = s.env[i].tick();
             x += (s.bell[i].sine() + s.bellB[i].sine() * 0.35f) * e * 0.3f;
         }
-        float wet = s.dl.tap(5999);
-        s.dl.put(x + wet * 0.45f);
+        float wet = echo ? echo->tap(EchoSamples - 1) : 0.f;
+        if (echo) echo->put(x + wet * 0.45f);
         out[k] = dsp::toPcm(x + wet * 0.4f);
     }
 }
@@ -89,16 +99,29 @@ void cast() {
 
 void enter() {
     if (!S) {
+#ifdef GRIM_CYD
+        static State state;
+        S = &state;
+#else
         S = new State();
+#endif
         S->rng.s ^= hal::ms() * 2654435761u;
         S->utt = S->rng.next() % N_UTT;
     }
+#ifdef GRIM_CYD
+    if (!S->delay) S->delay = new (std::nothrow) Echo();
+#endif
     for (auto &e : S->env) e.time(1.4f);
     S->low.hz(55);
     S->uttAt = hal::ms();
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    delete S->delay;
+    S->delay = nullptr;
+#endif
+}
 
 bool onKey(const hal::Key &k) {
     if (k.nav == hal::N_ENTER) cast();
@@ -150,7 +173,11 @@ void draw(uint32_t now) {
             text(line, 30, 83 + i * 9, i == 2 ? C_GLOW : C_BONE);
         }
     } else {
+#ifdef GRIM_CYD
+        textCentre("tap Cast to draw the runes", 120, 92, C_DIM);
+#else
         textCentre("press enter to cast the runes", 120, 92, C_DIM);
+#endif
     }
     // typed utterance
     const char *u = UTTERANCES[s.utt];
@@ -160,7 +187,9 @@ void draw(uint32_t now) {
     snprintf(buf, sizeof buf, "%.*s%s", chars < len ? chars : len, u, (now / 300) & 1 ? "_" : " ");
     cv.drawFastHLine(0, 111, 240, C_CLOT);
     textCentre(buf, 120, 115, C_EMBER);
+#ifndef GRIM_CYD
     textCentre("ent cast  spc speak", 120, 126, C_DIM);
+#endif
 }
 } // namespace
 

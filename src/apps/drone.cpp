@@ -8,6 +8,7 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include <new>
 #include <stdio.h>
 #include <string.h>
 #ifdef GRIM_DEVICE
@@ -31,6 +32,8 @@ constexpr int N_SCALES = sizeof(SCALES) / sizeof(SCALES[0]);
 const char *NOTE_NAMES[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
 constexpr int NV = 5;
+constexpr int DelaySamples = 4096;
+using Feedback = dsp::Delay<DelaySamples>;
 struct Voice {
     dsp::Osc a, b, sub;
     float hz = 110, target = 110;
@@ -57,7 +60,13 @@ struct State {
     // Keep the feedback buffer below 20 KB on the PSRAM-less Cardputer. The
     // old 9000-sample delay used 36 KB by itself and could exhaust/fragment
     // heap after visiting radio-heavy rites before opening DRONE.
-    dsp::Delay<4096> dl;
+#ifdef GRIM_CYD
+    Feedback *delay = nullptr;
+    Feedback *feedback() { return delay; }
+#else
+    Feedback delay;
+    Feedback *feedback() { return &delay; }
+#endif
     float dlLp = 0;
     uint32_t ctrl = 0, nextMove = 0;
     float cutoffNow = 600;
@@ -113,6 +122,7 @@ void moveVoice() {
 
 void render(int16_t *out, int n) {
     State &s = *S;
+    auto *delay = s.feedback();
     for (int i = 0; i < n; ++i) {
         if ((s.ctrl++ & 63) == 0) {
             // control rate: glides, swells, filter LFO, wandering, bells
@@ -157,9 +167,9 @@ void render(int16_t *out, int n) {
         float bl = s.bell.sine() * s.bellEnv.tick();
         mix += bl * 0.18f;
         // dark delay: two taps, low-passed feedback
-        float wet = s.safeMode ? 0.f : s.dl.tap(4095) * 0.55f + s.dl.tap(3072) * 0.3f;
+        float wet = !delay || s.safeMode ? 0.f : delay->tap(DelaySamples - 1) * 0.55f + delay->tap(3072) * 0.3f;
         s.dlLp += (wet - s.dlLp) * 0.18f;
-        s.dl.put(mix + s.dlLp * 0.62f);
+        if (delay) delay->put(mix + s.dlLp * 0.62f);
         float o = mix * 0.8f + s.dlLp * 0.5f;
         int16_t p = dsp::toPcm(o * 0.9f);
         out[i] = p;
@@ -169,28 +179,44 @@ void render(int16_t *out, int n) {
 
 void enter() {
     if (!S) {
+#ifdef GRIM_CYD
+        static State state;
+        S = &state;
+        seed(true);
+#else
         S = new State();
         if (!S) {
             // Do not let an exhausted heap turn opening DRONE into a reboot.
             hal::setAudio(nullptr);
             return;
         }
+#endif
     }
     S->lfo.hz(0.045f);
     S->lfo2.hz(0.013f);
     S->bellEnv.time(1.6f);
     S->bellF.set(880, 0.9f);
-#ifdef GRIM_DEVICE
+#ifdef GRIM_CYD
+    if (!S->delay) S->delay = new (std::nothrow) Feedback();
+#elif defined(GRIM_DEVICE)
     // Radio rites can leave the PSRAM-less S3 heap fragmented. Safe mode keeps
     // the core drone alive while dropping bells and feedback if headroom is low.
     S->safeMode = esp_get_free_heap_size() < 60000;
 #else
     S->safeMode = false;
 #endif
+#ifndef GRIM_CYD
     seed(true);
+#endif
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    delete S->delay;
+    S->delay = nullptr;
+    S->dlLp = 0;
+#endif
+}
 
 const char PIANO[] = "awsedftgyhujk";
 

@@ -1,9 +1,11 @@
-# cardputer-adv-diviner
+# Diviner
 
 A Daedric / Lain-core skinned companion firmware for the **M5Stack Cardputer ADV**,
 booted by the [Launcher](https://github.com/bmorcelli/Launcher). Sixteen "rites"
 across four domains — **sound**, **sight**, **the wired**, and **wards** — in one
 blood-and-ember aesthetic, with a hand-rasterised Daedric glyph font.
+The **ESP32-2432S028R Cheap Yellow Display (CYD)** build runs as standalone
+firmware with landscape touch controls and an on-screen keyboard.
 
 <p align="center">
   <img src="docs/previews/splash.png" width="47%" alt="splash">
@@ -61,11 +63,40 @@ Kingdom-Hearts-style sound feedback.
 ## Build
 
 ```sh
+pio run -e cyd            # ESP32-2432S028R (4 MB flash)
 pio run -e cardputer      # .pio/build/cardputer/firmware.bin -> install via the Launcher
 pio run -e native         # desktop simulator (SDL2), 240x135 at 3x
 .pio/build/native/program # laptop keys: arrows = Fn+;./  Alt = Fn  Esc = `
 tools/shots.sh shots      # headless screenshots + WAVs of every rite
 ```
+
+### Installing on the CYD
+
+The `cyd` target uses an ILI9341 LCD, XPT2046 resistive touch and the GPIO26
+speaker amplifier on the ESP32-2432S028R. Use the matching board revision.
+Connect the CYD over USB and run the upload command with its serial port.
+
+```sh
+pio run -e cyd -t upload --upload-port COM21
+pio device monitor -e cyd --port COM21
+```
+
+Close the serial monitor before uploading. If the log reports `Wrong boot mode`,
+hold **BOOT**, tap **RESET/EN**, and keep holding **BOOT** until the uploader
+connects. Diviner starts directly after reset. The images in `dist/` are for
+the Cardputer ADV.
+
+Tap the carousel's centre card to open a rite or tap either side to browse.
+Each rite has labelled controls below its viewport. **Menu** returns to the
+carousel, and the board's **BOOT** button also works as Back while Diviner is
+running. Tap steps directly in **seq** and use **More** for tempo and pattern
+actions. **beat**, **wifi** and **gemini** use the on-screen keyboard. Audio
+requires a speaker attached to the CYD's two-pin speaker connector.
+
+The CYD build includes 14 rites. **Banish** requires an IR emitter, and **Probe**
+is excluded from the CYD build. **Pulse** measures CSI from the connected 2.4 GHz
+access point and indicates when it is waiting for frames. The Bluetooth scanner
+tracks up to 32 recent devices to fit the CYD's memory.
 
 ### Running in the simulator
 
@@ -88,10 +119,15 @@ first with `esptool read-flash 0 0x800000 backup.bin`.
 
 ## Development
 
+The `cyd-diagnostics` target enables USB serial bench testing at 115200 baud.
+Send `status` for heap, display timing and audio counters, `tap X Y` to inject
+a landscape touch, or `shot` to read the LCD as 320×240 little-endian RGB565.
+
 ### Layout
 - `src/hal.*` — the hardware seam. `hal_device.cpp`: M5Cardputer, ES8311 codec,
-  TCA8418 keyboard, 24 kHz audio with a UI-sfx overlay. `hal_native.cpp`: LovyanGFX
-  SDL panel + SDL/WAV audio.
+  TCA8418 keyboard, 24 kHz audio with a UI-sfx overlay. `hal_cyd.cpp`: LovyanGFX
+  LCD, XPT2046 touch, and ESP32 DAC audio. `cyd_controls.cpp` provides the touch
+  dock and keyboard. `hal_native.cpp`: LovyanGFX SDL panel + SDL/WAV audio.
 - `src/net.*` — Wi-Fi, BLE, promiscuous sniffing, LAN sweep, CSI, Gemini (TLS).
   `net_device.cpp` is real; `net_native.cpp` returns canned data for the sim.
 - `src/theme.*`, `src/daedric_glyphs.h`, `src/dsp.h`, `src/uisfx.h` — skin, font,
