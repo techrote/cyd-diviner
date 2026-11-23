@@ -98,6 +98,31 @@ is excluded from the CYD build. **Pulse** measures CSI from the connected 2.4 GH
 access point and indicates when it is waiting for frames. The Bluetooth scanner
 tracks up to 32 recent devices to fit the CYD's memory.
 
+### Streaming CYD audio to VLC on Windows
+
+The `cyd-pcm` firmware sends Diviner’s mixed audio over USB serial as 24 kHz,
+16-bit mono PCM at 533,333 baud. The VLC input plugin accepts `cydpcm://COM21` and the CYD's
+blue LED lights while it is streaming. Use the CYD volume controls to adjust
+the mix before it is sent to VLC.
+
+```powershell
+pio run -e cyd-pcm -t upload --upload-port COM21
+.\tools\vlc\build.ps1
+.\tools\vlc\open.ps1 -Port COM21
+```
+
+The build script uses the Windows x64 VLC 3.0.24 SDK. The launcher loads the
+plugin into a new VLC instance and sets 150 ms of live caching. Change the
+buffer with `-CachingMs` or open another CYD port by changing `-Port`. Use
+`-VlcPath` to choose a different VLC executable. To stage a matching portable
+copy, run `build.ps1 -StagePortable` and pass
+`.pio/vlc-sdk/vlc-3.0.24/vlc.exe` to `-VlcPath`.
+
+Close serial monitors before starting playback because only one program can
+open the COM port at a time. Stop playback before flashing or opening a
+monitor. To hear the synth, open a sound rite such as **drone** or **seq** on
+the CYD.
+
 ### Running in the simulator
 
 The simulator plays audio through SDL, or to a file with `GRIM_WAV=out.wav`;
