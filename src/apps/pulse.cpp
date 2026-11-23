@@ -21,7 +21,8 @@ struct State {
     int col = 0;
     float bins[NB] = {};
     float motion = 0, baseline = 0.06f, sens = 1.f;
-    bool mute = false, mono = false, online = false;
+    bool mute = false, mono = false, online = false, csiReady = false;
+    volatile bool hasSamples = false;
     uint32_t lastCol = 0;
     dsp::Osc tick, hum;
     dsp::Decay tickEnv;
@@ -35,7 +36,7 @@ void render(int16_t *out, int n) {
     State &s = *S;
     if (s.tickReq) { s.tickReq = 0; s.tick.hz(1800); s.tickEnv.trigger(0.4f); }
     for (int i = 0; i < n; ++i) {
-        if (s.mute) { out[i] = 0; continue; }
+        if (s.mute || !s.hasSamples) { out[i] = 0; continue; }
         float x = s.hum.sine() * 0.015f * (0.5f + s.level);
         x += s.tick.sine() * s.tickEnv.tick() * 0.3f;
         out[i] = dsp::toPcm(x);
@@ -44,18 +45,24 @@ void render(int16_t *out, int n) {
 
 void enter() {
     if (!S) S = new State();
+    S->online = false;
+    S->csiReady = false;
+    S->hasSamples = false;
+    S->tickAccum = 0;
+    S->tickReq = 0;
+    memset(S->wf, 0, sizeof S->wf);
     S->hum.hz(70);
     S->tickEnv.time(0.03f);
     net::wifiBegin();
     hal::setAudio(render);
 }
-void leave() { net::csiEnd(); }
+void leave() { if (S->csiReady) net::csiEnd(); }
 
 bool onKey(const hal::Key &k) {
     State &s = *S;
     if (k.nav == hal::N_UP || k.nav == hal::N_RIGHT) s.sens = fminf(4.f, s.sens + 0.25f);
     else if (k.nav == hal::N_DOWN || k.nav == hal::N_LEFT) s.sens = fmaxf(0.25f, s.sens - 0.25f);
-    else if (k.ch == 'l') s.baseline = s.motion; // mark "this is still"
+    else if (k.ch == 'l' && s.hasSamples) s.baseline = s.motion; // mark "this is still"
     else if (k.ch == ' ') s.mute = !s.mute;
     else if (k.ch == 'm') s.mono = !s.mono;
     return true;
@@ -68,17 +75,32 @@ void draw(uint32_t now) {
     header("PULSE", "csi sense");
 
     if (net::wifiState() != net::WST_ONLINE) {
+        if (s.csiReady) net::csiEnd();
         s.online = false;
+        s.csiReady = false;
+        s.hasSamples = false;
         textCentre("no link", 120, 56, C_BLOOD);
         textCentre("join a network in LINK;", 120, 70, C_DIM);
         textCentre("csi needs an active connection", 120, 80, C_DIM);
         footer("csi motion sense");
         return;
     }
-    if (!s.online) { net::csiBegin(); s.online = true; }
+    if (!s.online) {
+        s.csiReady = net::csiBegin();
+        s.online = true;
+    }
 
-    float m;
-    int nb = net::csiRead(m, s.bins, NB);
+    float m = 0;
+    int nb = s.csiReady ? net::csiRead(m, s.bins, NB) : -1;
+    s.hasSamples = nb > 0;
+    if (!s.hasSamples) {
+        const char *status = s.csiReady ? "waiting for CSI" : "CSI unavailable";
+        const char *hint = s.csiReady ? "needs traffic from the router" : "reopen Pulse to retry";
+        textCentre(status, 120, 56, C_EMBER);
+        textCentre(hint, 120, 70, C_DIM);
+        footer("csi motion sense");
+        return;
+    }
     float rel = (m - s.baseline) * s.sens;
     if (rel < 0) rel = 0;
     if (rel > 1) rel = 1;
@@ -90,7 +112,7 @@ void draw(uint32_t now) {
     if (s.tickAccum >= 1.f) { s.tickAccum = 0; s.tickReq = 1; }
 
     // scroll waterfall one column per ~60ms
-    if (nb > 0 && now - s.lastCol > 60) {
+    if (now - s.lastCol > 60) {
         s.lastCol = now;
         for (int y = 0; y < WF_H; ++y) {
             int bi = y * nb / WF_H;
@@ -135,7 +157,7 @@ void draw(uint32_t now) {
     text(b, px, 112, C_DIM);
     snprintf(b, sizeof b, "raw %.2f", s.motion);
     textRight(b, 236, 112, C_DIM);
-    footer(s.mute ? "MUTE m  ;. sens  l baseline" : "spc mute  ;. sens  l baseline");
+    footer(s.mute ? "MUTE m  ;. sens  l baseline" : "spc mute  ;. sens  l baseline", s.mute ? "Muted" : nullptr);
 }
 } // namespace
 

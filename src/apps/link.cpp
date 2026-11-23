@@ -8,6 +8,9 @@
 #include "../rite.h"
 #include "../textedit.h"
 #include "../theme.h"
+#ifdef GRIM_CYD
+#include "../cyd_controls.h"
+#endif
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -55,6 +58,7 @@ bool onKey(const hal::Key &k) {
     }
 
     if (s.aps.empty()) return true;
+    if (s.sel >= static_cast<int>(s.aps.size())) s.sel = s.aps.size() - 1;
     if (k.nav == hal::N_UP) s.sel = (s.sel + s.aps.size() - 1) % s.aps.size();
     else if (k.nav == hal::N_DOWN) s.sel = (s.sel + 1) % s.aps.size();
     else if (k.ch == 'f') { net::wifiForget(s.aps[s.sel].ssid.c_str()); net::wifiScan(s.aps); }
@@ -81,19 +85,36 @@ void bars(int rssi, int x, int y, uint16_t c) {
 
 void draw(uint32_t now) {
     State &s = *S;
+#ifdef GRIM_CYD
+    cyd_controls::setTextMode(s.phase == ASKPASS ? cyd_controls::TextMode::Password : cyd_controls::TextMode::None);
+#endif
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);
     header("LINK", "wifi");
 
     net::WifiState ws = net::wifiState();
-    const char *st = ws == net::WST_ONLINE ? "online" : ws == net::WST_CONNECTING ? "linking.." :
-                     ws == net::WST_FAILED ? "offline" : "...";
+    const char *st = ws == net::WST_ONLINE ? "online" : ws == net::WST_CONNECTING ? "linking..." :
+                     ws == net::WST_SCANNING ? "scanning" : "offline";
     char line[64];
+#ifdef GRIM_CYD
+    if (ws == net::WST_ONLINE) {
+        std::string ssid = net::wifiSSID();
+        const std::string ip = net::wifiIP();
+        // Reserve the left side for the title and keep the full IPv4 address.
+        const size_t ssidWidth = 25 - ip.size() - 2;
+        if (ssid.size() > ssidWidth) ssid = ssid.substr(0, ssidWidth - 3) + "...";
+        snprintf(line, sizeof line, "%s  %s", ssid.c_str(), ip.c_str());
+    } else {
+        snprintf(line, sizeof line, "%s", st);
+    }
+    textRight(line, hal::W - 4, 5, ws == net::WST_ONLINE ? C_GLOW : C_DIM);
+#else
     if (ws == net::WST_ONLINE)
         snprintf(line, sizeof line, "%s  %s", net::wifiSSID().c_str(), net::wifiIP().c_str());
     else
         snprintf(line, sizeof line, "%s", st);
     textRight(line, 178, 5, ws == net::WST_ONLINE ? C_GLOW : C_DIM);
+#endif
 
     // once a link is up, probe for a captive portal (walled garden) once
     if (ws == net::WST_ONLINE) { if (!s.capAsked) { net::captiveCheck(); s.capAsked = true; } }
@@ -107,7 +128,9 @@ void draw(uint32_t now) {
         snprintf(t, sizeof t, "key for %s", s.joining);
         textCentre(t, 120, 46, C_BONE);
         s.pass.draw(24, 60, 192, now);
+#ifndef GRIM_CYD
         textCentre("enter: join   ` : cancel", 120, 80, C_DIM);
+#endif
         return;
     }
 
@@ -129,6 +152,7 @@ void draw(uint32_t now) {
     }
 
     const int rows = 7, rh = 12, y0 = 22;
+    if (s.sel >= static_cast<int>(s.aps.size())) s.sel = s.aps.empty() ? 0 : s.aps.size() - 1;
     if (s.sel < s.top) s.top = s.sel;
     if (s.sel >= s.top + rows) s.top = s.sel - rows + 1;
     for (int i = 0; i < rows && s.top + i < (int)s.aps.size(); ++i) {
@@ -150,20 +174,25 @@ void draw(uint32_t now) {
 
     // captive-portal status takes over the hint line once a link is up
     const char *foot = "ent join  f forget  r rescan";
+    const char *touchFoot = nullptr;
     if (ws == net::WST_ONLINE) {
         if (ps == net::PORTAL_CAPTIVE) {
             // once p has been tried and we're still walled in, the portal wants
             // a real browser login (form/JS) the device can't drive — say so
             foot = s.capTried ? "needs a browser login" : "captive portal!  p: accept";
+            touchFoot = s.capTried ? "needs a browser login" : "tap Portal to accept";
             std::string u = net::captiveURL();
             if (!u.empty()) textCentre(u.c_str(), 120, hal::H - 22, C_EMBER);
             else if (s.capTried) textCentre("open it on your phone", 120, hal::H - 22, C_DIM);
-        } else if (ps == net::PORTAL_CHECKING) foot = "checking the aether...";
-        else if (ps == net::PORTAL_JOINING) foot = "opening the portal...";
-        else if (ps == net::PORTAL_ONLINE) foot = "the aether is open";
-        else if (ps == net::PORTAL_FAILED) foot = "walled off  p: retry";
+        } else if (ps == net::PORTAL_CHECKING) foot = touchFoot = "checking the aether...";
+        else if (ps == net::PORTAL_JOINING) foot = touchFoot = "opening the portal...";
+        else if (ps == net::PORTAL_ONLINE) foot = touchFoot = "the aether is open";
+        else if (ps == net::PORTAL_FAILED) {
+            foot = "walled off  p: retry";
+            touchFoot = "tap Portal to retry";
+        }
     }
-    footer(foot);
+    footer(foot, touchFoot);
 }
 } // namespace
 

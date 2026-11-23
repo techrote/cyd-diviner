@@ -169,7 +169,7 @@ std::vector<Host> lanHosts() {
 namespace {
 float csiMotion = 0;
 }
-void csiBegin() {}
+bool csiBegin() { return true; }
 void csiEnd() {}
 int csiRead(float &motion, float *bins, int nbins) {
     uint32_t t = now();

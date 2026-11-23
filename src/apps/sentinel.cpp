@@ -96,7 +96,13 @@ void enter() {
     net::bleBegin(); // one radio, no auto-cycling (switching stacks on a timer crashes)
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    if (S->mode == K_BLE) net::radioStop();
+    std::vector<net::AP>().swap(S->scanAps);
+    std::vector<net::BleDev>().swap(S->scanDevs);
+#endif
+}
 
 Watch *find(const std::string &id) {
     for (auto &w : S->watch) if (w.id == id) return &w;
@@ -199,8 +205,17 @@ bool onKey(const hal::Key &k) {
             s.learning = true;
             s.learnUntil = hal::ms() + 12000;
             s.newCount = s.droneCount = 0;
-            if (s.mode == K_WIFI) net::wifiBegin();
-            else net::bleBegin();
+            if (s.mode == K_WIFI) {
+#ifdef GRIM_CYD
+                std::vector<net::BleDev>().swap(s.scanDevs);
+#endif
+                net::wifiBegin();
+            } else {
+#ifdef GRIM_CYD
+                std::vector<net::AP>().swap(s.scanAps);
+#endif
+                net::bleBegin();
+            }
         }
         return true;
     }
@@ -223,7 +238,14 @@ void draw(uint32_t now) {
         // only merge a fresh result set: bleScan returns -1 (and leaves
         // scanDevs untouched) on its first call after a (re)start, so merging
         // unconditionally would re-fold stale devices with last=now.
-        if (net::bleScan(s.scanDevs) >= 0) mergeBle(s.scanDevs, now);
+        const int count = net::bleScan(s.scanDevs);
+        if (count == net::BLE_UNAVAILABLE) {
+            header("SENTINEL", "ble");
+            textCentre("Bluetooth unavailable", 120, 58, C_EMBER);
+            textCentre("switch radio or reopen to retry", 120, 72, C_DIM);
+            return;
+        }
+        if (count >= 0) mergeBle(s.scanDevs, now);
     }
     if (s.learning && now > s.learnUntil) s.learning = false;
 
@@ -303,7 +325,7 @@ void draw(uint32_t now) {
     char foot[48];
     snprintf(foot, sizeof foot, "%s%s ent:know w/b:band spc:%s", s.mute ? "MUTE " : "",
              s.armed ? "ARMED" : "idle", s.armed ? "disarm" : "arm");
-    footer(foot);
+    footer(foot, s.armed ? (s.mute ? "Armed / Muted" : "Armed") : (s.mute ? "Idle / Muted" : "Idle"));
 }
 } // namespace
 

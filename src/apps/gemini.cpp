@@ -9,6 +9,9 @@
 #include "../rite.h"
 #include "../textedit.h"
 #include "../theme.h"
+#ifdef GRIM_CYD
+#include "../cyd_controls.h"
+#endif
 #include <math.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -38,6 +41,7 @@ struct State {
     std::string pendingBase; // base URL for resolving links / input target
     bool loadedOnce = false;
     bool parsed = false; // parsed the current GEM_DONE body yet
+    bool responsePrompted = false;
     // wrapped display rows, rebuilt only on parse (not per frame)
     std::vector<std::pair<const GLine *, std::string>> rows;
     uint32_t spin = 0;
@@ -114,6 +118,7 @@ void go(const char *url, bool pushHistory = true) {
     if (pushHistory && !s.pendingBase.empty()) s.history.push_back(s.pendingBase);
     s.pendingBase = url;
     s.parsed = false; // a new fetch; the next GEM_DONE should (re)parse once
+    s.responsePrompted = false;
     net::gemGet(url);
 }
 
@@ -160,12 +165,14 @@ bool onKey(const hal::Key &k) {
     }
     if (s.mode == M_BOOKMARKS) {
         if (k.nav == hal::N_ESC) { s.mode = M_BROWSE; return true; }
+        if (s.marks.empty()) return true;
         if (k.nav == hal::N_UP) s.markSel = (s.markSel + s.marks.size() - 1) % s.marks.size();
         else if (k.nav == hal::N_DOWN) s.markSel = (s.markSel + 1) % s.marks.size();
         else if (k.nav == hal::N_ENTER && !s.marks.empty()) { go(s.marks[s.markSel].c_str()); s.mode = M_BROWSE; }
         return true;
     }
     // M_BROWSE
+    if (net::gemState() == net::GEM_FETCHING) return true;
     if (k.nav == hal::N_UP) { if (s.scroll > 0) s.scroll--; return true; }
     if (k.nav == hal::N_DOWN) { s.scroll++; return true; }
     if (k.ch >= '1' && k.ch <= '9') {
@@ -178,7 +185,12 @@ bool onKey(const hal::Key &k) {
         if (!s.history.empty()) { std::string u = s.history.back(); s.history.pop_back(); go(u.c_str(), false); }
         return true;
     }
-    if (k.ch == 'g') { s.edit.set(s.pendingBase.c_str()); s.mode = M_URLBAR; return true; }
+    if (k.ch == 'g') {
+        s.edit.mask = false;
+        s.edit.set(s.pendingBase.c_str());
+        s.mode = M_URLBAR;
+        return true;
+    }
     if (k.ch == 'b') {
         // 'b' also bookmarks current if held? keep simple: open list
         bool have = false;
@@ -212,13 +224,23 @@ void draw(uint32_t now) {
     // show URL (shortened) top-right
     std::string u = net::gemURL();
     if (u.empty()) u = s.pendingBase;
+#ifdef GRIM_CYD
+    // Leave room for the rite title and keep the capsule host at the start.
+    if (u.rfind("gemini://", 0) == 0) u.erase(0, 9);
+    if (u.size() > 21) u = u.substr(0, 18) + "...";
+    textRight(u.c_str(), hal::W - 4, 5, C_DIM);
+#else
     char ub[40];
     const char *uu = u.c_str();
     if (u.size() > 30) uu = u.c_str() + u.size() - 30;
     snprintf(ub, sizeof ub, "%s", uu);
     textRight(ub, 178, 5, C_DIM);
+#endif
 
     if (gs == net::GEM_FETCHING) {
+#ifdef GRIM_CYD
+        cyd_controls::setTextMode(cyd_controls::TextMode::Waiting);
+#endif
         textCentre("opening the channel...", 120, 60, C_DIM);
         float a = now * 0.006f;
         for (int i = 0; i < 7; ++i) {
@@ -231,21 +253,17 @@ void draw(uint32_t now) {
         textCentre(b, 120, 92, C_DIM);
         return;
     }
-    if (gs == net::GEM_INPUT && s.mode != M_INPUT) {
+    if (gs == net::GEM_INPUT && !s.responsePrompted) {
+        s.responsePrompted = true;
         s.mode = M_INPUT;
         s.edit.clear();
         s.edit.mask = net::gemStatus() == 11; // sensitive input
     }
-    if (gs == net::GEM_ERROR) {
-        char b[64];
-        int status = net::gemStatus();
-        snprintf(b, sizeof b, status ? "gemini status %d" : "network failure", status);
-        textCentre(b, 120, 54, C_BLOOD);
-        std::string m = net::gemMeta();
-        textCentre(m.empty() ? "no response from capsule" : m.c_str(), 120, 68, C_DIM);
-        footer("u back  g go  b marks");
-        return;
-    }
+#ifdef GRIM_CYD
+    using cyd_controls::TextMode;
+    cyd_controls::setTextMode(s.mode == M_URLBAR ? TextMode::Url : s.mode == M_INPUT ? TextMode::Prompt :
+                              s.mode == M_BOOKMARKS ? TextMode::Bookmarks : TextMode::None);
+#endif
     if (s.mode == M_URLBAR) {
         cv.fillRect(10, 50, 220, 36, C_DUSK);
         frame(10, 50, 220, 36, C_RUST, C_EMBER);
@@ -262,13 +280,30 @@ void draw(uint32_t now) {
         strncpy(p, prompt.c_str(), 38);
         textCentre(p, 120, 49, C_GLOW);
         s.edit.draw(18, 64, 204, now, C_BONE);
+#ifndef GRIM_CYD
         textCentre("enter: send to the wired   ` : cancel", 120, 80, C_DIM);
+#endif
         return;
     }
     if (s.mode == M_BOOKMARKS) {
+        const int y0 = 40, rh = 12, visible = 7;
+        const int first = s.markSel >= visible ? s.markSel - visible + 1 : 0;
+#ifdef GRIM_CYD
+        int tx, ty;
+        if (cyd_controls::takeViewportTap(tx, ty) && ty >= y0 && ty < y0 + rh * visible) {
+            const int mark = first + (ty - y0) / rh;
+            if (mark < static_cast<int>(s.marks.size())) {
+                s.markSel = mark;
+                go(s.marks[mark].c_str());
+                s.mode = M_BROWSE;
+                cyd_controls::setTextMode(TextMode::Waiting);
+                return;
+            }
+        }
+#endif
         textCentre("- bookmarks -", 120, 24, C_EMBER);
-        for (int i = 0; i < (int)s.marks.size(); ++i) {
-            int y = 40 + i * 12;
+        for (int i = first; i < (int)s.marks.size() && i < first + visible; ++i) {
+            int y = y0 + (i - first) * rh;
             bool here = i == s.markSel;
             if (here) cv.fillRect(6, y - 1, 228, 11, C_DUSK);
             char m[40] = {};
@@ -276,6 +311,22 @@ void draw(uint32_t now) {
             text(m, 12, y, here ? C_GLOW : C_BONE);
         }
         footer("enter: open   ` : back");
+        return;
+    }
+
+    if (gs == net::GEM_ERROR) {
+        char b[64];
+        int status = net::gemStatus();
+        snprintf(b, sizeof b, status ? "gemini status %d" : "network failure", status);
+        textCentre(b, 120, 54, C_BLOOD);
+        std::string m = net::gemMeta();
+        textCentre(m.empty() ? "no response from capsule" : m.c_str(), 120, 68, C_DIM);
+        footer("u back  g go  b marks");
+        return;
+    }
+    if (gs == net::GEM_INPUT) {
+        textCentre("input cancelled", 120, 60, C_DIM);
+        footer("u back  g go  b marks");
         return;
     }
 
@@ -305,6 +356,17 @@ void draw(uint32_t now) {
     auto &rows = s.rows;
     int total = rows.size();
     if (s.scroll > total - 1) s.scroll = total > 0 ? total - 1 : 0;
+#ifdef GRIM_CYD
+    int tx, ty;
+    if (cyd_controls::takeViewportTap(tx, ty) && ty >= Y0 && ty < Y0 + LH * VIS) {
+        const int row = s.scroll + (ty - Y0) / LH;
+        if (row < total && rows[row].first->kind == L_LINK) {
+            go(rows[row].first->url.c_str());
+            cyd_controls::setTextMode(TextMode::Waiting);
+            return;
+        }
+    }
+#endif
     for (int i = 0; i < VIS && s.scroll + i < total; ++i) {
         auto &r = rows[s.scroll + i];
         int y = Y0 + i * LH;
@@ -321,7 +383,7 @@ void draw(uint32_t now) {
         cv.fillRect(237, Y0, 2, VIS * LH, C_DUSK);
         cv.fillRect(237, by, 2, bh < 4 ? 4 : bh, C_RUST);
     }
-    footer("1-9 link  u back  g go  b marks");
+    footer("1-9 link  u back  g go  b marks", s.links.empty() ? nullptr : "tap a link to open");
 }
 } // namespace
 

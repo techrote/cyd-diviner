@@ -268,7 +268,7 @@ void draw(uint32_t now) {
     // scanline flicker, CRT-ish
     int sl = (now / 16) % 120;
     cv.drawFastHLine(0, OY + sl, 240, C_DUSK);
-    footer("1-4 form ;. tilt ,/ spin s snd m mono");
+    footer("1-4 form ;. tilt ,/ spin s snd m mono", s.paused ? "Paused" : nullptr);
 }
 } // namespace
 

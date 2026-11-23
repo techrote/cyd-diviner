@@ -400,9 +400,11 @@ void draw(uint32_t now) {
     } else if (now - s.castAt < 600) {
         cv.fillRect(0, 124, 240, 11, C_VOID);
         textCentre("- cast -", 120, 126, C_GLOW);
+#ifndef GRIM_CYD
     } else {
         cv.fillRect(0, 124, 240, 11, C_VOID);
         textCentre("ent cast  tab preset  fn+;. rate", 120, 126, C_DIM);
+#endif
     }
 }
 } // namespace

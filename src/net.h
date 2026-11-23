@@ -68,7 +68,9 @@ struct BleDev {
     uint32_t lastSeen; // ms
 };
 void bleBegin();
-int bleScan(std::vector<BleDev> &out); // -1 while a scan is running
+constexpr int BLE_UNAVAILABLE = -2;
+// Returns the latest device count, -1 while warming up, or BLE_UNAVAILABLE.
+int bleScan(std::vector<BleDev> &out);
 
 // ---- LAN scan (net rites) -----------------------------------------------
 struct Host {
@@ -87,13 +89,14 @@ std::vector<Host> lanHosts();
 // Reads Wi-Fi channel-state info from the connected link and turns its
 // variation into a motion signal: bodies moving through the radio field
 // perturb the subcarriers. Needs an active connection (join one in LINK).
-void csiBegin();
+bool csiBegin(); // false if the Wi-Fi driver could not start CSI
 void csiEnd();
 // motion: 0..1 smoothed; bins: per-subcarrier amplitude (0..1) for a waterfall
-// (up to nbins written); returns the number of bins, or -1 if no data yet.
+// (up to nbins written); returns the number of bins, or -1 if no recent data.
 int csiRead(float &motion, float *bins, int nbins);
 
 // ---- host probe (active HTTP recon / default creds) ----------------------
+#ifndef GRIM_CYD
 struct ProbeLine {
     std::string text;
     uint8_t kind; // 0 info, 1 hit (interesting), 2 vuln (e.g. default creds), 3 error
@@ -102,6 +105,7 @@ void probeBegin(const char *ip, uint16_t port); // HTTP enum + default-cred chec
 int probeProgress();
 std::vector<ProbeLine> probeResults();
 bool probeDone();
+#endif
 
 // ---- Gemini (gemtext) ---------------------------------------------------
 // One request at a time on a worker task; poll gemState()/gemBody().

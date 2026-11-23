@@ -42,19 +42,17 @@ struct TextEdit {
         Canvas &cv = hal::canvas();
         cv.fillRect(x, y, w, 12, C_ASH);
         theme::frame(x, y, w, 12, C_RUST, C_UMBER);
-        char shown[132];
-        if (mask) {
-            int n = len < 20 ? len : 20;
-            memset(shown, '*', n);
-            shown[n] = 0;
-        } else {
-            int off = cur > (w / 6 - 3) ? cur - (w / 6 - 3) : 0;
-            snprintf(shown, sizeof shown, "%s", buf + off);
-        }
+        const int cells = (w - 6) / 6;
+        if (cells < 1) return;
+        const int off = cur >= cells ? cur - cells + 1 : 0;
+        const int n = len - off < cells ? len - off : cells;
+        char shown[sizeof buf];
+        if (mask) memset(shown, '*', n);
+        else memcpy(shown, buf + off, n);
+        shown[n] = 0;
         theme::text(shown, x + 3, y + 3, fg);
         if ((now / 350) & 1) {
-            int cc = mask ? (len < 20 ? len : 20) : cur;
-            cv.fillRect(x + 3 + cc * 6, y + 3, 5, 7, C_EMBER);
+            cv.fillRect(x + 3 + (cur - off) * 6, y + 3, 5, 7, C_EMBER);
         }
     }
 };

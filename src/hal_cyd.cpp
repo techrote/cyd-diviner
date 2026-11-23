@@ -1,0 +1,346 @@
+// ESP32-2432S028R backend: ILI9341 LCD, XPT2046 touch and GPIO26 speaker output.
+#include "hal.h"
+#include "cyd_controls.h"
+
+#include <Arduino.h>
+#include <SPI.h>
+#include <XPT2046_Touchscreen.h>
+#include <driver/i2s.h>
+#include <lgfx/v1/panel/Panel_ILI9341.hpp>
+#include <lgfx/v1/platforms/esp32/Bus_SPI.hpp>
+
+#include <algorithm>
+#include <atomic>
+#include <cstring>
+
+namespace hal {
+namespace {
+constexpr int ScreenW = 320, ScreenH = 240, AppH = 180;
+constexpr int BacklightPin = 21, BootPin = 0;
+constexpr int TouchCs = 33, TouchMosi = 32, TouchMiso = 39, TouchClk = 25;
+
+class Display : public lgfx::LGFX_Device {
+    lgfx::Bus_SPI bus;
+    lgfx::Panel_ILI9341_2 panel;
+
+public:
+    Display() {
+        auto spi = bus.config();
+        spi.spi_host = SPI2_HOST;
+        spi.freq_write = 40000000;
+        spi.freq_read = 8000000;
+        spi.spi_3wire = false; // LCD readback uses the separate GPIO12 MISO line.
+        spi.pin_sclk = 14;
+        spi.pin_mosi = 13;
+        spi.pin_miso = 12;
+        spi.pin_dc = 2;
+        bus.config(spi);
+        panel.setBus(&bus);
+
+        auto lcd = panel.config();
+        lcd.pin_cs = 15;
+        lcd.pin_rst = -1;
+        lcd.invert = true;
+        lcd.bus_shared = false;
+        panel.config(lcd);
+        setPanel(&panel);
+    }
+};
+
+Display lcd;
+Canvas cv(&lcd);
+SPIClass touchSpi(VSPI);
+XPT2046_Touchscreen touch(TouchCs);
+bool displayReady = false, canvasReady = false;
+
+constexpr int AudioBlock = 128;
+constexpr i2s_port_t AudioPort = I2S_NUM_0;
+SemaphoreHandle_t audioLock = nullptr;
+AudioFn audioFn = nullptr, overlayFn = nullptr;
+std::atomic<uint8_t> level{140};
+#ifdef GRIM_CYD_DIAGNOSTICS
+std::atomic<uint32_t> audioBlocks{0}, signalBlocks{0};
+uint32_t presentUs = 0;
+#endif
+
+void audioTask(void *) {
+    int16_t main[AudioBlock], overlay[AudioBlock];
+    uint16_t pcm[AudioBlock * 2];
+    for (;;) {
+        // Complete any in-flight callback before setAudio(nullptr) returns
+        // and the main thread tears down the active rite.
+        xSemaphoreTake(audioLock, portMAX_DELAY);
+        if (audioFn) audioFn(main, AudioBlock);
+        else memset(main, 0, sizeof(main));
+        if (overlayFn) overlayFn(overlay, AudioBlock);
+        else memset(overlay, 0, sizeof(overlay));
+        xSemaphoreGive(audioLock);
+
+        const int volume = level.load(std::memory_order_relaxed);
+#ifdef GRIM_CYD_DIAGNOSTICS
+        bool signal = false;
+#endif
+        for (int i = 0; i < AudioBlock; ++i) {
+            const int sample = std::clamp<int>(main[i] + overlay[i], -32768, 32767);
+            const uint16_t value = sample * volume / 255 + 32768;
+            // The built-in DAC reads the top 8 bits. Send the same sample in
+            // both I2S slots while enabling only GPIO26, leaving touch CLK alone.
+            pcm[i * 2] = pcm[i * 2 + 1] = value;
+#ifdef GRIM_CYD_DIAGNOSTICS
+            signal |= (value >> 8) != 128;
+#endif
+        }
+        size_t written;
+        if (i2s_write(AudioPort, pcm, sizeof(pcm), &written, portMAX_DELAY) != ESP_OK) {
+            vTaskDelay(1);
+        }
+#ifdef GRIM_CYD_DIAGNOSTICS
+        else if (written == sizeof(pcm)) {
+            audioBlocks.fetch_add(1, std::memory_order_relaxed);
+            if (signal) signalBlocks.fetch_add(1, std::memory_order_relaxed);
+        }
+#endif
+    }
+}
+
+bool beginAudio() {
+    audioLock = xSemaphoreCreateMutex();
+    if (!audioLock) return false;
+
+    i2s_config_t cfg{};
+    cfg.mode = static_cast<i2s_mode_t>(I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN);
+    cfg.sample_rate = RATE;
+    cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
+    cfg.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT;
+    cfg.communication_format = I2S_COMM_FORMAT_STAND_MSB;
+    cfg.dma_buf_count = 4;
+    cfg.dma_buf_len = AudioBlock;
+    cfg.tx_desc_auto_clear = true;
+    const bool installed = i2s_driver_install(AudioPort, &cfg, 0, nullptr) == ESP_OK;
+    if (installed && i2s_set_dac_mode(I2S_DAC_CHANNEL_LEFT_EN) == ESP_OK &&
+        xTaskCreatePinnedToCore(audioTask, "grim-audio", 4096, nullptr, 5, nullptr, 0) == pdPASS) {
+        return true;
+    }
+    if (installed) {
+        i2s_set_dac_mode(I2S_DAC_CHANNEL_DISABLE);
+        i2s_driver_uninstall(AudioPort);
+    }
+    vSemaphoreDelete(audioLock);
+    audioLock = nullptr;
+    return false;
+}
+
+constexpr uint8_t QueueSize = 16;
+Key input[QueueSize];
+uint8_t head = 0, tail = 0;
+
+void push(const Key &key) {
+    const uint8_t next = (tail + 1) % QueueSize;
+    if (next == head) return;
+    input[tail] = key;
+    tail = next;
+}
+
+void sendTouch(bool down, int x, int y, uint32_t now) {
+    Key key;
+    if (cyd_controls::touch(down, x, y, now, key)) push(key);
+}
+
+#ifdef GRIM_CYD_DIAGNOSTICS
+bool syntheticDown = false;
+int syntheticX = 0, syntheticY = 0;
+
+void shot() {
+    // Read the physical controller after both the app and controls are drawn.
+    // Payload has one little-endian RGB565 word per pixel, left-to-right.
+    Serial.printf("shot %d %d rgb565le\n", ScreenW, ScreenH);
+    lgfx::rgb565_t row[ScreenW];
+    for (int y = 0; y < ScreenH; ++y) {
+        lcd.readRect(0, y, ScreenW, 1, row);
+        Serial.write(reinterpret_cast<const uint8_t *>(row), sizeof(row));
+        delay(1);
+    }
+}
+
+void diagnostic(const char *cmd, uint32_t now) {
+    int x, y;
+    bool tap = sscanf(cmd, "tap %d %d", &x, &y) == 2;
+    if (tap || sscanf(cmd, "touch %d %d", &x, &y) == 2) {
+        if (x < 0 || x >= ScreenW || y < 0 || y >= ScreenH) return;
+        if (tap && syntheticDown) sendTouch(false, syntheticX, syntheticY, now);
+        sendTouch(true, x, y, now);
+        if (tap) sendTouch(false, x, y, now);
+        syntheticDown = !tap;
+        syntheticX = x;
+        syntheticY = y;
+        Serial.println("touch accepted");
+    } else if (strcmp(cmd, "release") == 0) {
+        if (syntheticDown) sendTouch(false, syntheticX, syntheticY, now);
+        syntheticDown = false;
+    } else if (strcmp(cmd, "status") == 0) {
+        Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u\n",
+                      ESP.getFreeHeap(), ESP.getMaxAllocHeap(), displayReady, audioLock != nullptr, volume(),
+                      presentUs, audioBlocks.load(std::memory_order_relaxed), signalBlocks.load(std::memory_order_relaxed));
+    } else if (strcmp(cmd, "shot") == 0 && displayReady) {
+        shot();
+    }
+}
+
+void serialInput(uint32_t now) {
+    static char line[40];
+    static unsigned length = 0;
+    static bool overflow = false;
+    while (Serial.available()) {
+        const int c = Serial.read();
+        if (c == '\n') {
+            line[length] = '\0';
+            if (!overflow) diagnostic(line, now);
+            length = 0;
+            overflow = false;
+        } else if (c != '\r') {
+            if (length < sizeof(line) - 1) line[length++] = c;
+            else overflow = true;
+        }
+    }
+}
+#endif
+
+void scanInput() {
+    const uint32_t now = millis();
+#ifdef GRIM_CYD_DIAGNOSTICS
+    serialInput(now);
+#endif
+    static uint32_t lastScan = 0;
+    if (now - lastScan < 12) return;
+    lastScan = now;
+
+#ifdef GRIM_CYD_DIAGNOSTICS
+    if (syntheticDown) {
+        sendTouch(true, syntheticX, syntheticY, now);
+    } else
+#endif
+    {
+        const auto p = touch.getPoint();
+        const bool down = p.z >= 400;
+        // CISmon calibrated XPT2046 rotation 0 in portrait. Convert that
+        // coordinate pair to the panel's TFT_eSPI-compatible landscape view.
+        const int x = constrain(map(p.y, 200, 3900, 0, ScreenW - 1), 0, ScreenW - 1);
+        const int y = constrain(map(p.x, 3900, 200, 0, ScreenH - 1), 0, ScreenH - 1);
+        sendTouch(down, x, y, now);
+#ifdef GRIM_CYD_DIAGNOSTICS
+        static bool wasDown = false;
+        if (down && !wasDown && cyd_controls::viewportBottom() == AppH) {
+            Serial.printf("screen touch %d %d pressure %d\n", x, y, p.z);
+        }
+        wasDown = down;
+#endif
+    }
+
+    static uint8_t bootSamples = 0;
+    static bool bootDown = false;
+    // Require a stable release before a held or bouncing BOOT button can
+    // emit another Back.
+    bootSamples = ((bootSamples << 1) | (digitalRead(BootPin) == LOW)) & 7;
+    if (bootSamples == 7 && !bootDown) {
+        bootDown = true;
+        push(Key{'`', N_ESC});
+    } else if (!bootSamples) {
+        bootDown = false;
+    }
+}
+} // namespace
+
+void begin() {
+    Serial.begin(115200);
+    pinMode(BootPin, INPUT_PULLUP);
+    for (int pin : {4, 16, 17}) {
+        digitalWrite(pin, HIGH); // The CYD RGB LED is active low.
+        pinMode(pin, OUTPUT);
+    }
+    pinMode(BacklightPin, OUTPUT);
+    digitalWrite(BacklightPin, LOW);
+    displayReady = lcd.init();
+    if (displayReady) {
+        lcd.setRotation(5); // Same memory access directions as TFT_eSPI rotation 1.
+        lcd.fillScreen(static_cast<uint16_t>(0));
+        digitalWrite(BacklightPin, HIGH);
+    }
+    cv.setColorDepth(16);
+    canvasReady = cv.createSprite(W, H) != nullptr;
+    if (!canvasReady) {
+        cv.setColorDepth(8);
+        canvasReady = cv.createSprite(W, H) != nullptr;
+    }
+    cv.setPivot(0, 0);
+    if (!canvasReady && displayReady) lcd.drawString("Display buffer unavailable", 8, 8);
+
+    touchSpi.begin(TouchClk, TouchMiso, TouchMosi, TouchCs);
+    touch.begin(touchSpi);
+    touch.setRotation(0);
+    const bool audioReady = beginAudio();
+    Serial.printf("Diviner CYD: LCD %s %dx%d, canvas %s %dx%d, audio %s, heap %u bytes\n",
+                  displayReady ? "ready" : "failed", lcd.width(), lcd.height(),
+                  canvasReady ? "ready" : "failed", W, H, audioReady ? "ready" : "failed", ESP.getFreeHeap());
+}
+
+Canvas &canvas() { return cv; }
+
+void present() {
+    if (!displayReady || !canvasReady) return;
+#ifdef GRIM_CYD_DIAGNOSTICS
+    const uint32_t start = micros();
+#endif
+    lcd.startWrite();
+    lcd.setClipRect(0, 0, ScreenW, cyd_controls::viewportBottom());
+    constexpr float Scale = 4.f / 3.f;
+    cv.pushRotateZoom(0, cyd_controls::viewportTop(), 0, Scale, Scale);
+    lcd.clearClipRect();
+    cyd_controls::draw(lcd);
+    lcd.endWrite();
+#ifdef GRIM_CYD_DIAGNOSTICS
+    presentUs = micros() - start;
+#endif
+}
+
+uint32_t ms() { return millis(); }
+
+void idle(uint32_t msec) {
+    scanInput();
+    if (msec) delay(msec);
+}
+
+bool pollKey(Key &key) {
+    scanInput();
+    if (head == tail) return false;
+    key = input[head];
+    head = (head + 1) % QueueSize;
+    return true;
+}
+
+bool anyHeld() { return cyd_controls::anyHeld(); }
+
+void setAudio(AudioFn fn) {
+    if (!audioLock) return;
+    xSemaphoreTake(audioLock, portMAX_DELAY);
+    audioFn = fn;
+    xSemaphoreGive(audioLock);
+}
+
+void setOverlayAudio(AudioFn fn) {
+    if (!audioLock) return;
+    xSemaphoreTake(audioLock, portMAX_DELAY);
+    overlayFn = fn;
+    xSemaphoreGive(audioLock);
+}
+
+void setVolume(uint8_t v) { level.store(v, std::memory_order_relaxed); }
+uint8_t volume() { return level.load(std::memory_order_relaxed); }
+
+int batteryPercent() { return -1; }
+void backToLauncher() {} // The CYD boots directly into Diviner.
+} // namespace hal
+
+void grimSetup();
+void grimLoop();
+void setup() { grimSetup(); }
+void loop() { grimLoop(); }

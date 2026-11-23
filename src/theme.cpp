@@ -155,7 +155,13 @@ void header(const char *daedric, const char *latin) {
     diamond(hal::W / 2, 18, 2, C_RUST);
 }
 
-void footer(const char *hint) {
+void footer(const char *hint, const char *touchHint) {
+#ifdef GRIM_CYD
+    hint = touchHint;
+    if (!hint) return;
+#else
+    (void)touchHint;
+#endif
     Canvas &cv = hal::canvas();
     cv.drawFastHLine(0, hal::H - 11, hal::W, C_CLOT);
     textCentre(hint, hal::W / 2, hal::H - 9, C_DIM);

@@ -8,6 +8,7 @@
 #include "../rite.h"
 #include "../theme.h"
 #include <math.h>
+#include <new>
 #include <stdio.h>
 #include <string.h>
 
@@ -18,13 +19,23 @@ constexpr int VW = 120, VH = 58, OY = 19; // half-res field, drawn 2x2
 const char *NAMES[] = {"plasma", "gate", "ashfire", "rain", "kaleido"};
 constexpr int N_VIS = 5;
 
+struct VisualBuffers {
+    uint8_t ang[VH][VW], dist[VH][VW]; // tunnel tables
+    bool tablesBuilt = false;
+    uint8_t fire[VH + 1][VW];
+};
+
 struct State {
     int vis = 0;
     float t = 0, speed = 1.f;
     bool paused = false, sound = true;
-    uint8_t ang[VH][VW], dist[VH][VW]; // tunnel tables
-    bool tablesBuilt = false;
-    uint8_t fire[VH + 1][VW];
+#ifdef GRIM_CYD
+    VisualBuffers *buffers = nullptr;
+    VisualBuffers *visualBuffers() { return buffers; }
+#else
+    VisualBuffers buffers;
+    VisualBuffers *visualBuffers() { return &buffers; }
+#endif
     struct Drop {
         float y, v;
         char g;
@@ -61,23 +72,23 @@ void plasma() {
         }
 }
 
-void buildTunnel() {
+void buildTunnel(VisualBuffers &b) {
     for (int y = 0; y < VH; ++y)
         for (int x = 0; x < VW; ++x) {
             float dx = x - VW / 2 + 0.5f, dy = (y - VH / 2 + 0.5f) * 1.1f;
             float d = sqrtf(dx * dx + dy * dy) + 0.5f;
-            S->dist[y][x] = (uint8_t)((int)(900.f / d) & 255);
-            S->ang[y][x] = (uint8_t)(128 * atan2f(dy, dx) / 3.14159f);
+            b.dist[y][x] = (uint8_t)((int)(900.f / d) & 255);
+            b.ang[y][x] = (uint8_t)(128 * atan2f(dy, dx) / 3.14159f);
         }
-    S->tablesBuilt = true;
+    b.tablesBuilt = true;
 }
 
-void gate() {
-    if (!S->tablesBuilt) buildTunnel();
+void gate(VisualBuffers &b) {
+    if (!b.tablesBuilt) buildTunnel(b);
     int t = (int)(S->t * 60);
     for (int y = 0; y < VH; ++y)
         for (int x = 0; x < VW; ++x) {
-            uint8_t d = S->dist[y][x], a = S->ang[y][x];
+            uint8_t d = b.dist[y][x], a = b.ang[y][x];
             uint8_t u = d + t, v = a * 2 + t / 4;
             int pat = ((u >> 4) ^ (v >> 4)) & 1 ? 150 : 40;
             pat += sin8(u * 2 + v) / 3;
@@ -91,8 +102,8 @@ void gate() {
     hal::canvas().drawEllipse(120, OY + 58, 112, 56, C_BLOOD);
 }
 
-void ashfire() {
-    auto &f = S->fire;
+void ashfire(VisualBuffers &b) {
+    auto &f = b.fire;
     for (int x = 0; x < VW; ++x) f[VH][x] = (S->rng.next() % 100) < 55 ? 255 : 60;
     for (int y = 0; y < VH; ++y)
         for (int x = 0; x < VW; ++x) {
@@ -178,16 +189,39 @@ void retone() {
     S->which = S->vis;
 }
 
+#ifdef GRIM_CYD
+void prepareVisualBuffers() {
+    // Plasma, rain and kaleidoscope leave the larger tables unallocated.
+    if ((S->vis == 1 || S->vis == 2) && !S->buffers) {
+        S->buffers = new (std::nothrow) VisualBuffers();
+    }
+}
+#endif
+
 void enter() {
+#ifdef GRIM_CYD
+    static State state;
+    S = &state;
+    prepareVisualBuffers();
+#else
     if (!S) S = new State();
+#endif
     S->lfo.hz(0.07f);
     retone();
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+#ifdef GRIM_CYD
+    delete S->buffers;
+    S->buffers = nullptr;
+#endif
+}
 
 bool onKey(const hal::Key &k) {
     State &s = *S;
+#ifdef GRIM_CYD
+    const int previous = s.vis;
+#endif
     if (k.ch >= '1' && k.ch < '1' + N_VIS) s.vis = k.ch - '1';
     else if (k.nav == hal::N_TAB || k.nav == hal::N_ENTER || k.nav == hal::N_DOWN) s.vis = (s.vis + 1) % N_VIS;
     else if (k.nav == hal::N_UP) s.vis = (s.vis + N_VIS - 1) % N_VIS;
@@ -195,6 +229,9 @@ bool onKey(const hal::Key &k) {
     else if (k.nav == hal::N_LEFT) s.speed = fmaxf(0.25f, s.speed - 0.25f);
     else if (k.ch == ' ') s.paused = !s.paused;
     else if (k.ch == 's') s.sound = !s.sound;
+#ifdef GRIM_CYD
+    if (s.vis != previous) prepareVisualBuffers();
+#endif
     retone();
     return true;
 }
@@ -205,8 +242,16 @@ void draw(uint32_t) {
     if (!s.paused) s.t += 0.033f * s.speed;
     switch (s.vis) {
     case 0: plasma(); break;
-    case 1: gate(); break;
-    case 2: ashfire(); break;
+    case 1:
+    case 2:
+        if (auto *buffers = s.visualBuffers()) {
+            if (s.vis == 1) gate(*buffers);
+            else ashfire(*buffers);
+        } else {
+            cv.fillRect(0, OY, 240, VH * 2, C_VOID);
+            textCentre("not enough memory for this vision", 120, 72, C_DIM);
+        }
+        break;
     case 3: glyphRain(); break;
     case 4: kaleido(); break;
     }
