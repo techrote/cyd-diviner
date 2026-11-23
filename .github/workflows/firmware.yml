@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [cyd, cyd-diagnostics]
+        target: [cyd, cyd-diagnostics, cyd-pcm]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,3 +37,12 @@ jobs:
         run: python -m pip install --disable-pip-version-check platformio==6.2.0
       - name: Build CYD firmware
         run: pio run -e ${{ matrix.target }}
+
+  vlc-plugin:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and validate the VLC plugin DLL
+        shell: pwsh
+        run: ./tools/vlc/build.ps1

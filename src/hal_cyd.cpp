@@ -1,6 +1,11 @@
 // ESP32-2432S028R backend: ILI9341 LCD, XPT2046 touch and GPIO26 speaker output.
 #include "hal.h"
 #include "cyd_controls.h"
+#ifdef GRIM_CYD_PCM
+#include "cyd_pcm_protocol.h"
+#include "cyd_pcm_serial.h"
+#include <driver/uart.h>
+#endif
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -17,6 +22,7 @@ namespace hal {
 namespace {
 constexpr int ScreenW = 320, ScreenH = 240, AppH = 180;
 constexpr int BacklightPin = 21, BootPin = 0;
+constexpr int BlueLedPin = 17;
 constexpr int TouchCs = 33, TouchMosi = 32, TouchMiso = 39, TouchClk = 25;
 
 class Display : public lgfx::LGFX_Device {
@@ -66,6 +72,9 @@ uint32_t presentUs = 0;
 void audioTask(void *) {
     int16_t main[AudioBlock], overlay[AudioBlock];
     uint16_t pcm[AudioBlock * 2];
+#ifdef GRIM_CYD_PCM
+    static_assert(AudioBlock == CYD_PCM_SAMPLES && RATE == CYD_PCM_RATE, "PCM protocol must match the I2S mixer");
+#endif
     for (;;) {
         // Complete any in-flight callback before setAudio(nullptr) returns
         // and the main thread tears down the active rite.
@@ -77,12 +86,19 @@ void audioTask(void *) {
         xSemaphoreGive(audioLock);
 
         const int volume = level.load(std::memory_order_relaxed);
+#ifdef GRIM_CYD_PCM
+        const uint32_t pcmSession = cyd_pcm_serial::session();
+#endif
 #ifdef GRIM_CYD_DIAGNOSTICS
         bool signal = false;
 #endif
         for (int i = 0; i < AudioBlock; ++i) {
             const int sample = std::clamp<int>(main[i] + overlay[i], -32768, 32767);
-            const uint16_t value = sample * volume / 255 + 32768;
+            const int scaled = sample * volume / 255;
+            const uint16_t value = scaled + 32768;
+#ifdef GRIM_CYD_PCM
+            if (pcmSession) main[i] = static_cast<int16_t>(scaled);
+#endif
             // The built-in DAC reads the top 8 bits. Send the same sample in
             // both I2S slots while enabling only GPIO26, leaving touch CLK alone.
             pcm[i * 2] = pcm[i * 2 + 1] = value;
@@ -94,10 +110,15 @@ void audioTask(void *) {
         if (i2s_write(AudioPort, pcm, sizeof(pcm), &written, portMAX_DELAY) != ESP_OK) {
             vTaskDelay(1);
         }
-#ifdef GRIM_CYD_DIAGNOSTICS
+#if defined(GRIM_CYD_PCM) || defined(GRIM_CYD_DIAGNOSTICS)
         else if (written == sizeof(pcm)) {
+#ifdef GRIM_CYD_PCM
+            if (pcmSession) cyd_pcm_serial::submit(pcmSession, main);
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
             audioBlocks.fetch_add(1, std::memory_order_relaxed);
             if (signal) signalBlocks.fetch_add(1, std::memory_order_relaxed);
+#endif
         }
 #endif
     }
@@ -150,6 +171,14 @@ void sendTouch(bool down, int x, int y, uint32_t now) {
 bool syntheticDown = false;
 int syntheticX = 0, syntheticY = 0;
 
+bool pcmStreaming() {
+#ifdef GRIM_CYD_PCM
+    return cyd_pcm_serial::session() != 0;
+#else
+    return false;
+#endif
+}
+
 void shot() {
     // Read the physical controller after both the app and controls are drawn.
     // Payload has one little-endian RGB565 word per pixel, left-to-right.
@@ -173,10 +202,12 @@ void diagnostic(const char *cmd, uint32_t now) {
         syntheticDown = !tap;
         syntheticX = x;
         syntheticY = y;
-        Serial.println("touch accepted");
+        if (!pcmStreaming()) Serial.println("touch accepted");
     } else if (strcmp(cmd, "release") == 0) {
         if (syntheticDown) sendTouch(false, syntheticX, syntheticY, now);
         syntheticDown = false;
+    } else if (pcmStreaming()) {
+        return;
     } else if (strcmp(cmd, "status") == 0) {
         Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u\n",
                       ESP.getFreeHeap(), ESP.getMaxAllocHeap(), displayReady, audioLock != nullptr, volume(),
@@ -185,20 +216,41 @@ void diagnostic(const char *cmd, uint32_t now) {
         shot();
     }
 }
+#endif
+
+#if defined(GRIM_CYD_PCM) || defined(GRIM_CYD_DIAGNOSTICS)
+void dispatchSerial(char *line, unsigned length, uint32_t now) {
+#ifdef GRIM_CYD_PCM
+    line[length] = '\n';
+    line[length + 1] = '\0';
+    if (cyd_pcm_serial::handleCommand(line, now)) return;
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
+    line[length] = '\0';
+    diagnostic(line, now);
+#endif
+}
 
 void serialInput(uint32_t now) {
     static char line[40];
     static unsigned length = 0;
     static bool overflow = false;
-    while (Serial.available()) {
-        const int c = Serial.read();
+    uint8_t bytes[64];
+#ifdef GRIM_CYD_PCM
+    // Read through the UART driver's independent RX path so the touch loop
+    // never waits for HardwareSerial's lock while the PCM task is writing.
+    const int received = uart_read_bytes(UART_NUM_0, bytes, sizeof(bytes), 0);
+#else
+    const int received = Serial.read(bytes, sizeof(bytes));
+#endif
+    for (int i = 0; i < received; ++i) {
+        const int c = bytes[i];
         if (c == '\n') {
-            line[length] = '\0';
-            if (!overflow) diagnostic(line, now);
+            if (!overflow) dispatchSerial(line, length, now);
             length = 0;
             overflow = false;
         } else if (c != '\r') {
-            if (length < sizeof(line) - 1) line[length++] = c;
+            if (length < sizeof(line) - 2) line[length++] = c;
             else overflow = true;
         }
     }
@@ -207,7 +259,10 @@ void serialInput(uint32_t now) {
 
 void scanInput() {
     const uint32_t now = millis();
-#ifdef GRIM_CYD_DIAGNOSTICS
+#ifdef GRIM_CYD_PCM
+    cyd_pcm_serial::expire(now);
+#endif
+#if defined(GRIM_CYD_PCM) || defined(GRIM_CYD_DIAGNOSTICS)
     serialInput(now);
 #endif
     static uint32_t lastScan = 0;
@@ -229,7 +284,7 @@ void scanInput() {
         sendTouch(down, x, y, now);
 #ifdef GRIM_CYD_DIAGNOSTICS
         static bool wasDown = false;
-        if (down && !wasDown && cyd_controls::viewportBottom() == AppH) {
+        if (down && !wasDown && !pcmStreaming() && cyd_controls::viewportBottom() == AppH) {
             Serial.printf("screen touch %d %d pressure %d\n", x, y, p.z);
         }
         wasDown = down;
@@ -251,9 +306,13 @@ void scanInput() {
 } // namespace
 
 void begin() {
+#ifdef GRIM_CYD_PCM
+    Serial.begin(CYD_PCM_BAUD);
+#else
     Serial.begin(115200);
+#endif
     pinMode(BootPin, INPUT_PULLUP);
-    for (int pin : {4, 16, 17}) {
+    for (int pin : {4, 16, BlueLedPin}) {
         digitalWrite(pin, HIGH); // The CYD RGB LED is active low.
         pinMode(pin, OUTPUT);
     }
@@ -278,6 +337,9 @@ void begin() {
     touch.begin(touchSpi);
     touch.setRotation(0);
     const bool audioReady = beginAudio();
+#ifdef GRIM_CYD_PCM
+    if (audioReady && !cyd_pcm_serial::begin(BlueLedPin)) Serial.println("Diviner CYD: USB PCM unavailable");
+#endif
     Serial.printf("Diviner CYD: LCD %s %dx%d, canvas %s %dx%d, audio %s, heap %u bytes\n",
                   displayReady ? "ready" : "failed", lcd.width(), lcd.height(),
                   canvasReady ? "ready" : "failed", W, H, audioReady ? "ready" : "failed", ESP.getFreeHeap());
