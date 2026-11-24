@@ -10,6 +10,9 @@
 #include <nvs.h>
 #endif
 
+bool visionsUsesRgb444();
+bool visionsAreLayered();
+
 namespace cyd_controls {
 namespace {
 
@@ -179,6 +182,7 @@ TextMode textMode = TextMode::None;
 Panel panel = Panel::Main;
 bool splash = true, dirty = true, symbols = false, shift = false;
 bool dockVisible = false, dockBeforeKeyboard = false;
+bool immersive = false;
 bool contact = false, releasing = false, canRepeat = false;
 uint32_t releaseAt = 0, repeatAt = 0;
 int heldRow = -1, heldCol = -1;
@@ -326,10 +330,11 @@ void makeLayout(Layout &layout) {
                    {character("Torus", '1'), character("Navi", '2'), character("Solids", '3'),
                     character("Tunnel", '4'), character("Sound", 's'), character("Mono", 'm'), volume});
     } else if (active == &RITE_VISIONS) {
-        layout.set({menu, nav("Speed -", hal::N_LEFT), nav("Speed +", hal::N_RIGHT), character("Pause", ' '),
-                    character("Sound", 's'), volume},
+        layout.set({menu, nav("Speed-", hal::N_LEFT), nav("Speed+", hal::N_RIGHT), character("Pause", ' '),
+                    character("Sound", 's'), volume, character(visionsUsesRgb444() ? "RGB444" : "RGB565", 'f'),
+                    character("Layer", 'l')},
                    {character("Plasma", '1'), character("Gate", '2'), character("Ashfire", '3'),
-                    character("Rain", '4'), character("Kaleido", '5')});
+                    character("Rain", '4'), character("Kaleido", '5'), character("Trails", '6')});
     } else if (active == &RITE_ORACLE) {
         layout.set({menu, nav("Cast", hal::N_ENTER), character("Utterance", ' ')}, {volume});
     } else if (active == &RITE_LINK) {
@@ -415,6 +420,8 @@ bool tapViewport(Point p, uint32_t now, hal::Key &out) {
     }
     if (active == &RITE_BEAT && p.y >= 91 && p.y < 123) {
         show(Panel::Keyboard);
+    } else if (active == &RITE_VISIONS && p.y >= VisionsArtTop) {
+        immersive = true;
     } else if (panel != Panel::Keyboard && (active == &RITE_SEQ || active == &RITE_GEMINI)) {
         tapX = p.x;
         tapY = p.y;
@@ -493,6 +500,7 @@ bool saveColourway(const theme::Colourway &colourway) {
 void setRite(const Rite *rite) {
     splash = false;
     active = rite;
+    immersive = false;
     textMode = TextMode::None;
     symbols = shift = false;
     tapX = tapY = -1;
@@ -516,13 +524,16 @@ void setPaletteDirty(bool changed) {
     dirty = true;
 }
 
-int viewportHeight() { return DOCK_Y; }
+bool visionsImmersive() { return immersive; }
+
+int viewportHeight() { return immersive ? LCD_H : DOCK_Y; }
 int viewportTop() {
+    if (immersive) return 0;
     if (!dockVisible) return (LCD_H - DOCK_Y) / 2;
     return keyboardVisible() && active == &RITE_BEAT ? KEYBOARD_Y - DOCK_Y : 0;
 }
 int viewportBottom() {
-    if (!dockVisible) return LCD_H;
+    if (immersive || !dockVisible) return LCD_H;
     return keyboardVisible() ? KEYBOARD_Y : DOCK_Y;
 }
 
@@ -561,6 +572,15 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
     }
     releasing = false;
     if (x < 0 || x >= LCD_W || y < 0 || y >= LCD_H) return false;
+
+    if (immersive) {
+        if (!contact) {
+            contact = true;
+            immersive = false;
+            dirty = true;
+        }
+        return false;
+    }
 
     if (!contact && x < ToggleWidth && y >= ToggleTop) {
         contact = true;
@@ -618,6 +638,7 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
 }
 
 void draw(lgfx::LGFXBase &display) {
+    if (immersive) return;
     if (!dockVisible) {
         drawToggle(display);
         return;
@@ -653,7 +674,9 @@ void draw(lgfx::LGFXBase &display) {
             const int x = left + width * col / line.n + 2;
             const int w = left + width * (col + 1) / line.n - x - 2;
             const bool pressed = heldRow == row && heldCol == col;
-            const bool selected = button.action == Action::Scheme && button.scheme == scheme;
+            const bool layerToggle = active == &RITE_VISIONS && button.key.ch == 'l';
+            const bool selected = (button.action == Action::Scheme && button.scheme == scheme) ||
+                                  (layerToggle && visionsAreLayered());
             const bool primary = button.key.nav == hal::N_ENTER || selected ||
                                  (active == &RITE_PALETTE && button.key.ch == 's');
             const uint16_t bg = pressed ? pressedBackground : primary ? colours.clot : colours.dusk;
@@ -662,8 +685,14 @@ void draw(lgfx::LGFXBase &display) {
             const char ch[] = {button.key.ch, 0};
             const char *label = button.action == Action::Level ? level : (button.label ? button.label : ch);
             display.setTextColor((primary || pressed) && !extraPreset ? colours.glow : colours.bone);
-            display.setTextSize(strlen(label) * 12 + 4 <= static_cast<size_t>(w) ? 2 : 1);
-            display.drawString(label, x + w / 2, y + h / 2);
+            if (layerToggle) {
+                display.setTextSize(1);
+                display.drawString(label, x + w / 2, y + h / 2 - 6);
+                display.drawString(selected ? "On" : "Off", x + w / 2, y + h / 2 + 6);
+            } else {
+                display.setTextSize(strlen(label) * 12 + 4 <= static_cast<size_t>(w) ? 2 : 1);
+                display.drawString(label, x + w / 2, y + h / 2);
+            }
         }
     }
     drawToggle(display);

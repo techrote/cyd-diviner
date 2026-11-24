@@ -14,6 +14,8 @@ bool saveColourway(const theme::Colourway &colourway);
 void setRite(const Rite *rite);
 void setTextMode(TextMode mode);
 void setPaletteDirty(bool changed);
+inline constexpr int VisionsArtTop = 19;
+bool visionsImmersive();
 
 // Coordinates are LCD pixels, after touch calibration and rotation.
 bool touch(bool down, int x, int y, uint32_t now, hal::Key &out);

@@ -421,6 +421,7 @@ void present() {
     const int top = cyd_controls::viewportTop();
     const int viewHeight = cyd_controls::viewportHeight();
     const int clipBottom = cyd_controls::viewportBottom();
+    const bool immersive = cyd_controls::visionsImmersive();
     static int marginOrigin = 0;
     static std::array<uint16_t, 8> previousBackdrop{};
     lcd.startWrite();
@@ -446,12 +447,21 @@ void present() {
     marginOrigin = top > 0 ? top : 0;
     backdropDamage = {};
     lcd.setClipRect(0, 0, ScreenW, clipBottom);
-    constexpr float scale = static_cast<float>(ScreenW) / W;
-    cv.pushRotateZoom(0, top, 0, scale, scale);
+    if (immersive) {
+        constexpr float zoom = static_cast<float>(ScreenH) / (H - cyd_controls::VisionsArtTop);
+        // Align scaled edges using LovyanGFX's half-pixel pivot convention.
+        constexpr float pixelOffset = (zoom - 1.f) / 2.f;
+        constexpr float left = (ScreenW - W * zoom) / 2.f + pixelOffset;
+        constexpr float artTop = -cyd_controls::VisionsArtTop * zoom + pixelOffset;
+        cv.pushRotateZoom(left, artTop, 0, zoom, zoom);
+    } else {
+        constexpr float scale = static_cast<float>(ScreenW) / W;
+        cv.pushRotateZoom(0, top, 0, scale, scale);
+    }
     lcd.clearClipRect();
     if (top > 0) drawBackdropMotes(top, top + viewHeight);
     backdropMoteCount = 0;
-    cyd_controls::draw(lcd);
+    if (!immersive) cyd_controls::draw(lcd);
     lcd.endWrite();
 #ifdef GRIM_CYD_DIAGNOSTICS
     presentUs = micros() - start;

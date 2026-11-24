@@ -65,6 +65,8 @@ are for the Cardputer ADV.
   whole view again. Wi-Fi and Gemini text prompts open the keyboard as needed,
   even when the controls are hidden.
   **Symbols** switches the keyboard layout.
+- In **Visions**, tap the animation to toggle fullscreen. See [Visions layers
+  and trail formats](#visions-layers-and-trail-formats) for effects and controls.
 - The **Volume** control adjusts the mix. Local audio uses the GPIO26 DAC and
   the two-pin speaker output. The USB stream takes the digital mix before the
   DAC and works with the speaker connector removed.
@@ -234,7 +236,7 @@ build and have simulator views.
 | [seq](docs/previews/seq.png) | A 16-step kick, snare, hat, and acid groovebox with four pattern banks, Euclidean fills, song mode, and saved patterns on hardware |
 | [beat](docs/previews/beat.png) | Bytebeat livecoding with expressions in `t` |
 | [wired](docs/previews/wired-navi.png) | ASCII 3D torus, navi sphere, wireframe solids, and tunnel |
-| [visions](docs/previews/vis-plasma.png) | Plasma, gate, ash-fire, glyph rain, and kaleidoscope |
+| [visions](docs/previews/vis-plasma.png) | Plasma, gate, ash-fire, glyph rain, kaleidoscope, and feedback trails |
 | [oracle](docs/previews/oracle.png) | Three-rune casts with bell chimes |
 | [wifi](docs/previews/link.png) | Wi-Fi join and saved networks, with detection and click-through support for simple captive portals. The source calls it Link |
 | [scry](docs/previews/scry.png) | Nearby Wi-Fi networks as a constellation |
@@ -250,6 +252,44 @@ build and have simulator views.
 
 Use the radio and IR tools on networks and devices you own or have permission
 to test. [Usage notice](NOTICE.md)
+
+### Visions layers and trail formats
+
+Visions starts with **Layer On** and opens on **Plasma + Kaleido** after boot.
+On CYD, show the lower controls and tap **Layer** to switch between paired and
+solo effects. With layering on, either effect button in a pair selects that
+scene. Cardputer and simulator users can press **L** to toggle layering and
+**1–6** to select effects.
+
+Tap the animation on the CYD to go fullscreen. The artwork fills the 320×240
+LCD with a centred crop that preserves its proportions. The header and touch
+controls disappear. Tap anywhere again to restore the previous view.
+
+| Pair | How it is drawn |
+| --- | --- |
+| Gate + Trails | One 8-bit intensity per pixel maps through the current theme's 256-colour LUT. Fading trails blend directly over the tunnel. |
+| Ashfire + Rain | The glyphs draw over the fire, with the tails blended into the pixels beneath them. |
+| Plasma + Kaleido | The lines and sparks draw directly over dimmed plasma. |
+
+To compare the solo trail formats, turn **Layer Off**, select **Trails**, and
+tap **RGB444** or **RGB565**. On the keyboard, press **6** for Trails and **F**
+to switch formats. Packed RGB444 is the solo default. RGB565 preserves more
+colour detail. Switching formats clears the trails. Gate + Trails uses its
+8-bit history in either case.
+
+| Scene | History pixel storage | Extra heap over the solo base | Total effect heap |
+| --- | ---: | ---: | ---: |
+| Gate + Trails, 8-bit theme LUT | 27,840 B | 27,904 B | 41,840 B |
+| Ashfire + Rain | 0 B | 0 B | 7,100 B |
+| Plasma + Kaleido | 0 B | 0 B | 0 B |
+| Solo Trails, packed RGB444 | 41,760 B | — | 41,824 B |
+| Solo Trails, RGB565 | 55,680 B | — | 55,744 B |
+
+These are heap measurements from CYD diagnostics, including allocator
+overhead and excluding the shared canvas and audio. The history covers the
+240×116 animation area. Fullscreen reuses the existing canvas and left heap
+use unchanged in testing. History and effect buffers are released when the
+scene no longer needs them or you leave Visions.
 
 ## Development and verification
 
