@@ -229,7 +229,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
 
     // single radio, no auto-cycling: the active ward scans its own stack
     if (s.mode == K_WIFI) {

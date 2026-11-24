@@ -258,7 +258,8 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    const bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
+    theme::drawBackground(cv);
     header("DRONE", "drone");
 
     // mandala: each voice is a ring of 7 nodes; radius from pitch, glow from amp
@@ -270,20 +271,25 @@ void draw(uint32_t now) {
         float r = 14 + log2f(v.hz / 30.f) * 9.f;
         if (r > 50) r = 50;
         uint8_t a = (uint8_t)fminf(255.f, 60 + v.amp * 260.f);
-        uint16_t c = blend(k == s.lastMoved && now - s.movedAt < 1500 ? C_GLOW : C_EMBER, C_VOID, a);
+        const uint16_t node = k == s.lastMoved && now - s.movedAt < 1500 ? C_GLOW : C_EMBER;
         int nodes = 7;
         float ph = rot * (k & 1 ? -1.f : 1.f) * (1 + k * 0.3f);
-        int px0 = 0, py0 = 0, fx = 0, fy = 0;
+        int px0 = 0, py0 = 0;
         for (int j = 0; j <= nodes; ++j) {
             float t = ph + j * 6.2831853f / nodes;
             int px = cx + (int)(cosf(t) * r), py = cy + (int)(sinf(t) * r);
-            if (j) cv.drawLine(px0, py0, px, py, blend(C_BLOOD, C_VOID, a));
-            else { fx = px; fy = py; }
+            if (j) {
+                // Sample the background once for each short native line segment.
+                const uint16_t bg = styled ? cv.readPixel((px0 + px) / 2, (py0 + py) / 2) : C_VOID;
+                cv.drawLine(px0, py0, px, py, blend(C_BLOOD, bg, a));
+            }
             px0 = px;
             py0 = py;
-            if (j < nodes) cv.fillCircle(px, py, 1, c);
+            if (j < nodes) {
+                const uint16_t bg = styled ? cv.readPixel(px, py) : C_VOID;
+                cv.fillCircle(px, py, 1, blend(node, bg, a));
+            }
         }
-        (void)fx; (void)fy;
     }
     // polar scope in the middle
     int w = s.scope.w;

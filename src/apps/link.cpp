@@ -89,7 +89,7 @@ void draw(uint32_t now) {
     cyd_controls::setTextMode(s.phase == ASKPASS ? cyd_controls::TextMode::Password : cyd_controls::TextMode::None);
 #endif
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("LINK", "wifi");
 
     net::WifiState ws = net::wifiState();

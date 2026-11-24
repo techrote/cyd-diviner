@@ -7,6 +7,7 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include <algorithm>
 #include <math.h>
 #include <new>
 #include <stdio.h>
@@ -120,11 +121,11 @@ void ashfire(VisualBuffers &b) {
         for (int x = 0; x < VW; ++x) cell(x, y, ramp(f[y][x]));
 }
 
-void glyphRain() {
+void glyphRain(bool styled) {
     Canvas &cv = hal::canvas();
-    cv.fillRect(0, OY, 240, VH * 2, C_VOID);
     const int lanes = 24, lw = 10;
     for (int i = 0; i < lanes; ++i) {
+        const int x = i * lw;
         auto &d = S->drops[i];
         if (d.v == 0 || d.y > 140) {
             d.y = -(float)(S->rng.next() % 80);
@@ -136,15 +137,19 @@ void glyphRain() {
             int y = (int)d.y - j * 16;
             if (y < OY - 14 || y > 134) continue;
             char g[2] = {(char)('A' + ((i * 7 + j * 3 + (int)(d.y / 16)) % 26)), 0};
-            uint16_t c = j == 0 ? C_GLOW : blend(C_RUST, C_VOID, 255 - j * 255 / d.len);
-            glyphs(DAEDRIC_S, g, i * lw, y, c);
+            uint16_t c = C_GLOW;
+            if (j) {
+                const uint16_t bg = styled ? cv.readPixel(x + lw / 2, std::clamp(y + DAEDRIC_S.h / 2, OY, hal::H - 1))
+                                           : C_VOID;
+                c = blend(C_RUST, bg, 255 - j * 255 / d.len);
+            }
+            glyphs(DAEDRIC_S, g, x, y, c);
         }
     }
 }
 
 void kaleido() {
     Canvas &cv = hal::canvas();
-    cv.fillRect(0, OY, 240, VH * 2, C_VOID);
     float t = S->t;
     const int cx = 120, cy = OY + 58;
     for (int ring = 0; ring < 5; ++ring) {
@@ -239,6 +244,16 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t) {
     State &s = *S;
     Canvas &cv = hal::canvas();
+    const Palette &colours = palette();
+    const bool sparseArt = s.vis == 3 || s.vis == 4;
+    const bool styledArt = sparseArt && colours.backgroundStyle != BackgroundStyle::Flat;
+    if (styledArt) {
+        // A single backdrop keeps the gradient continuous across the heading.
+        drawBackground(cv);
+        cv.setClipRect(0, OY, hal::W, VH * 2);
+    } else if (sparseArt) {
+        cv.fillRect(0, OY, hal::W, VH * 2, C_VOID);
+    }
     if (!s.paused) s.t += 0.033f * s.speed;
     switch (s.vis) {
     case 0: plasma(); break;
@@ -248,14 +263,15 @@ void draw(uint32_t) {
             if (s.vis == 1) gate(*buffers);
             else ashfire(*buffers);
         } else {
-            cv.fillRect(0, OY, 240, VH * 2, C_VOID);
+            cv.fillRect(0, OY, hal::W, VH * 2, C_VOID);
             textCentre("not enough memory for this vision", 120, 72, C_DIM);
         }
         break;
-    case 3: glyphRain(); break;
+    case 3: glyphRain(styledArt); break;
     case 4: kaleido(); break;
     }
-    cv.fillRect(0, 0, 240, OY, C_VOID);
+    if (styledArt) cv.clearClipRect();
+    else drawSceneBackground(cv, 0, 0, hal::W, OY, colours);
     header("VISIONS", "visions");
     textRight(NAMES[s.vis], 178, 5, C_DIM);
 }

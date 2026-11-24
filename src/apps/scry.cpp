@@ -61,7 +61,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("SCRY", "wifi scry");
 
     if (now - s.lastScan > 2500 || s.scanning) {

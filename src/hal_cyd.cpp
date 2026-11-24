@@ -1,6 +1,7 @@
 // ESP32-2432S028R backend: ILI9341 LCD, XPT2046 touch and GPIO26 speaker output.
 #include "hal.h"
 #include "cyd_controls.h"
+#include "theme.h"
 #ifdef GRIM_CYD_PCM
 #include "cyd_pcm_protocol.h"
 #include "cyd_pcm_serial.h"
@@ -20,7 +21,7 @@
 
 namespace hal {
 namespace {
-constexpr int ScreenW = 320, ScreenH = 240, AppH = 180;
+constexpr int ScreenW = 320, ScreenH = 240;
 constexpr int BacklightPin = 21, BootPin = 0;
 constexpr int BlueLedPin = 17;
 constexpr int TouchCs = 33, TouchMosi = 32, TouchMiso = 39, TouchClk = 25;
@@ -58,6 +59,57 @@ Canvas cv(&lcd);
 SPIClass touchSpi(VSPI);
 XPT2046_Touchscreen touch(TouchCs);
 bool displayReady = false, canvasReady = false;
+
+struct BackdropMote {
+    int16_t x, y;
+    uint16_t colour;
+    uint8_t alpha;
+};
+
+struct Rectangle {
+    int left = 0, top = 0, right = 0, bottom = 0;
+
+    bool empty() const { return left >= right || top >= bottom; }
+    void include(const Rectangle &other) {
+        if (empty()) {
+            *this = other;
+            return;
+        }
+        left = std::min(left, other.left);
+        top = std::min(top, other.top);
+        right = std::max(right, other.right);
+        bottom = std::max(bottom, other.bottom);
+    }
+};
+
+std::array<BackdropMote, 18> backdropMotes{};
+size_t backdropMoteCount = 0;
+std::array<Rectangle, 2> backdropDamage{};
+
+// Sprite zoom uses a half-pixel pivot. This is the first output pixel that
+// samples a given logical coordinate at 4/3 scale, including negative rows.
+int rasterEdge(int coordinate) {
+    const int scaled = 4 * coordinate - 2;
+    return scaled >= 0 ? (scaled + 2) / 3 : scaled / 3;
+}
+
+void drawBackdropMotes(int origin, int sceneBottom) {
+    for (size_t i = 0; i < backdropMoteCount; ++i) {
+        const auto &mote = backdropMotes[i];
+        const bool above = mote.y < 0;
+        const Rectangle pixels{
+            rasterEdge(mote.x),
+            std::max(above ? 0 : sceneBottom, origin + rasterEdge(mote.y)),
+            std::min(ScreenW, rasterEdge(mote.x + 1)),
+            std::min(above ? origin : ScreenH, origin + rasterEdge(mote.y + 1)),
+        };
+        if (pixels.empty()) continue;
+        const uint16_t behind = lcd.readPixel(pixels.left, pixels.top);
+        lcd.fillRect(pixels.left, pixels.top, pixels.right - pixels.left, pixels.bottom - pixels.top,
+                     theme::blend(mote.colour, behind, mote.alpha));
+        backdropDamage[above ? 0 : 1].include(pixels);
+    }
+}
 
 constexpr int AudioBlock = 128;
 constexpr i2s_port_t AudioPort = I2S_NUM_0;
@@ -209,9 +261,11 @@ void diagnostic(const char *cmd, uint32_t now) {
     } else if (pcmStreaming()) {
         return;
     } else if (strcmp(cmd, "status") == 0) {
-        Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u\n",
+        Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u theme_id=%u view_h=%d clip_y=%d view_top=%d\n",
                       ESP.getFreeHeap(), ESP.getMaxAllocHeap(), displayReady, audioLock != nullptr, volume(),
-                      presentUs, audioBlocks.load(std::memory_order_relaxed), signalBlocks.load(std::memory_order_relaxed));
+                      presentUs, audioBlocks.load(std::memory_order_relaxed), signalBlocks.load(std::memory_order_relaxed),
+                      static_cast<unsigned>(theme::colourScheme()), cyd_controls::viewportHeight(),
+                      cyd_controls::viewportBottom(), cyd_controls::viewportTop());
     } else if (strcmp(cmd, "shot") == 0 && displayReady) {
         shot();
     }
@@ -284,7 +338,8 @@ void scanInput() {
         sendTouch(down, x, y, now);
 #ifdef GRIM_CYD_DIAGNOSTICS
         static bool wasDown = false;
-        if (down && !wasDown && !pcmStreaming() && cyd_controls::viewportBottom() == AppH) {
+        if (down && !wasDown && !pcmStreaming() &&
+            cyd_controls::viewportBottom() >= cyd_controls::viewportHeight()) {
             Serial.printf("screen touch %d %d pressure %d\n", x, y, p.z);
         }
         wasDown = down;
@@ -311,6 +366,7 @@ void begin() {
 #else
     Serial.begin(115200);
 #endif
+    cyd_controls::loadSettings();
     pinMode(BootPin, INPUT_PULLUP);
     for (int pin : {4, 16, BlueLedPin}) {
         digitalWrite(pin, HIGH); // The CYD RGB LED is active low.
@@ -347,16 +403,54 @@ void begin() {
 
 Canvas &canvas() { return cv; }
 
+void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha) {
+    if (!alpha || backdropMoteCount == backdropMotes.size() || x < 0 || x >= W ||
+        y < -theme::FullBackdropMargin || y >= H + theme::FullBackdropMargin ||
+        (y >= 0 && y < H)) return;
+    backdropMotes[backdropMoteCount++] = {static_cast<int16_t>(x), static_cast<int16_t>(y), colour, alpha};
+}
+
 void present() {
-    if (!displayReady || !canvasReady) return;
+    if (!displayReady || !canvasReady) {
+        backdropMoteCount = 0;
+        return;
+    }
 #ifdef GRIM_CYD_DIAGNOSTICS
     const uint32_t start = micros();
 #endif
+    const int top = cyd_controls::viewportTop();
+    const int viewHeight = cyd_controls::viewportHeight();
+    const int clipBottom = cyd_controls::viewportBottom();
+    static int marginOrigin = 0;
+    static std::array<uint16_t, 8> previousBackdrop{};
     lcd.startWrite();
-    lcd.setClipRect(0, 0, ScreenW, cyd_controls::viewportBottom());
-    constexpr float Scale = 4.f / 3.f;
-    cv.pushRotateZoom(0, cyd_controls::viewportTop(), 0, Scale, Scale);
+    if (top > 0) {
+        const auto &colours = theme::palette();
+        const std::array<uint16_t, 8> backdrop{
+            colours.background, colours.ember, colours.dusk, colours.bone, colours.gradientTop,
+            colours.gradientBottom, static_cast<uint16_t>(colours.backgroundStyle),
+            static_cast<uint16_t>(colours.gradientMode),
+        };
+        if (marginOrigin != top || backdrop != previousBackdrop) {
+            theme::drawBackdropMargins(lcd, top, colours);
+            previousBackdrop = backdrop;
+        } else {
+            for (const auto &rect : backdropDamage) {
+                if (!rect.empty()) {
+                    theme::drawBackdropPatch(lcd, top, rect.left, rect.top, rect.right - rect.left,
+                                             rect.bottom - rect.top, colours);
+                }
+            }
+        }
+    }
+    marginOrigin = top > 0 ? top : 0;
+    backdropDamage = {};
+    lcd.setClipRect(0, 0, ScreenW, clipBottom);
+    constexpr float scale = static_cast<float>(ScreenW) / W;
+    cv.pushRotateZoom(0, top, 0, scale, scale);
     lcd.clearClipRect();
+    if (top > 0) drawBackdropMotes(top, top + viewHeight);
+    backdropMoteCount = 0;
     cyd_controls::draw(lcd);
     lcd.endWrite();
 #ifdef GRIM_CYD_DIAGNOSTICS

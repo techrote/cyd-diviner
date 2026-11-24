@@ -217,7 +217,7 @@ uint16_t lineColor(uint8_t k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("GEMINI", "gemini");
 
     net::GemState gs = net::gemState();

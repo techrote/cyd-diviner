@@ -87,7 +87,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("BANISH", "infrared");
 
     // banish-all sweep: fire each power code in turn

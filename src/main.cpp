@@ -4,6 +4,7 @@
 #include "rite.h"
 #include "uisfx.h"
 #include "theme.h"
+#include <algorithm>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,7 +26,9 @@ const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
                              &RITE_IR,
 #endif
                              &RITE_SENTINEL, &RITE_PULSE,
-#ifndef GRIM_CYD
+#ifdef GRIM_CYD
+                             &RITE_PALETTE,
+#else
                              &RITE_PROBE,
 #endif
 };
@@ -47,25 +50,44 @@ struct Mote {
     uint8_t life;
 } motes[18];
 
+#ifdef GRIM_CYD
+constexpr int MoteMargin = 22; // The centered viewport has 30 physical pixels above and below it.
+#else
+constexpr int MoteMargin = 0;
+#endif
+constexpr int MoteTop = -MoteMargin, MoteBottom = hal::H + MoteMargin;
+
 void motesInit() {
     for (auto &m : motes) {
         m.x = rand() % hal::W;
-        m.y = rand() % hal::H;
+        m.y = MoteTop + rand() % (MoteBottom - MoteTop);
         m.vy = 0.15f + (rand() % 100) / 220.f;
         m.life = rand() % 255;
     }
 }
 void motesDraw() {
     Canvas &cv = hal::canvas();
+    const bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
+#ifdef GRIM_CYD
+    const bool centered = cyd_controls::viewportTop() > 0;
+#endif
     for (auto &m : motes) {
         m.y -= m.vy;
         m.life += 3;
-        if (m.y < 0) {
-            m.y = hal::H;
+        if (m.y < MoteTop) {
+            m.y = MoteBottom;
             m.x = rand() % hal::W;
         }
         uint8_t a = (uint8_t)(128 + 127 * sinf(m.life * 0.0245f));
-        cv.drawPixel((int)m.x, (int)m.y, blend(C_EMBER, C_VOID, a));
+        const int x = static_cast<int>(m.x), y = static_cast<int>(floorf(m.y));
+        if (y < 0 || y >= hal::H) {
+#ifdef GRIM_CYD
+            if (centered && a) hal::queueBackdropMote(x, y, C_EMBER, a);
+#endif
+            continue;
+        }
+        if (!styled) cv.drawPixel(x, y, blend(C_EMBER, C_VOID, a));
+        else if (a) cv.drawPixel(x, y, blend(C_EMBER, cv.readPixel(x, y), a));
     }
 }
 
@@ -87,7 +109,7 @@ const char *const LINES[] = {"present day.", "present time.", "the wired remembe
 void drawSplash(uint32_t now) {
     Canvas &cv = hal::canvas();
     uint32_t t = now - t0;
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     motesDraw();
     int cx = 62, cy = 67;
     cv.drawCircle(cx, cy, 50, C_CLOT);
@@ -128,54 +150,57 @@ void drawSplash(uint32_t now) {
 }
 
 /* ------------------------------------------------------------ menu */
-void card(const Rite &r, int x, int y, int w, int h, bool centre, float reveal = 0.f) {
+constexpr int CardY = 66, CardSpacing = 86;
+
+void card(const Rite &r, int cx, bool centre, float reveal = 0.f) {
     Canvas &cv = hal::canvas();
-    int cx = x + w / 2;
+    const DaedricFont &font = !centre ? DAEDRIC_S :
+                              glyphWidth(DAEDRIC_L, r.glyph) <= 92 ? DAEDRIC_L : DAEDRIC_M;
+    const int latinWidth = centre ? static_cast<int>(strlen(r.glyph)) * 6 : 0;
+    const int latinSize = latinWidth * 2 <= 96 ? 2 : 1;
+    // Keep the backing steady through the reveal by allowing for either word.
+    const int w = std::max(glyphWidth(font, r.glyph), latinWidth * latinSize) + (centre ? 12 : 8);
+    const int h = font.h + 8;
+    const int x = cx - w / 2, y = CardY - h / 2;
+    if (x >= hal::W || x + w <= 0) return;
+
     cv.fillRect(x, y, w, h, centre ? C_DUSK : C_ASH);
     frame(x, y, w, h, centre ? C_RUST : C_CLOT, centre ? C_EMBER : C_UMBER);
     if (centre) {
-        // the tag itself resolves from runes to english as you land on it
-        textCentre("- rite -", cx, y + 5, blend(C_DIM, C_DUSK, (uint8_t)(smoothstep(0.4f, 1.f, reveal) * 255)));
-        // the rite's own name: Daedric runes that dissolve into latin letters
-        const DaedricFont &f = glyphWidth(DAEDRIC_L, r.glyph) <= w - 12 ? DAEDRIC_L : DAEDRIC_M;
-        int latSize = (int)strlen(r.glyph) * 12 <= w - 8 ? 2 : 1;
-        int yRune = y + 20 + (f.h == DAEDRIC_L.h ? 0 : 4);
-        int yLat = yRune + (f.h - 8 * latSize) / 2;
-        wordDissolve(f, r.glyph, cx, yRune, yLat, reveal, C_EMBER, C_GLOW, C_DUSK, latSize);
-        // the plain-language subtitle (e.g. "wifi") fades in with the english
-        float sub = smoothstep(0.55f, 1.f, reveal);
-        if (sub > 0.02f) textCentre(r.name, cx, y + h - 16, blend(C_BONE, C_DUSK, (uint8_t)(sub * 255)));
+        const int runeY = y + 4;
+        const int latinY = runeY + (font.h - 8 * latinSize) / 2;
+        wordDissolve(font, r.glyph, cx, runeY, latinY, reveal, C_EMBER, C_GLOW, C_DUSK, latinSize);
+
+        const int tagY = y - 13, subtitleY = y + h + 5;
+        const auto tagAlpha = static_cast<uint8_t>(255 * smoothstep(0.4f, 1.f, reveal));
+        const auto subtitleAlpha = static_cast<uint8_t>(255 * smoothstep(0.55f, 1.f, reveal));
+        if (tagAlpha) textCentre("- rite -", cx, tagY, blend(C_DIM, cv.readPixel(cx, tagY + 4), tagAlpha));
+        if (subtitleAlpha) textCentre(r.name, cx, subtitleY,
+                                      blend(C_BONE, cv.readPixel(cx, subtitleY + 4), subtitleAlpha));
     } else {
-        // unselected: the word stays in Daedric runes only
-        glyphsCentre(DAEDRIC_S, r.glyph, cx, y + h / 2 - DAEDRIC_S.h / 2, C_BLOOD);
+        glyphsCentre(font, r.glyph, cx, y + 4, C_BLOOD);
     }
 }
 
 void drawMenu(uint32_t now) {
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     motesDraw();
     header("GRIMOIRE", "grimoire");
 
     slide += (sel - slide) * 0.35f;
     if (fabsf(sel - slide) < 0.01f) slide = sel;
-    // cards at spacing 82px around the centre; wraps
+    const int anchor = static_cast<int>(roundf(slide));
+    const float offset = anchor - slide;
     for (int d = -2; d <= 2; ++d) {
-        int i = ((int)roundf(slide) + d + N_RITES * 4) % N_RITES;
-        float off = (roundf(slide) + d) - slide;
-        bool centre = d == 0 && fabsf(off) < 0.5f;
-        int cw = centre ? 104 : 60, ch = centre ? 86 : 62;
-        int x = (int)(hal::W / 2 + off * 86) - cw / 2;
-        int y = centre ? 23 : 35;
-        if (x > hal::W || x + cw < 0) continue;
-        if (!centre) card(*RITES[i], x, y, cw, ch, false);
+        if (d == 0) continue;
+        const int i = (anchor + d + N_RITES * 4) % N_RITES;
+        const int cx = static_cast<int>(hal::W / 2 + (offset + d) * CardSpacing);
+        card(*RITES[i], cx, false);
     }
-    {
-        int i = ((int)roundf(slide) % N_RITES + N_RITES) % N_RITES;
-        float off = roundf(slide) - slide;
-        float reveal = smoothstep(130.f, 520.f, (float)(now - selAt));
-        card(*RITES[i], (int)(hal::W / 2 + off * 86) - 52, 23, 104, 86, true, reveal);
-    }
+    const int i = (anchor % N_RITES + N_RITES) % N_RITES;
+    const float reveal = smoothstep(130.f, 520.f, static_cast<float>(now - selAt));
+    card(*RITES[i], static_cast<int>(hal::W / 2 + offset * CardSpacing), true, reveal);
     // arrows
     uint16_t ac = ((now / 400) & 1) ? C_RUST : C_BLOOD;
     cv.fillTriangle(4, 66, 10, 60, 10, 72, ac);
