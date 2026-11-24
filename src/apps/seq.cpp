@@ -309,7 +309,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("SEQ", "sequencer");
 
     const int gx = 30, gy = 24, cw = 13, ch = 17;

@@ -60,7 +60,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("PROBE", "host test");
 
     if (net::wifiState() != net::WST_ONLINE) {

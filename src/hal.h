@@ -32,6 +32,10 @@ typedef void (*AudioFn)(int16_t *out, int n);
 void begin();
 Canvas &canvas(); // 240x135 back buffer; draw here, then present()
 void present();
+#ifdef GRIM_CYD
+// Ambient artwork can submit points above and below the logical canvas.
+void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha);
+#endif
 uint32_t ms();
 void idle(uint32_t msec);
 

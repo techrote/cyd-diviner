@@ -30,3 +30,6 @@ extern const Rite RITE_IR;
 extern const Rite RITE_SENTINEL;
 extern const Rite RITE_PULSE;
 extern const Rite RITE_PROBE;
+#ifdef GRIM_CYD
+extern const Rite RITE_PALETTE;
+#endif

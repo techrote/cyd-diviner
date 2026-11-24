@@ -240,7 +240,8 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    const bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
+    theme::drawBackground(cv);
     header("WIRED", "wired");
     textRight(FORMS[s.form], 178, 5, C_DIM);
     if (!s.paused) {
@@ -255,6 +256,9 @@ void draw(uint32_t now) {
     case 2: solids(); break;
     case 3: tunnel(); break;
     }
+    // Keep the sweep behind the lettering when a background is in use.
+    const int sweepY = OY + (now / 16) % 120;
+    if (styled) cv.drawFastHLine(0, sweepY, 240, C_DUSK);
     cv.setFont(&fonts::Font0);
     cv.setTextSize(1);
     for (int y = 0; y < ROWS; ++y)
@@ -265,9 +269,7 @@ void draw(uint32_t now) {
             cv.setTextColor(col);
             cv.drawChar(c, x * 6, OY + y * 8);
         }
-    // scanline flicker, CRT-ish
-    int sl = (now / 16) % 120;
-    cv.drawFastHLine(0, OY + sl, 240, C_DUSK);
+    if (!styled) cv.drawFastHLine(0, sweepY, 240, C_DUSK);
     footer("1-4 form ;. tilt ,/ spin s snd m mono", s.paused ? "Paused" : nullptr);
 }
 } // namespace

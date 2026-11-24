@@ -3,26 +3,70 @@
 #pragma once
 #include "daedric_glyphs.h"
 #include "hal.h"
-
-// RGB565
-#define C_VOID 0x0020
-#define C_ASH 0x0840
-#define C_DUSK 0x1820
-#define C_CLOT 0x3861
-#define C_BLOOD 0x78E2
-#define C_RUST 0xAA05
-#define C_EMBER 0xC307
-#define C_GLOW 0xE4CD
-#define C_BONE 0xB531
-#define C_DIM 0x6A47
-#define C_UMBER 0x3923
-#define C_STONE 0x39A6
+#include <array>
+#include <cstddef>
 
 namespace theme {
 
+enum class ColourScheme : uint8_t {
+    Ember = 0, Neon = 1, Custom = 2, Glacier, Violet, Sunset, Terminal,
+    Phosphor, Dust, Hotline, Blueprint, Pearl, Abyss
+};
+constexpr std::size_t PresetCount = 12;
+enum class ColourRole : uint8_t { Background, Panel, Text, Accent };
+enum class BackgroundStyle : uint8_t {
+    Flat = 0, Gradient, Grid, Scanlines, Dither, Diagonal, Checker, Diamonds, Waves
+};
+enum class GradientMode : uint8_t { Blend = 0, Multitone, Bands };
+
+struct Colourway {
+    std::array<uint32_t, 4> rgb{}; // 0xRRGGBB, ordered by ColourRole
+    uint8_t saturation = 100;     // 0..200
+    int8_t brightness = 0;      // -100..100
+    int8_t contrast = 0;        // -100..100, relative to the background
+    BackgroundStyle backgroundStyle = BackgroundStyle::Flat;
+    ColourRole gradientStart = ColourRole::Background;
+    ColourRole gradientEnd = ColourRole::Accent;
+    GradientMode gradientMode = GradientMode::Blend;
+};
+
+struct Palette {
+    uint16_t background, ash, dusk, clot, blood, rust, ember, glow, bone, dim, umber, stone;
+    std::array<uint16_t, 256> intensity;
+    BackgroundStyle backgroundStyle = BackgroundStyle::Flat;
+    uint16_t gradientTop = 0, gradientBottom = 0;
+    GradientMode gradientMode = GradientMode::Blend;
+};
+
+namespace detail {
+extern const Palette *activePalette;
+}
+
+inline const Palette &palette() { return *detail::activePalette; }
+ColourScheme colourScheme();
+ColourScheme presetScheme(std::size_t index);
+bool validColourScheme(ColourScheme scheme);
+void setColourScheme(ColourScheme scheme);
+const char *colourSchemeName(ColourScheme scheme);
+const Palette &presetPalette(ColourScheme scheme);
+Colourway presetColourway(ColourScheme scheme);
+Colourway generateColourway(uint16_t hue, GradientMode mode = GradientMode::Blend);
+void buildPalette(Palette &out, const Colourway &colourway);
+bool validColourway(const Colourway &colourway);
+bool hasCustomColourway();
+const Colourway &customColourway();
+void setCustomColourway(const Colourway &colourway);
+void drawBackground(Canvas &canvas, int x, int y, int w, int h, const Palette &colours);
+void drawSceneBackground(Canvas &canvas, int x, int y, int w, int h, const Palette &colours);
+void drawBackground(Canvas &canvas);
+#ifdef GRIM_CYD
+constexpr int FullBackdropMargin = 23;
+void drawBackdropMargins(lgfx::LGFXBase &display, int originY, const Palette &colours);
+void drawBackdropPatch(lgfx::LGFXBase &display, int originY, int x, int y, int w, int h, const Palette &colours);
+#endif
+
 uint16_t blend(uint16_t fg, uint16_t bg, uint8_t a); // a 0..255
-// 0..255 -> void..clot..blood..rust..ember..glow..bone ramp
-uint16_t ramp(uint8_t v);
+inline uint16_t ramp(uint8_t v) { return palette().intensity[v]; }
 
 int glyphWidth(const DaedricFont &f, const char *text, int spacing = 2);
 int glyphs(const DaedricFont &f, const char *text, int x, int y, uint16_t fg, int spacing = 2);
@@ -48,3 +92,17 @@ void header(const char *daedric, const char *latin);
 void footer(const char *hint, const char *touchHint = nullptr);
 
 } // namespace theme
+
+// Semantic RGB565 roles shared by the existing rites and device chrome.
+#define C_VOID (theme::palette().background)
+#define C_ASH (theme::palette().ash)
+#define C_DUSK (theme::palette().dusk)
+#define C_CLOT (theme::palette().clot)
+#define C_BLOOD (theme::palette().blood)
+#define C_RUST (theme::palette().rust)
+#define C_EMBER (theme::palette().ember)
+#define C_GLOW (theme::palette().glow)
+#define C_BONE (theme::palette().bone)
+#define C_DIM (theme::palette().dim)
+#define C_UMBER (theme::palette().umber)
+#define C_STONE (theme::palette().stone)

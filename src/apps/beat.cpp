@@ -346,7 +346,7 @@ bool onKey(const hal::Key &k) {
 void draw(uint32_t now) {
     State &s = *S;
     Canvas &cv = hal::canvas();
-    cv.fillScreen(C_VOID);
+    theme::drawBackground(cv);
     header("BEAT", "bytebeat");
     char b[48];
     snprintf(b, sizeof b, "%s t=%lu", RATE_NAMES[s.rate], (unsigned long)s.t);
