@@ -294,6 +294,20 @@ uint16_t blend(uint16_t fg, uint16_t bg, uint8_t a) {
     return blend565(fg, bg, a);
 }
 
+int luma(uint16_t colour) {
+    const int r = ((colour >> 11) & 31) * 255 / 31;
+    const int g = ((colour >> 5) & 63) * 255 / 63;
+    const int b = (colour & 31) * 255 / 31;
+    return (299 * r + 587 * g + 114 * b) / 1000;
+}
+
+uint16_t readableInk(uint16_t preferred, uint16_t background) {
+    const int tone = luma(background);
+    const int delta = luma(preferred) - tone;
+    if (delta >= 96 || delta <= -96) return preferred;
+    return tone < 128 ? 0xffff : 0;
+}
+
 template <typename Surface>
 static void drawBlend(Surface &canvas, int x, int y, int w, int h,
                       uint16_t start, uint16_t end, int maxBands) {

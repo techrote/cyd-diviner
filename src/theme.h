@@ -66,6 +66,8 @@ void drawBackdropPatch(lgfx::LGFXBase &display, int originY, int x, int y, int w
 #endif
 
 uint16_t blend(uint16_t fg, uint16_t bg, uint8_t a); // a 0..255
+int luma(uint16_t colour);
+uint16_t readableInk(uint16_t preferred, uint16_t background);
 inline uint16_t ramp(uint8_t v) { return palette().intensity[v]; }
 
 int glyphWidth(const DaedricFont &f, const char *text, int spacing = 2);

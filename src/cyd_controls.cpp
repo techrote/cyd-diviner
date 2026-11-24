@@ -192,6 +192,7 @@ int displayedVolume = -1;
 ColourScheme displayedScheme = ColourScheme::Neon;
 size_t themePage = 0;
 bool paletteDirty = false;
+const theme::Palette *palettePreview = nullptr;
 bool paletteContact = false;
 struct Point { int x = -1, y = -1; } paletteStart, paletteMotion;
 
@@ -447,15 +448,8 @@ void drawToggle(lgfx::LGFXBase &display) {
     display.drawLine(cx, point, cx + 5, ends, 0xffff);
 }
 
-int luma(uint16_t colour) {
-    const int r = ((colour >> 11) & 31) * 255 / 31;
-    const int g = ((colour >> 5) & 63) * 255 / 63;
-    const int b = (colour & 31) * 255 / 31;
-    return (299 * r + 587 * g + 114 * b) / 1000;
-}
-
 bool hasContrast(uint16_t text, uint16_t background) {
-    const int difference = luma(text) - luma(background);
+    const int difference = theme::luma(text) - theme::luma(background);
     return difference >= 48 || difference <= -48;
 }
 
@@ -505,6 +499,7 @@ void setRite(const Rite *rite) {
     symbols = shift = false;
     tapX = tapY = -1;
     paletteDirty = paletteContact = false;
+    palettePreview = nullptr;
     paletteStart = paletteMotion = {};
     show(Panel::Main);
 }
@@ -518,7 +513,8 @@ void setTextMode(TextMode mode) {
     show(edit ? Panel::Keyboard : Panel::Main);
 }
 
-void setPaletteDirty(bool changed) {
+void setPalettePreview(const theme::Palette &preview, bool changed) {
+    palettePreview = &preview;
     if (paletteDirty == changed) return;
     paletteDirty = changed;
     dirty = true;
@@ -652,7 +648,7 @@ void draw(lgfx::LGFXBase &display) {
 
     Layout layout;
     makeLayout(layout);
-    const auto &colours = dockColours(scheme);
+    const auto &colours = palettePreview ? *palettePreview : dockColours(scheme);
     display.fillRect(0, layout.top, LCD_W, LCD_H - layout.top, colours.background);
     display.drawFastHLine(0, layout.top, LCD_W, colours.rust);
     display.setFont(&fonts::Font0);
@@ -660,8 +656,9 @@ void draw(lgfx::LGFXBase &display) {
 
     char level[8];
     snprintf(level, sizeof level, "%d%%", percent);
-    const bool extraPreset = scheme != ColourScheme::Ember && scheme != ColourScheme::Neon && scheme != ColourScheme::Custom;
-    const uint16_t pressedBackground = scheme == ColourScheme::Ember ? colours.blood :
+    const bool extraPreset = !palettePreview && scheme != ColourScheme::Ember && scheme != ColourScheme::Neon &&
+                             scheme != ColourScheme::Custom;
+    const uint16_t pressedBackground = !palettePreview && scheme == ColourScheme::Ember ? colours.blood :
                                        extraPreset ? theme::blend(colours.stone, colours.clot, 128) : colours.stone;
     for (int row = 0; row < layout.n; ++row) {
         const Row &line = layout.rows[row];
@@ -681,10 +678,13 @@ void draw(lgfx::LGFXBase &display) {
                                  (active == &RITE_PALETTE && button.key.ch == 's');
             const uint16_t bg = pressed ? pressedBackground : primary ? colours.clot : colours.dusk;
             display.fillRoundRect(x, y, w, h, 3, bg);
-            display.drawRoundRect(x, y, w, h, 3, primary || pressed ? colours.rust : colours.clot);
+            const uint16_t edge = primary || pressed ? colours.rust : colours.clot;
+            display.drawRoundRect(x, y, w, h, 3,
+                                  palettePreview ? theme::blend(theme::readableInk(edge, bg), bg, 128) : edge);
             const char ch[] = {button.key.ch, 0};
             const char *label = button.action == Action::Level ? level : (button.label ? button.label : ch);
-            display.setTextColor((primary || pressed) && !extraPreset ? colours.glow : colours.bone);
+            const uint16_t ink = (primary || pressed) && !extraPreset ? colours.glow : colours.bone;
+            display.setTextColor(palettePreview ? theme::readableInk(ink, bg) : ink);
             if (layerToggle) {
                 display.setTextSize(1);
                 display.drawString(label, x + w / 2, y + h / 2 - 6);

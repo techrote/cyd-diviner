@@ -98,8 +98,9 @@ From **Drone** in the carousel, tap the left side or use **Previous** to reach
 **Palette**. Tap the centre to open it. The editor starts from the active
 theme, including its background style. Select a swatch to edit **Background**,
 **Panel**, **Text**, or **Accent** with the **RGB** sliders. The sample panel
-and colour ramp update as you drag. **Saturation** and **Brightness** affect
-the whole palette.
+and colour ramp update as you drag, and the editor and its lower controls
+preview the draft theme live. Each RGB track keeps its own single-channel
+colour ramp. **Saturation** and **Brightness** affect the whole palette.
 
 Show the lower controls to choose **Neon** or **Ember** as a starting point.
 These seeds and **Hue**, which generates a coordinated colourway, keep the

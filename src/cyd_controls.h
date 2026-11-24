@@ -3,7 +3,7 @@
 #include "hal.h"
 
 struct Rite;
-namespace theme { struct Colourway; }
+namespace theme { struct Colourway; struct Palette; }
 
 namespace cyd_controls {
 
@@ -13,7 +13,7 @@ void loadSettings();
 bool saveColourway(const theme::Colourway &colourway);
 void setRite(const Rite *rite);
 void setTextMode(TextMode mode);
-void setPaletteDirty(bool changed);
+void setPalettePreview(const theme::Palette &preview, bool changed);
 inline constexpr int VisionsArtTop = 19;
 bool visionsImmersive();
 

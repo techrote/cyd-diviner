@@ -20,12 +20,6 @@ constexpr uint16_t pixelRgb(uint32_t rgb) {
     return ((rgb >> 8) & 0xf800) | ((rgb >> 5) & 0x07e0) | ((rgb >> 3) & 0x001f);
 }
 
-constexpr uint16_t Background = pixelRgb(0x101819);
-constexpr uint16_t Panel = pixelRgb(0x1b292a);
-constexpr uint16_t Border = pixelRgb(0x49605f);
-constexpr uint16_t Text = pixelRgb(0xe6eeea);
-constexpr uint16_t Subtle = pixelRgb(0xb3c3be);
-constexpr uint16_t Focus = pixelRgb(0x80d6ad);
 constexpr uint16_t Error = pixelRgb(0xffb477);
 
 struct Tab {
@@ -68,6 +62,16 @@ static_assert(GradientModeCount == static_cast<int>(GradientMode::Bands) + 1);
 
 Colourway draft, saved;
 theme::Palette preview;
+struct Surface {
+    uint16_t fill, text, edge, focus;
+};
+Surface background, panel;
+
+Surface editorSurface(uint16_t fill) {
+    const uint16_t ink = theme::readableInk(preview.bone, fill);
+    return {fill, ink, theme::blend(ink, fill, 128), theme::readableInk(preview.ember, fill)};
+}
+
 int tab = 0, focusedTrack = 0, draggedTrack = -1;
 unsigned hue = 0;
 bool saveFailed = false, gradientDetails = false;
@@ -83,8 +87,10 @@ bool changed() { return !sameColourway(draft, saved); }
 
 void refresh() {
     theme::buildPalette(preview, draft);
+    background = editorSurface(preview.background);
+    panel = editorSurface(preview.dusk);
     saveFailed = false;
-    cyd_controls::setPaletteDirty(changed());
+    cyd_controls::setPalettePreview(preview, changed());
 }
 
 void enter() {
@@ -247,7 +253,7 @@ bool key(const hal::Key &k) {
             saveFailed = !cyd_controls::saveColourway(draft);
             if (!saveFailed) {
                 saved = draft;
-                cyd_controls::setPaletteDirty(false);
+                cyd_controls::setPalettePreview(preview, false);
             }
         }
         break;
@@ -262,14 +268,14 @@ void drawTabs(Canvas &cv) {
     for (int i = 0; i < TabCount; ++i) {
         const Tab &item = Tabs[i];
         const bool selected = i == tab;
-        const uint16_t edge = selected ? Focus : Border;
+        const uint16_t edge = selected ? panel.focus : panel.edge;
         const int width = item.width - 2;
-        cv.fillRect(x, TabsY, width, TabsH, Panel);
+        cv.fillRect(x, TabsY, width, TabsH, panel.fill);
         cv.drawRect(x, TabsY, width, TabsH, edge);
-        theme::textCentre(item.name, x + width / 2, TabsY + (i == StyleTab ? 7 : 4), selected ? Text : Subtle);
+        theme::textCentre(item.name, x + width / 2, TabsY + (i == StyleTab ? 7 : 4), panel.text);
         if (i != StyleTab) {
             cv.fillRect(x + 4, TabsY + 14, width - 8, 4, pixelRgb(draft.rgb[i]));
-            cv.drawRect(x + 3, TabsY + 13, width - 6, 6, Border);
+            cv.drawRect(x + 3, TabsY + 13, width - 6, 6, panel.edge);
         }
         x += item.width;
     }
@@ -280,26 +286,26 @@ void drawStyles(Canvas &cv) {
         const int x = OptionsX + (i % 2) * StyleColumnW;
         const int y = TracksY + (i / 2) * RowHeight;
         const bool selected = static_cast<BackgroundStyle>(i) == draft.backgroundStyle;
-        cv.fillRect(x, y, StyleColumnW - 2, RowHeight - 1, Panel);
-        cv.drawRect(x, y, StyleColumnW - 2, RowHeight - 1, selected ? Focus : Border);
-        cv.drawCircle(x + 6, y + 7, 3, selected ? Focus : Subtle);
-        if (selected) cv.fillCircle(x + 6, y + 7, 1, Focus);
-        theme::text(Styles[i], x + 12, y + 4, selected ? Text : Subtle);
+        cv.fillRect(x, y, StyleColumnW - 2, RowHeight - 1, panel.fill);
+        cv.drawRect(x, y, StyleColumnW - 2, RowHeight - 1, selected ? panel.focus : panel.edge);
+        cv.drawCircle(x + 6, y + 7, 3, selected ? panel.focus : panel.edge);
+        if (selected) cv.fillCircle(x + 6, y + 7, 1, panel.focus);
+        theme::text(Styles[i], x + 12, y + 4, panel.text);
     }
 }
 
 void drawStops(Canvas &cv, const char *title, ColourRole selected, int y, const uint16_t *colours) {
     const int role = static_cast<int>(selected);
-    theme::text(title, OptionsX, y - 10, Text);
-    theme::textRight(Tabs[role].name, OptionsX + OptionsW - 2, y - 10, Subtle);
+    theme::text(title, OptionsX, y - 10, background.text);
+    theme::textRight(Tabs[role].name, OptionsX + OptionsW - 2, y - 10, background.text);
     for (int i = 0; i < StyleTab; ++i) {
         const int x = OptionsX + i * StopW;
         const int width = StopW - 2;
-        cv.fillRect(x, y, width, StopH, Panel);
-        cv.drawRect(x, y, width, StopH, i == role ? Focus : Border);
-        theme::textCentre(StopLabels[i], x + width / 2, y + 3, i == role ? Text : Subtle);
+        cv.fillRect(x, y, width, StopH, panel.fill);
+        cv.drawRect(x, y, width, StopH, i == role ? panel.focus : panel.edge);
+        theme::textCentre(StopLabels[i], x + width / 2, y + 3, panel.text);
         cv.fillRect(x + 4, y + 13, width - 8, 4, colours[i]);
-        cv.drawRect(x + 3, y + 12, width - 6, 6, Border);
+        cv.drawRect(x + 3, y + 12, width - 6, 6, panel.edge);
     }
 }
 
@@ -307,12 +313,12 @@ void drawGradientDetails(Canvas &cv) {
     const int modeX = OptionsX + StyleColumnW;
     const int width = StyleColumnW - 2;
     const int height = RowHeight - 1;
-    cv.fillRect(OptionsX, TracksY, width, height, Panel);
-    cv.drawRect(OptionsX, TracksY, width, height, Border);
-    theme::textCentre("< Styles", OptionsX + width / 2, TracksY + 4, Text);
-    cv.fillRect(modeX, TracksY, width, height, Panel);
-    cv.drawRect(modeX, TracksY, width, height, Border);
-    theme::textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + width / 2, TracksY + 4, Text);
+    cv.fillRect(OptionsX, TracksY, width, height, panel.fill);
+    cv.drawRect(OptionsX, TracksY, width, height, panel.edge);
+    theme::textCentre("< Styles", OptionsX + width / 2, TracksY + 4, panel.text);
+    cv.fillRect(modeX, TracksY, width, height, panel.fill);
+    cv.drawRect(modeX, TracksY, width, height, panel.edge);
+    theme::textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + width / 2, TracksY + 4, panel.text);
     const uint16_t colours[] = {preview.background, preview.dusk, preview.bone, preview.ember};
     drawStops(cv, "Start colour", draft.gradientStart, StartY, colours);
     drawStops(cv, "End colour", draft.gradientEnd, EndY, colours);
@@ -324,40 +330,39 @@ void drawTrack(Canvas &cv, int i) {
     const int span = TrackRight - track.left;
     const int v = value(i);
     const bool selected = i == focusedTrack;
-    const uint16_t ink = selected ? Text : Subtle;
-    if (selected) cv.fillRect(3, y, 144, RowHeight - 1, Panel);
-    theme::text(track.label, 4, y + 4, ink);
+    const Surface &surface = selected ? panel : background;
+    if (selected) cv.fillRect(3, y, 144, RowHeight - 1, panel.fill);
+    theme::text(track.label, 4, y + 4, surface.text);
 
     if (i < Saturation) {
-        const uint32_t colour = draft.rgb[tab];
         for (int x = track.left; x <= TrackRight; x += 2) {
-            const int channel = (x - track.left) * 255 / span;
-            cv.fillRect(x, y + 5, x == TrackRight ? 1 : 2, 6, pixelRgb(replaceComponent(colour, i, channel)));
+            const uint32_t channel = (x - track.left) * 255 / span;
+            cv.fillRect(x, y + 5, x == TrackRight ? 1 : 2, 6, pixelRgb(channel << componentShift(i)));
         }
     } else {
-        cv.fillRect(track.left, y + 5, span + 1, 6, Border);
-        cv.drawFastVLine(track.left + span / 2, y + 4, 8, Subtle);
+        cv.fillRect(track.left, y + 5, span + 1, 6, surface.edge);
+        cv.drawFastVLine(track.left + span / 2, y + 4, 8, surface.text);
     }
-    cv.drawRect(track.left - 1, y + 4, span + 3, 8, Border);
+    cv.drawRect(track.left - 1, y + 4, span + 3, 8, surface.edge);
     const int knob = track.left + ((v - track.minimum) * span + (track.maximum - track.minimum) / 2) /
                                  (track.maximum - track.minimum);
-    cv.fillRect(knob - 2, y + 2, 5, 12, Background);
-    cv.drawRect(knob - 2, y + 2, 5, 12, selected ? Focus : Text);
+    cv.fillRect(knob - 2, y + 2, 5, 12, surface.fill);
+    cv.drawRect(knob - 2, y + 2, 5, 12, selected ? surface.focus : surface.text);
 
     char label[8];
     const char *format = i == Saturation ? "%d%%" : i == Brightness ? "%+d" : "%d";
     snprintf(label, sizeof label, format, v);
-    theme::textRight(label, ValueRight, y + 4, ink);
+    theme::textRight(label, ValueRight, y + 4, surface.text);
 }
 
 void drawPreview(Canvas &cv) {
     constexpr int x = 152, y = 57, w = 84;
     const int h = tab == StyleTab ? 72 : 56;
     const bool showStops = tab == StyleTab && gradientDetails;
-    theme::text(showStops ? "Stop colours" : "UI preview", x, 47, Text);
+    theme::text(showStops ? "Stop colours" : "UI preview", x, 47, background.text);
     if (showStops) theme::drawBackground(cv, x, y, w, h, preview);
     else theme::drawSceneBackground(cv, x, y, w, h, preview);
-    cv.drawRect(x, y, w, h, Border);
+    cv.drawRect(x, y, w, h, background.edge);
     if (showStops) return;
     theme::glyphs(DAEDRIC_S, "D", x + 5, y + 3, preview.ember);
     theme::text("Diviner", x + 23, y + 8, preview.bone);
@@ -373,10 +378,10 @@ void drawPreview(Canvas &cv) {
     if (tab == StyleTab) return;
     const uint32_t rgb = draft.rgb[tab];
     cv.fillRect(x + 3, 119, 21, 10, pixelRgb(rgb));
-    cv.drawRect(x + 3, 119, 21, 10, Border);
+    cv.drawRect(x + 3, 119, 21, 10, background.edge);
     char hex[8];
     snprintf(hex, sizeof hex, "#%06lX", static_cast<unsigned long>(rgb & 0xffffffu));
-    theme::textRight(hex, x + w - 2, 120, Text);
+    theme::textRight(hex, x + w - 2, 120, background.text);
 }
 
 void draw(uint32_t) {
@@ -386,15 +391,15 @@ void draw(uint32_t) {
     if (update) refresh();
 
     Canvas &cv = hal::canvas();
-    cv.fillScreen(Background);
-    theme::text("Palette", 4, 2, Text, 2);
+    cv.fillScreen(background.fill);
+    theme::text("Palette", 4, 2, background.text, 2);
     if (tab == StyleTab && gradientDetails && draft.gradientMode != GradientMode::Blend) {
-        theme::text("Via Panel", 92, 6, Subtle);
+        theme::text("Via Panel", 92, 6, background.text);
     }
     const char *status = saveFailed ? "Save failed" : changed() ? "Unsaved" :
                          theme::colourScheme() == ColourScheme::Custom ? "Saved" : "Preview";
-    theme::textRight(status, 236, 6, saveFailed ? Error : Text);
-    cv.drawFastHLine(0, 18, hal::W, Border);
+    theme::textRight(status, 236, 6, saveFailed ? theme::readableInk(Error, background.fill) : background.text);
+    cv.drawFastHLine(0, 18, hal::W, background.edge);
 
     drawTabs(cv);
     if (tab == StyleTab) {
