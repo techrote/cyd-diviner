@@ -30,7 +30,7 @@ struct Tab {
 constexpr Tab Tabs[] = {{"Background", 68}, {"Panel", 43}, {"Text", 36}, {"Accent", 50}, {"Style", 35}};
 constexpr int TabCount = sizeof Tabs / sizeof Tabs[0];
 constexpr int StyleTab = TabCount - 1;
-constexpr int TabsX = 4, TabsY = 21, TabsH = 22;
+constexpr int TabsX = 4, TabsY = 21, TabsH = 21;
 
 struct Track {
     const char *label;
@@ -41,7 +41,7 @@ struct Track {
 constexpr Track Tracks[] = {{"R", 17, 0, 255}, {"G", 17, 0, 255}, {"B", 17, 0, 255},
                             {"Saturation", 66, 0, 200}, {"Brightness", 66, -100, 100}};
 constexpr int TrackCount = sizeof Tracks / sizeof Tracks[0];
-constexpr int TracksY = 46, RowHeight = 16, TrackRight = 113, ValueRight = 146;
+constexpr int TracksY = 43, RowHeight = 14, TrackRight = 113, ValueRight = 146;
 constexpr int Saturation = 3, Brightness = 4;
 
 constexpr const char *Styles[] = {"Flat", "Gradient", "Grid", "Scanlines", "Dither",
@@ -53,12 +53,26 @@ constexpr int StyleColumnW = OptionsW / 2;
 constexpr int StyleRows = (StyleCount + 1) / 2;
 
 constexpr const char *StopLabels[] = {"BG", "Panel", "Text", "Acc"};
-constexpr int StopW = OptionsW / StyleTab, StopH = 21, StartY = 74, EndY = 105;
+constexpr int StopW = OptionsW / StyleTab, StopH = 17, StartY = 69, EndY = 96;
 static_assert(sizeof StopLabels / sizeof StopLabels[0] == StyleTab);
 
 constexpr const char *GradientModes[] = {"Blend >", "Multitone >", "Bands >"};
 constexpr int GradientModeCount = sizeof GradientModes / sizeof GradientModes[0];
 static_assert(GradientModeCount == static_cast<int>(GradientMode::Bands) + 1);
+
+struct Action {
+    const char *label;
+    char key;
+};
+constexpr Action Actions[] = {{"Ember", 'e'}, {"Neon", 'n'}, {"Hue", 'g'},
+                              {"Multi", 'm'}, {"Bands", 'h'}, {"Save", 's'}};
+constexpr int ActionCount = sizeof Actions / sizeof Actions[0];
+constexpr int ActionWidth = hal::W / ActionCount;
+constexpr int ActionsY = 116;
+static_assert(ActionWidth * ActionCount == hal::W);
+
+constexpr int PreviewX = 152, PreviewY = 53, PreviewW = 84;
+constexpr int StepsY = 99, StepWidth = 17;
 
 Colourway draft, saved;
 theme::Palette preview;
@@ -90,7 +104,6 @@ void refresh() {
     background = editorSurface(preview.background);
     panel = editorSurface(preview.dusk);
     saveFailed = false;
-    cyd_controls::setPalettePreview(preview, changed());
 }
 
 void enter() {
@@ -177,35 +190,6 @@ bool stylePointer(int x, int y) {
     return style < StyleCount && setStyle(style);
 }
 
-bool pointer(int x, int y, bool start) {
-    if (start) {
-        draggedTrack = -1;
-        if (y >= TabsY && y < TabsY + TabsH) {
-            int left = TabsX;
-            for (int i = 0; i < TabCount; ++i) {
-                if (x >= left && x < left + Tabs[i].width) {
-                    tab = i;
-                    gradientDetails = false;
-                    break;
-                }
-                left += Tabs[i].width;
-            }
-            return false;
-        }
-        if (tab == StyleTab) return stylePointer(x, y);
-        if (y >= TracksY && y < TracksY + TrackCount * RowHeight) {
-            const int hit = (y - TracksY) / RowHeight;
-            if (x >= Tracks[hit].left - 5 && x <= TrackRight + 5) focusedTrack = draggedTrack = hit;
-        }
-    }
-    if (tab == StyleTab || draggedTrack < 0) return false;
-    const Track &track = Tracks[draggedTrack];
-    const int width = TrackRight - track.left;
-    const int offset = std::clamp(x, track.left, TrackRight) - track.left;
-    const int next = track.minimum + (offset * (track.maximum - track.minimum) + width / 2) / width;
-    return setValue(draggedTrack, next);
-}
-
 bool key(const hal::Key &k) {
     switch (k.nav) {
     case hal::N_LEFT:
@@ -251,10 +235,7 @@ bool key(const hal::Key &k) {
     case 's':
         if (theme::colourScheme() != ColourScheme::Custom || changed()) {
             saveFailed = !cyd_controls::saveColourway(draft);
-            if (!saveFailed) {
-                saved = draft;
-                cyd_controls::setPalettePreview(preview, false);
-            }
+            if (!saveFailed) saved = draft;
         }
         break;
     default:
@@ -263,19 +244,59 @@ bool key(const hal::Key &k) {
     return true;
 }
 
+bool pointer(int x, int y, bool start) {
+    if (start) {
+        draggedTrack = -1;
+        if (y >= ActionsY) {
+            key(hal::Key{Actions[x / ActionWidth].key});
+            return false;
+        }
+        if (y >= TabsY && y < TabsY + TabsH) {
+            int left = TabsX;
+            for (int i = 0; i < TabCount; ++i) {
+                if (x >= left && x < left + Tabs[i].width) {
+                    tab = i;
+                    gradientDetails = false;
+                    break;
+                }
+                left += Tabs[i].width;
+            }
+            return false;
+        }
+        if (tab == StyleTab) return stylePointer(x, y);
+        if (y >= StepsY && x >= PreviewX && x < PreviewX + PreviewW) {
+            if (x < PreviewX + StepWidth) return setValue(focusedTrack, value(focusedTrack) - 1);
+            if (x >= PreviewX + PreviewW - StepWidth) return setValue(focusedTrack, value(focusedTrack) + 1);
+            return false;
+        }
+        if (y >= TracksY && y < TracksY + TrackCount * RowHeight) {
+            const int hit = (y - TracksY) / RowHeight;
+            if (x >= Tracks[hit].left - 5 && x <= TrackRight + 5) focusedTrack = draggedTrack = hit;
+        }
+    }
+    if (tab == StyleTab || draggedTrack < 0) return false;
+    const Track &track = Tracks[draggedTrack];
+    const int width = TrackRight - track.left;
+    const int offset = std::clamp(x, track.left, TrackRight) - track.left;
+    const int next = track.minimum + (offset * (track.maximum - track.minimum) + width / 2) / width;
+    return setValue(draggedTrack, next);
+}
+
 void drawTabs(Canvas &cv) {
     int x = TabsX;
     for (int i = 0; i < TabCount; ++i) {
         const Tab &item = Tabs[i];
         const bool selected = i == tab;
-        const uint16_t edge = selected ? panel.focus : panel.edge;
+        const Surface &surface = selected ? panel : background;
         const int width = item.width - 2;
-        cv.fillRect(x, TabsY, width, TabsH, panel.fill);
-        cv.drawRect(x, TabsY, width, TabsH, edge);
-        theme::textCentre(item.name, x + width / 2, TabsY + (i == StyleTab ? 7 : 4), panel.text);
+        if (selected) cv.fillRect(x, TabsY, width, TabsH - 1, panel.fill);
+        const int bottom = TabsY + TabsH - 1;
+        cv.drawFastHLine(x, bottom, width, selected ? panel.focus : surface.edge);
+        if (selected) theme::diamond(x + width / 2, bottom, 1, panel.focus);
+        theme::textCentre(item.name, x + width / 2, TabsY + (i == StyleTab ? 6 : 3), surface.text);
         if (i != StyleTab) {
-            cv.fillRect(x + 4, TabsY + 14, width - 8, 4, pixelRgb(draft.rgb[i]));
-            cv.drawRect(x + 3, TabsY + 13, width - 6, 6, panel.edge);
+            cv.fillRect(x + 5, TabsY + 13, width - 10, 4, pixelRgb(draft.rgb[i]));
+            cv.drawRect(x + 4, TabsY + 12, width - 8, 6, surface.edge);
         }
         x += item.width;
     }
@@ -286,26 +307,27 @@ void drawStyles(Canvas &cv) {
         const int x = OptionsX + (i % 2) * StyleColumnW;
         const int y = TracksY + (i / 2) * RowHeight;
         const bool selected = static_cast<BackgroundStyle>(i) == draft.backgroundStyle;
-        cv.fillRect(x, y, StyleColumnW - 2, RowHeight - 1, panel.fill);
-        cv.drawRect(x, y, StyleColumnW - 2, RowHeight - 1, selected ? panel.focus : panel.edge);
-        cv.drawCircle(x + 6, y + 7, 3, selected ? panel.focus : panel.edge);
-        if (selected) cv.fillCircle(x + 6, y + 7, 1, panel.focus);
-        theme::text(Styles[i], x + 12, y + 4, panel.text);
+        const Surface &surface = selected ? panel : background;
+        if (selected) cv.fillRect(x, y, StyleColumnW - 2, RowHeight - 1, panel.fill);
+        theme::diamond(x + 5, y + 6, 2, selected ? surface.focus : surface.edge, selected);
+        theme::text(Styles[i], x + 11, y + 3, surface.text);
     }
 }
 
 void drawStops(Canvas &cv, const char *title, ColourRole selected, int y, const uint16_t *colours) {
     const int role = static_cast<int>(selected);
-    theme::text(title, OptionsX, y - 10, background.text);
-    theme::textRight(Tabs[role].name, OptionsX + OptionsW - 2, y - 10, background.text);
+    theme::text(title, OptionsX, y - 9, background.text);
+    theme::textRight(Tabs[role].name, OptionsX + OptionsW - 2, y - 9, background.text);
     for (int i = 0; i < StyleTab; ++i) {
         const int x = OptionsX + i * StopW;
         const int width = StopW - 2;
-        cv.fillRect(x, y, width, StopH, panel.fill);
-        cv.drawRect(x, y, width, StopH, i == role ? panel.focus : panel.edge);
-        theme::textCentre(StopLabels[i], x + width / 2, y + 3, panel.text);
-        cv.fillRect(x + 4, y + 13, width - 8, 4, colours[i]);
-        cv.drawRect(x + 3, y + 12, width - 6, 6, panel.edge);
+        const bool chosen = i == role;
+        const Surface &surface = chosen ? panel : background;
+        if (chosen) cv.fillRect(x, y, width, StopH, surface.fill);
+        cv.drawFastHLine(x, y + StopH - 1, width, chosen ? surface.focus : surface.edge);
+        theme::textCentre(StopLabels[i], x + width / 2, y + 1, surface.text);
+        cv.fillRect(x + 4, y + 10, width - 8, 4, colours[i]);
+        cv.drawRect(x + 3, y + 9, width - 6, 6, surface.edge);
     }
 }
 
@@ -314,11 +336,11 @@ void drawGradientDetails(Canvas &cv) {
     const int width = StyleColumnW - 2;
     const int height = RowHeight - 1;
     cv.fillRect(OptionsX, TracksY, width, height, panel.fill);
-    cv.drawRect(OptionsX, TracksY, width, height, panel.edge);
-    theme::textCentre("< Styles", OptionsX + width / 2, TracksY + 4, panel.text);
+    cv.drawFastHLine(OptionsX, TracksY + height - 1, width, panel.edge);
+    theme::textCentre("< Styles", OptionsX + width / 2, TracksY + 3, panel.text);
     cv.fillRect(modeX, TracksY, width, height, panel.fill);
-    cv.drawRect(modeX, TracksY, width, height, panel.edge);
-    theme::textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + width / 2, TracksY + 4, panel.text);
+    cv.drawFastHLine(modeX, TracksY + height - 1, width, panel.edge);
+    theme::textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + width / 2, TracksY + 3, panel.text);
     const uint16_t colours[] = {preview.background, preview.dusk, preview.bone, preview.ember};
     drawStops(cv, "Start colour", draft.gradientStart, StartY, colours);
     drawStops(cv, "End colour", draft.gradientEnd, EndY, colours);
@@ -332,56 +354,89 @@ void drawTrack(Canvas &cv, int i) {
     const bool selected = i == focusedTrack;
     const Surface &surface = selected ? panel : background;
     if (selected) cv.fillRect(3, y, 144, RowHeight - 1, panel.fill);
-    theme::text(track.label, 4, y + 4, surface.text);
+    theme::text(track.label, 4, y + 3, surface.text);
 
     if (i < Saturation) {
         for (int x = track.left; x <= TrackRight; x += 2) {
             const uint32_t channel = (x - track.left) * 255 / span;
-            cv.fillRect(x, y + 5, x == TrackRight ? 1 : 2, 6, pixelRgb(channel << componentShift(i)));
+            cv.fillRect(x, y + 5, x == TrackRight ? 1 : 2, 4, pixelRgb(channel << componentShift(i)));
         }
     } else {
-        cv.fillRect(track.left, y + 5, span + 1, 6, surface.edge);
-        cv.drawFastVLine(track.left + span / 2, y + 4, 8, surface.text);
+        cv.drawFastHLine(track.left, y + 6, span + 1, surface.edge);
+        cv.drawFastVLine(track.left + span / 2, y + 4, 6, surface.text);
     }
-    cv.drawRect(track.left - 1, y + 4, span + 3, 8, surface.edge);
+    if (i < Saturation) cv.drawRect(track.left - 1, y + 4, span + 3, 6, surface.edge);
     const int knob = track.left + ((v - track.minimum) * span + (track.maximum - track.minimum) / 2) /
                                  (track.maximum - track.minimum);
-    cv.fillRect(knob - 2, y + 2, 5, 12, surface.fill);
-    cv.drawRect(knob - 2, y + 2, 5, 12, selected ? surface.focus : surface.text);
+    theme::diamond(knob, y + 7, 3, surface.fill);
+    theme::diamond(knob, y + 7, 2, selected ? surface.focus : surface.text);
 
     char label[8];
     const char *format = i == Saturation ? "%d%%" : i == Brightness ? "%+d" : "%d";
     snprintf(label, sizeof label, format, v);
-    theme::textRight(label, ValueRight, y + 4, surface.text);
+    theme::textRight(label, ValueRight, y + 3, surface.text);
 }
 
 void drawPreview(Canvas &cv) {
-    constexpr int x = 152, y = 57, w = 84;
-    const int h = tab == StyleTab ? 72 : 56;
+    constexpr int x = PreviewX, y = PreviewY, w = PreviewW;
     const bool showStops = tab == StyleTab && gradientDetails;
-    theme::text(showStops ? "Stop colours" : "UI preview", x, 47, background.text);
+    const bool middleStop = showStops && draft.gradientMode != GradientMode::Blend;
+    const int h = tab != StyleTab ? 43 : middleStop ? 49 : 59;
+    const char *label = saveFailed ? "Save failed" : showStops ? "Stop colours" : "Preview";
+    theme::text(label, x, TracksY, saveFailed ? theme::readableInk(Error, background.fill) : background.text);
     if (showStops) theme::drawBackground(cv, x, y, w, h, preview);
     else theme::drawSceneBackground(cv, x, y, w, h, preview);
-    cv.drawRect(x, y, w, h, background.edge);
-    if (showStops) return;
+    theme::frame(x, y, w, h, background.edge, background.focus);
+    if (showStops) {
+        if (middleStop) theme::textCentre("Via Panel", x + w / 2, y + h + 3, background.text);
+        return;
+    }
     theme::glyphs(DAEDRIC_S, "D", x + 5, y + 3, preview.ember);
-    theme::text("Diviner", x + 23, y + 8, preview.bone);
+    theme::text("diviner", x + 23, y + 8, preview.bone);
     cv.drawFastHLine(x + 4, y + 19, w - 8, preview.clot);
-    cv.fillRect(x + 7, y + 24, w - 14, 16, preview.dusk);
-    cv.drawRect(x + 7, y + 24, w - 14, 16, preview.rust);
-    theme::textCentre("Open", x + w / 2, y + 28, preview.glow);
+    theme::diamond(x + w / 2, y + 19, 1, preview.rust);
+    cv.fillRect(x + 8, y + 23, w - 16, 12, preview.dusk);
+    theme::frame(x + 8, y + 23, w - 16, 12, preview.rust, preview.ember);
+    theme::textCentre("rite", x + w / 2, y + 25, preview.glow);
     for (int i = 0; i < w - 10; ++i) {
         const auto index = i * 255 / (w - 11);
-        cv.drawFastVLine(x + 5 + i, y + h - 11, 6, preview.intensity[index]);
+        cv.drawFastVLine(x + 5 + i, y + h - 5, 3, preview.intensity[index]);
     }
 
     if (tab == StyleTab) return;
-    const uint32_t rgb = draft.rgb[tab];
-    cv.fillRect(x + 3, 119, 21, 10, pixelRgb(rgb));
-    cv.drawRect(x + 3, 119, 21, 10, background.edge);
+    const int plusX = x + w - StepWidth;
+    cv.fillRect(x, StepsY + 2, StepWidth, 12, panel.fill);
+    cv.fillRect(plusX, StepsY + 2, StepWidth, 12, panel.fill);
+    cv.drawFastHLine(x, StepsY + 13, StepWidth, panel.edge);
+    cv.drawFastHLine(plusX, StepsY + 13, StepWidth, panel.edge);
+    theme::textCentre("-", x + StepWidth / 2, StepsY + 4, panel.text);
+    theme::textCentre("+", plusX + StepWidth / 2, StepsY + 4, panel.text);
     char hex[8];
-    snprintf(hex, sizeof hex, "#%06lX", static_cast<unsigned long>(rgb & 0xffffffu));
-    theme::textRight(hex, x + w - 2, 120, background.text);
+    snprintf(hex, sizeof hex, "#%06lX", static_cast<unsigned long>(draft.rgb[tab] & 0xffffffu));
+    theme::textCentre(hex, x + w / 2, StepsY + 4, background.text);
+}
+
+void drawHeader(Canvas &cv, bool pending) {
+    const int runeWidth = theme::glyphs(DAEDRIC_S, "PALETTE", 4, 1, background.focus);
+    theme::text("palette", 4 + runeWidth + 6, 5, background.text);
+    if (pending) theme::textRight("unsaved", 167, 5, background.text);
+    else if (theme::colourScheme() == ColourScheme::Custom) theme::textRight("saved", 167, 5, background.text);
+    theme::textRight(pending ? "< Discard" : "< Settings", 236, 5, background.focus);
+    cv.drawFastHLine(0, 18, hal::W, background.edge);
+    theme::diamond(hal::W / 2, 18, 2, background.focus);
+}
+
+void drawActions(Canvas &cv) {
+    cv.drawFastHLine(0, ActionsY - 1, hal::W, background.edge);
+    for (int i = 0; i < ActionCount; ++i) {
+        const int x = i * ActionWidth + 2, y = ActionsY + 2, w = ActionWidth - 4;
+        constexpr int h = 14;
+        const bool save = Actions[i].key == 's';
+        cv.fillRect(x, y, w, h, panel.fill);
+        if (save) theme::frame(x, y, w, h, panel.edge, panel.focus);
+        else cv.drawFastHLine(x, y + h - 1, w, panel.edge);
+        theme::textCentre(Actions[i].label, x + w / 2, y + 3, save ? panel.focus : panel.text);
+    }
 }
 
 void draw(uint32_t) {
@@ -392,14 +447,7 @@ void draw(uint32_t) {
 
     Canvas &cv = hal::canvas();
     cv.fillScreen(background.fill);
-    theme::text("Palette", 4, 2, background.text, 2);
-    if (tab == StyleTab && gradientDetails && draft.gradientMode != GradientMode::Blend) {
-        theme::text("Via Panel", 92, 6, background.text);
-    }
-    const char *status = saveFailed ? "Save failed" : changed() ? "Unsaved" :
-                         theme::colourScheme() == ColourScheme::Custom ? "Saved" : "Preview";
-    theme::textRight(status, 236, 6, saveFailed ? theme::readableInk(Error, background.fill) : background.text);
-    cv.drawFastHLine(0, 18, hal::W, background.edge);
+    drawHeader(cv, changed());
 
     drawTabs(cv);
     if (tab == StyleTab) {
@@ -409,6 +457,7 @@ void draw(uint32_t) {
         for (int i = 0; i < TrackCount; ++i) drawTrack(cv, i);
     }
     drawPreview(cv);
+    drawActions(cv);
 }
 
 } // namespace

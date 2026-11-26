@@ -71,6 +71,8 @@ uint16_t readableInk(uint16_t preferred, uint16_t background);
 inline uint16_t ramp(uint8_t v) { return palette().intensity[v]; }
 
 int glyphWidth(const DaedricFont &f, const char *text, int spacing = 2);
+int glyphs(Canvas &canvas, const DaedricFont &f, const char *text, int x, int y, uint16_t fg,
+           int spacing = 2, uint8_t opacity = 255, int transparent = -1);
 int glyphs(const DaedricFont &f, const char *text, int x, int y, uint16_t fg, int spacing = 2);
 void glyphsCentre(const DaedricFont &f, const char *text, int cx, int y, uint16_t fg);
 
@@ -90,7 +92,7 @@ void textCentre(const char *s, int cx, int y, uint16_t c, int size = 1);
 void textRight(const char *s, int rx, int y, uint16_t c, int size = 1);
 
 // Top bar: Daedric name + latin name, battery; bottom hint line.
-void header(const char *daedric, const char *latin);
+void header(const char *daedric, const char *latin, int transparent = -1);
 void footer(const char *hint, const char *touchHint = nullptr);
 
 } // namespace theme

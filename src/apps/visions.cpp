@@ -15,6 +15,7 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <optional>
 #include <stdio.h>
 #include <string.h>
 #if defined(GRIM_DEVICE) && defined(GRIM_CYD_DIAGNOSTICS)
@@ -137,6 +138,11 @@ struct Fire {
     bool seeded = false;
 };
 
+struct RainDrop {
+    float y, v;
+    uint8_t len;
+};
+
 struct State {
     Vision vis = Plasma;
     float t = 0, speed = 1.f;
@@ -145,11 +151,10 @@ struct State {
     TrailHistory history;
     std::unique_ptr<Tunnel> tunnel;
     std::unique_ptr<Fire> fire;
-    struct Drop {
-        float y, v;
-        char g;
-        uint8_t len;
-    } drops[24]{};
+#ifdef GRIM_CYD
+    bool nativeFullscreen = false;
+#endif
+    RainDrop drops[24]{};
     dsp::Noise visualRng;
     // sound
     dsp::Noise rng;
@@ -158,26 +163,33 @@ struct State {
     volatile int which = 0;
 } *S = nullptr;
 
-int8_t sin8(uint8_t a) { // -127..127
+const int8_t *sineValues() {
     static int8_t t[256];
     static bool built = false;
     if (!built) {
         for (int i = 0; i < 256; ++i) t[i] = (int8_t)(127 * sinf(i * 6.2831853f / 256));
         built = true;
     }
-    return t[a];
+    return t;
 }
 
+int8_t sin8(uint8_t a) { return sineValues()[a]; }
+
 void cell(int x, int y, uint16_t c) { hal::canvas().fillRect(x * 2, OY + y * 2, 2, 2, c); }
+
+uint8_t plasmaIntensity(int x, int y, int t) {
+    const int dx = x - VW / 2, dy = (y - VH / 2) * 2;
+    const int wave = sin8(x * 3 + t) + sin8(y * 5 - t * 2 / 3) + sin8((x + y) * 2 + t / 2) +
+                     sin8(int(sqrtf(dx * dx + dy * dy) * 4) - t);
+    const int phase = (wave + 508) * 255 / 1016;
+    return sin8(phase + t / 3) + 128;
+}
 
 void plasma(bool layered) {
     int t = (int)(S->t * 40);
     for (int y = 0; y < VH; ++y)
         for (int x = 0; x < VW; ++x) {
-            int v = sin8(x * 3 + t) + sin8(y * 5 - t * 2 / 3) + sin8((x + y) * 2 + t / 2) +
-                    sin8((int)(sqrtf((x - 60) * (x - 60) + (y - 29) * (y - 29) * 4) * 4) - t);
-            uint8_t u = (uint8_t)((v + 508) * 255 / 1016);
-            const int intensity = sin8(u + t / 3) + 128;
+            const int intensity = plasmaIntensity(x, y, t);
             cell(x, y, ramp(layered ? intensity * 3 / 5 : intensity));
         }
 }
@@ -210,38 +222,44 @@ void gate(const Tunnel &b) {
     hal::canvas().drawEllipse(120, OY + 58, 112, 56, C_BLOOD);
 }
 
+template <size_t Rows, size_t Cols>
+void stepFire(uint8_t (&field)[Rows][Cols], dsp::Noise &rng) {
+    const int floor = Rows - 1;
+    for (auto &spark : field[floor]) spark = (rng.next() % 100) < 55 ? 255 : 60;
+    for (int y = 0; y < floor; ++y) {
+        for (int x = 0; x < int(Cols); ++x) {
+            const int sx = std::clamp(x + int(rng.next() % 3) - 1, 0, int(Cols) - 1);
+            const int y2 = std::min(y + 2, floor);
+            int v = (field[y + 1][sx] * 2 + field[y + 1][x] + field[y2][x]) / 4;
+            v -= 3 + (rng.next() & 3);
+            field[y][x] = v < 0 ? 0 : v;
+        }
+    }
+}
+
 void ashfire(Fire &fire, bool layered) {
     auto &f = fire.values;
     if (!S->paused || !fire.seeded) {
-        auto &rng = S->visualRng;
-        for (int x = 0; x < VW; ++x) f[VH][x] = (rng.next() % 100) < 55 ? 255 : 60;
-        for (int y = 0; y < VH; ++y) {
-            for (int x = 0; x < VW; ++x) {
-                const int sx = std::clamp(x + int(rng.next() % 3) - 1, 0, VW - 1);
-                const int y2 = std::min(y + 2, VH);
-                int v = (f[y + 1][sx] * 2 + f[y + 1][x] + f[y2][x]) / 4;
-                v -= 3 + (rng.next() & 3);
-                f[y][x] = v < 0 ? 0 : v;
-            }
-        }
+        stepFire(f, S->visualRng);
         fire.seeded = true;
     }
     for (int y = 0; y < VH; ++y)
         for (int x = 0; x < VW; ++x) cell(x, y, ramp(layered ? f[y][x] * 3 / 4 : f[y][x]));
 }
 
-void glyphRain(bool styled) {
+template <size_t Lanes>
+void glyphRain(RainDrop (&drops)[Lanes], dsp::Noise &rng, float step, bool styled) {
     Canvas &cv = hal::canvas();
-    const int lanes = 24, lw = 10;
-    for (int i = 0; i < lanes; ++i) {
+    const int lw = hal::W / Lanes;
+    for (int i = 0; i < int(Lanes); ++i) {
         const int x = i * lw;
-        auto &d = S->drops[i];
+        auto &d = drops[i];
         if (d.v == 0 || d.y > 140) {
-            d.y = -(float)(S->visualRng.next() % 80);
-            d.v = 0.6f + (S->visualRng.next() % 100) / 70.f;
-            d.len = 3 + S->visualRng.next() % 5;
+            d.y = -(float)(rng.next() % 80);
+            d.v = 0.6f + (rng.next() % 100) / 70.f;
+            d.len = 3 + rng.next() % 5;
         }
-        if (!S->paused) d.y += d.v * S->speed;
+        d.y += d.v * step;
         for (int j = 0; j < d.len; ++j) {
             int y = (int)d.y - j * 16;
             if (y < OY - 14 || y > 134) continue;
@@ -256,6 +274,84 @@ void glyphRain(bool styled) {
         }
     }
 }
+
+void glyphRain(bool styled) {
+    glyphRain(S->drops, S->visualRng, S->paused ? 0.f : S->speed, styled);
+}
+
+#ifdef GRIM_CYD
+using cyd_controls::MenuBackdrop;
+constexpr int MenuFireRows = 16;
+constexpr int MenuFireCols = 60;
+struct MenuFire {
+    uint8_t values[MenuFireRows + 1][MenuFireCols]{};
+};
+std::unique_ptr<MenuFire> menuFire;
+RainDrop menuRain[16]{};
+dsp::Noise menuNoise;
+MenuBackdrop previousBackdrop = MenuBackdrop::Theme;
+uint16_t backdropKey = 0;
+constexpr int MenuBandRows = 8, MenuBandWidth = 320;
+constexpr size_t MenuBandPixels = 2 * MenuBandRows * MenuBandWidth;
+std::unique_ptr<lgfx::swap565_t[]> menuBandBuffer;
+uint32_t previousRainMs = 0;
+uint32_t previousFireMs = 0;
+struct MenuMote {
+    int16_t x, y;
+    uint8_t alpha;
+};
+std::array<MenuMote, 18> menuMotes;
+size_t menuMoteCount = 0;
+
+void advanceMenuRain(int height, uint32_t now) {
+    const float step = std::min<uint32_t>(now - previousRainMs, 100) * .024f;
+    previousRainMs = now;
+    for (auto &drop : menuRain) {
+        if (!drop.v || drop.y >= height + (drop.len - 1) * DAEDRIC_S.h) {
+            drop.y = drop.v ? -float(menuNoise.next() % 80) : float(menuNoise.next() % height);
+            drop.v = 0.6f + (menuNoise.next() % 100) / 70.f;
+            drop.len = 2 + menuNoise.next() % 3;
+        }
+        drop.y += drop.v * step;
+    }
+}
+
+void drawMenuRain(Canvas &cv, int first, int rows) {
+    constexpr int lanes = sizeof(menuRain) / sizeof(*menuRain);
+    const int pitch = DAEDRIC_S.h;
+    for (int i = 0; i < lanes; ++i) {
+        const auto &drop = menuRain[i];
+        const int head = int(drop.y);
+        for (int j = 0; j < drop.len; ++j) {
+            const int y = head - j * pitch - first;
+            if (y >= rows || y + pitch <= 0) continue;
+            const int index = (i * 7 + j * 3 + std::max(0, head) / pitch) % 26;
+            const char g[] = {char('A' + index), 0};
+            const int x = std::min(i * cv.width() / lanes, cv.width() - DAEDRIC_S.glyphs[index].w);
+            glyphs(cv, DAEDRIC_S, g, x, y, C_EMBER, 2, 84 - j * 84 / drop.len);
+        }
+    }
+}
+
+void clearMenuForeground(Canvas &cv) {
+    const auto quantise = [&](uint16_t c) {
+        return cv.getColorDepth() == 8 ? cv.color8to16(cv.color16to8(c)) : c;
+    };
+    const uint16_t inks[] = {C_VOID, C_ASH, C_DUSK, C_CLOT, C_BLOOD, C_RUST, C_EMBER,
+                             C_GLOW, C_BONE, C_DIM, C_UMBER, C_STONE, 0, 0xffff};
+    constexpr uint16_t candidates[] = {0xf81f, 0x07ff, 0xffe0, 0x001f, 0xf800, 0x07e0,
+                                       0xf80f, 0x061f, 0x07ef, 0xfbe0, 0x7fe0, 0x701f,
+                                       0xf9e0, 0x03ff, 0x781f, 0xdbff, 0x6ffe, 0x79ef};
+    for (const auto key : candidates) {
+        if (std::none_of(std::begin(inks), std::end(inks), [&](uint16_t ink) { return quantise(ink) == quantise(key); })) {
+            cv.fillScreen(key);
+            backdropKey = cv.readPixel(0, 0);
+            return;
+        }
+    }
+}
+
+#endif
 
 void kaleido() {
     Canvas &cv = hal::canvas();
@@ -383,6 +479,282 @@ void feedbackTrails(Canvas &cv, State &s) {
     }
 }
 
+#ifdef GRIM_CYD
+constexpr int NativeEdge = 320;
+constexpr int BandHeight = 8;
+constexpr int NativeHalf = NativeEdge / 2 + 1;
+
+struct PolarSample { uint8_t radius, angle; };
+
+constexpr int integerRoot(int squared) {
+    int lo = 0, hi = NativeEdge;
+    while (lo + 1 < hi) {
+        const int mid = (lo + hi) / 2;
+        if (mid * mid <= squared) lo = mid;
+        else hi = mid;
+    }
+    return lo;
+}
+
+constexpr auto buildPolarSamples() {
+    std::array<std::array<PolarSample, NativeHalf>, NativeHalf> samples{};
+    for (int y = 0; y < NativeHalf; ++y) {
+        for (int x = 0; x < NativeHalf; ++x) {
+            const int major = x > y ? x : y, minor = x > y ? y : x;
+            const int fraction = major ? minor * 256 / major : 0;
+            const int octant = (32 * fraction + (11 * fraction * (256 - fraction) >> 8)) >> 8;
+            samples[y][x] = {static_cast<uint8_t>(integerRoot(x * x + y * y)),
+                             static_cast<uint8_t>(y > x ? 64 - octant : octant)};
+        }
+    }
+    return samples;
+}
+
+// Both LCD orientations share the same quadrant table in flash.
+constexpr auto NativePolar = buildPolarSamples();
+
+constexpr auto buildTunnelPhase() {
+    std::array<uint8_t, 256> phase{};
+    for (int r = 0; r < int(phase.size()); ++r) phase[r] = 1800 / (r + 1);
+    return phase;
+}
+
+constexpr auto NativeTunnel = buildTunnelPhase();
+
+constexpr int NativeTrailLength = 36;
+constexpr int NativeHeads = 3;
+using TrailStep = std::array<TrailPoint, NativeHeads>;
+std::array<TrailStep, NativeTrailLength> nativePath;
+int nativePathEnd = 0, nativePathCount = 0;
+uint32_t nativePreviousMs = 0;
+
+void moveNativeTrails(float t, int w, int h) {
+    auto &points = nativePath[nativePathEnd];
+    for (int i = 0; i < NativeHeads; ++i) {
+        const float phase = i * 2.0943951f;
+        points[i] = {w / 2 + int(w * (0.34f * sinf(t * 1.6f + phase) + 0.09f * sinf(t * 3.1f - phase))),
+                     h / 2 + int(h * (0.34f * cosf(t * 1.25f - phase) + 0.09f * sinf(t * 2.6f + phase)))};
+    }
+    nativePathEnd = (nativePathEnd + 1) % NativeTrailLength;
+    nativePathCount = std::min(nativePathCount + 1, NativeTrailLength);
+}
+
+struct NativeKaleido {
+    TrailPoint rings[5][7], sparks[7];
+    uint16_t ink[5];
+
+    void animate(float t, int w, int h) {
+        for (int ring = 0; ring < 5; ++ring) {
+            const float r = 0.09f + ring * 0.077f + 0.025f * sinf(t * 1.3f + ring);
+            const float rotation = t * (ring & 1 ? -0.4f : 0.3f) + ring * 0.4f;
+            ink[ring] = ramp(90 + ring * 30 + 40 * sinf(t + ring));
+            for (int i = 0; i < 7; ++i) {
+                const float angle = rotation + i * 6.2831853f / 7;
+                rings[ring][i] = {w / 2 + int(cosf(angle) * r * w), h / 2 + int(sinf(angle) * r * h)};
+            }
+        }
+        const float radius = 0.23f + 0.16f * sinf(t * 2.1f);
+        for (int i = 0; i < 7; ++i) {
+            const float a = t * 0.9f + i * 6.2831853f / 7;
+            sparks[i] = {w / 2 + int(cosf(a) * radius * w), h / 2 + int(sinf(a) * radius * h)};
+        }
+    }
+
+    void draw(Canvas &band, int top) const {
+        const int bottom = top + band.height();
+        for (int ring = 0; ring < 5; ++ring) {
+            for (int i = 0; i < 7; ++i) {
+                const auto a = rings[ring][i], b = rings[ring][(i + 2 + ring % 2) % 7];
+                if (std::max(a.y, b.y) >= top && std::min(a.y, b.y) < bottom) {
+                    band.drawLine(a.x, a.y - top, b.x, b.y - top, ink[ring]);
+                }
+                if (a.y + 2 >= top && a.y - 2 < bottom) band.fillCircle(a.x, a.y - top, 2, C_GLOW);
+            }
+        }
+        for (const auto point : sparks) {
+            if (point.y + 3 >= top && point.y - 3 < bottom) band.fillCircle(point.x, point.y - top, 3, C_BONE);
+        }
+    }
+};
+
+void prepareNativeRain(State &s, float elapsed) {
+    for (auto &drop : s.drops) {
+        if (!drop.v || drop.y > hal::H + 15) {
+            drop.y = drop.v ? -float(s.visualRng.next() % 80) : float(s.visualRng.next() % hal::H);
+            drop.v = 0.6f + (s.visualRng.next() % 100) / 70.f;
+            drop.len = 3 + s.visualRng.next() % 5;
+        }
+        drop.y += drop.v * elapsed * 30.f * s.speed;
+    }
+}
+
+void drawNativeRain(Canvas &band, int top, int height, const State &s) {
+    const int bottom = top + band.height();
+    const int lanes = sizeof(s.drops) / sizeof(*s.drops);
+    const int pitch = DAEDRIC_M.h + 4;
+    for (int i = 0; i < lanes; ++i) {
+        const auto &drop = s.drops[i];
+        const int x = i * band.width() / lanes;
+        const int head = int(drop.y * height / hal::H);
+        for (int j = 0; j < drop.len; ++j) {
+            const int y = head - j * pitch;
+            if (y >= bottom || y + DAEDRIC_M.h <= top) continue;
+            const char letter[] = {char('A' + (i * 7 + j * 3 + std::max(0, head) / pitch) % 26), 0};
+            const int sampleY = std::clamp(y + DAEDRIC_M.h / 2 - top, 0, band.height() - 1);
+            const auto behind = band.readPixel(x, sampleY);
+            const auto ink = j ? blend(C_RUST, behind, 255 - j * 255 / drop.len) : C_GLOW;
+            glyphs(band, DAEDRIC_M, letter, x, y - top, ink);
+        }
+    }
+}
+
+void drawNativeTrails(Canvas &band, int top, const State &s) {
+    const int bottom = top + band.height();
+    const uint16_t colours[] = {C_EMBER, C_GLOW, C_BONE};
+    const int first = (nativePathEnd + NativeTrailLength - nativePathCount) % NativeTrailLength;
+    for (int i = 0; i < nativePathCount; ++i) {
+        const int strength = 24 + (NativeTrailLength - nativePathCount + i) * 230 / (NativeTrailLength - 1);
+        const auto &points = nativePath[(first + i) % NativeTrailLength];
+        const auto &next = nativePath[(first + std::min(i + 1, nativePathCount - 1)) % NativeTrailLength];
+        const int radius = 2 + strength / 64;
+        for (int j = 0; j < NativeHeads; ++j) {
+            const auto a = points[j], b = next[j];
+            if (std::max(a.y + radius, b.y) < top || std::min(a.y - radius, b.y) >= bottom) continue;
+            const int sampleY = std::clamp(a.y - top, 0, band.height() - 1);
+            const auto behind = s.layered ? band.readPixel(a.x, sampleY) : C_VOID;
+            const auto trail = s.layered ? ramp(strength) : colours[j];
+            uint16_t ink = blend(trail, behind, strength);
+            if (!s.layered && s.history.rgb444) ink = to565(to444(ink));
+            band.drawLine(a.x, a.y - top, b.x, b.y - top, ink);
+            band.fillCircle(a.x, a.y - top, radius, ink);
+        }
+    }
+}
+
+template <size_t Rows, size_t Cols, typename Paint>
+void interpolateHeat(const uint8_t (&heat)[Rows][Cols], int y, int width, int height, Paint paint) {
+    const int fy = y * ((int(Rows) - 2) << 8) / (height - 1);
+    const auto &upper = heat[fy >> 8], &lower = heat[(fy >> 8) + 1];
+    const int wy = fy & 255;
+    const int step = ((int(Cols) - 1) << 16) / (width - 1);
+    int fx = 0;
+    for (int x = 0; x < width; ++x, fx += step) {
+        const int ix = std::min(fx >> 16, int(Cols) - 2), wx = (fx - (ix << 16)) >> 8;
+        const int a = upper[ix] * (256 - wx) + upper[ix + 1] * wx;
+        const int b = lower[ix] * (256 - wx) + lower[ix + 1] * wx;
+        paint(x, (a * (256 - wy) + b * wy) >> 16);
+    }
+}
+
+struct NativeField {
+    Vision base;
+    int width, height, tick;
+    const Fire *fire;
+    const int8_t *sines = sineValues();
+    std::array<int8_t, NativeEdge> horizontal{};
+    std::array<lgfx::swap565_t, 256> shades;
+
+    NativeField(const State &s, int w, int h)
+        : NativeField(s.base(), w, h, int(s.t * (s.base() == Gate ? 60.f : 40.f)), s.layered, s.fire.get()) {}
+
+    NativeField(Vision effect, int w, int h, int phase, bool layered, const Fire *heat, bool dimmed = false)
+        : base(effect), width(w), height(h), tick(phase), fire(heat) {
+        for (int i = 0; i < 256; ++i) {
+            const int intensity = !layered ? i : base == Plasma ? i * 3 / 5 : base == Ashfire ? i * 3 / 4 : i;
+            const auto colour = ramp(intensity);
+            shades[i] = lgfx::rgb565_t{dimmed ? blend(colour, C_VOID, 67) : colour};
+        }
+        if (base == Plasma) {
+            for (int x = 0; x < width; ++x) horizontal[x] = wave(x + x / 2 + tick);
+        }
+    }
+
+    int wave(int phase) const { return sines[static_cast<uint8_t>(phase)]; }
+
+    void plasma(lgfx::swap565_t *out, int y) const {
+        const int mid = width / 2;
+        const auto &polar = NativePolar[abs(y - height / 2)];
+        const int vertical = wave(2 * y + y / 2 - tick * 2 / 3);
+        const int diagonal = y + tick / 2;
+        const int phase = tick / 3;
+        for (int x = 0; x < width; ++x) {
+            const int r = polar[abs(x - mid)].radius;
+            const int sum = horizontal[x] + vertical + wave(x + diagonal) + wave(r * 2 - tick);
+            out[x] = shades[wave(((sum + 508) >> 2) + phase) + 128];
+        }
+    }
+
+    void gate(lgfx::swap565_t *out, int y) const {
+        const int mid = width / 2, dy = y - height / 2;
+        const auto &polar = NativePolar[abs(dy)];
+        const int ring = std::min(width, height) * 45 / 100;
+        const lgfx::swap565_t rim{static_cast<uint16_t>(lgfx::getSwap16(C_BLOOD))};
+        for (int x = 0; x < width; ++x) {
+            const int dx = x - mid;
+            const auto p = polar[abs(dx)];
+            int angle = dx < 0 ? 128 - p.angle : p.angle;
+            if (dy < 0) angle = -angle;
+            const uint8_t u = NativeTunnel[p.radius] + tick;
+            const uint8_t v = 2 * angle + tick / 4;
+            const int checker = ((u ^ v) & 16) ? 150 : 40;
+            const int light = checker + wave(u * 2 + v) / 3;
+            const int intensity = std::max(0, light) * std::min(int(p.radius) * 5, 256) >> 8;
+            out[x] = p.radius == ring ? rim : shades[intensity];
+        }
+    }
+
+    void ashfire(lgfx::swap565_t *out, int y) const {
+        interpolateHeat(fire->values, y, width, height, [&](int x, int heat) { out[x] = shades[heat]; });
+    }
+
+    void draw(Canvas &band, int top, int rows) const {
+        if (base != Gate && base != Plasma && (base != Ashfire || !fire)) {
+            drawSceneBackground(band, 0, -top, width, height, palette());
+            return;
+        }
+        auto *out = static_cast<lgfx::swap565_t *>(band.getBuffer());
+        for (int row = 0; row < rows; ++row, out += width) {
+            if (base == Plasma) plasma(out, top + row);
+            else if (base == Gate) gate(out, top + row);
+            else ashfire(out, top + row);
+        }
+    }
+};
+
+constexpr int MenuFlameHeight = 64;
+
+void drawMenuFire(lgfx::swap565_t *line, int y, int width) {
+    const auto &colours = palette().intensity;
+    const int strength = 105 * y / (MenuFlameHeight - 1);
+    interpolateHeat(menuFire->values, y, width, MenuFlameHeight, [&](int x, int heat) {
+        if (heat < 12) return;
+        const auto bg = static_cast<uint16_t>(lgfx::getSwap16(line[x].get()));
+        line[x] = lgfx::rgb565_t{blend(colours[heat], bg, strength)};
+    });
+}
+
+void drawMenuMotes(lgfx::swap565_t *pixels, int width, int y, int rows, int top, bool portrait) {
+    const auto edge = [portrait](int coordinate) {
+        if (portrait) return coordinate;
+        const int scaled = 4 * coordinate - 2;
+        return scaled >= 0 ? (scaled + 2) / 3 : scaled / 3;
+    };
+    for (size_t i = 0; i < menuMoteCount; ++i) {
+        const auto &mote = menuMotes[i];
+        const int first = std::max(y, top + edge(mote.y));
+        const int end = std::min(y + rows, top + edge(mote.y + 1));
+        if (first >= end) continue;
+        for (int row = first; row < end; ++row) {
+            auto *line = pixels + (row - y) * width;
+            for (int x = edge(mote.x); x < edge(mote.x + 1); ++x) {
+                const auto bg = static_cast<uint16_t>(lgfx::getSwap16(line[x].get()));
+                line[x] = lgfx::rgb565_t{blend(C_EMBER, bg, mote.alpha)};
+            }
+        }
+    }
+}
+#endif
+
 void render(int16_t *out, int n) {
     State &s = *S;
     for (int i = 0; i < n; ++i) {
@@ -439,6 +811,9 @@ void enter() {
     hal::setAudio(render);
 }
 void leave() {
+#ifdef GRIM_CYD
+    S->nativeFullscreen = false;
+#endif
     S->history.release();
     S->tunnel.reset();
     S->fire.reset();
@@ -474,8 +849,60 @@ bool onKey(const hal::Key &k) {
     return true;
 }
 
+#ifdef GRIM_CYD
+void drawVisionsHeader(Canvas &cv, const State &s, Vision base) {
+    constexpr const char *names[] = {"Plasma", "Gate", "Ashfire", "Rain", "Kaleido", "Trails"};
+    constexpr const char *pairs[] = {"Plasma + Kaleido", "Gate + Trails", "Ashfire + Rain"};
+    static_assert(sizeof(names) / sizeof(*names) == N_VIS);
+    static_assert(sizeof(pairs) / sizeof(*pairs) == LayerCount);
+
+    const uint16_t surface = blend(C_DUSK, C_VOID, 160);
+    const uint16_t ink = readableInk(C_BONE, surface);
+    const uint16_t detail = readableInk(C_DIM, surface);
+    const uint16_t accent = readableInk(C_EMBER, surface);
+    const uint16_t rule = blend(ink, surface, 58);
+    cv.fillRect(0, 0, hal::W, OY, surface);
+    cv.drawFastHLine(0, OY - 1, hal::W, rule);
+    cv.drawFastVLine(39, 4, 11, rule);
+    cv.drawFastVLine(221, 4, 11, rule);
+
+    cv.drawLine(8, 5, 4, 9, detail);
+    cv.drawLine(4, 9, 8, 13, detail);
+    text("Back", 12, 5, detail);
+    glyphs(cv, DAEDRIC_S, "VISIONS", 44, 1, accent);
+
+    const char *const details[] = {!s.sound ? "Muted" : nullptr, s.paused ? "Paused" : nullptr,
+                                   base == Trails ? (s.history.rgb444 ? "RGB444" : "RGB565") : nullptr};
+    constexpr int LabelRight = 218;
+    const bool showDetails = !s.sound || s.paused || base == Trails;
+    textRight(s.layered ? pairs[base] : names[base], LabelRight, showDetails ? 1 : 5, ink);
+    int detailRight = LabelRight;
+    for (const char *label : details) {
+        if (!label) continue;
+        textRight(label, detailRight, 9, detail);
+        detailRight -= static_cast<int>(strlen(label) + 1) * 6;
+    }
+
+    // This target shares the artwork's fullscreen action.
+    for (int y : {4, 13}) {
+        cv.drawFastHLine(226, y, 4, detail);
+        cv.drawFastHLine(232, y, 4, detail);
+    }
+    for (int x : {226, 235}) {
+        cv.drawFastVLine(x, 4, 4, detail);
+        cv.drawFastVLine(x, 10, 4, detail);
+    }
+}
+#endif
+
 void draw(uint32_t) {
     State &s = *S;
+#ifdef GRIM_CYD
+    if (s.nativeFullscreen) {
+        s.nativeFullscreen = false;
+        prepareVision();
+    }
+#endif
     Canvas &cv = hal::canvas();
     const Palette &colours = palette();
     const Vision base = s.base();
@@ -514,17 +941,185 @@ void draw(uint32_t) {
         }
     }
     if (sparseArt || s.layered) cv.clearClipRect();
+#ifdef GRIM_CYD
+    drawVisionsHeader(cv, s, base);
+#else
     if (!styledArt) drawSceneBackground(cv, 0, 0, hal::W, OY, colours);
     header("VISIONS", "visions");
     const char *title = s.layered ? LayerTitles[base] : NAMES[base];
     if (base == Trails) title = s.history.rgb444 ? "trails RGB444" : "trails RGB565";
     textRight(title, 198, 5, C_DIM);
+#endif
 }
 } // namespace
 
 #ifdef GRIM_CYD
 bool visionsUsesRgb444() { return !S || S->history.rgb444; }
 bool visionsAreLayered() { return S && S->layered; }
+bool visionsPaused() { return S && S->paused; }
+bool visionsSoundEnabled() { return !S || S->sound; }
+int visionsChoice() { return S ? S->base() : Plasma; }
+
+void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
+    State &s = *S;
+    const int width = display.width(), height = display.height();
+    auto *const pixels = static_cast<uint8_t *>(hal::canvas().getBuffer());
+    if (!pixels || width > NativeEdge || height > NativeEdge) {
+        display.fillScreen(C_VOID);
+        return;
+    }
+
+    const bool fresh = !s.nativeFullscreen;
+    if (fresh) {
+        s.nativeFullscreen = true;
+        s.history.release();
+        s.tunnel.reset();
+        nativePathEnd = nativePathCount = 0;
+        nativePreviousMs = now;
+    }
+    const float elapsed = s.paused ? 0.f : std::min<uint32_t>(now - nativePreviousMs, 100) * 0.001f;
+    nativePreviousMs = now;
+    s.t += elapsed * s.speed;
+
+    const Vision base = s.base();
+    const bool hasTrails = base == Trails || (s.layered && base == Gate);
+    const bool hasRain = base == Rain || (s.layered && base == Ashfire);
+    const bool hasKaleido = base == Kaleido || (s.layered && base == Plasma);
+    if (hasTrails && (fresh || !s.paused)) moveNativeTrails(s.t, width, height);
+    if (hasRain) prepareNativeRain(s, elapsed);
+    if (base == Ashfire && s.fire && (!s.paused || !s.fire->seeded)) {
+        stepFire(s.fire->values, s.visualRng);
+        s.fire->seeded = true;
+    }
+    NativeKaleido kaleido;
+    if (hasKaleido) kaleido.animate(s.t, width, height);
+    const NativeField field(s, width, height);
+
+    // Borrow two strips of the ordinary canvas. Even its RGB332 fallback
+    // has 32,400 bytes, enough for both native RGB565 strips (10,240 bytes).
+    static_assert(2 * NativeEdge * BandHeight * sizeof(lgfx::swap565_t) <= hal::W * hal::H);
+    Canvas bands[2];
+    const int bandBytes = width * BandHeight * sizeof(lgfx::swap565_t);
+    bands[0].setBuffer(pixels, width, BandHeight, 16);
+    bands[1].setBuffer(pixels + bandBytes, width, BandHeight, 16);
+    display.setAddrWindow(0, 0, width, height);
+    for (int y = 0; y < height; y += BandHeight) {
+        Canvas &band = bands[(y / BandHeight) % 2];
+        const int rows = std::min(BandHeight, height - y);
+        field.draw(band, y, rows);
+        if (hasRain) drawNativeRain(band, y, height, s);
+        if (hasKaleido) kaleido.draw(band, y);
+        if (hasTrails) drawNativeTrails(band, y, s);
+        display.waitDMA();
+        display.writePixelsDMA(static_cast<const lgfx::swap565_t *>(band.getBuffer()), width * rows);
+    }
+    display.waitDMA();
+}
+
+void releaseVisionsMenuBackdrop() {
+    menuFire.reset();
+    menuBandBuffer.reset();
+    previousBackdrop = MenuBackdrop::Theme;
+}
+
+void drawVisionsMenuBackdrop(uint32_t now) {
+    const auto backdrop = cyd_controls::menuBackdrop();
+    menuMoteCount = 0;
+    if (backdrop == MenuBackdrop::Theme) {
+        if (previousBackdrop != backdrop) releaseVisionsMenuBackdrop();
+        theme::drawBackground(hal::canvas());
+        return;
+    }
+    if (previousBackdrop != backdrop) {
+        if (!menuBandBuffer) menuBandBuffer.reset(new (std::nothrow) lgfx::swap565_t[MenuBandPixels]);
+        menuFire.reset();
+        previousBackdrop = backdrop;
+        if (backdrop == MenuBackdrop::Ashfire) {
+            menuFire.reset(new (std::nothrow) MenuFire);
+            if (menuFire) for (int step = 0; step < MenuFireRows; ++step) stepFire(menuFire->values, menuNoise);
+            previousFireMs = now;
+        }
+        if (backdrop == MenuBackdrop::Rain) {
+            for (auto &drop : menuRain) drop = {};
+            previousRainMs = now;
+        }
+    }
+
+    if (backdrop == MenuBackdrop::Rain) {
+        advanceMenuRain(cyd_controls::displayHeight(), now);
+    } else if (menuFire && now - previousFireMs >= 46) {
+        previousFireMs = now - (now - previousFireMs) % 46;
+        stepFire(menuFire->values, menuNoise);
+    }
+    clearMenuForeground(hal::canvas());
+}
+
+void queueVisionsMenuMote(int x, int y, uint8_t alpha) {
+    if (alpha && x >= 0 && x < hal::W && menuMoteCount < menuMotes.size()) {
+        menuMotes[menuMoteCount++] = {static_cast<int16_t>(x), static_cast<int16_t>(y), alpha};
+    }
+}
+
+int menuBackdropKey() { return previousBackdrop == MenuBackdrop::Theme ? -1 : backdropKey; }
+
+void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now) {
+    Canvas &foreground = hal::canvas();
+    const bool portrait = cyd_controls::isPortrait();
+    const int width = display.width(), height = display.height();
+    const int bottom = cyd_controls::viewportBottom();
+    const int top = cyd_controls::viewportTop(), sceneBottom = top + cyd_controls::viewportHeight();
+    const int rowsPerBand = menuBandBuffer ? MenuBandRows : 1;
+    lgfx::swap565_t local[MenuBandWidth];
+    lgfx::swap565_t source[hal::W];
+    const auto key = lgfx::getSwap16(backdropKey);
+    std::array<uint8_t, MenuBandWidth> xs;
+    for (int x = 0; x < width; ++x) xs[x] = portrait ? x : (3 * x + 2) / 4;
+
+    std::optional<NativeField> plasma;
+    if (previousBackdrop == MenuBackdrop::Plasma) plasma.emplace(Plasma, width, height, (now / 40) % 1536, false, nullptr, true);
+
+    auto *const scratch = menuBandBuffer ? menuBandBuffer.get() : local;
+    Canvas bands[2];
+    bands[0].setBuffer(scratch, width, rowsPerBand, 16);
+    if (menuBandBuffer) bands[1].setBuffer(scratch + width * rowsPerBand, width, rowsPerBand, 16);
+    display.setAddrWindow(0, 0, width, bottom);
+    int previousRow = -1;
+    for (int y = 0; y < bottom; y += rowsPerBand) {
+        Canvas &band = bands[menuBandBuffer ? y / rowsPerBand % 2 : 0];
+        const int rows = std::min(rowsPerBand, bottom - y);
+        auto *const dest = static_cast<lgfx::swap565_t *>(band.getBuffer());
+        if (plasma) {
+            for (int row = 0; row < rows; ++row) plasma->plasma(dest + row * width, y + row);
+        } else {
+            theme::drawSceneBackground(band, 0, -y, width, height, palette());
+            if (previousBackdrop == MenuBackdrop::Rain) {
+                drawMenuRain(band, y, rows);
+            } else if (menuFire) {
+                const int flameTop = bottom - MenuFlameHeight;
+                for (int row = std::max(0, flameTop - y); row < rows; ++row) {
+                    drawMenuFire(dest + row * width, y + row - flameTop, width);
+                }
+            }
+        }
+        drawMenuMotes(dest, width, y, rows, top, portrait);
+        for (int row = std::max(0, top - y); row < std::min(rows, sceneBottom - y); ++row) {
+            const int sy = portrait ? y + row - top : (3 * (y + row - top) + 2) / 4;
+            if (sy != previousRow) foreground.readRect(0, sy, hal::W, 1, source);
+            previousRow = sy;
+            auto *line = dest + row * width;
+            for (int x = 0; x < width; ++x) {
+                if (source[xs[x]].get() != key) line[x] = source[xs[x]];
+            }
+        }
+        if (menuBandBuffer) {
+            display.waitDMA();
+            display.writePixelsDMA(dest, width * rows);
+        } else {
+            display.writePixels(dest, width * rows);
+        }
+    }
+    display.waitDMA();
+}
 #endif
 
 const Rite RITE_VISIONS = {"VISIONS", "visions", "plasma, fire, rain, feedback trails", enter, leave, onKey, draw};

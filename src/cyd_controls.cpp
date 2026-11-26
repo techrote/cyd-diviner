@@ -12,17 +12,28 @@
 
 bool visionsUsesRgb444();
 bool visionsAreLayered();
+bool visionsPaused();
+bool visionsSoundEnabled();
+int visionsChoice();
 
 namespace cyd_controls {
 namespace {
 
-constexpr int LCD_W = 320, LCD_H = 240, DOCK_Y = 180, KEYBOARD_Y = 110;
-constexpr int ToggleWidth = 30, ToggleHeight = 26, ToggleTop = LCD_H - ToggleHeight;
+constexpr int LongEdge = 320, ShortEdge = 240;
+constexpr int LandscapeDockY = 180, LandscapeKeyboardY = 110;
+constexpr int PortraitDockY = 230, PortraitKeyboardY = 170;
+constexpr int ToggleWidth = 30, ToggleHeight = 26, CarouselDockHeight = 30;
 constexpr uint32_t RELEASE_MS = 30, FIRST_REPEAT_MS = 340, REPEAT_MS = 95;
 
 using theme::ColourScheme;
-constexpr size_t PresetsPerPage = 4;
-constexpr size_t ThemePageCount = (theme::PresetCount + PresetsPerPage - 1) / PresetsPerPage;
+constexpr char OrientationKey[] = "orientation";
+constexpr char BackdropKey[] = "menu_backdrop";
+Orientation currentOrientation = Orientation::Landscape;
+MenuBackdrop currentBackdrop = MenuBackdrop::Theme;
+
+int dockTop() { return isPortrait() ? PortraitDockY : LandscapeDockY; }
+int keyboardTop() { return isPortrait() ? PortraitKeyboardY : LandscapeKeyboardY; }
+
 #ifdef GRIM_DEVICE
 constexpr char SettingsNamespace[] = "grimui";
 constexpr char LegacyColourKey[] = "colour";
@@ -115,16 +126,30 @@ bool loadPalette(nvs_handle_t settings) {
 }
 #endif
 
-enum class Panel { Main, Volume, Theme, Notes, Scales, More, Keyboard };
+bool saveOption(const char *key, uint8_t value) {
+#ifdef GRIM_DEVICE
+    nvs_handle_t settings;
+    if (nvs_open(SettingsNamespace, NVS_READWRITE, &settings) != ESP_OK) return false;
+    const bool saved = nvs_set_u8(settings, key, value) == ESP_OK && nvs_commit(settings) == ESP_OK;
+    nvs_close(settings);
+    return saved;
+#else
+    (void)key;
+    (void)value;
+    return true;
+#endif
+}
+
+enum class Panel { Main, Volume, Notes, Scales, More, Keyboard, VisionsEffects, VisionsOptions };
+enum class SettingsPage { Closed, Home, Theme, Display };
 enum class Action : uint8_t {
-    Send, Main, Volume, Theme, Scheme, ThemePrev, ThemeNext, Notes, Scales, More, Keyboard, Symbols, Shift, Level
+    Send, Main, Volume, Notes, Scales, More, Keyboard, Symbols, Shift, Level, VisionsEffects, VisionsOptions
 };
 
 struct Button {
     const char *label = "";
     hal::Key key{};
     Action action = Action::Send;
-    ColourScheme scheme = ColourScheme::Neon;
 };
 
 constexpr Button nav(const char *label, hal::Nav n, bool fn = false) {
@@ -139,10 +164,6 @@ constexpr Button local(const char *label, Action action) {
     return {label, {}, action};
 }
 
-Button schemeButton(ColourScheme scheme) {
-    return {theme::colourSchemeName(scheme), {}, Action::Scheme, scheme};
-}
-
 constexpr Button menu = nav("Menu", hal::N_ESC);
 constexpr Button up = nav("Up", hal::N_UP);
 constexpr Button down = nav("Down", hal::N_DOWN);
@@ -152,6 +173,7 @@ constexpr Button done = local("Done", Action::Main);
 constexpr Button volume = local("Volume", Action::Volume);
 constexpr Button notes = local("Notes", Action::Notes);
 constexpr Button more = local("More", Action::More);
+constexpr const char *VisionsOverlays[] = {"+ Kaleido", "+ Trails", "+ Rain"};
 
 struct Row {
     Button buttons[10];
@@ -168,7 +190,7 @@ struct Row {
 
 struct Layout {
     Row rows[5];
-    int top = DOCK_Y;
+    int top = dockTop();
     int n = 2;
 
     void set(std::initializer_list<Button> first, std::initializer_list<Button> second) {
@@ -180,8 +202,9 @@ struct Layout {
 const Rite *active = nullptr;
 TextMode textMode = TextMode::None;
 Panel panel = Panel::Main;
+SettingsPage settingsPage = SettingsPage::Closed;
 bool splash = true, dirty = true, symbols = false, shift = false;
-bool dockVisible = false, dockBeforeKeyboard = false;
+bool dockVisible = false, dockBeforeKeyboard = false, dockBeforeSettings = false, dockBeforeFocusedRite = false;
 bool immersive = false;
 bool contact = false, releasing = false, canRepeat = false;
 uint32_t releaseAt = 0, repeatAt = 0;
@@ -190,11 +213,10 @@ hal::Key heldKey;
 int tapX = -1, tapY = -1;
 int displayedVolume = -1;
 ColourScheme displayedScheme = ColourScheme::Neon;
-size_t themePage = 0;
-bool paletteDirty = false;
-const theme::Palette *palettePreview = nullptr;
 bool paletteContact = false;
 struct Point { int x = -1, y = -1; } paletteStart, paletteMotion;
+
+bool focusedRite(const Rite *rite) { return rite == &RITE_PALETTE || rite == &RITE_VISIONS; }
 
 void show(Panel next) {
     if (next == Panel::Keyboard) {
@@ -213,9 +235,15 @@ bool keyboardVisible() {
     return dockVisible && panel == Panel::Keyboard;
 }
 
+bool carouselMain() {
+    return !splash && !active && settingsPage == SettingsPage::Closed;
+}
+
 Point viewportPoint(int x, int y) {
-    const int logicalY = (y - viewportTop()) * hal::H / viewportHeight();
-    return {x * hal::W / LCD_W, std::clamp(logicalY, 0, hal::H - 1)};
+    const int px = x - viewportLeft(), py = y - viewportTop();
+    const int logicalX = isPortrait() ? px : (px * 3 + 2) / 4;
+    const int logicalY = isPortrait() ? py : (py * 3 + 2) / 4;
+    return {std::clamp(logicalX, 0, hal::W - 1), std::clamp(logicalY, 0, hal::H - 1)};
 }
 
 void chooseScheme(ColourScheme scheme) {
@@ -228,19 +256,95 @@ void chooseScheme(ColourScheme scheme) {
     theme::setColourScheme(scheme);
 }
 
-void openTheme() {
-    const auto current = theme::colourScheme();
-    for (size_t i = 0; i < theme::PresetCount; ++i) {
-        if (theme::presetScheme(i) == current) {
-            themePage = i / PresetsPerPage;
-            break;
-        }
+struct Area {
+    int x, y, w, h;
+    bool contains(Point p) const { return p.x >= x && p.x < x + w && p.y >= y && p.y < y + h; }
+};
+
+constexpr Area SettingsBack{174, 0, 66, 19};
+constexpr Area VolumeMinus{136, 27, 26, 22}, VolumePlus{197, 27, 29, 22};
+constexpr Area SettingsTheme{14, 51, 212, 22}, SettingsDisplay{14, 75, 212, 22}, SettingsPalette{14, 99, 212, 24};
+constexpr Area TurnChoice{174, 38, 52, 26};
+constexpr Area CustomChoice{14, 106, 212, 18};
+constexpr const char *OrientationNames[] = {"Landscape", "Portrait", "Landscape 180", "Portrait 180"};
+constexpr const char *BackdropNames[] = {"Theme", "Rain", "Ashfire", "Plasma"};
+
+constexpr Area orientationChoice(int i) { return {14 + 80 * i, 38, 76, 26}; }
+constexpr Area backdropChoice(int i) { return {14 + 54 * i, 86, 50, 25}; }
+constexpr Area themeChoice(size_t i) { return {14 + 54 * int(i % 4), 25 + 27 * int(i / 4), 50, 24}; }
+
+void changeOrientation(uint8_t value) {
+    if (value != static_cast<uint8_t>(currentOrientation) && saveOption(OrientationKey, value)) {
+        currentOrientation = static_cast<Orientation>(value);
+        dirty = true;
     }
-    show(Panel::Theme);
+}
+
+bool tapSettings(Point point, hal::Key &out) {
+    if (SettingsBack.contains(point)) {
+        out = {0, hal::N_ESC};
+        return true;
+    }
+    switch (settingsPage) {
+    case SettingsPage::Home:
+        if (VolumeMinus.contains(point) || VolumePlus.contains(point)) {
+            out = {VolumeMinus.contains(point) ? '-' : '='};
+            return true;
+        }
+        if (SettingsTheme.contains(point)) settingsPage = SettingsPage::Theme;
+        else if (SettingsDisplay.contains(point)) settingsPage = SettingsPage::Display;
+        else if (SettingsPalette.contains(point)) {
+            out = {'p'};
+            return true;
+        }
+        break;
+    case SettingsPage::Theme:
+        for (size_t i = 0; i < theme::PresetCount; ++i) {
+            if (themeChoice(i).contains(point)) chooseScheme(theme::presetScheme(i));
+        }
+        if (CustomChoice.contains(point)) chooseScheme(ColourScheme::Custom);
+        break;
+    case SettingsPage::Display: {
+        const auto rotation = static_cast<uint8_t>(currentOrientation);
+        if (TurnChoice.contains(point)) changeOrientation(rotation ^ 2);
+        else if (orientationChoice(0).contains(point)) changeOrientation(rotation & 2);
+        else if (orientationChoice(1).contains(point)) changeOrientation((rotation & 2) | 1);
+        for (uint8_t i = 0; i < 4; ++i) {
+            if (backdropChoice(i).contains(point) && i != static_cast<uint8_t>(currentBackdrop) && saveOption(BackdropKey, i)) {
+                currentBackdrop = static_cast<MenuBackdrop>(i);
+            }
+        }
+        break;
+    }
+    case SettingsPage::Closed:
+        break;
+    }
+    return false;
+}
+
+void settingRow(Area area, const char *label, const char *value = nullptr) {
+    Canvas &cv = hal::canvas();
+    cv.fillRect(area.x, area.y, area.w, area.h, C_DUSK);
+    cv.drawFastHLine(area.x, area.y + area.h - 1, area.w, C_CLOT);
+    theme::text(label, area.x + 7, area.y + (area.h - 8) / 2, theme::readableInk(C_BONE, C_DUSK));
+    if (value) {
+        theme::textRight(value, area.x + area.w - 20, area.y + (area.h - 8) / 2, theme::readableInk(C_DIM, C_DUSK));
+        theme::text(">", area.x + area.w - 14, area.y + (area.h - 8) / 2, theme::readableInk(C_GLOW, C_DUSK));
+    }
+}
+
+void settingChoice(Area area, const char *label, bool selected = false, bool swatch = false, uint16_t ink = 0) {
+    Canvas &cv = hal::canvas();
+    const uint16_t bg = selected ? C_CLOT : C_DUSK;
+    cv.fillRect(area.x, area.y, area.w, area.h, bg);
+    theme::textCentre(label, area.x + area.w / 2, area.y + (area.h - 8) / 2 - (swatch ? 3 : 0),
+                      theme::readableInk(selected ? C_GLOW : C_BONE, bg));
+    if (swatch) cv.drawFastHLine(area.x + area.w / 2 - 10, area.y + area.h - 6, 20, ink);
+    if (selected) cv.drawFastHLine(area.x, area.y + area.h - 1, area.w, C_EMBER);
 }
 
 void keyboard(Layout &layout) {
-    layout.top = KEYBOARD_Y;
+    layout.top = keyboardTop();
     layout.n = 5;
     if (symbols) {
         layout.rows[0].chars("!@#$%^&*()");
@@ -252,34 +356,43 @@ void keyboard(Layout &layout) {
         layout.rows[0].chars("1234567890");
         layout.rows[1].chars(shift ? "QWERTYUIOP" : "qwertyuiop");
         layout.rows[2].chars(shift ? "ASDFGHJKL" : "asdfghjkl");
-        layout.rows[3].add({local(shift ? "ABC" : "Shift", Action::Shift)});
+        layout.rows[3].add({local(shift ? "ABC" : isPortrait() ? "Aa" : "Shift", Action::Shift)});
         layout.rows[3].chars(shift ? "ZXCVBNM" : "zxcvbnm");
         layout.rows[3].add({nav("Del", hal::N_BACK)});
     }
-    layout.rows[4].add({local(symbols ? "ABC" : "Symbols", Action::Symbols),
+    layout.rows[4].add({local(symbols ? "ABC" : isPortrait() ? "Sym" : "Symbols", Action::Symbols),
                         nav("<", hal::N_LEFT, true), nav(">", hal::N_RIGHT, true),
                         character("Space", ' '),
-                        active == &RITE_BEAT ? local("Hide", Action::Main) : nav("Cancel", hal::N_ESC, true),
+                        active == &RITE_BEAT ? local("Hide", Action::Main) :
+                            nav(isPortrait() ? "Back" : "Cancel", hal::N_ESC, true),
                         nav(active == &RITE_BEAT ? "Cast" : textMode == TextMode::Password ? "Join" :
                             textMode == TextMode::Url ? "Open" : "Send", hal::N_ENTER)});
 }
 
-void makeLayout(Layout &layout) {
+void buildLayout(Layout &layout) {
     switch (panel) {
     case Panel::Keyboard:
         keyboard(layout);
         return;
     case Panel::Volume:
-        layout.set({character("Vol -", '-', true), local("", Action::Level), character("Vol +", '=', true)}, {done});
+        layout.set({character("Vol -", '-', true), local("", Action::Level), character("Vol +", '=', true)},
+                   {active == &RITE_VISIONS ? local("Back", Action::VisionsOptions) : done});
         return;
-    case Panel::Theme:
-        for (size_t i = themePage * PresetsPerPage;
-             i < theme::PresetCount && i < (themePage + 1) * PresetsPerPage; ++i) {
-            layout.rows[0].add({schemeButton(theme::presetScheme(i))});
+    case Panel::VisionsEffects:
+        layout.top = displayHeight() - 58;
+        if (visionsAreLayered()) {
+            layout.set({character("Plasma", '1'), character("Gate", '2'), character("Ashfire", '3')}, {done});
+        } else {
+            layout.set({character("Plasma", '1'), character("Gate", '2'), character("Ashfire", '3')},
+                       {character("Rain", '4'), character("Kaleido", '5'), character("Trails", '6'), done});
         }
-        layout.rows[1].add({local("Prev", Action::ThemePrev), local("Next", Action::ThemeNext)});
-        if (theme::hasCustomColourway()) {
-            layout.rows[1].add({schemeButton(ColourScheme::Custom)});
+        return;
+    case Panel::VisionsOptions:
+        layout.top = displayHeight() - 56;
+        layout.rows[0].add({nav("Slower", hal::N_LEFT), nav("Faster", hal::N_RIGHT), volume});
+        layout.rows[1].add({character(visionsAreLayered() ? "Layered" : "Solo", 'l')});
+        if (!visionsAreLayered() && visionsChoice() == 5) {
+            layout.rows[1].add({character(visionsUsesRgb444() ? "RGB444" : "RGB565", 'f')});
         }
         layout.rows[1].add({done});
         return;
@@ -306,14 +419,12 @@ void makeLayout(Layout &layout) {
     if (splash) {
         layout.set({nav("Begin", hal::N_ENTER)}, {});
     } else if (!active) {
-        layout.set({nav("Previous", hal::N_LEFT), nav("Open", hal::N_ENTER), nav("Next", hal::N_RIGHT)},
-                   {volume, local("Theme", Action::Theme)});
-    } else if (active == &RITE_PALETTE) {
-        layout.set({nav(paletteDirty ? "Discard" : "Back", hal::N_ESC), character("Ember", 'e'),
-                    character("Neon", 'n'), character("Hue", 'g'), character("Save", 's')},
-                   {character("Multi", 'm'), character("Bands", 'h'), nav("-", hal::N_LEFT), nav("+", hal::N_RIGHT)});
+        layout.top = displayHeight() - CarouselDockHeight;
+        layout.n = 1;
+        layout.rows[0].add({nav("Previous", hal::N_LEFT), nav("Open", hal::N_ENTER), nav("Next", hal::N_RIGHT)});
     } else if (active == &RITE_DRONE) {
-        layout.set({menu, nav("Bright -", hal::N_DOWN), nav("Bright +", hal::N_UP),
+        layout.set({menu, nav(isPortrait() ? "Bright-" : "Bright -", hal::N_DOWN),
+                    nav(isPortrait() ? "Bright+" : "Bright +", hal::N_UP),
                     nav("Drift -", hal::N_LEFT), nav("Drift +", hal::N_RIGHT), character("Hold", ' ')},
                    {notes, local("Scales", Action::Scales), character("Wind", 'n'), character("Bells", 'b'),
                     character("Safe", 'q'), character("Reseed", 'r'), volume});
@@ -331,11 +442,10 @@ void makeLayout(Layout &layout) {
                    {character("Torus", '1'), character("Navi", '2'), character("Solids", '3'),
                     character("Tunnel", '4'), character("Sound", 's'), character("Mono", 'm'), volume});
     } else if (active == &RITE_VISIONS) {
-        layout.set({menu, nav("Speed-", hal::N_LEFT), nav("Speed+", hal::N_RIGHT), character("Pause", ' '),
-                    character("Sound", 's'), volume, character(visionsUsesRgb444() ? "RGB444" : "RGB565", 'f'),
-                    character("Layer", 'l')},
-                   {character("Plasma", '1'), character("Gate", '2'), character("Ashfire", '3'),
-                    character("Rain", '4'), character("Kaleido", '5'), character("Trails", '6')});
+        layout.top = displayHeight() - 30;
+        layout.n = 1;
+        layout.rows[0].add({local("Effects", Action::VisionsEffects), character(visionsPaused() ? "Play" : "Pause", ' '),
+                           character(visionsSoundEnabled() ? "Mute" : "Unmute", 's'), local("Options", Action::VisionsOptions)});
     } else if (active == &RITE_ORACLE) {
         layout.set({menu, nav("Cast", hal::N_ENTER), character("Utterance", ' ')}, {volume});
     } else if (active == &RITE_LINK) {
@@ -370,6 +480,27 @@ void makeLayout(Layout &layout) {
     }
 }
 
+void makeLayout(Layout &layout) {
+    buildLayout(layout);
+    if (!isPortrait() || layout.n != 2 ||
+        (layout.rows[0].n <= 5 && layout.rows[1].n <= 4)) return;
+
+    // Reflow crowded dock buttons in reading order. The last row has
+    // slightly less room because it also contains the dock toggle.
+    const Row first = layout.rows[0], second = layout.rows[1];
+    const int count = first.n + second.n;
+    layout.n = count > 9 ? 3 : 2;
+    int index = 0;
+    for (int r = 0; r < layout.n; ++r) {
+        Row &row = layout.rows[r];
+        const int remainingRows = layout.n - r;
+        row.n = (count - index + remainingRows - 1) / remainingRows;
+        for (int col = 0; col < row.n; ++col, ++index) {
+            row.buttons[col] = index < first.n ? first.buttons[index] : second.buttons[index - first.n];
+        }
+    }
+}
+
 bool repeatable(hal::Key key) {
     return key.nav == hal::N_LEFT || key.nav == hal::N_RIGHT || key.nav == hal::N_UP ||
            key.nav == hal::N_DOWN || (key.nav == hal::N_BACK && !key.fn);
@@ -379,14 +510,6 @@ bool dispatch(Button button, uint32_t now, hal::Key &out) {
     switch (button.action) {
     case Action::Main: show(Panel::Main); return false;
     case Action::Volume: show(Panel::Volume); return false;
-    case Action::Theme: openTheme(); return false;
-    case Action::Scheme: chooseScheme(button.scheme); return false;
-    case Action::ThemePrev:
-        themePage = (themePage + ThemePageCount - 1) % ThemePageCount;
-        return false;
-    case Action::ThemeNext:
-        themePage = (themePage + 1) % ThemePageCount;
-        return false;
     case Action::Notes: show(Panel::Notes); return false;
     case Action::Scales: show(Panel::Scales); return false;
     case Action::More: show(Panel::More); return false;
@@ -394,6 +517,8 @@ bool dispatch(Button button, uint32_t now, hal::Key &out) {
     case Action::Symbols: symbols = !symbols; dirty = true; return false;
     case Action::Shift: shift = !shift; dirty = true; return false;
     case Action::Level: return false;
+    case Action::VisionsEffects: show(Panel::VisionsEffects); return false;
+    case Action::VisionsOptions: show(Panel::VisionsOptions); return false;
     case Action::Send: break;
     }
     if (!button.key.ch && !button.key.nav) return false;
@@ -409,8 +534,9 @@ bool dispatch(Button button, uint32_t now, hal::Key &out) {
 
 bool tapViewport(Point p, uint32_t now, hal::Key &out) {
     if (splash) return dispatch(nav("", hal::N_ENTER), now, out);
-    if (keyboardVisible() || (dockVisible && panel == Panel::Theme)) return false;
-    if (!active && p.y >= 22 && p.y < 110) {
+    if (keyboardVisible()) return false;
+    if (carouselSettingsVisible()) return tapSettings(p, out);
+    if (!active && p.y >= 22 && p.y < 123) {
         // Cover the full width of the largest settled centre card.
         constexpr int centreHalfWidth = 54;
         hal::Nav key = p.x < hal::W / 2 - centreHalfWidth ? hal::N_LEFT :
@@ -421,8 +547,12 @@ bool tapViewport(Point p, uint32_t now, hal::Key &out) {
     }
     if (active == &RITE_BEAT && p.y >= 91 && p.y < 123) {
         show(Panel::Keyboard);
-    } else if (active == &RITE_VISIONS && p.y >= VisionsArtTop) {
-        immersive = true;
+    } else if (active == &RITE_VISIONS) {
+        if (p.y < VisionsArtTop && p.x < 39) {
+            out = {0, hal::N_ESC};
+            return true;
+        }
+        if (p.y >= VisionsArtTop || p.x >= 222) immersive = true;
     } else if (panel != Panel::Keyboard && (active == &RITE_SEQ || active == &RITE_GEMINI)) {
         tapX = p.x;
         tapY = p.y;
@@ -431,7 +561,7 @@ bool tapViewport(Point p, uint32_t now, hal::Key &out) {
 }
 
 int rowEdge(const Layout &layout, int row) {
-    return layout.top + (LCD_H - layout.top) * row / layout.n;
+    return layout.top + (displayHeight() - layout.top) * row / layout.n;
 }
 
 int rowLeft(const Layout &layout, int row) {
@@ -439,28 +569,16 @@ int rowLeft(const Layout &layout, int row) {
 }
 
 void drawToggle(lgfx::LGFXBase &display) {
-    constexpr int cx = ToggleWidth / 2, cy = ToggleTop + ToggleHeight / 2;
-    display.fillRoundRect(4, ToggleTop + 3, ToggleWidth - 8, ToggleHeight - 6, 4, 0x1082);
-    display.drawRoundRect(4, ToggleTop + 3, ToggleWidth - 8, ToggleHeight - 6, 4, 0xa514);
-    const int point = dockVisible ? cy + 3 : cy - 3;
-    const int ends = dockVisible ? cy - 2 : cy + 2;
-    display.drawLine(cx - 5, ends, cx, point, 0xffff);
-    display.drawLine(cx, point, cx + 5, ends, 0xffff);
-}
-
-bool hasContrast(uint16_t text, uint16_t background) {
-    const int difference = theme::luma(text) - theme::luma(background);
-    return difference >= 48 || difference <= -48;
-}
-
-const theme::Palette &dockColours(ColourScheme scheme) {
-    const auto &colours = theme::palette();
-    if (scheme == ColourScheme::Custom &&
-        (!hasContrast(colours.bone, colours.dusk) || !hasContrast(colours.glow, colours.clot) ||
-         !hasContrast(colours.glow, colours.stone))) {
-        return theme::presetPalette(ColourScheme::Neon);
-    }
-    return colours;
+    constexpr int cx = ToggleWidth / 2 - 2;
+    const int cy = displayHeight() - 11;
+    const auto bg = theme::palette().background;
+    const auto edge = theme::blend(theme::readableInk(theme::palette().dim, bg), bg, 150);
+    display.fillRect(cx - 7, cy - 7, 15, 15, bg);
+    display.drawFastHLine(cx - 5, cy + 5, 11, edge);
+    const int point = dockVisible ? cy + 2 : cy - 3;
+    const int ends = dockVisible ? cy - 2 : cy + 1;
+    display.drawLine(cx - 4, ends, cx, point, edge);
+    display.drawLine(cx, point, cx + 4, ends, edge);
 }
 
 } // namespace
@@ -469,8 +587,14 @@ void loadSettings() {
 #ifdef GRIM_DEVICE
     nvs_handle_t settings;
     if (nvs_open(SettingsNamespace, NVS_READONLY, &settings) != ESP_OK) return;
+    uint8_t value;
+    if (nvs_get_u8(settings, OrientationKey, &value) == ESP_OK && value <= static_cast<uint8_t>(Orientation::Portrait180)) {
+        currentOrientation = static_cast<Orientation>(value);
+    }
+    if (nvs_get_u8(settings, BackdropKey, &value) == ESP_OK && value <= static_cast<uint8_t>(MenuBackdrop::Plasma)) {
+        currentBackdrop = static_cast<MenuBackdrop>(value);
+    }
     if (!loadPalette(settings)) {
-        uint8_t value;
         if (nvs_get_u8(settings, LegacyColourKey, &value) == ESP_OK &&
             (value == static_cast<uint8_t>(ColourScheme::Ember) || value == static_cast<uint8_t>(ColourScheme::Neon))) {
             theme::setColourScheme(static_cast<ColourScheme>(value));
@@ -478,6 +602,70 @@ void loadSettings() {
     }
     nvs_close(settings);
 #endif
+}
+
+Orientation orientation() { return currentOrientation; }
+bool isPortrait() {
+    return currentOrientation == Orientation::Portrait || currentOrientation == Orientation::Portrait180;
+}
+MenuBackdrop menuBackdrop() { return currentBackdrop; }
+void openCarouselSettings() {
+    if (!carouselMain()) return;
+    dockBeforeSettings = dockVisible;
+    dockVisible = false;
+    settingsPage = SettingsPage::Home;
+    show(Panel::Main);
+}
+void backCarouselSettings() {
+    if (settingsPage == SettingsPage::Home) {
+        dockVisible = dockBeforeSettings;
+        settingsPage = SettingsPage::Closed;
+        dirty = true;
+    } else if (settingsPage != SettingsPage::Closed) {
+        settingsPage = SettingsPage::Home;
+    }
+}
+bool carouselSettingsVisible() { return settingsPage != SettingsPage::Closed; }
+
+void drawCarouselSettings(int transparent) {
+    using namespace theme;
+    const bool home = settingsPage == SettingsPage::Home;
+    const bool themes = settingsPage == SettingsPage::Theme;
+    header(home ? "SETTINGS" : themes ? "THEME" : "DISPLAY", home ? "settings" : themes ? "theme" : "display", transparent);
+    auto &cv = hal::canvas();
+    cv.fillRect(SettingsBack.x, 0, SettingsBack.w, 17, C_DUSK);
+    textRight(home ? "< Grimoire" : "< Settings", 233, 5, readableInk(C_BONE, C_DUSK));
+
+    if (home) {
+        const auto level = hal::volume();
+        char percent[6];
+        snprintf(percent, sizeof percent, "%d%%", (level * 100 + 127) / 255);
+        settingRow({14, 27, 212, 22}, "Volume");
+        cv.drawFastHLine(68, 42, 56, C_CLOT);
+        cv.drawFastHLine(68, 42, level * 56 / 255, C_EMBER);
+        settingChoice(VolumeMinus, "-");
+        settingChoice(VolumePlus, "+");
+        textCentre(percent, 180, 34, readableInk(C_GLOW, C_DUSK));
+        settingRow(SettingsTheme, "Theme", colourSchemeName(colourScheme()));
+        settingRow(SettingsDisplay, "Display", OrientationNames[static_cast<uint8_t>(currentOrientation)]);
+        settingRow(SettingsPalette, "Palette", "Edit");
+    } else if (themes) {
+        for (size_t i = 0; i < PresetCount; ++i) {
+            const auto scheme = presetScheme(i);
+            settingChoice(themeChoice(i), colourSchemeName(scheme), scheme == colourScheme(), true, presetPalette(scheme).ember);
+        }
+        if (hasCustomColourway()) settingChoice(CustomChoice, "Custom", colourScheme() == ColourScheme::Custom);
+    } else {
+        const auto rotation = static_cast<uint8_t>(currentOrientation);
+        text("Orientation", 14, 25, C_BONE);
+        settingChoice(orientationChoice(0), "Landscape", !(rotation & 1));
+        settingChoice(orientationChoice(1), "Portrait", rotation & 1);
+        settingChoice(TurnChoice, "Flip 180", rotation & 2);
+        text("Backdrop", 14, 73, C_BONE);
+        for (uint8_t i = 0; i < 4; ++i) {
+            settingChoice(backdropChoice(i), BackdropNames[i], i == static_cast<uint8_t>(currentBackdrop));
+        }
+    }
 }
 
 bool saveColourway(const theme::Colourway &colourway) {
@@ -492,16 +680,24 @@ bool saveColourway(const theme::Colourway &colourway) {
 }
 
 void setRite(const Rite *rite) {
+    show(Panel::Main);
+    if (settingsPage != SettingsPage::Closed) {
+        settingsPage = SettingsPage::Closed;
+        dockVisible = dockBeforeSettings;
+    }
+    if (focusedRite(active)) dockVisible = dockBeforeFocusedRite;
+    if (focusedRite(rite)) {
+        dockBeforeFocusedRite = dockVisible;
+        dockVisible = false;
+    }
     splash = false;
     active = rite;
     immersive = false;
     textMode = TextMode::None;
     symbols = shift = false;
     tapX = tapY = -1;
-    paletteDirty = paletteContact = false;
-    palettePreview = nullptr;
+    paletteContact = false;
     paletteStart = paletteMotion = {};
-    show(Panel::Main);
 }
 
 void setTextMode(TextMode mode) {
@@ -513,24 +709,25 @@ void setTextMode(TextMode mode) {
     show(edit ? Panel::Keyboard : Panel::Main);
 }
 
-void setPalettePreview(const theme::Palette &preview, bool changed) {
-    palettePreview = &preview;
-    if (paletteDirty == changed) return;
-    paletteDirty = changed;
-    dirty = true;
-}
-
 bool visionsImmersive() { return immersive; }
 
-int viewportHeight() { return immersive ? LCD_H : DOCK_Y; }
+int displayWidth() { return isPortrait() ? ShortEdge : LongEdge; }
+int displayHeight() { return isPortrait() ? LongEdge : ShortEdge; }
+int viewportWidth() { return displayWidth(); }
+int viewportHeight() { return immersive ? displayHeight() : viewportWidth() * hal::H / hal::W; }
+int viewportLeft() { return 0; }
 int viewportTop() {
     if (immersive) return 0;
-    if (!dockVisible) return (LCD_H - DOCK_Y) / 2;
-    return keyboardVisible() && active == &RITE_BEAT ? KEYBOARD_Y - DOCK_Y : 0;
+    if (isPortrait() || !dockVisible || carouselMain() || active == &RITE_VISIONS) return (viewportBottom() - viewportHeight()) / 2;
+    return keyboardVisible() && active == &RITE_BEAT ? keyboardTop() - viewportHeight() : 0;
 }
 int viewportBottom() {
-    if (immersive || !dockVisible) return LCD_H;
-    return keyboardVisible() ? KEYBOARD_Y : DOCK_Y;
+    if (immersive || !dockVisible) return displayHeight();
+    if (carouselMain()) return displayHeight() - CarouselDockHeight;
+    if (active == &RITE_VISIONS && panel != Panel::Volume) {
+        return displayHeight() - (panel == Panel::VisionsEffects ? 58 : panel == Panel::VisionsOptions ? 56 : 30);
+    }
+    return keyboardVisible() ? keyboardTop() : dockTop();
 }
 
 bool takeViewportTap(int &x, int &y) {
@@ -567,7 +764,7 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
         return false;
     }
     releasing = false;
-    if (x < 0 || x >= LCD_W || y < 0 || y >= LCD_H) return false;
+    if (x < 0 || x >= displayWidth() || y < 0 || y >= displayHeight()) return false;
 
     if (immersive) {
         if (!contact) {
@@ -578,9 +775,11 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
         return false;
     }
 
-    if (!contact && x < ToggleWidth && y >= ToggleTop) {
+    if (!carouselSettingsVisible() && active != &RITE_PALETTE && !contact &&
+        x < ToggleWidth && y >= displayHeight() - ToggleHeight) {
         contact = true;
         dockVisible = !dockVisible;
+        if (!dockVisible && active == &RITE_VISIONS) show(Panel::Main);
         dirty = true;
         return false;
     }
@@ -591,6 +790,10 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
         if (sceneY < 0 || sceneY >= viewportHeight()) return false;
         const Point p = viewportPoint(x, y);
         if (active == &RITE_PALETTE) {
+            if (p.x >= 175 && p.y < 20) {
+                out = {0, hal::N_ESC};
+                return true;
+            }
             paletteContact = true;
             paletteStart = p;
             paletteMotion = {};
@@ -611,7 +814,7 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
     while (row + 1 < layout.n && y >= rowEdge(layout, row + 1)) ++row;
     const Row &line = layout.rows[row];
     const int left = rowLeft(layout, row);
-    const int col = x >= left && line.n ? ((x - left + 1) * line.n - 1) / (LCD_W - left) : -1;
+    const int col = x >= left && line.n ? ((x - left + 1) * line.n - 1) / (displayWidth() - left) : -1;
 
     if (contact) {
         if (y < layout.top || row != heldRow || col != heldCol) {
@@ -634,7 +837,7 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
 }
 
 void draw(lgfx::LGFXBase &display) {
-    if (immersive) return;
+    if (immersive || carouselSettingsVisible() || active == &RITE_PALETTE) return;
     if (!dockVisible) {
         drawToggle(display);
         return;
@@ -648,22 +851,19 @@ void draw(lgfx::LGFXBase &display) {
 
     Layout layout;
     makeLayout(layout);
-    const auto &colours = palettePreview ? *palettePreview : dockColours(scheme);
-    display.fillRect(0, layout.top, LCD_W, LCD_H - layout.top, colours.background);
-    display.drawFastHLine(0, layout.top, LCD_W, colours.rust);
+    const auto &colours = theme::palette();
+    display.fillRect(0, layout.top, displayWidth(), displayHeight() - layout.top, colours.background);
+    display.drawFastHLine(0, layout.top, displayWidth(), colours.clot);
     display.setFont(&fonts::Font0);
     display.setTextDatum(textdatum_t::middle_center);
 
     char level[8];
     snprintf(level, sizeof level, "%d%%", percent);
-    const bool extraPreset = !palettePreview && scheme != ColourScheme::Ember && scheme != ColourScheme::Neon &&
-                             scheme != ColourScheme::Custom;
-    const uint16_t pressedBackground = !palettePreview && scheme == ColourScheme::Ember ? colours.blood :
-                                       extraPreset ? theme::blend(colours.stone, colours.clot, 128) : colours.stone;
+    const uint16_t pressedBackground = theme::blend(colours.stone, colours.clot, 128);
     for (int row = 0; row < layout.n; ++row) {
         const Row &line = layout.rows[row];
         const int left = rowLeft(layout, row);
-        const int width = LCD_W - left;
+        const int width = displayWidth() - left;
         const int y = rowEdge(layout, row) + 1;
         const int h = rowEdge(layout, row + 1) - y - 1;
         for (int col = 0; col < line.n; ++col) {
@@ -671,28 +871,22 @@ void draw(lgfx::LGFXBase &display) {
             const int x = left + width * col / line.n + 2;
             const int w = left + width * (col + 1) / line.n - x - 2;
             const bool pressed = heldRow == row && heldCol == col;
-            const bool layerToggle = active == &RITE_VISIONS && button.key.ch == 'l';
-            const bool selected = (button.action == Action::Scheme && button.scheme == scheme) ||
-                                  (layerToggle && visionsAreLayered());
-            const bool primary = button.key.nav == hal::N_ENTER || selected ||
-                                 (active == &RITE_PALETTE && button.key.ch == 's');
-            const uint16_t bg = pressed ? pressedBackground : primary ? colours.clot : colours.dusk;
-            display.fillRoundRect(x, y, w, h, 3, bg);
-            const uint16_t edge = primary || pressed ? colours.rust : colours.clot;
-            display.drawRoundRect(x, y, w, h, 3,
-                                  palettePreview ? theme::blend(theme::readableInk(edge, bg), bg, 128) : edge);
+            const bool selected = (panel == Panel::VisionsEffects && button.key.ch == '1' + visionsChoice()) ||
+                                  (panel == Panel::VisionsOptions && button.key.ch == 'l' && visionsAreLayered());
+            const bool primary = button.key.nav == hal::N_ENTER || selected;
+            const uint16_t bg = pressed ? pressedBackground : primary ? colours.clot :
+                                theme::blend(colours.dusk, colours.background, 190);
+            display.fillRect(x, y, w, h, bg);
+            display.drawFastHLine(x, y + h - 1, w, (primary || pressed) ? colours.rust : colours.clot);
             const char ch[] = {button.key.ch, 0};
             const char *label = button.action == Action::Level ? level : (button.label ? button.label : ch);
-            const uint16_t ink = (primary || pressed) && !extraPreset ? colours.glow : colours.bone;
-            display.setTextColor(palettePreview ? theme::readableInk(ink, bg) : ink);
-            if (layerToggle) {
-                display.setTextSize(1);
-                display.drawString(label, x + w / 2, y + h / 2 - 6);
-                display.drawString(selected ? "On" : "Off", x + w / 2, y + h / 2 + 6);
-            } else {
-                display.setTextSize(strlen(label) * 12 + 4 <= static_cast<size_t>(w) ? 2 : 1);
-                display.drawString(label, x + w / 2, y + h / 2);
-            }
+            const uint16_t ink = (primary || pressed) ? colours.glow : colours.bone;
+            display.setTextColor(theme::readableInk(ink, bg));
+            const bool compact = active == &RITE_VISIONS || carouselMain();
+            display.setTextSize(!compact && strlen(label) * 12 + 4 <= static_cast<size_t>(w) ? 2 : 1);
+            const bool pair = panel == Panel::VisionsEffects && visionsAreLayered() && row == 0;
+            display.drawString(label, x + w / 2, y + h / 2 - (pair ? 5 : 0));
+            if (pair) display.drawString(VisionsOverlays[col], x + w / 2, y + h / 2 + 5);
         }
     }
     drawToggle(display);

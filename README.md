@@ -18,7 +18,7 @@ for VLC on Windows.
 
 | PlatformIO target | Hardware or runtime | Use |
 | --- | --- | --- |
-| `cyd` | Classic ESP32-2432S028R with 4 MB flash, an ILI9341 LCD, and XPT2046 resistive touch | Standalone landscape touchscreen firmware with 15 rites |
+| `cyd` | Classic ESP32-2432S028R with 4 MB flash, an ILI9341 LCD, and XPT2046 resistive touch | Standalone touchscreen firmware with 14 rites and a palette editor |
 | `cyd-pcm` | The same CYD, with the Windows VLC plugin on the host | Touchscreen firmware with live USB serial audio |
 | `cyd-diagnostics` | The same CYD | Serial touch injection, display readback, and hardware diagnostics |
 | `cardputer` | M5Stack Cardputer ADV with the Daedric Launcher | Original keyboard workflow with 16 rites. This is PlatformIO's default target |
@@ -46,19 +46,16 @@ are for the Cardputer ADV.
 - Tap either side of the carousel to browse and the centre to open the selected
   rite. The compact cards frame the rite names, with the selected rite's
   subtitle and description below.
-- The touch controls start hidden. The backdrop fills the 320×240 LCD, with
-  the 320×180 artwork centred at its original proportions. Patterns and the
-  carousel's drifting particles continue into the top and bottom margins.
+- The touch controls start hidden. In landscape, the backdrop fills the 320×240
+  LCD around the centred 320×180 artwork. Patterns and the carousel's drifting
+  particles continue into the top and bottom margins.
   Tap the small unlabelled chevron in the lower-left corner to show or hide
   the controls.
 - Show the controls to access each rite's buttons. **Menu** or the board's
   **BOOT** button takes you back to the carousel while the firmware is running.
-- In the carousel, show the controls and tap **Theme** to browse twelve
-  built-in themes. **Prev** and **Next** move between pages. Tapping a theme
-  applies it immediately and keeps it active across reboots. Tap **Done** to
-  return to the carousel controls. **Custom** appears once you save a palette
-  and stays available when you switch themes. Neon is the CYD default.
-  Cardputer and the desktop simulator default to Ember.
+- Open the **Settings** tile to reach **Volume**, **Theme**, **Display**, and
+  the **Palette** editor. The settings pages use the centre of the screen.
+  The carousel dock offers **Previous**, **Open**, and **Next**.
 - In **seq**, tap the grid to edit steps and the A–D buttons to select banks.
   **More** opens tempo and pattern controls.
 - In **beat**, tap **Edit** to bring up the keyboard and **Hide** to see the
@@ -74,6 +71,30 @@ are for the Cardputer ADV.
 Wi-Fi runs on 2.4 GHz. Use **wifi** to join a network before opening a rite
 that needs a connection. **Pulse** waits for CSI frames from the connected
 access point. The CYD's Bluetooth scan tracks up to 32 recent devices.
+
+### CYD settings
+
+Select the **Settings** tile between **Pulse** and **Drone**. From **Drone**,
+go left once and tap the centre. Use **< Settings** to return from a section
+and **< Grimoire** to return to the carousel.
+
+- **Volume** adjusts the mix using **−** and **+**.
+- **Theme** shows all twelve built-in themes with colour swatches. **Custom**
+  appears once you save a palette. Tapping a theme applies and saves it
+  immediately. Neon is the CYD default. Cardputer and the desktop simulator
+  default to Ember.
+- **Display** sets **Landscape** or **Portrait**. Tap **Flip 180** to turn
+  either orientation upside down. The display and touch controls rotate
+  together. You can also choose **Theme**, **Rain**, **Ashfire**, or **Plasma**
+  as the carousel backdrop. Both choices apply immediately and survive reboots.
+- **Palette** opens the colourway editor with the current theme as its draft.
+
+In portrait, the 240×135 artwork stays proportional on the 240×320 LCD.
+The dock and on-screen keyboard sit below it. The animated carousel backdrops
+reach the edges in both orientations and render at LCD resolution using the
+active theme's colours. Rain lets each glyph trail fall fully offscreen.
+Ashfire rises from the bottom and interpolates a compact heat simulation
+across the LCD pixels. Plasma computes its waves at each LCD pixel.
 
 ### Built-in themes
 
@@ -94,15 +115,14 @@ access point. The CYD's Bluetooth scan tracks up to 32 recent devices.
 
 ### Palette editor
 
-From **Drone** in the carousel, tap the left side or use **Previous** to reach
-**Palette**. Tap the centre to open it. The editor starts from the active
-theme, including its background style. Select a swatch to edit **Background**,
-**Panel**, **Text**, or **Accent** with the **RGB** sliders. The sample panel
-and colour ramp update as you drag, and the editor and its lower controls
-preview the draft theme live. Each RGB track keeps its own single-channel
-colour ramp. **Saturation** and **Brightness** affect the whole palette.
+Open **Settings → Palette**. The editor starts from the active theme,
+including its background style. Select **Background**, **Panel**, **Text**,
+or **Accent** and drag the **RGB** sliders to edit that swatch. The sample
+panel, colour ramp, and editor update live. Select a slider and tap **−** or
+**+** under the preview for a one-step adjustment. **Saturation** and
+**Brightness** affect the whole palette.
 
-Show the lower controls to choose **Neon** or **Ember** as a starting point.
+Choose **Neon** or **Ember** in the editor's bottom row as a starting point.
 These seeds and **Hue**, which generates a coordinated colourway, keep the
 current style, gradient mode, and stop selections. **Multi** generates a
 contrasting colourway with a smooth three-colour gradient. **Bands** generates
@@ -117,7 +137,7 @@ selections follow those swatch edits. Tap the mode label to cycle between
 **Blend**, **Multitone**, and **Bands**. The last two modes use the **Panel**
 swatch as the middle colour. Tap **< Styles** to return to the list of styles.
 
-**Stop colours** shows the full gradient while you edit it. The **UI preview**
+**Stop colours** shows the full gradient while you edit it. The **Preview**
 shows it as a backdrop, with brightness adjusted so text and animation stay
 visible. Visions uses this backdrop behind Rain and Kaleido. Plasma, Gate, and
 Ashfire fill their own effect area.
@@ -127,11 +147,11 @@ The other styles are **Flat**, **Grid**, **Scanlines**, **Dither**,
 draft background and accent colours. The saved style appears on the
 carousel and behind rites that use the shared background.
 
-Show the lower controls and tap **Save** to apply the draft as **Custom**.
+Tap **Save** to apply the draft as **Custom**.
 Diviner keeps one custom palette across reboots, including the swatches,
-adjustments, background style, and gradient settings. **Back** returns to
-the carousel. If you have unsaved edits, the button reads **Discard**.
-Pressing **BOOT** also leaves the editor and discards unsaved edits.
+adjustments, background style, and gradient settings. **< Settings** returns
+to Settings. If you have unsaved edits, the button reads **< Discard**.
+Pressing **BOOT** also returns to Settings and discards unsaved edits.
 
 ## USB PCM into VLC on Windows
 
@@ -228,7 +248,7 @@ script actions. `tools/shots.sh shots` generates screenshots and WAV samples.
 
 The carousel shows each rite in Daedric script and reveals its name on selection.
 The first 14 entries below are available on CYD and Cardputer. **Palette**
-is available on CYD. **Banish** and **Probe** are included in the Cardputer
+is in CYD Settings. **Banish** and **Probe** are included in the Cardputer
 build and have simulator views.
 
 | Rite | What it does |
@@ -256,15 +276,21 @@ to test. [Usage notice](NOTICE.md)
 
 ### Visions layers and trail formats
 
-Visions starts with **Layer On** and opens on **Plasma + Kaleido** after boot.
-On CYD, show the lower controls and tap **Layer** to switch between paired and
-solo effects. With layering on, either effect button in a pair selects that
-scene. Cardputer and simulator users can press **L** to toggle layering and
-**1–6** to select effects.
+Visions starts on **Plasma + Kaleido** after boot. On CYD, tap the lower-left
+chevron to reveal a single row with **Effects**, playback, sound, and
+**Options**. **Effects** shows the three pairs in layered mode and the six
+individual effects in solo mode. Tap **Layered** or **Solo** in **Options** to
+switch modes. Cardputer and simulator users can press **L** to toggle layering
+and **1–6** to select effects.
 
-Tap the animation on the CYD to go fullscreen. The artwork fills the 320×240
-LCD with a centred crop that preserves its proportions. The header and touch
-controls disappear. Tap anywhere again to restore the previous view.
+Tap the animation or the expand icon in the CYD header to go fullscreen.
+Visions draws at LCD resolution in either orientation, streaming strips
+through the existing canvas memory. The header and touch controls disappear.
+Tap anywhere again to restore the previous view. **Back** in the header
+returns to the carousel.
+
+In fullscreen, diagnostics report drawing and LCD transfer together in
+`present_us`.
 
 | Pair | How it is drawn |
 | --- | --- |
@@ -272,8 +298,8 @@ controls disappear. Tap anywhere again to restore the previous view.
 | Ashfire + Rain | The glyphs draw over the fire, with the tails blended into the pixels beneath them. |
 | Plasma + Kaleido | The lines and sparks draw directly over dimmed plasma. |
 
-To compare the solo trail formats, turn **Layer Off**, select **Trails**, and
-tap **RGB444** or **RGB565**. On the keyboard, press **6** for Trails and **F**
+To compare the solo trail formats, switch to **Solo**, select **Trails**, and
+tap **RGB444** or **RGB565** in **Options**. On the keyboard, press **6** for Trails and **F**
 to switch formats. Packed RGB444 is the solo default. RGB565 preserves more
 colour detail. Switching formats clears the trails. Gate + Trails uses its
 8-bit history in either case.
@@ -288,9 +314,9 @@ colour detail. Switching formats clears the trails. Gate + Trails uses its
 
 These are heap measurements from CYD diagnostics, including allocator
 overhead and excluding the shared canvas and audio. The history covers the
-240×116 animation area. Fullscreen reuses the existing canvas and left heap
-use unchanged in testing. History and effect buffers are released when the
-scene no longer needs them or you leave Visions.
+240×116 animation area in the ordinary view. Fullscreen reuses the existing
+canvas memory and stores trails as short paths. History and effect buffers are
+released when the scene no longer needs them or you leave Visions.
 
 ## Development and verification
 
@@ -309,8 +335,9 @@ scene no longer needs them or you leave Visions.
   The editor rebuilds the draft table when settings change, and **Save**
   stores the source colours and adjustments in NVS.
 - At 115200 baud, `cyd-diagnostics` accepts `status` for heap, display time,
-  audio counters, the active theme ID and viewport geometry, `tap X Y` for
-  injected touch, and `shot` for 320×240 little-endian RGB565 LCD readback.
+  audio counters, the active theme, orientation, menu backdrop and viewport
+  geometry, `tap X Y` for injected touch in the current orientation, and `shot`
+  for little-endian RGB565 LCD readback. The shot header reports the dimensions.
 - To generate a compilation database for clangd, run
   `pio run -e native -t compiledb`.
 
