@@ -1,0 +1,47 @@
+{
+  "schema": "greenfield-sdr-protocol-manifest/1",
+  "evidence_class": "SOURCE_AND_OFFLINE_MODEL",
+  "generated_utc": "2026-11-27T21:24:13.623689+00:00",
+  "files_sha256": {
+    "experiments/sdr/protocol.h": "ca813f500452dc92c86350cf3c7b6642a60b80e5ec2bcac492eaf720f5fe5974",
+    "experiments/sdr/protocol.cpp": "cd19a3ca95dfe5c84b5cd5255b2eb1d579d14654f22197257c8304d20a66e734",
+    "experiments/sdr/test_protocol.cpp": "14211f9ed812a0f0dfdf8bda2ed63b87bf97b6472c735e95a2ff28831b5a73f3",
+    "experiments/sdr/PROTOCOL.md": "ba03856f4021b3615498524c5314f1ef72b603cf54fcbf5dfac5b8aaecc31ad1",
+    "experiments/sdr/host-validation.json": "57e8c72f81a1826659b90a407e12d8a903644b8adb8aeb69a59fc10acb3a0925"
+  },
+  "host_executable_sha256": "2f048784a20a62ae363565f914779d1c589c4dc1d884452ec4f8546c41fd73c3",
+  "host_build": "g++ -std=c++17 -O2 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer experiments/sdr/protocol.cpp experiments/sdr/test_protocol.cpp -o .pio/sdr-model-test",
+  "transmit_only_compile_checked": true,
+  "transmit_only_define": "SDR_PROTOCOL_TRANSMIT_ONLY=1",
+  "validated_checks": 52896,
+  "no_rf_measurement": true,
+  "wire": {
+    "training_symbols": 32,
+    "sync_hex": "d391c5a7",
+    "header_bytes": 6,
+    "header_crc": "CRC8_poly07_init00_header_first5bytes",
+    "payload_crc": false,
+    "payload_bits": [
+      128,
+      256
+    ],
+    "frame_symbols": [
+      240,
+      368
+    ],
+    "cli_emit_symbol_bit_order": "MSB_first_per_byte"
+  },
+  "host_demod_limits": {
+    "iq_samples_max": 10000000,
+    "samples_per_symbol_min": 8,
+    "samples_per_symbol_max": 1024,
+    "clock_grid_points_max": 129
+  },
+  "important_limits": [
+    "Batch host IQ decoding; no on-device realtime or RF latency claim.",
+    "Payload bit errors are accepted; bad headers lose frames.",
+    "Header CRC reject counters count overlapping search candidates, not received RF packets.",
+    "Full-source model quality includes explicitly zero-filled unreceived frames.",
+    "Receiver uses ideal passband model, not measured RF selectivity."
+  ]
+}

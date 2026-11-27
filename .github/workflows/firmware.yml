@@ -75,6 +75,10 @@ jobs:
           /tmp/cyd-color-pipeline-test
           g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF_AUDIO_CORE_STANDALONE=1 tools/perf/test_audio_core.cpp src/perf_audio_core.cpp -o /tmp/cyd-audio-core-test
           /tmp/cyd-audio-core-test
+      - name: Validate greenfield SDR framing and host demodulation models
+        run: |
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr/test_protocol.cpp experiments/sdr/protocol.cpp -o /tmp/cyd-sdr-protocol-test
+          /tmp/cyd-sdr-protocol-test
 
   native:
     runs-on: ubuntu-latest
