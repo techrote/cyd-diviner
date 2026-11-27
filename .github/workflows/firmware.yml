@@ -69,7 +69,7 @@ jobs:
           /tmp/cyd-i2s-events-test
       - name: Validate packed colour and bounded audio cores
         run: |
-          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined tools/perf/test_color_packing.cpp -o /tmp/cyd-color-packing-test
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -Isrc tools/perf/test_color_packing.cpp -o /tmp/cyd-color-packing-test
           /tmp/cyd-color-packing-test
           g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF=1 -DGRIM_PERF_COLOR=1 -Itools/perf/fakes/color tools/perf/test_color_pipeline.cpp src/perf_color.cpp -o /tmp/cyd-color-pipeline-test
           /tmp/cyd-color-pipeline-test
