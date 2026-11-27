@@ -28,7 +28,7 @@ blood-and-ember aesthetic, with a hand-rasterised Daedric glyph font.
 | | | |
 |---|---|---|
 | ![drone](docs/previews/drone.png) | ![seq](docs/previews/seq.png) | ![beat](docs/previews/beat.png) |
-| **drone** — generative drone box: 5 drifting voices, resonant LP, wind, bells, dark delay | **seq** — groovebox: kick/snare/hat/acid, euclid fills, **4 pattern banks + song mode + save/load** | **beat** — bytebeat livecoder: type a C expression in `t`, hear it instantly |
+| **drone** — generative drone box: 5 drifting voices, resonant LP, wind, FM bells, dark delay; **6 styles on `p`** (temple, tubular, bowl, kalimba, gong, ice) | **seq** — groovebox: kick/snare/hat/acid, euclid fills, **4 pattern banks + song mode + save/load** | **beat** — bytebeat livecoder: type a C expression in `t`, hear it instantly |
 
 ### ◈ sight
 | | | |

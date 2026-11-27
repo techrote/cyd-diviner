@@ -18,7 +18,6 @@
 
 #ifdef GRIM_DEVICE
 #define SEND_PWM_BY_TIMER
-#define IR_SEND_PIN GRIM_IR_PIN
 #include <IRremote.hpp>
 #endif
 

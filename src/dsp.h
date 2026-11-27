@@ -35,6 +35,17 @@ struct Osc {
         phase += inc;
         return v;
     }
+    // Phase-modulated sine: offset in cycles (any sign/size). Bells use this
+    // for 2-op FM so the strike has real inharmonic partials.
+    inline float pmSine(float cyc) {
+        const float *t = sineTable();
+        cyc -= floorf(cyc);
+        uint32_t ph = phase + (uint32_t)(cyc * 4294967040.f);
+        uint32_t i = ph >> 22;
+        float frac = (ph & 0x3FFFFF) * (1.f / 4194304.f);
+        phase += inc;
+        return t[i] + (t[i + 1] - t[i]) * frac;
+    }
     inline float saw() {
         float v = (int32_t)phase * (1.f / 2147483648.f);
         phase += inc;
