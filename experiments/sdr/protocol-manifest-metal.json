@@ -1,0 +1,38 @@
+{
+  "schema": "greenfield-sdr-protocol-manifest/3",
+  "evidence_class": "SOURCE_AND_OFFLINE_MODEL",
+  "generated_utc": "2026-11-27T22:41:05.604121+00:00",
+  "files_sha256": {
+    "experiments/sdr/protocol.h": "ca813f500452dc92c86350cf3c7b6642a60b80e5ec2bcac492eaf720f5fe5974",
+    "experiments/sdr/protocol.cpp": "fd2087d483eaaec454cddb4fcd7c608a427ee517dc76e14e3fc46e71408fc1dd",
+    "experiments/sdr/test_protocol.cpp": "b6cc242f53358570ee71111af77e9c4e0ed71fb18050f65a6ada7d3fe8b1d0a2",
+    "experiments/sdr/test_emit_cli.py": "06dff2fa8de6f28bff50daaa719561e67532fc182f07bfebdd66baf1b3cd03e7",
+    "experiments/sdr/PROTOCOL.md": "1f455ea42add8f24eab0a06ff1295f2536f48ee11f9b3d6ebdb513948a710076",
+    "experiments/sdr/host-emit-metal-validation.json": "fd4daee48f4c59433fa15877efc71e68f34172497ac949ece68121fbec4a2e3e",
+    "experiments/sdr/host-regression-metal.json": "a84a35bbfc99ef51e56b33ccf5090199e28c9dfbd054312f947325deed761a05",
+    "experiments/sdr/host-validation-metal.json": "870942f02cee71192eb943df37daf3473121d08879053308f481ecc89c898d2b"
+  },
+  "host_executable": ".pio/sdr-model-test-metal",
+  "host_executable_sha256": "09c500232d4046ac6021dfcb8e83c998ff96846296abcc583ef62ace176b8f28",
+  "retained_previous_executables_sha256": {
+    ".pio/sdr-model-test": "2f048784a20a62ae363565f914779d1c589c4dc1d884452ec4f8546c41fd73c3",
+    ".pio/sdr-model-test-low-sps": "d99ab63acddc7f578db97a263b32f15fc0141fd6ab10963104be6ab325e80312"
+  },
+  "host_build": "g++ -std=c++17 -O2 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer experiments/sdr/protocol.cpp experiments/sdr/test_protocol.cpp -o .pio/sdr-model-test-metal",
+  "validated_regression_checks": 52896,
+  "validated_low_sps_checks": 1846,
+  "validated_emitter_valid_baud_cases": 4,
+  "validated_emitter_invalid_baud_cases": 6,
+  "emitter_baud_integer_range": [
+    1,
+    240000000
+  ],
+  "wire_and_pdm_source_unchanged": true,
+  "demod_algorithm_unchanged": true,
+  "no_rf_measurement": true,
+  "important_limits": [
+    "Requested baud is stimulus metadata; acceptance does not prove RF switching or receiver throughput.",
+    "Packed symbols, reference PCM and boxcar PCM are byte-identical at 100 kbaud and 1.104 Mbaud for the validated configuration.",
+    "Effective audio rate differs from declared source rate when baud differs from the required rate."
+  ]
+}

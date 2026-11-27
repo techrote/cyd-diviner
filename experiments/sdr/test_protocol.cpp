@@ -141,8 +141,13 @@ static int modelCli(int argc,char **argv) {
 }
 static int emitCli(int argc,char **argv) {
     if(argc!=11){std::fprintf(stderr,"--emit PREFIX SOURCE_RATE CH OSR PAYLOAD_BITS BAUD FRAME_COUNT SEED STREAM_ID\n");return 2;}
-    const std::string prefix=argv[2];const unsigned rate=unsigned(std::stoul(argv[3])),ch=unsigned(std::stoul(argv[4])),osr=unsigned(std::stoul(argv[5])),payload=unsigned(std::stoul(argv[6])),baud=unsigned(std::stoul(argv[7])),count=unsigned(std::stoul(argv[8])),seed=unsigned(std::stoul(argv[9])),stream=unsigned(std::stoul(argv[10]));
-    if(ch>255||osr>255||payload>65535||stream>255||baud<1000||baud>100000||!count||count>65536)return 2;
+    if(argv[7][0]<'0'||argv[7][0]>'9')return 2;
+    size_t baud_end=0;const auto baud_wide=std::stoull(argv[7],&baud_end);
+    // This is stimulus metadata, bounded by the probe's 240 MHz CPU clock;
+    // packed symbols and PCM generation do not depend on requested baud.
+    if(baud_end!=std::strlen(argv[7])||!baud_wide||baud_wide>240000000ull)return 2;
+    const std::string prefix=argv[2];const unsigned rate=unsigned(std::stoul(argv[3])),ch=unsigned(std::stoul(argv[4])),osr=unsigned(std::stoul(argv[5])),payload=unsigned(std::stoul(argv[6])),baud=unsigned(baud_wide),count=unsigned(std::stoul(argv[8])),seed=unsigned(std::stoul(argv[9])),stream=unsigned(std::stoul(argv[10]));
+    if(ch>255||osr>255||payload>65535||stream>255||!count||count>65536)return 2;
     s::Config config{rate,uint8_t(ch),uint8_t(osr),uint8_t(stream),uint16_t(payload)};if(!s::valid(config))return 2;
     std::FILE *packed=std::fopen((prefix+"-symbols.bits").c_str(),"wb"),*reference=std::fopen((prefix+"-reference.pcm").c_str(),"wb"),*boxcar=std::fopen((prefix+"-boxcar.pcm").c_str(),"wb");if(!packed||!reference||!boxcar)throw std::string("cannot open emitted stream artifacts");
     s::PdmSource source;source.reset(seed);

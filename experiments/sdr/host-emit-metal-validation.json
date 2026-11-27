@@ -1,0 +1,206 @@
+{
+  "schema": "greenfield_sdr_emit_cli_validation/1",
+  "evidence_class": "HOST_CORRECTNESS_ONLY",
+  "no_RF_measurement": true,
+  "binary_sha256": "09c500232d4046ac6021dfcb8e83c998ff96846296abcc583ef62ace176b8f28",
+  "driver_sha256": "06dff2fa8de6f28bff50daaa719561e67532fc182f07bfebdd66baf1b3cd03e7",
+  "configuration": {
+    "source_rate_hz": 24000,
+    "channels": 2,
+    "oversample": 16,
+    "payload_bits": 256,
+    "frame_count": 8,
+    "seed": 23063,
+    "stream_id": 1
+  },
+  "valid_baud_cases": [
+    {
+      "baud": 1,
+      "receipt": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 24000,
+        "effective_audio_rate_hz_at_requested_baud": 0.0217391304348,
+        "channels": 2,
+        "oversample": 16,
+        "payload_bits": 256,
+        "baud_requested": 1,
+        "baud_required_for_source_rate": 1104000,
+        "frame_count": 8,
+        "frame_symbols": 368,
+        "symbols_total": 2944,
+        "packed_bytes": 368,
+        "pcm_frames": 64,
+        "pcm_bytes": 256,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "files": {
+        "-symbols.bits": {
+          "bytes": 368,
+          "sha256": "c18ac00ee58ca3c188ea9100f16f26c640e72bb3075511893af7e4fe9c7b83c8"
+        },
+        "-reference.pcm": {
+          "bytes": 256,
+          "sha256": "e086f7d5f4c1930d83b387690a628b0ec5c36dfd25b10bc972ff887e3385fbe4"
+        },
+        "-boxcar.pcm": {
+          "bytes": 256,
+          "sha256": "0e6715e3db25b1fb0ad4b0009f896ab26c32f35ec14801b3ee14997eb38cec5c"
+        }
+      }
+    },
+    {
+      "baud": 100000,
+      "receipt": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 24000,
+        "effective_audio_rate_hz_at_requested_baud": 2173.91304348,
+        "channels": 2,
+        "oversample": 16,
+        "payload_bits": 256,
+        "baud_requested": 100000,
+        "baud_required_for_source_rate": 1104000,
+        "frame_count": 8,
+        "frame_symbols": 368,
+        "symbols_total": 2944,
+        "packed_bytes": 368,
+        "pcm_frames": 64,
+        "pcm_bytes": 256,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "files": {
+        "-symbols.bits": {
+          "bytes": 368,
+          "sha256": "c18ac00ee58ca3c188ea9100f16f26c640e72bb3075511893af7e4fe9c7b83c8"
+        },
+        "-reference.pcm": {
+          "bytes": 256,
+          "sha256": "e086f7d5f4c1930d83b387690a628b0ec5c36dfd25b10bc972ff887e3385fbe4"
+        },
+        "-boxcar.pcm": {
+          "bytes": 256,
+          "sha256": "0e6715e3db25b1fb0ad4b0009f896ab26c32f35ec14801b3ee14997eb38cec5c"
+        }
+      }
+    },
+    {
+      "baud": 1104000,
+      "receipt": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 24000,
+        "effective_audio_rate_hz_at_requested_baud": 24000,
+        "channels": 2,
+        "oversample": 16,
+        "payload_bits": 256,
+        "baud_requested": 1104000,
+        "baud_required_for_source_rate": 1104000,
+        "frame_count": 8,
+        "frame_symbols": 368,
+        "symbols_total": 2944,
+        "packed_bytes": 368,
+        "pcm_frames": 64,
+        "pcm_bytes": 256,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "files": {
+        "-symbols.bits": {
+          "bytes": 368,
+          "sha256": "c18ac00ee58ca3c188ea9100f16f26c640e72bb3075511893af7e4fe9c7b83c8"
+        },
+        "-reference.pcm": {
+          "bytes": 256,
+          "sha256": "e086f7d5f4c1930d83b387690a628b0ec5c36dfd25b10bc972ff887e3385fbe4"
+        },
+        "-boxcar.pcm": {
+          "bytes": 256,
+          "sha256": "0e6715e3db25b1fb0ad4b0009f896ab26c32f35ec14801b3ee14997eb38cec5c"
+        }
+      }
+    },
+    {
+      "baud": 240000000,
+      "receipt": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 24000,
+        "effective_audio_rate_hz_at_requested_baud": 5217391.30435,
+        "channels": 2,
+        "oversample": 16,
+        "payload_bits": 256,
+        "baud_requested": 240000000,
+        "baud_required_for_source_rate": 1104000,
+        "frame_count": 8,
+        "frame_symbols": 368,
+        "symbols_total": 2944,
+        "packed_bytes": 368,
+        "pcm_frames": 64,
+        "pcm_bytes": 256,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "files": {
+        "-symbols.bits": {
+          "bytes": 368,
+          "sha256": "c18ac00ee58ca3c188ea9100f16f26c640e72bb3075511893af7e4fe9c7b83c8"
+        },
+        "-reference.pcm": {
+          "bytes": 256,
+          "sha256": "e086f7d5f4c1930d83b387690a628b0ec5c36dfd25b10bc972ff887e3385fbe4"
+        },
+        "-boxcar.pcm": {
+          "bytes": 256,
+          "sha256": "0e6715e3db25b1fb0ad4b0009f896ab26c32f35ec14801b3ee14997eb38cec5c"
+        }
+      }
+    }
+  ],
+  "invalid_baud_cases": [
+    {
+      "input": "0",
+      "returncode": 2
+    },
+    {
+      "input": "240000001",
+      "returncode": 2
+    },
+    {
+      "input": "4294967297",
+      "returncode": 2
+    },
+    {
+      "input": "18446744073709551616",
+      "returncode": 2
+    },
+    {
+      "input": "-1",
+      "returncode": 2
+    },
+    {
+      "input": "100000junk",
+      "returncode": 2
+    }
+  ],
+  "valid": true,
+  "all_three_outputs_byte_identical_across_bauds": true
+}
