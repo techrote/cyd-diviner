@@ -183,6 +183,7 @@ class Endpoint:
         self.pending = bytearray()
         self.redactor = StreamingRedactor(guard)
         self.records: list[dict] = []
+        self.native_usb = False
         self.private_records: list[dict] = []
         self.errors: list[str] = []
         self.serial = serial.Serial(port=None, baudrate=identity.get("baud", 533333), timeout=0.02, write_timeout=3)
@@ -246,18 +247,48 @@ class Endpoint:
 
     def until(self, kinds: set[str], cursor: int, timeout=15, run_id=None, private=False) -> list[dict]:
         deadline = time.perf_counter() + timeout
+        recover = (not private and self.native_usb and self.identity.get("usb_progress_poll", True)
+                   and kinds in ({"link_info"}, {"link_summary"}))
+        expected = next(iter(kinds)) if recover else None
+        last_offset, last_progress = self.offset, time.perf_counter()
+        last_poke, pokes = float("-inf"), 0
         while time.perf_counter() < deadline:
             if self.errors:
                 raise RuntimeError("Malformed public telemetry; redacted bytes retained")
             records = self.private_records if private else self.records
+            matched = False
             for record in records[cursor:]:
                 if record["type"] in ("error", "link_error", "kernel_error"):
                     raise RuntimeError("Endpoint rejected command: " + json.dumps(self.guard.clean(record)))
                 if record["type"] in ("ack", "link_ack") and record.get("ok") is False:
                     raise RuntimeError("Endpoint setup failed: " + json.dumps(self.guard.clean(record)))
                 if record["type"] in kinds and (run_id is None or record.get("run_id") == run_id):
-                    return records[cursor:]
+                    matched = True
+            # A recovery query produces another metadata reply. Consume those
+            # replies in this same control/export phase before another command,
+            # and return the latest info snapshot rather than stale metadata.
+            info_replies = sum(record["type"] == "link_info" for record in records[cursor:])
+            if matched and (not recover or info_replies >= pokes + (1 if expected == "link_info" else 0)):
+                return records[cursor:]
             self.read(private=private)
+            at = time.perf_counter()
+            if self.offset != last_offset:
+                last_offset, last_progress = self.offset, at
+            if recover and pokes < 3 and at - last_progress >= .75 and at - last_poke >= 1:
+                pending = bytes(self.pending).lstrip()
+                allowed = {expected}
+                if matched and expected == "link_summary":
+                    allowed.add("link_info")
+                partial_type = next((kind for kind in allowed if pending.startswith(b"PERF {") and
+                    re.search(rb'"type"\s*:\s*"' + kind.encode("ascii") + rb'"', pending)), None)
+                if partial_type:
+                    pokes += 1
+                    self.log("usb_progress_poll", awaited_record=expected, pending_record=partial_type,
+                             attempt=pokes, stalled_for_s=at - last_progress, rx_offset=self.offset,
+                             pending_bytes=len(self.pending), command="perf link info",
+                             scope="native USB metadata/export only; outside timed traffic; private transactions excluded")
+                    self.send("perf link info")
+                    last_poke = at
         raise TimeoutError("Endpoint acknowledgement/summary timeout (no private contents recorded)")
 
     def request(self, command: str, kinds=None, timeout=15, run_id=None) -> list[dict]:
@@ -283,7 +314,7 @@ class Endpoint:
 
     def info(self) -> dict:
         records = self.request("perf link info", {"link_info"})
-        return next(record for record in records if record["type"] == "link_info")
+        return [record for record in records if record["type"] == "link_info"][-1]
 
     def close(self) -> None:
         self.raw.write(self.redactor.flush())
@@ -298,7 +329,12 @@ def verify_identity(endpoint: Endpoint) -> dict:
     for key, field in (("source_sha", "source_sha"), ("source_digest", "source_digest"), ("profile", "profile")):
         if info.get(key) != endpoint.identity[field]:
             raise RuntimeError("Target source/profile differs from identified image")
+    endpoint.native_usb = info.get("native_usb") is True
     return {"identity": endpoint.guard.clean(endpoint.identity), "target_info": records, "link_info": endpoint.info(),
+            "usb_progress_poll_policy": {"enabled": endpoint.native_usb and endpoint.identity.get("usb_progress_poll", True),
+                "native_usb_reported": endpoint.native_usb, "record_types": ["link_info", "link_summary"],
+                "maximum_per_wait": 3, "minimum_stall_s": .75, "minimum_query_spacing_s": 1,
+                "scope": "metadata/export waits only; never quiet traffic or private provisioning"},
             "binary_digest_attested_by_target": False}
 
 
@@ -519,6 +555,8 @@ def capture(args) -> int:
     validate_plan(plan)
     args.output.mkdir(parents=True, exist_ok=False)
     result = {"schema": "cyd-perf-link-capture/1", "evidence_class": "physical_measured", "status": "IN PROGRESS",
+              "harness_sha256": digest(pathlib.Path(__file__)),
+              "capture_module_sha256": digest(pathlib.Path(__file__).with_name("capture.py")),
               "started_utc": utc_now(), "plan": plan, "plan_sha256": digest(args.plan), "endpoints": {}, "runs": [],
               "privacy": "Provision/allow TX and transaction RX omitted; public RX length-preserving redaction of registered literal, hex and JSON-escaped secrets. No private configuration path/hash recorded.",
               "limitations": ["Target source/profile/digest are checked; local binary SHA256 needs the owner's separate flash receipt, not target attestation.",

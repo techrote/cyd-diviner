@@ -58,6 +58,25 @@ def capture(runs):
 
 
 class LinkAnalysisTests(unittest.TestCase):
+    def test_raw_panic_and_later_startup_do_not_become_hardware_unsupported_or_zero_rtt(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "cyd").mkdir()
+            data = b"prefix\nGuru Meditation Error: Core 0 panic'ed (StoreProhibited).\nDiviner CYD: LCD ready\n"
+            (root / "cyd/serial-rx.redacted.bin").write_bytes(data)
+            (root / "cyd/serial-events.redacted.jsonl").write_text(json.dumps({"event": "rx", "offset": 0, "bytes": len(data), "host_elapsed_s": 4.2}) + "\n")
+            failure = run("failed")
+            failure.update(status="FAILED", error="ble_mode_required")
+            failure.pop("cyd_link")
+            failure.pop("peer_link")
+            result = analyze(capture([failure]), root)
+            self.assertTrue(result["failure_context"]["panic_observed"])
+            self.assertTrue(result["failure_context"]["startup_or_reset_after_panic"])
+            self.assertEqual(result["raw_runtime_diagnostics"][0]["raw_byte_offset"], len(b"prefix\n"))
+            self.assertIsNone(result["groups"][0]["rtt"])
+            self.assertEqual(result["groups"][0]["measured_runs"], 0)
+            self.assertIn("not a BLE hardware-unsupported result", report(result, "c" * 64, "results.json"))
+
     def test_offline_cli_preserves_status_and_hashes_written_artifacts(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

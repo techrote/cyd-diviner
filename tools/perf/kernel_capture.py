@@ -13,6 +13,7 @@ import pathlib
 import platform
 import re
 import sys
+import time
 from typing import Any
 
 from capture import Capture, digest, percentile, save_result, utc_now
@@ -25,6 +26,47 @@ OUTPUT_BYTES = {"osc-f32": (256, 1024), "osc-q15": (256, 1024),
                 "fft-f32": (2048, 8192), "cellular": (3072, 12288),
                 "particles": (2048, 8192), "feedback": (4800, 19200),
                 "stripe-rgb565": (2560, 10240)}
+
+
+def await_record(capture: Capture, kind: str, *, after: int, timeout: float = 20,
+                 usb_progress_poll: bool = False) -> list[dict[str, Any]]:
+    """Optionally wake stalled native-USB output only after its record began.
+
+    A kernel's type tag is printed after its timed steps. Requiring that exact
+    tag avoids injecting a query while a kernel is still computing or while an
+    unrelated earlier state line is pending. Raw bytes/errors remain untouched.
+    """
+    if not usb_progress_poll or kind not in ("info", "state", "kernel"):
+        return capture.until(kind, after=after, timeout=timeout)
+    deadline = time.perf_counter() + timeout
+    last_progress = time.perf_counter()
+    last_offset = capture.offset
+    last_poke = float("-inf")
+    pokes = 0
+    expected_type = re.compile(rb'"type"\s*:\s*"' + kind.encode("ascii") + rb'"')
+    while time.perf_counter() < deadline:
+        if capture.errors:
+            raise RuntimeError("Malformed target telemetry; original raw bytes retained: " + capture.errors[-1])
+        for record in capture.records[after:]:
+            if record.get("type") in ("error", "kernel_error"):
+                raise RuntimeError("Target error: " + json.dumps(record))
+            if record.get("type") == kind:
+                return capture.records[after:]
+        capture.read()
+        at = time.perf_counter()
+        if capture.offset != last_offset:
+            last_offset, last_progress = capture.offset, at
+        pending = bytes(capture.pending).lstrip()
+        record_began = pending.startswith(b"PERF {") and expected_type.search(pending) is not None
+        if (record_began and at - last_progress >= .75 and at - last_poke >= 1.0 and pokes < 3):
+            pokes += 1
+            capture.log("usb_progress_poll", awaited_record=kind, attempt=pokes,
+                        stalled_for_s=at - last_progress, rx_offset=capture.offset,
+                        pending_bytes=len(capture.pending), command="perf sample",
+                        scope="expected record type already emitted; kernel timing steps have finished")
+            capture.command("perf sample")
+            last_poke = at
+    raise TimeoutError(f"No target {kind!r} record after {timeout}s; USB progress polls={pokes}")
 
 
 def validate_identity(info: dict[str, Any], args: argparse.Namespace, board: dict[str, Any]) -> None:
@@ -107,6 +149,9 @@ def execute(args: argparse.Namespace) -> int:
               "serial_baud": args.baud, "profile": args.profile, "board": board,
               "firmware_file": str(args.firmware.resolve()), "firmware_sha256": digest(args.firmware),
               "host": {"platform": platform.platform(), "python": sys.version},
+              "harness_sha256": digest(pathlib.Path(__file__)),
+              "capture_module_sha256": digest(pathlib.Path(__file__).with_name("capture.py")),
+              "usb_progress_poll": bool(getattr(args, "usb_progress_poll", False)),
               "plan": {"schema": "cyd-perf-plan/1", "seed": args.seed, "repetitions": 3,
                        "kernel_samples": 256, "memory_request": args.memory, "workloads": []},
               "runs": [], "limitations": [
@@ -121,7 +166,7 @@ def execute(args: argparse.Namespace) -> int:
         capture.wait(.3)
         cursor = len(capture.records)
         capture.command("perf info")
-        information = capture.until("info", after=cursor, timeout=10)
+        information = await_record(capture, "info", after=cursor, timeout=10, usb_progress_poll=getattr(args, "usb_progress_poll", False))
         info = next(record for record in information if record["type"] == "info")
         validate_identity(info, args, board)
         result["target_info"] = information
@@ -179,12 +224,12 @@ def execute(args: argparse.Namespace) -> int:
                         print(f"{run_id} {name} repetition {repetition}/3", flush=True)
                         cursor = len(capture.records)
                         capture.command("perf sample")
-                        capture.until("state", after=cursor)
+                        await_record(capture, "state", after=cursor, usb_progress_poll=getattr(args, "usb_progress_poll", False))
                         memory_suffix = "" if args.legacy_internal else " " + region
                         command = f"perf kernel {kernel} {args.seed} 256 {large}{memory_suffix}"
                         run["host_command_correlation"] = command
                         capture.command(command)
-                        records = capture.until("kernel", after=cursor, timeout=180)
+                        records = await_record(capture, "kernel", after=cursor, timeout=180, usb_progress_poll=getattr(args, "usb_progress_poll", False))
                         record = next(item for item in records if item["type"] == "kernel")
                         validate_kernel(record, kernel, large, args.seed, region, args.legacy_internal)
                         key = (kernel, large)
@@ -194,7 +239,7 @@ def execute(args: argparse.Namespace) -> int:
                         reference_checksums[key] = fingerprint
                         after = len(capture.records)
                         capture.command("perf sample")
-                        capture.until("state", after=after)
+                        await_record(capture, "state", after=after, usb_progress_poll=getattr(args, "usb_progress_poll", False))
                         run["target"] = capture.records[cursor:]
                         run["status"] = "MEASURED"
                         save_result(result, args.output)
@@ -229,6 +274,7 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=23063)
     parser.add_argument("--memory", choices=("auto", "internal", "psram", "both"), default="auto")
     parser.add_argument("--legacy-internal", action="store_true", help="Explicit inference-only compatibility for an older CYD image on zero-PSRAM hardware")
+    parser.add_argument("--usb-progress-poll", action="store_true", help="After a partial expected info/state/kernel record stalls >=0.75s, send <=3 logged perf sample queries >=1s apart; never poke before its type tag")
     parser.add_argument("--output", type=pathlib.Path, required=True)
     args = parser.parse_args()
     if not 0 <= args.seed <= 0xFFFFFFFF:

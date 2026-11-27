@@ -146,7 +146,8 @@ def summarize(result: dict) -> dict:
             "firmware_sha256": result["firmware_sha256"], "profile": result["profile"],
             "evidence_class": result["evidence_class"], "scenes": scenes, "metrics": metrics,
             "kernels": kernels, "spi": spi, "missing": missing,
-            "offload_break_even": "local_compute_us > remote_compute_us + measured_RTT_us + 1000000*(input_bytes+output_bytes)/measured_goodput_bytes_per_second",
+            "offload_break_even": "local_compute_us > remote_compute_us + pack_unpack_us + measured_matched_input_output_transport_us + remote_queue_us",
+            "offload_transport_model": "A model may use separately estimated fixed message overhead + input_bytes/up_goodput + output_bytes/down_goodput. Do not add payload transmission again to a full matched-payload RTT.",
             "offload_limitation": "Kernel output-only ratios do not include input/state upload or remote computation and cannot establish wireless benefit alone."}
 
 

@@ -104,7 +104,9 @@ def generate_kernel_report(result: dict, label: str, input_sha256: str, summary:
         "Unlisted combinations in a failed incremental plan remain unmeasured. Preserve the failed stream and protocol error; do not infer timings from truncated JSON.", "",
         "Compute time per output byte in [summary-kernels.csv](summary-kernels.csv) nominates offload experiments. "
         "It excludes required input/state transfers, serialization, measured link tails and remote scheduling. "
-        "A speedup requires `local compute > remote compute + RTT + (input+output bytes)/goodput` in consistent units; no wireless benefit is asserted by these kernels alone.", "",
+        "A speedup requires local compute to exceed remote compute plus packing/unpacking, remote queueing and measured transport for the actual input/output message shapes. "
+        "Do not add payload transmission again to a full matched-payload RTT. A separate fixed-overhead/throughput model requires independently estimated fixed overhead and directional transfer costs. "
+        "No wireless benefit is asserted by these kernels alone.", "",
         "Artifacts: [results.json](results.json), [target records](target.jsonl), [serial RX](serial-rx.bin), "
         "[serial events](serial-events.jsonl), [samples.csv](samples.csv), [summary.json](summary.json), "
         "[summary kernels](summary-kernels.csv), [artifact checksums](artifact-hashes.json).", ""]
@@ -389,8 +391,10 @@ def generate(result: dict, label: str, input_sha256: str, plots: list[str] | Non
         labels = ", ".join(f"`{row['kernel']}` ({'large' if row['large'] else 'realistic'}: {row['median_compute_us_per_output_byte']:.3f} µs/output B)" for row in candidates)
         text += [f"* Prioritize measured high-compute/low-output kernels for owned-peer offload experiments: {labels}. "
                  "These output-only ratios nominate experiments; they do not establish a wireless speedup. Preserve hard audio deadlines locally until the complete link/remote timing is measured."]
-    text += ["* Offload break-even requires `local compute > remote compute + measured RTT + (input bytes + output bytes) / measured goodput` in consistent units. "
-             "Measure input/state serialization, link tails/loss and remote service time on each candidate peer. No numeric minimum useful ratio can be established from controller-init-only radio tests.",
+    text += ["* Offload break-even requires local compute to exceed remote compute, packing/unpacking, queueing and measured transport for the actual input/output message shapes. "
+             "A full matched-payload RTT already includes its payload transfer: do not add that transmission a second time. "
+             "A fixed-overhead/throughput model instead needs independently estimated fixed overhead and directional byte-transfer costs. "
+             "No numeric minimum useful ratio can be established from controller-init-only radio tests.",
              "* Reserve memory using the observed free/largest-block minima and allocation receipts for the intended combination of effects. "
              "Saved-palette gradients, history format, fullscreen path and radio initialization are workload settings, not incidental details. "
              "Repeat matching scene transitions and long sessions before diagnosing a leak or guaranteeing a memory margin.", "",

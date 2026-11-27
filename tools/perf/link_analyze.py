@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 
 from capture import percentile, validate_end
 from link_capture import derive_link
@@ -110,7 +111,29 @@ def profile_observations(result, run):
     return answer
 
 
-def analyze(result):
+def raw_faults(directory):
+    observations = []
+    if directory is None:
+        return observations
+    for endpoint in ("cyd", "peer"):
+        raw = directory / endpoint / "serial-rx.redacted.bin"
+        log = directory / endpoint / "serial-events.redacted.jsonl"
+        if not raw.is_file():
+            continue
+        data = raw.read_bytes()
+        events = [json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()] if log.is_file() else []
+        received = [event for event in events if event.get("event") == "rx"]
+        for found in re.finditer(rb"Guru Meditation Error:[^\r\n]*|Backtrace:[^\r\n]*|rst:0x[^\r\n]*|Diviner CYD:[^\r\n]*", data):
+            line = found.group().decode("ascii", errors="replace")[:512]
+            chunk = next((event for event in received if event.get("offset", -1) <= found.start() < event.get("offset", -1) + event.get("bytes", 0)), {})
+            observations.append({"endpoint": endpoint, "kind": "panic" if line.startswith("Guru Meditation") else "backtrace" if line.startswith("Backtrace") else "firmware_startup" if line.startswith("Diviner CYD:") else "reset",
+                "raw_file": f"{endpoint}/serial-rx.redacted.bin", "raw_byte_offset": found.start(), "line": line,
+                "host_rx_chunk_elapsed_s": chunk.get("host_elapsed_s"),
+                "time_scope": "host receive-chunk time, not target exception timestamp"})
+    return observations
+
+
+def analyze(result, raw_directory=None):
     if result.get("schema") != "cyd-perf-link-capture/1" or result.get("evidence_class") != "physical_measured":
         raise ValueError("Expected physical cyd-perf-link-capture/1 records")
     rows, groups = [], collections.defaultdict(list)
@@ -192,8 +215,15 @@ def analyze(result):
         control_fps = baseline["fps_successful_cases"]["median"] if baseline else None
         entry["baseline_group_id"] = baseline["group_id"] if baseline else None
         entry["fps_difference_from_matched_idle"] = median - control_fps if median is not None and control_fps is not None else None
+    faults = raw_faults(raw_directory)
+    mode_required = sum("mode_required" in str(row.get("error")) for row in rows)
+    restarted = any(later["endpoint"] == fault["endpoint"] and later["kind"] in ("reset", "firmware_startup") and
+        later["raw_byte_offset"] > fault["raw_byte_offset"] for fault in faults if fault["kind"] == "panic" for later in faults)
     return {"schema": "cyd-perf-link-analysis/1", "capture_status": result["status"],
         "execution_complete": result.get("execution_complete", False), "endpoints": result["endpoints"],
+        "raw_runtime_diagnostics": faults,
+        "failure_context": {"panic_observed": any(record["kind"] == "panic" for record in faults), "startup_or_reset_after_panic": restarted, "mode_required_rejections": mode_required,
+            "interpretation": "A runtime panic/reboot can clear volatile topology/session state. Later mode-required rejections must not be counted as independent hardware-capacity failures. No unsupported-hardware conclusion follows from this sequence."},
         "run_status_counts": dict(collections.Counter(row["status"] for row in rows)), "runs": rows, "groups": comparisons,
         "limitations": ["FAILED/BLOCKED cases and separately valid profiler windows retain their own statuses. Only MEASURED link cases enter successful-link aggregates.",
             "Idle has no RTT/goodput/loss observation; missing values remain null. Per-repetition goodput uses median/range, not an unsupported p99 from three repetitions.",
@@ -262,12 +292,21 @@ def report(analysis, input_hash, raw_href):
         "RTT jitter is the mean/max absolute difference between adjacent received RTTs within each run; repetitions are not joined. "
         "The JSON/CSV retains counters, jitter, callback/lock/mix/enqueue/period histograms, BLE negotiated parameters, CRC/duplicates/reordering/too-old/queue-drop counts and actual allocation receipts.", "",
         "## Failures and measurement limits", ""]
+    if analysis.get("failure_context", {}).get("panic_observed"):
+        lines += ["**A runtime panic is present in the redacted raw stream.** This is firmware/runtime failure evidence, not a BLE hardware-unsupported result. "
+            f"The capture also records {analysis['failure_context']['mode_required_rejections']} mode-required rejections. A reboot invalidates volatile setup; "
+            "these later rejections must not be presented as independent hardware-capacity tests. Abort/re-provision after a detected runtime reset before claiming independent repetitions.", ""]
+    for fault in analysis.get("raw_runtime_diagnostics", []):
+        lines += [f"* Raw `{fault['endpoint']}` {fault['kind']} at byte {fault['raw_byte_offset']} in `{fault['raw_file']}` "
+            f"(host RX-chunk elapsed {f(fault['host_rx_chunk_elapsed_s'])} s): `{fault['line']}`."]
     for row in analysis["runs"]:
         if row["status"] != "MEASURED":
             lines += [f"* `{row['run_id']}` {row['workload']}: **{row['status']}** — {row.get('error', 'no completed transport result')}."]
     lines += ["", *["* " + note for note in analysis["limitations"]], "", "## Offload interpretation", "",
-        "Use actual RTT tails, observed unique payload goodput, local degradation and a matching measured remote kernel context in "
-        "`local compute > remote compute + RTT + (input+output bytes)/goodput`. Input/state serialization and remote queueing still need measurement. "
+        "Compare local compute with remote compute plus packing/unpacking, queueing and measured transport for the actual input/output message shapes. "
+        "A full matched-payload RTT includes its payload transfer; do not add that transmission again. "
+        "A separate fixed-overhead/throughput model needs independently estimated fixed overhead and directional byte-transfer costs. "
+        "The 64-byte echo and paced one-way throughput are not a measured job RPC for arbitrary larger inputs/outputs. "
         "A throughput average or finite maximum gives no hard real-time guarantee; these links do not by themselves justify moving the local DAC deadline loop off-board.", "",
         "Artifacts: [link-summary.json](link-summary.json), [per-run CSV](link-runs.csv), [group CSV](link-groups.csv), "
         "[analysis manifest](link-analysis-manifest.json).", ""]
@@ -280,7 +319,7 @@ def main():
     parser.add_argument("--output", type=pathlib.Path)
     args = parser.parse_args()
     payload = args.results.read_bytes()
-    analysis = analyze(json.loads(payload))
+    analysis = analyze(json.loads(payload), args.results.parent)
     output = args.output or args.results.parent
     output.mkdir(parents=True, exist_ok=True)
     input_hash = hashlib.sha256(payload).hexdigest()
