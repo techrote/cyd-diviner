@@ -2,6 +2,7 @@
 
 #include "rite.h"
 #include "theme.h"
+#include "cyd_ui.h"
 #include <algorithm>
 #include <initializer_list>
 #include <stdio.h>
@@ -243,7 +244,7 @@ Point viewportPoint(int x, int y) {
     const int px = x - viewportLeft(), py = y - viewportTop();
     const int logicalX = isPortrait() ? px : (px * 3 + 2) / 4;
     const int logicalY = isPortrait() ? py : (py * 3 + 2) / 4;
-    return {std::clamp(logicalX, 0, hal::W - 1), std::clamp(logicalY, 0, hal::H - 1)};
+    return {std::clamp(logicalX, 0, hal::W - 1), std::clamp(logicalY, 0, isPortrait() ? viewportHeight() - 1 : hal::H - 1)};
 }
 
 void chooseScheme(ColourScheme scheme) {
@@ -269,9 +270,23 @@ constexpr Area CustomChoice{14, 106, 212, 18};
 constexpr const char *OrientationNames[] = {"Landscape", "Portrait", "Landscape 180", "Portrait 180"};
 constexpr const char *BackdropNames[] = {"Theme", "Rain", "Ashfire", "Plasma"};
 
-constexpr Area orientationChoice(int i) { return {14 + 80 * i, 38, 76, 26}; }
-constexpr Area backdropChoice(int i) { return {14 + 54 * i, 86, 50, 25}; }
-constexpr Area themeChoice(size_t i) { return {14 + 54 * int(i % 4), 25 + 27 * int(i / 4), 50, 24}; }
+Area volumeMinusArea() { return isPortrait() ? Area{116, 42, 30, 34} : VolumeMinus; }
+Area volumePlusArea() { return isPortrait() ? Area{196, 42, 30, 34} : VolumePlus; }
+Area themeArea() { return isPortrait() ? Area{12, 98, 216, 46} : SettingsTheme; }
+Area displayArea() { return isPortrait() ? Area{12, 156, 216, 46} : SettingsDisplay; }
+Area paletteArea() { return isPortrait() ? Area{12, 214, 216, 46} : SettingsPalette; }
+Area turnArea() { return isPortrait() ? Area{12, 100, 216, 34} : TurnChoice; }
+Area customArea() { return isPortrait() ? Area{12, 282, 216, 28} : CustomChoice; }
+Area orientationChoice(int i) {
+    return isPortrait() ? Area{12 + 112 * i, 52, 104, 38} : Area{14 + 80 * i, 38, 76, 26};
+}
+Area backdropChoice(int i) {
+    return isPortrait() ? Area{12 + 112 * (i % 2), 178 + 46 * (i / 2), 104, 38} : Area{14 + 54 * i, 86, 50, 25};
+}
+Area themeChoice(size_t i) {
+    return isPortrait() ? Area{12 + 74 * int(i % 3), 38 + 58 * int(i / 3), 68, 50} :
+                          Area{14 + 54 * int(i % 4), 25 + 27 * int(i / 4), 50, 24};
+}
 
 void changeOrientation(uint8_t value) {
     if (value != static_cast<uint8_t>(currentOrientation) && saveOption(OrientationKey, value)) {
@@ -287,13 +302,13 @@ bool tapSettings(Point point, hal::Key &out) {
     }
     switch (settingsPage) {
     case SettingsPage::Home:
-        if (VolumeMinus.contains(point) || VolumePlus.contains(point)) {
-            out = {VolumeMinus.contains(point) ? '-' : '='};
+        if (volumeMinusArea().contains(point) || volumePlusArea().contains(point)) {
+            out = {volumeMinusArea().contains(point) ? '-' : '='};
             return true;
         }
-        if (SettingsTheme.contains(point)) settingsPage = SettingsPage::Theme;
-        else if (SettingsDisplay.contains(point)) settingsPage = SettingsPage::Display;
-        else if (SettingsPalette.contains(point)) {
+        if (themeArea().contains(point)) settingsPage = SettingsPage::Theme;
+        else if (displayArea().contains(point)) settingsPage = SettingsPage::Display;
+        else if (paletteArea().contains(point)) {
             out = {'p'};
             return true;
         }
@@ -302,11 +317,11 @@ bool tapSettings(Point point, hal::Key &out) {
         for (size_t i = 0; i < theme::PresetCount; ++i) {
             if (themeChoice(i).contains(point)) chooseScheme(theme::presetScheme(i));
         }
-        if (CustomChoice.contains(point)) chooseScheme(ColourScheme::Custom);
+        if (customArea().contains(point)) chooseScheme(ColourScheme::Custom);
         break;
     case SettingsPage::Display: {
         const auto rotation = static_cast<uint8_t>(currentOrientation);
-        if (TurnChoice.contains(point)) changeOrientation(rotation ^ 2);
+        if (turnArea().contains(point)) changeOrientation(rotation ^ 2);
         else if (orientationChoice(0).contains(point)) changeOrientation(rotation & 2);
         else if (orientationChoice(1).contains(point)) changeOrientation((rotation & 2) | 1);
         for (uint8_t i = 0; i < 4; ++i) {
@@ -341,6 +356,27 @@ void settingChoice(Area area, const char *label, bool selected = false, bool swa
                       theme::readableInk(selected ? C_GLOW : C_BONE, bg));
     if (swatch) cv.drawFastHLine(area.x + area.w / 2 - 10, area.y + area.h - 6, 20, ink);
     if (selected) cv.drawFastHLine(area.x, area.y + area.h - 1, area.w, C_EMBER);
+}
+
+void portraitChoice(cyd_ui::Surface &ui, Area area, const char *label, bool selected = false,
+                    const theme::Palette *swatch = nullptr) {
+    const uint16_t bg = selected ? C_CLOT : C_DUSK;
+    ui.fillRect(area.x, area.y, area.w, area.h, bg);
+    ui.textCentre(label, area.x + area.w / 2, area.y + (area.h - 8) / 2 - (swatch ? 8 : 0),
+                  theme::readableInk(selected ? C_GLOW : C_BONE, bg));
+    if (swatch) {
+        const uint16_t inks[] = {swatch->background, swatch->dusk, swatch->bone, swatch->ember};
+        for (int i = 0; i < 4; ++i) ui.fillRect(area.x + 10 + i * 12, area.y + area.h - 15, 12, 6, inks[i]);
+    }
+    ui.drawFastHLine(area.x, area.y + area.h - 1, area.w, selected ? C_EMBER : C_CLOT);
+}
+
+void portraitSettingRow(cyd_ui::Surface &ui, Area area, const char *label, const char *value) {
+    ui.fillRect(area.x, area.y, area.w, area.h, C_DUSK);
+    ui.drawFastHLine(area.x, area.y + area.h - 1, area.w, C_CLOT);
+    ui.text(label, area.x + 9, area.y + 9, theme::readableInk(C_BONE, C_DUSK));
+    ui.text(value, area.x + 9, area.y + 27, theme::readableInk(C_DIM, C_DUSK));
+    ui.text(">", area.x + area.w - 17, area.y + 18, theme::readableInk(C_GLOW, C_DUSK));
 }
 
 void keyboard(Layout &layout) {
@@ -536,7 +572,12 @@ bool tapViewport(Point p, uint32_t now, hal::Key &out) {
     if (splash) return dispatch(nav("", hal::N_ENTER), now, out);
     if (keyboardVisible()) return false;
     if (carouselSettingsVisible()) return tapSettings(p, out);
-    if (!active && p.y >= 22 && p.y < 123) {
+    if (!active && isPortrait() && p.y >= 25 && p.y < viewportBottom() - 24) {
+        const int shift = (displayHeight() - viewportBottom()) / 2;
+        out = {0, p.y < 116 - shift ? hal::N_LEFT : p.y >= 226 - shift ? hal::N_RIGHT : hal::N_ENTER};
+        return true;
+    }
+    if (!active && !isPortrait() && p.y >= 22 && p.y < 123) {
         // Cover the full width of the largest settled centre card.
         constexpr int centreHalfWidth = 54;
         hal::Nav key = p.x < hal::W / 2 - centreHalfWidth ? hal::N_LEFT :
@@ -627,6 +668,51 @@ void backCarouselSettings() {
 }
 bool carouselSettingsVisible() { return settingsPage != SettingsPage::Closed; }
 
+void drawPortraitSettings(Canvas &band, int top) {
+    using namespace theme;
+    cyd_ui::Surface ui(band, top);
+    drawSceneBackground(band, 0, -top, 240, 320, palette());
+    const bool home = settingsPage == SettingsPage::Home;
+    const bool themes = settingsPage == SettingsPage::Theme;
+    const int titleWidth = ui.glyphs(DAEDRIC_S, home ? "SETTINGS" : themes ? "THEME" : "DISPLAY", 4, 1, C_EMBER);
+    ui.text(home ? "settings" : themes ? "theme" : "display", titleWidth + 10, 5, C_DIM);
+    ui.fillRect(SettingsBack.x, 0, SettingsBack.w, 18, C_DUSK);
+    ui.textRight(home ? "< Grimoire" : "< Settings", 233, 5, readableInk(C_BONE, C_DUSK));
+    ui.drawFastHLine(0, 18, 240, C_CLOT);
+    ui.diamond(120, 18, 2, C_RUST);
+    if (home) {
+        const auto level = hal::volume();
+        char percent[6];
+        snprintf(percent, sizeof percent, "%d%%", (level * 100 + 127) / 255);
+        ui.fillRect(12, 34, 216, 50, C_DUSK);
+        ui.text("Volume", 21, 48, readableInk(C_BONE, C_DUSK));
+        ui.drawFastHLine(21, 69, 78, C_CLOT);
+        ui.drawFastHLine(21, 69, level * 78 / 255, C_EMBER);
+        portraitChoice(ui, volumeMinusArea(), "-");
+        portraitChoice(ui, volumePlusArea(), "+");
+        ui.textCentre(percent, 170, 55, readableInk(C_GLOW, C_DUSK));
+        portraitSettingRow(ui, themeArea(), "Theme", colourSchemeName(colourScheme()));
+        portraitSettingRow(ui, displayArea(), "Display", OrientationNames[static_cast<uint8_t>(currentOrientation)]);
+        portraitSettingRow(ui, paletteArea(), "Palette", "Colours, gradients, patterns");
+    } else if (themes) {
+        for (size_t i = 0; i < PresetCount; ++i) {
+            const auto scheme = presetScheme(i);
+            portraitChoice(ui, themeChoice(i), colourSchemeName(scheme), scheme == colourScheme(), &presetPalette(scheme));
+        }
+        if (hasCustomColourway()) portraitChoice(ui, customArea(), "Custom", colourScheme() == ColourScheme::Custom);
+    } else {
+        const auto rotation = static_cast<uint8_t>(currentOrientation);
+        ui.text("Orientation", 12, 34, C_BONE);
+        portraitChoice(ui, orientationChoice(0), "Landscape", !(rotation & 1));
+        portraitChoice(ui, orientationChoice(1), "Portrait", rotation & 1);
+        portraitChoice(ui, turnArea(), "Flip 180", rotation & 2);
+        ui.text("Backdrop", 12, 158, C_BONE);
+        for (uint8_t i = 0; i < 4; ++i) {
+            portraitChoice(ui, backdropChoice(i), BackdropNames[i], i == static_cast<uint8_t>(currentBackdrop));
+        }
+    }
+}
+
 void drawCarouselSettings(int transparent) {
     using namespace theme;
     const bool home = settingsPage == SettingsPage::Home;
@@ -714,10 +800,15 @@ bool visionsImmersive() { return immersive; }
 int displayWidth() { return isPortrait() ? ShortEdge : LongEdge; }
 int displayHeight() { return isPortrait() ? LongEdge : ShortEdge; }
 int viewportWidth() { return displayWidth(); }
-int viewportHeight() { return immersive ? displayHeight() : viewportWidth() * hal::H / hal::W; }
+int viewportHeight() {
+    if (immersive) return displayHeight();
+    if (isPortrait() && !splash && (!active || focusedRite(active))) return viewportBottom();
+    return viewportWidth() * hal::H / hal::W;
+}
 int viewportLeft() { return 0; }
 int viewportTop() {
     if (immersive) return 0;
+    if (isPortrait() && !splash && (!active || focusedRite(active))) return 0;
     if (isPortrait() || !dockVisible || carouselMain() || active == &RITE_VISIONS) return (viewportBottom() - viewportHeight()) / 2;
     return keyboardVisible() && active == &RITE_BEAT ? keyboardTop() - viewportHeight() : 0;
 }

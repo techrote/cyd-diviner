@@ -1,6 +1,7 @@
 #ifdef GRIM_CYD
 
 #include "../cyd_controls.h"
+#include "../cyd_ui.h"
 #include "../rite.h"
 #include "../theme.h"
 
@@ -53,7 +54,7 @@ constexpr int StyleColumnW = OptionsW / 2;
 constexpr int StyleRows = (StyleCount + 1) / 2;
 
 constexpr const char *StopLabels[] = {"BG", "Panel", "Text", "Acc"};
-constexpr int StopW = OptionsW / StyleTab, StopH = 17, StartY = 69, EndY = 96;
+constexpr int StopH = 17, StartY = 69, EndY = 96;
 static_assert(sizeof StopLabels / sizeof StopLabels[0] == StyleTab);
 
 constexpr const char *GradientModes[] = {"Blend >", "Multitone >", "Bands >"};
@@ -73,6 +74,16 @@ static_assert(ActionWidth * ActionCount == hal::W);
 
 constexpr int PreviewX = 152, PreviewY = 53, PreviewW = 84;
 constexpr int StepsY = 99, StepWidth = 17;
+
+constexpr int PortraitTabsY = 24, PortraitTabsH = 30;
+constexpr int PortraitBodyY = 132, PortraitRowH = 24, PortraitTrackRight = 168;
+constexpr int PortraitValueX = 206, PortraitMinusX = 175, PortraitPlusX = 218, PortraitStepW = 18;
+constexpr int PortraitOptionsX = 12, PortraitOptionsW = 216;
+constexpr int PortraitStartY = 176, PortraitEndY = 220, PortraitStopH = 26;
+constexpr int PortraitPresetY = 260, PortraitGenerateY = 291, PortraitActionH = 28;
+constexpr int PortraitActionsPerRow = ActionCount / 2, PortraitActionW = hal::W / PortraitActionsPerRow;
+static_assert(PortraitActionsPerRow * 2 == ActionCount && PortraitActionsPerRow * PortraitActionW == hal::W);
+constexpr int PortraitPreviewX = 12, PortraitPreviewY = 74, PortraitPreviewW = 216, PortraitPreviewH = 49;
 
 Colourway draft, saved;
 theme::Palette preview;
@@ -161,19 +172,25 @@ uint16_t nextHue() {
     return static_cast<uint16_t>(hue);
 }
 
-bool setStop(ColourRole &stop, int offset) {
-    const auto role = static_cast<ColourRole>(offset / StopW);
+bool setStop(ColourRole &stop, int index) {
+    const auto role = static_cast<ColourRole>(index);
     if (stop == role) return false;
     stop = role;
     return true;
 }
 
-bool stylePointer(int x, int y) {
-    const int offset = x - OptionsX;
-    if (offset < 0 || offset >= OptionsW) return false;
+bool stylePointer(int x, int y, bool portrait) {
+    const int optionsX = portrait ? PortraitOptionsX : OptionsX;
+    const int width = portrait ? PortraitOptionsW : OptionsW;
+    const int top = portrait ? PortraitBodyY : TracksY;
+    const int rowHeight = portrait ? PortraitRowH : RowHeight;
+    const int start = portrait ? PortraitStartY : StartY, end = portrait ? PortraitEndY : EndY;
+    const int stopHeight = portrait ? PortraitStopH : StopH;
+    const int offset = x - optionsX;
+    if (offset < 0 || offset >= width) return false;
     if (gradientDetails) {
-        if (y >= TracksY && y < TracksY + RowHeight) {
-            if (offset < StyleColumnW) {
+        if (y >= top && y < top + rowHeight) {
+            if (offset < width / 2) {
                 gradientDetails = false;
                 return false;
             }
@@ -181,12 +198,12 @@ bool stylePointer(int x, int y) {
             draft.gradientMode = static_cast<GradientMode>(next);
             return true;
         }
-        if (y >= StartY && y < StartY + StopH) return setStop(draft.gradientStart, offset);
-        if (y >= EndY && y < EndY + StopH) return setStop(draft.gradientEnd, offset);
+        if (y >= start && y < start + stopHeight) return setStop(draft.gradientStart, offset / (width / StyleTab));
+        if (y >= end && y < end + stopHeight) return setStop(draft.gradientEnd, offset / (width / StyleTab));
         return false;
     }
-    if (y < TracksY || y >= TracksY + StyleRows * RowHeight) return false;
-    const int style = ((y - TracksY) / RowHeight) * 2 + offset / StyleColumnW;
+    if (y < top || y >= top + StyleRows * rowHeight) return false;
+    const int style = ((y - top) / rowHeight) * 2 + offset / (width / 2);
     return style < StyleCount && setStyle(style);
 }
 
@@ -245,13 +262,28 @@ bool key(const hal::Key &k) {
 }
 
 bool pointer(int x, int y, bool start) {
+    const bool portrait = cyd_controls::isPortrait();
+    const int tabsY = portrait ? PortraitTabsY : TabsY;
+    const int tabsH = portrait ? PortraitTabsH : TabsH;
+    const int trackY = portrait ? PortraitBodyY : TracksY;
+    const int trackH = portrait ? PortraitRowH : RowHeight;
+    const int trackRight = portrait ? PortraitTrackRight : TrackRight;
     if (start) {
         draggedTrack = -1;
-        if (y >= ActionsY) {
+        if (portrait) {
+            if (y >= PortraitPresetY && y < PortraitPresetY + PortraitActionH) {
+                key(hal::Key{Actions[x / PortraitActionW].key});
+                return false;
+            }
+            if (y >= PortraitGenerateY && y < PortraitGenerateY + PortraitActionH) {
+                key(hal::Key{Actions[PortraitActionsPerRow + x / PortraitActionW].key});
+                return false;
+            }
+        } else if (y >= ActionsY) {
             key(hal::Key{Actions[x / ActionWidth].key});
             return false;
         }
-        if (y >= TabsY && y < TabsY + TabsH) {
+        if (y >= tabsY && y < tabsY + tabsH) {
             int left = TabsX;
             for (int i = 0; i < TabCount; ++i) {
                 if (x >= left && x < left + Tabs[i].width) {
@@ -263,204 +295,270 @@ bool pointer(int x, int y, bool start) {
             }
             return false;
         }
-        if (tab == StyleTab) return stylePointer(x, y);
-        if (y >= StepsY && x >= PreviewX && x < PreviewX + PreviewW) {
+        if (tab == StyleTab) return stylePointer(x, y, portrait);
+        if (!portrait && y >= StepsY && x >= PreviewX && x < PreviewX + PreviewW) {
             if (x < PreviewX + StepWidth) return setValue(focusedTrack, value(focusedTrack) - 1);
             if (x >= PreviewX + PreviewW - StepWidth) return setValue(focusedTrack, value(focusedTrack) + 1);
             return false;
         }
-        if (y >= TracksY && y < TracksY + TrackCount * RowHeight) {
-            const int hit = (y - TracksY) / RowHeight;
-            if (x >= Tracks[hit].left - 5 && x <= TrackRight + 5) focusedTrack = draggedTrack = hit;
+        if (y >= trackY && y < trackY + TrackCount * trackH) {
+            const int hit = (y - trackY) / trackH;
+            if (x >= Tracks[hit].left - 5 && x <= trackRight + 5) focusedTrack = draggedTrack = hit;
+            else if (portrait && x >= PortraitMinusX && x < PortraitPlusX + PortraitStepW) {
+                const bool stepping = focusedTrack == hit;
+                focusedTrack = hit;
+                if (stepping && x < PortraitMinusX + PortraitStepW) return setValue(hit, value(hit) - 1);
+                if (stepping && x >= PortraitPlusX) return setValue(hit, value(hit) + 1);
+            }
         }
     }
     if (tab == StyleTab || draggedTrack < 0) return false;
     const Track &track = Tracks[draggedTrack];
-    const int width = TrackRight - track.left;
-    const int offset = std::clamp(x, track.left, TrackRight) - track.left;
+    const int width = trackRight - track.left;
+    const int offset = std::clamp(x, track.left, trackRight) - track.left;
     const int next = track.minimum + (offset * (track.maximum - track.minimum) + width / 2) / width;
     return setValue(draggedTrack, next);
 }
 
-void drawTabs(Canvas &cv) {
+void drawTabs(cyd_ui::Surface &cv, int y, int height) {
     int x = TabsX;
+    const int contentY = y + (height - TabsH) / 2;
     for (int i = 0; i < TabCount; ++i) {
         const Tab &item = Tabs[i];
         const bool selected = i == tab;
         const Surface &surface = selected ? panel : background;
         const int width = item.width - 2;
-        if (selected) cv.fillRect(x, TabsY, width, TabsH - 1, panel.fill);
-        const int bottom = TabsY + TabsH - 1;
+        if (selected) cv.fillRect(x, y, width, height - 1, panel.fill);
+        const int bottom = y + height - 1;
         cv.drawFastHLine(x, bottom, width, selected ? panel.focus : surface.edge);
-        if (selected) theme::diamond(x + width / 2, bottom, 1, panel.focus);
-        theme::textCentre(item.name, x + width / 2, TabsY + (i == StyleTab ? 6 : 3), surface.text);
+        if (selected) cv.diamond(x + width / 2, bottom, 1, panel.focus);
+        cv.textCentre(item.name, x + width / 2, contentY + (i == StyleTab ? 6 : 3), surface.text);
         if (i != StyleTab) {
-            cv.fillRect(x + 5, TabsY + 13, width - 10, 4, pixelRgb(draft.rgb[i]));
-            cv.drawRect(x + 4, TabsY + 12, width - 8, 6, surface.edge);
+            cv.fillRect(x + 5, contentY + 13, width - 10, 4, pixelRgb(draft.rgb[i]));
+            cv.drawRect(x + 4, contentY + 12, width - 8, 6, surface.edge);
         }
         x += item.width;
     }
 }
 
-void drawStyles(Canvas &cv) {
+void drawStyles(cyd_ui::Surface &cv, bool portrait) {
+    const int optionsX = portrait ? PortraitOptionsX : OptionsX;
+    const int top = portrait ? PortraitBodyY : TracksY;
+    const int rowHeight = portrait ? PortraitRowH : RowHeight;
+    const int columnWidth = portrait ? PortraitOptionsW / 2 : StyleColumnW;
     for (int i = 0; i < StyleCount; ++i) {
-        const int x = OptionsX + (i % 2) * StyleColumnW;
-        const int y = TracksY + (i / 2) * RowHeight;
+        const int x = optionsX + (i % 2) * columnWidth;
+        const int y = top + (i / 2) * rowHeight;
+        const int offset = (rowHeight - RowHeight) / 2;
         const bool selected = static_cast<BackgroundStyle>(i) == draft.backgroundStyle;
         const Surface &surface = selected ? panel : background;
-        if (selected) cv.fillRect(x, y, StyleColumnW - 2, RowHeight - 1, panel.fill);
-        theme::diamond(x + 5, y + 6, 2, selected ? surface.focus : surface.edge, selected);
-        theme::text(Styles[i], x + 11, y + 3, surface.text);
+        if (selected) cv.fillRect(x, y, columnWidth - 2, rowHeight - 1, panel.fill);
+        cv.diamond(x + 5, y + 6 + offset, 2, selected ? surface.focus : surface.edge, selected);
+        cv.text(Styles[i], x + 11, y + 3 + offset, surface.text);
     }
 }
 
-void drawStops(Canvas &cv, const char *title, ColourRole selected, int y, const uint16_t *colours) {
+void drawStops(cyd_ui::Surface &cv, const char *title, ColourRole selected, int y,
+               const uint16_t *colours, bool portrait) {
+    const int optionsX = portrait ? PortraitOptionsX : OptionsX;
+    const int optionsW = portrait ? PortraitOptionsW : OptionsW;
+    const int height = portrait ? PortraitStopH : StopH;
+    const int contentY = y + (height - StopH) / 2;
+    const int stopW = optionsW / StyleTab;
     const int role = static_cast<int>(selected);
-    theme::text(title, OptionsX, y - 9, background.text);
-    theme::textRight(Tabs[role].name, OptionsX + OptionsW - 2, y - 9, background.text);
+    cv.text(title, optionsX, y - 9, background.text);
+    cv.textRight(Tabs[role].name, optionsX + optionsW - 2, y - 9, background.text);
     for (int i = 0; i < StyleTab; ++i) {
-        const int x = OptionsX + i * StopW;
-        const int width = StopW - 2;
+        const int x = optionsX + i * stopW;
+        const int width = stopW - 2;
         const bool chosen = i == role;
         const Surface &surface = chosen ? panel : background;
-        if (chosen) cv.fillRect(x, y, width, StopH, surface.fill);
-        cv.drawFastHLine(x, y + StopH - 1, width, chosen ? surface.focus : surface.edge);
-        theme::textCentre(StopLabels[i], x + width / 2, y + 1, surface.text);
-        cv.fillRect(x + 4, y + 10, width - 8, 4, colours[i]);
-        cv.drawRect(x + 3, y + 9, width - 6, 6, surface.edge);
+        if (chosen) cv.fillRect(x, y, width, height, surface.fill);
+        cv.drawFastHLine(x, y + height - 1, width, chosen ? surface.focus : surface.edge);
+        cv.textCentre(StopLabels[i], x + width / 2, contentY + 1, surface.text);
+        cv.fillRect(x + 4, contentY + 10, width - 8, 4, colours[i]);
+        cv.drawRect(x + 3, contentY + 9, width - 6, 6, surface.edge);
     }
 }
 
-void drawGradientDetails(Canvas &cv) {
-    const int modeX = OptionsX + StyleColumnW;
-    const int width = StyleColumnW - 2;
-    const int height = RowHeight - 1;
-    cv.fillRect(OptionsX, TracksY, width, height, panel.fill);
-    cv.drawFastHLine(OptionsX, TracksY + height - 1, width, panel.edge);
-    theme::textCentre("< Styles", OptionsX + width / 2, TracksY + 3, panel.text);
-    cv.fillRect(modeX, TracksY, width, height, panel.fill);
-    cv.drawFastHLine(modeX, TracksY + height - 1, width, panel.edge);
-    theme::textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + width / 2, TracksY + 3, panel.text);
+void drawGradientDetails(cyd_ui::Surface &cv, bool portrait) {
+    const int x = portrait ? PortraitOptionsX : OptionsX;
+    const int y = portrait ? PortraitBodyY : TracksY;
+    const int column = portrait ? PortraitOptionsW / 2 : StyleColumnW;
+    const int height = (portrait ? PortraitRowH : RowHeight) - 1;
+    const int labelY = y + (height - 7) / 2;
+    cv.fillRect(x, y, column - 2, height, panel.fill);
+    cv.drawFastHLine(x, y + height - 1, column - 2, panel.edge);
+    cv.textCentre("< Styles", x + (column - 2) / 2, labelY, panel.text);
+    const int modeX = x + column;
+    cv.fillRect(modeX, y, column - 2, height, panel.fill);
+    cv.drawFastHLine(modeX, y + height - 1, column - 2, panel.edge);
+    cv.textCentre(GradientModes[static_cast<int>(draft.gradientMode)], modeX + (column - 2) / 2, labelY, panel.text);
     const uint16_t colours[] = {preview.background, preview.dusk, preview.bone, preview.ember};
-    drawStops(cv, "Start colour", draft.gradientStart, StartY, colours);
-    drawStops(cv, "End colour", draft.gradientEnd, EndY, colours);
+    drawStops(cv, "Start colour", draft.gradientStart, portrait ? PortraitStartY : StartY, colours, portrait);
+    drawStops(cv, "End colour", draft.gradientEnd, portrait ? PortraitEndY : EndY, colours, portrait);
 }
 
-void drawTrack(Canvas &cv, int i) {
+void drawTrack(cyd_ui::Surface &cv, int i, bool portrait) {
     const Track &track = Tracks[i];
-    const int y = TracksY + i * RowHeight;
-    const int span = TrackRight - track.left;
+    const int rowHeight = portrait ? PortraitRowH : RowHeight;
+    const int y = (portrait ? PortraitBodyY : TracksY) + i * rowHeight;
+    if (!cv.intersects(y, rowHeight)) return;
+    const int railY = y + (rowHeight - RowHeight) / 2;
+    const int right = portrait ? PortraitTrackRight : TrackRight;
+    const int span = right - track.left;
     const int v = value(i);
     const bool selected = i == focusedTrack;
     const Surface &surface = selected ? panel : background;
-    if (selected) cv.fillRect(3, y, 144, RowHeight - 1, panel.fill);
-    theme::text(track.label, 4, y + 3, surface.text);
+    if (selected) cv.fillRect(3, y, portrait ? hal::W - 6 : 144, rowHeight - 1, panel.fill);
+    cv.text(track.label, 4, railY + 3, surface.text);
 
     if (i < Saturation) {
-        for (int x = track.left; x <= TrackRight; x += 2) {
+        for (int x = track.left; x <= right; x += 2) {
             const uint32_t channel = (x - track.left) * 255 / span;
-            cv.fillRect(x, y + 5, x == TrackRight ? 1 : 2, 4, pixelRgb(channel << componentShift(i)));
+            cv.fillRect(x, railY + 5, x == right ? 1 : 2, 4, pixelRgb(channel << componentShift(i)));
         }
     } else {
-        cv.drawFastHLine(track.left, y + 6, span + 1, surface.edge);
-        cv.drawFastVLine(track.left + span / 2, y + 4, 6, surface.text);
+        cv.drawFastHLine(track.left, railY + 6, span + 1, surface.edge);
+        cv.drawFastVLine(track.left + span / 2, railY + 4, 6, surface.text);
     }
-    if (i < Saturation) cv.drawRect(track.left - 1, y + 4, span + 3, 6, surface.edge);
+    if (i < Saturation) cv.drawRect(track.left - 1, railY + 4, span + 3, 6, surface.edge);
     const int knob = track.left + ((v - track.minimum) * span + (track.maximum - track.minimum) / 2) /
                                  (track.maximum - track.minimum);
-    theme::diamond(knob, y + 7, 3, surface.fill);
-    theme::diamond(knob, y + 7, 2, selected ? surface.focus : surface.text);
+    cv.diamond(knob, railY + 7, 3, surface.fill);
+    cv.diamond(knob, railY + 7, 2, selected ? surface.focus : surface.text);
 
     char label[8];
     const char *format = i == Saturation ? "%d%%" : i == Brightness ? "%+d" : "%d";
     snprintf(label, sizeof label, format, v);
-    theme::textRight(label, ValueRight, y + 3, surface.text);
+    if (portrait) {
+        cv.textCentre(label, PortraitValueX, railY + 3, surface.text);
+        if (selected) {
+            cv.drawFastHLine(PortraitMinusX, railY + 13, PortraitStepW, surface.edge);
+            cv.drawFastHLine(PortraitPlusX, railY + 13, PortraitStepW, surface.edge);
+            cv.textCentre("-", PortraitMinusX + PortraitStepW / 2, railY + 3, surface.text);
+            cv.textCentre("+", PortraitPlusX + PortraitStepW / 2, railY + 3, surface.text);
+        }
+    } else cv.textRight(label, ValueRight, railY + 3, surface.text);
 }
 
-void drawPreview(Canvas &cv) {
-    constexpr int x = PreviewX, y = PreviewY, w = PreviewW;
+void drawPreview(cyd_ui::Surface &cv, bool portrait) {
+    const int x = portrait ? PortraitPreviewX : PreviewX;
+    const int y = portrait ? PortraitPreviewY : PreviewY;
+    const int w = portrait ? PortraitPreviewW : PreviewW;
     const bool showStops = tab == StyleTab && gradientDetails;
     const bool middleStop = showStops && draft.gradientMode != GradientMode::Blend;
-    const int h = tab != StyleTab ? 43 : middleStop ? 49 : 59;
+    const int h = portrait ? PortraitPreviewH : tab != StyleTab ? 43 : middleStop ? 49 : 59;
+    const int labelY = portrait ? 61 : TracksY;
     const char *label = saveFailed ? "Save failed" : showStops ? "Stop colours" : "Preview";
-    theme::text(label, x, TracksY, saveFailed ? theme::readableInk(Error, background.fill) : background.text);
-    if (showStops) theme::drawBackground(cv, x, y, w, h, preview);
-    else theme::drawSceneBackground(cv, x, y, w, h, preview);
-    theme::frame(x, y, w, h, background.edge, background.focus);
+    cv.text(label, x, labelY, saveFailed ? theme::readableInk(Error, background.fill) : background.text);
+    if (portrait && tab != StyleTab) {
+        char hex[8];
+        snprintf(hex, sizeof hex, "#%06lX", static_cast<unsigned long>(draft.rgb[tab] & 0xffffffu));
+        cv.textRight(hex, x + w, labelY, background.text);
+    }
+    if (cv.intersects(y, h)) {
+        if (showStops) theme::drawBackground(cv.canvas, x, y - cv.top, w, h, preview);
+        else theme::drawSceneBackground(cv.canvas, x, y - cv.top, w, h, preview);
+    }
+    cv.frame(x, y, w, h, background.edge, background.focus);
     if (showStops) {
-        if (middleStop) theme::textCentre("Via Panel", x + w / 2, y + h + 3, background.text);
+        if (middleStop) {
+            if (portrait) cv.textRight("Via Panel", x + w, labelY, background.text);
+            else cv.textCentre("Via Panel", x + w / 2, y + h + 3, background.text);
+        }
         return;
     }
-    theme::glyphs(DAEDRIC_S, "D", x + 5, y + 3, preview.ember);
-    theme::text("diviner", x + 23, y + 8, preview.bone);
+    cv.glyphs(DAEDRIC_S, "D", x + 5, y + 3, preview.ember);
+    cv.text("diviner", x + 23, y + 8, preview.bone);
     cv.drawFastHLine(x + 4, y + 19, w - 8, preview.clot);
-    theme::diamond(x + w / 2, y + 19, 1, preview.rust);
+    cv.diamond(x + w / 2, y + 19, 1, preview.rust);
     cv.fillRect(x + 8, y + 23, w - 16, 12, preview.dusk);
-    theme::frame(x + 8, y + 23, w - 16, 12, preview.rust, preview.ember);
-    theme::textCentre("rite", x + w / 2, y + 25, preview.glow);
-    for (int i = 0; i < w - 10; ++i) {
-        const auto index = i * 255 / (w - 11);
-        cv.drawFastVLine(x + 5 + i, y + h - 5, 3, preview.intensity[index]);
+    cv.frame(x + 8, y + 23, w - 16, 12, preview.rust, preview.ember);
+    cv.textCentre("rite", x + w / 2, y + 25, preview.glow);
+    if (cv.intersects(y + h - 5, 3)) {
+        for (int i = 0; i < w - 10; ++i) {
+            const auto index = i * 255 / (w - 11);
+            cv.drawFastVLine(x + 5 + i, y + h - 5, 3, preview.intensity[index]);
+        }
     }
 
-    if (tab == StyleTab) return;
+    if (tab == StyleTab || portrait) return;
     const int plusX = x + w - StepWidth;
     cv.fillRect(x, StepsY + 2, StepWidth, 12, panel.fill);
     cv.fillRect(plusX, StepsY + 2, StepWidth, 12, panel.fill);
     cv.drawFastHLine(x, StepsY + 13, StepWidth, panel.edge);
     cv.drawFastHLine(plusX, StepsY + 13, StepWidth, panel.edge);
-    theme::textCentre("-", x + StepWidth / 2, StepsY + 4, panel.text);
-    theme::textCentre("+", plusX + StepWidth / 2, StepsY + 4, panel.text);
+    cv.textCentre("-", x + StepWidth / 2, StepsY + 4, panel.text);
+    cv.textCentre("+", plusX + StepWidth / 2, StepsY + 4, panel.text);
     char hex[8];
     snprintf(hex, sizeof hex, "#%06lX", static_cast<unsigned long>(draft.rgb[tab] & 0xffffffu));
-    theme::textCentre(hex, x + w / 2, StepsY + 4, background.text);
+    cv.textCentre(hex, x + w / 2, StepsY + 4, background.text);
 }
 
-void drawHeader(Canvas &cv, bool pending) {
-    const int runeWidth = theme::glyphs(DAEDRIC_S, "PALETTE", 4, 1, background.focus);
-    theme::text("palette", 4 + runeWidth + 6, 5, background.text);
-    if (pending) theme::textRight("unsaved", 167, 5, background.text);
-    else if (theme::colourScheme() == ColourScheme::Custom) theme::textRight("saved", 167, 5, background.text);
-    theme::textRight(pending ? "< Discard" : "< Settings", 236, 5, background.focus);
+void drawHeader(cyd_ui::Surface &cv, bool pending) {
+    if (!cv.intersects(0, 21)) return;
+    const int runeWidth = cv.glyphs(DAEDRIC_S, "PALETTE", 4, 1, background.focus);
+    cv.text("palette", 4 + runeWidth + 6, 5, background.text);
+    if (pending) cv.textRight("unsaved", 167, 5, background.text);
+    else if (theme::colourScheme() == ColourScheme::Custom) cv.textRight("saved", 167, 5, background.text);
+    cv.textRight(pending ? "< Discard" : "< Settings", 236, 5, background.focus);
     cv.drawFastHLine(0, 18, hal::W, background.edge);
-    theme::diamond(hal::W / 2, 18, 2, background.focus);
+    cv.diamond(hal::W / 2, 18, 2, background.focus);
 }
 
-void drawActions(Canvas &cv) {
-    cv.drawFastHLine(0, ActionsY - 1, hal::W, background.edge);
+void drawActions(cyd_ui::Surface &cv, bool portrait) {
+    const int top = portrait ? PortraitPresetY : ActionsY;
+    const int width = portrait ? PortraitActionW : ActionWidth;
+    const int height = portrait ? PortraitActionH - 5 : 14;
+    cv.drawFastHLine(0, top - 1, hal::W, background.edge);
     for (int i = 0; i < ActionCount; ++i) {
-        const int x = i * ActionWidth + 2, y = ActionsY + 2, w = ActionWidth - 4;
-        constexpr int h = 14;
+        const int column = portrait ? i % PortraitActionsPerRow : i;
+        const int row = portrait && i >= PortraitActionsPerRow ? PortraitGenerateY : top;
+        const int x = column * width + 2, y = row + 2, w = width - 4;
         const bool save = Actions[i].key == 's';
-        cv.fillRect(x, y, w, h, panel.fill);
-        if (save) theme::frame(x, y, w, h, panel.edge, panel.focus);
-        else cv.drawFastHLine(x, y + h - 1, w, panel.edge);
-        theme::textCentre(Actions[i].label, x + w / 2, y + 3, save ? panel.focus : panel.text);
+        cv.fillRect(x, y, w, height, panel.fill);
+        if (save) cv.frame(x, y, w, height, panel.edge, panel.focus);
+        else cv.drawFastHLine(x, y + height - 1, w, panel.edge);
+        cv.textCentre(Actions[i].label, x + w / 2, y + (height - 8) / 2, save ? panel.focus : panel.text);
     }
 }
 
-void draw(uint32_t) {
+void updatePointer() {
     int x, y;
     bool start, update = false;
     while (cyd_controls::takePalettePointer(x, y, start)) update = pointer(x, y, start) || update;
     if (update) refresh();
+}
 
-    Canvas &cv = hal::canvas();
-    cv.fillScreen(background.fill);
+void drawEditor(cyd_ui::Surface &cv, bool portrait) {
+    cv.fillRect(0, 0, hal::W, portrait ? cv.height() : hal::H, background.fill);
     drawHeader(cv, changed());
-
-    drawTabs(cv);
+    drawTabs(cv, portrait ? PortraitTabsY : TabsY, portrait ? PortraitTabsH : TabsH);
     if (tab == StyleTab) {
-        if (gradientDetails) drawGradientDetails(cv);
-        else drawStyles(cv);
+        if (gradientDetails) drawGradientDetails(cv, portrait);
+        else drawStyles(cv, portrait);
     } else {
-        for (int i = 0; i < TrackCount; ++i) drawTrack(cv, i);
+        for (int i = 0; i < TrackCount; ++i) drawTrack(cv, i, portrait);
     }
-    drawPreview(cv);
-    drawActions(cv);
+    drawPreview(cv, portrait);
+    drawActions(cv, portrait);
+}
+
+void draw(uint32_t) {
+    updatePointer();
+    cyd_ui::Surface surface(hal::canvas(), 0);
+    drawEditor(surface, false);
 }
 
 } // namespace
+
+void preparePalettePortrait() { updatePointer(); }
+
+void drawPalettePortrait(Canvas &canvas, int top) {
+    cyd_ui::Surface surface(canvas, top);
+    drawEditor(surface, true);
+}
 
 const Rite RITE_PALETTE = {"PALETTE", "palette", "design a colourway", enter, leave, key, draw};
 

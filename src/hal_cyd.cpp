@@ -457,8 +457,9 @@ Canvas &canvas() { return cv; }
 void setFrameDrawUs(uint32_t elapsed) { frameDrawUs = elapsed; }
 #endif
 
-static void presentDirect(FullscreenRenderer render, uint32_t now, bool menu) {
-    if (!displayReady || !render) return;
+template <typename Renderer>
+static void presentDirect(Renderer render, bool drawControls) {
+    if (!displayReady) return;
 #ifdef GRIM_CYD_DIAGNOSTICS
     const uint32_t start = micros();
 #endif
@@ -467,22 +468,50 @@ static void presentDirect(FullscreenRenderer render, uint32_t now, bool menu) {
 
     lcd.clearClipRect();
     lcd.startWrite();
-    render(lcd, now);
+    render(lcd);
     lcd.clearClipRect();
-    if (menu) cyd_controls::draw(lcd);
+    if (drawControls) cyd_controls::draw(lcd);
     lcd.endWrite();
     fullscreenFrameWritten = true;
     backdropMoteCount = 0;
     backdropDamage = {};
 #ifdef GRIM_CYD_DIAGNOSTICS
     // Rendering and transfer are interleaved in the direct frame.
-    if (!menu) frameDrawUs = 0;
+    if (!drawControls) frameDrawUs = 0;
     presentUs = micros() - start;
 #endif
 }
 
-void drawVisionsFullscreen(FullscreenRenderer render, uint32_t now) { presentDirect(render, now, false); }
-void presentNativeMenu(FullscreenRenderer render, uint32_t now) { presentDirect(render, now, true); }
+void drawVisionsFullscreen(FullscreenRenderer render, uint32_t now) {
+    if (render) presentDirect([=](lgfx::LGFXBase &display) { render(display, now); }, false);
+}
+
+void presentNativeMenu(FullscreenRenderer render, uint32_t now) {
+    if (render) presentDirect([=](lgfx::LGFXBase &display) { render(display, now); }, true);
+}
+
+void presentPortraitPage(PortraitPageRenderer render) {
+    if (!render || !canvasReady || !cyd_controls::isPortrait()) return;
+    presentDirect([=](lgfx::LGFXBase &display) {
+        constexpr int BandRows = 64, FallbackRows = 32;
+        static_assert(2 * W * BandRows * sizeof(lgfx::swap565_t) <= W * H * 2);
+        static_assert(2 * W * FallbackRows * sizeof(lgfx::swap565_t) <= W * H);
+        static_assert(PanelHeight % BandRows == 0 && PanelHeight % FallbackRows == 0);
+        const int rows = cv.getColorDepth() == lgfx::rgb565_2Byte ? BandRows : FallbackRows;
+        auto *const pixels = static_cast<lgfx::swap565_t *>(cv.getBuffer());
+        Canvas bands[2];
+        bands[0].setBuffer(pixels, W, rows, 16);
+        bands[1].setBuffer(pixels + W * rows, W, rows, 16);
+        display.setAddrWindow(0, 0, W, PanelHeight);
+        for (int top = 0; top < PanelHeight; top += rows) {
+            Canvas &band = bands[top / rows % 2];
+            render(band, top);
+            display.waitDMA();
+            display.writePixelsDMA(static_cast<const lgfx::swap565_t *>(band.getBuffer()), W * rows);
+        }
+        display.waitDMA();
+    }, true);
+}
 
 void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha) {
     if (!alpha || backdropMoteCount == backdropMotes.size() || x < 0 || x >= W ||

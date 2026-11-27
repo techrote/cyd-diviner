@@ -37,6 +37,10 @@ void present();
 using FullscreenRenderer = void (*)(lgfx::LGFXBase &display, uint32_t now);
 void drawVisionsFullscreen(FullscreenRenderer render, uint32_t now);
 void presentNativeMenu(FullscreenRenderer render, uint32_t now);
+// Paint a full native portrait page in bands. The renderer receives the
+// first page row covered by its canvas and must leave page state unchanged.
+using PortraitPageRenderer = void (*)(Canvas &band, int top);
+void presentPortraitPage(PortraitPageRenderer render);
 // Ambient artwork can submit points above and below the logical canvas.
 void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha);
 #ifdef GRIM_CYD_DIAGNOSTICS

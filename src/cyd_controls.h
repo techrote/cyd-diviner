@@ -19,6 +19,7 @@ void openCarouselSettings();
 void backCarouselSettings();
 bool carouselSettingsVisible();
 void drawCarouselSettings(int transparent);
+void drawPortraitSettings(Canvas &band, int top);
 bool saveColourway(const theme::Colourway &colourway);
 void setRite(const Rite *rite);
 void setTextMode(TextMode mode);

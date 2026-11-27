@@ -10,6 +10,7 @@
 #include <string.h>
 #ifdef GRIM_CYD
 #include "cyd_controls.h"
+#include "cyd_ui.h"
 #endif
 #ifdef GRIM_CYD_DIAGNOSTICS
 #include <Arduino.h>
@@ -82,7 +83,8 @@ void motesDraw() {
     const auto [top, bottom] = moteBounds();
     bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
 #ifdef GRIM_CYD
-    const bool nativeMenu = mode == MENU && cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme;
+    const bool nativeMenu = mode == MENU && (cyd_controls::isPortrait() ||
+                           cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme);
     const bool hasMargins = cyd_controls::viewportTop() > 0;
 #endif
     for (auto &m : motes) {
@@ -217,6 +219,11 @@ void drawMenu(uint32_t now) {
 #endif
 #ifdef GRIM_CYD
     if (cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Rain) motesDraw();
+    if (cyd_controls::isPortrait()) {
+        slide += (sel - slide) * 0.35f;
+        if (fabsf(sel - slide) < 0.01f) slide = sel;
+        return;
+    }
     if (cyd_controls::carouselSettingsVisible()) {
         cyd_controls::drawCarouselSettings(menuBackdropKey());
         return;
@@ -332,6 +339,62 @@ bool volumeKey(const hal::Key &k) {
 }
 } // namespace
 
+#ifdef GRIM_CYD
+void drawPortraitMenu(Canvas &band, int top, uint32_t) {
+    cyd_ui::Surface ui(band, top);
+    const int wordWidth = theme::glyphWidth(DAEDRIC_S, "GRIMOIRE");
+    ui.glyphs(DAEDRIC_S, "GRIMOIRE", 4, 1, C_EMBER);
+    ui.text("grimoire", wordWidth + 10, 5, C_DIM);
+    ui.drawFastHLine(0, 18, 240, C_CLOT);
+    ui.diamond(120, 18, 2, C_RUST);
+    const int bottom = cyd_controls::viewportBottom();
+    // Keep the three cards in the space above a revealed dock.
+    const int centre = (bottom - 20) / 2;
+    const int spacing = 90;
+    const int anchor = static_cast<int>(roundf(slide));
+    const float offset = anchor - slide;
+    const int first = std::max(0, 26 - top), last = std::min(band.height(), bottom - 24 - top);
+    band.setClipRect(0, first, 240, std::max(0, last - first));
+    for (int d = -2; d <= 2; ++d) {
+        const int i = (anchor + d + N_RITES * 4) % N_RITES;
+        const Rite &rite = *RITES[i];
+        const bool selected = d == 0;
+        const int cy = centre + static_cast<int>((d + offset) * spacing);
+        const DaedricFont &font = selected ? DAEDRIC_M : DAEDRIC_S;
+        const int width = glyphWidth(font, rite.glyph) + 12;
+        const int height = font.h + 8;
+        const int y = cy - height / 2;
+        ui.fillRect(120 - width / 2, y, width, height, selected ? C_DUSK : C_ASH);
+        ui.frame(120 - width / 2, y, width, height, selected ? C_RUST : C_CLOT, selected ? C_EMBER : C_UMBER);
+        ui.glyphsCentre(font, rite.glyph, 120, y + 4, selected ? C_EMBER : C_BLOOD);
+        ui.textCentre(rite.name, 120, y + height + 5, selected ? C_BONE : C_DIM);
+    }
+    if (fabsf(sel - slide) < .03f) {
+        // Wrap the selected description at word boundaries without enlarging text.
+        const char *rest = RITES[sel]->desc;
+        int y = centre + 43;
+        while (*rest && y < centre + 65) {
+            size_t length = std::min<size_t>(strlen(rest), 34);
+            if (rest[length]) {
+                while (length && rest[length] != ' ') --length;
+                if (!length) length = 34;
+            }
+            char line[35];
+            memcpy(line, rest, length);
+            line[length] = 0;
+            ui.textCentre(line, 120, y, C_BONE);
+            rest += length;
+            while (*rest == ' ') ++rest;
+            y += 10;
+        }
+    }
+    band.clearClipRect();
+    for (int i = 0; i < N_RITES; ++i) {
+        ui.diamond(120 - (N_RITES - 1) * 5 + i * 10, bottom - 14, 2, i == sel ? C_EMBER : C_CLOT, i == sel);
+    }
+}
+#endif
+
 void grimSetup() {
     hal::begin();
     hal::setOverlayAudio(uisfx::render); // UI blips layer over everything
@@ -395,8 +458,12 @@ void grimLoop() {
 
     uint32_t now = hal::ms();
 #ifdef GRIM_CYD
-    if (active == &RITE_VISIONS && cyd_controls::visionsImmersive()) {
-        hal::drawVisionsFullscreen(drawVisionsNative, now);
+    if (active == &RITE_VISIONS && (cyd_controls::visionsImmersive() || cyd_controls::isPortrait())) {
+#ifdef GRIM_CYD_DIAGNOSTICS
+        hal::setFrameDrawUs(0);
+#endif
+        if (cyd_controls::visionsImmersive()) hal::drawVisionsFullscreen(drawVisionsNative, now);
+        else hal::presentNativeMenu(drawVisionsNative, now);
         const uint32_t spent = hal::ms() - start;
         hal::idle(spent < FRAME_MS ? FRAME_MS - spent : 1);
         return;
@@ -406,11 +473,23 @@ void grimLoop() {
     const uint32_t drawStart = micros();
 #endif
     if (mode == SPLASH) {
-        drawSplash(now);
-        if (now - t0 > 2600) finishSplash(now);
+        if (now - t0 > 2600) {
+            finishSplash(now);
+            drawMenu(now);
+        } else {
+            drawSplash(now);
+        }
     } else if (mode == MENU) {
-        drawMenu(now);
+#ifdef GRIM_CYD
+        if (cyd_controls::isPortrait() && cyd_controls::carouselSettingsVisible()) releaseVisionsMenuBackdrop();
+        else
+#endif
+            drawMenu(now);
     } else {
+#ifdef GRIM_CYD
+        if (active == &RITE_PALETTE && cyd_controls::isPortrait()) preparePalettePortrait();
+        else
+#endif
         active->frame(now);
 #ifndef GRIM_CYD
         if (now - volShownAt < 900) {
@@ -425,7 +504,11 @@ void grimLoop() {
     hal::setFrameDrawUs(micros() - drawStart);
 #endif
 #ifdef GRIM_CYD
-    if (mode == MENU && cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme) {
+    if (cyd_controls::isPortrait() && cyd_controls::carouselSettingsVisible()) {
+        hal::presentPortraitPage(cyd_controls::drawPortraitSettings);
+    } else if (active == &RITE_PALETTE && cyd_controls::isPortrait()) {
+        hal::presentPortraitPage(drawPalettePortrait);
+    } else if (mode == MENU && (cyd_controls::isPortrait() || cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme)) {
         hal::presentNativeMenu(renderNativeMenuBackdrop, now);
     } else
 #endif

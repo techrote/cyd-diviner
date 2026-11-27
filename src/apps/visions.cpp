@@ -5,6 +5,7 @@
 // keys 1-6 select   l layers   tab/enter next   ,/ speed   space pause   s sound   f trail format
 #ifdef GRIM_CYD
 #include "../cyd_controls.h"
+#include "../cyd_ui.h"
 #endif
 #include "../daedric_glyphs.h"
 #include "../dsp.h"
@@ -152,7 +153,7 @@ struct State {
     std::unique_ptr<Tunnel> tunnel;
     std::unique_ptr<Fire> fire;
 #ifdef GRIM_CYD
-    bool nativeFullscreen = false;
+    bool nativeRendering = false;
 #endif
     RainDrop drops[24]{};
     dsp::Noise visualRng;
@@ -294,6 +295,7 @@ uint16_t backdropKey = 0;
 constexpr int MenuBandRows = 8, MenuBandWidth = 320;
 constexpr size_t MenuBandPixels = 2 * MenuBandRows * MenuBandWidth;
 std::unique_ptr<lgfx::swap565_t[]> menuBandBuffer;
+bool nativeMenuActive = false;
 uint32_t previousRainMs = 0;
 uint32_t previousFireMs = 0;
 struct MenuMote {
@@ -526,6 +528,7 @@ constexpr int NativeHeads = 3;
 using TrailStep = std::array<TrailPoint, NativeHeads>;
 std::array<TrailStep, NativeTrailLength> nativePath;
 int nativePathEnd = 0, nativePathCount = 0;
+int nativeWidth = 0, nativeHeight = 0;
 uint32_t nativePreviousMs = 0;
 
 void moveNativeTrails(float t, int w, int h) {
@@ -776,16 +779,25 @@ void retone() {
     S->which = base;
 }
 
+#ifdef GRIM_CYD
+bool useNativeVision() { return cyd_controls::isPortrait() || cyd_controls::visionsImmersive(); }
+#endif
+
 void prepareVision() {
     State &s = *S;
     const Vision base = s.base();
     const bool indexed = s.layered && base == Gate;
-    const bool wantsHistory = indexed || base == Trails;
-    if (base != Gate) s.tunnel.reset();
+    bool wantsLegacyBuffers = true;
+#ifdef GRIM_CYD
+    wantsLegacyBuffers = !useNativeVision();
+    if (!wantsLegacyBuffers) nativePathEnd = nativePathCount = 0;
+#endif
+    const bool wantsHistory = wantsLegacyBuffers && (indexed || base == Trails);
+    if (base != Gate || !wantsLegacyBuffers) s.tunnel.reset();
     if (base != Ashfire) s.fire.reset();
     if (!wantsHistory || s.history.indexed != indexed) s.history.release();
 
-    if (base == Gate && !s.tunnel) {
+    if (wantsLegacyBuffers && base == Gate && !s.tunnel) {
         s.tunnel.reset(new (std::nothrow) Tunnel);
         if (s.tunnel) buildTunnel(*s.tunnel);
     }
@@ -812,7 +824,7 @@ void enter() {
 }
 void leave() {
 #ifdef GRIM_CYD
-    S->nativeFullscreen = false;
+    S->nativeRendering = false;
 #endif
     S->history.release();
     S->tunnel.reset();
@@ -833,7 +845,11 @@ bool onKey(const hal::Key &k) {
     else if (k.ch == 's') s.sound = !s.sound;
     else if (k.ch == 'l') s.layered = !s.layered;
     else if (k.ch == 'f') {
-        if (s.base() == Trails) {
+        bool wantsHistory = s.base() == Trails;
+#ifdef GRIM_CYD
+        wantsHistory = wantsHistory && !useNativeVision();
+#endif
+        if (wantsHistory) {
             const bool hadHistory = s.history.ready();
             s.history.rgb444 = !s.history.rgb444;
             if (!s.history.allocate() && hadHistory) {
@@ -842,6 +858,9 @@ bool onKey(const hal::Key &k) {
             }
         } else {
             s.history.rgb444 = !s.history.rgb444;
+#ifdef GRIM_CYD
+            if (s.base() == Trails) nativePathEnd = nativePathCount = 0;
+#endif
         }
     }
     if (direct || s.vis != previous || k.ch == 'l') prepareVision();
@@ -850,7 +869,8 @@ bool onKey(const hal::Key &k) {
 }
 
 #ifdef GRIM_CYD
-void drawVisionsHeader(Canvas &cv, const State &s, Vision base) {
+void drawVisionsHeader(Canvas &canvas, const State &s, Vision base) {
+    cyd_ui::Surface cv(canvas, 0);
     constexpr const char *names[] = {"Plasma", "Gate", "Ashfire", "Rain", "Kaleido", "Trails"};
     constexpr const char *pairs[] = {"Plasma + Kaleido", "Gate + Trails", "Ashfire + Rain"};
     static_assert(sizeof(names) / sizeof(*names) == N_VIS);
@@ -868,18 +888,18 @@ void drawVisionsHeader(Canvas &cv, const State &s, Vision base) {
 
     cv.drawLine(8, 5, 4, 9, detail);
     cv.drawLine(4, 9, 8, 13, detail);
-    text("Back", 12, 5, detail);
-    glyphs(cv, DAEDRIC_S, "VISIONS", 44, 1, accent);
+    cv.text("Back", 12, 5, detail);
+    cv.glyphs(DAEDRIC_S, "VISIONS", 44, 1, accent);
 
     const char *const details[] = {!s.sound ? "Muted" : nullptr, s.paused ? "Paused" : nullptr,
                                    base == Trails ? (s.history.rgb444 ? "RGB444" : "RGB565") : nullptr};
     constexpr int LabelRight = 218;
     const bool showDetails = !s.sound || s.paused || base == Trails;
-    textRight(s.layered ? pairs[base] : names[base], LabelRight, showDetails ? 1 : 5, ink);
+    cv.textRight(s.layered ? pairs[base] : names[base], LabelRight, showDetails ? 1 : 5, ink);
     int detailRight = LabelRight;
     for (const char *label : details) {
         if (!label) continue;
-        textRight(label, detailRight, 9, detail);
+        cv.textRight(label, detailRight, 9, detail);
         detailRight -= static_cast<int>(strlen(label) + 1) * 6;
     }
 
@@ -898,8 +918,8 @@ void drawVisionsHeader(Canvas &cv, const State &s, Vision base) {
 void draw(uint32_t) {
     State &s = *S;
 #ifdef GRIM_CYD
-    if (s.nativeFullscreen) {
-        s.nativeFullscreen = false;
+    if (s.nativeRendering) {
+        s.nativeRendering = false;
         prepareVision();
     }
 #endif
@@ -962,20 +982,29 @@ int visionsChoice() { return S ? S->base() : Plasma; }
 
 void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
     State &s = *S;
-    const int width = display.width(), height = display.height();
+    const bool headerVisible = cyd_controls::isPortrait() && !cyd_controls::visionsImmersive();
+    const int width = display.width();
+    const int top = headerVisible ? OY : 0;
+    const int bottom = headerVisible ? std::min(cyd_controls::viewportBottom(), int(display.height())) : display.height();
+    const int height = bottom - top;
     auto *const pixels = static_cast<uint8_t *>(hal::canvas().getBuffer());
-    if (!pixels || width > NativeEdge || height > NativeEdge) {
+    if (!pixels || width > NativeEdge || height < 2 || height > NativeEdge) {
         display.fillScreen(C_VOID);
         return;
     }
 
-    const bool fresh = !s.nativeFullscreen;
+    const bool fresh = !s.nativeRendering;
     if (fresh) {
-        s.nativeFullscreen = true;
+        s.nativeRendering = true;
         s.history.release();
         s.tunnel.reset();
-        nativePathEnd = nativePathCount = 0;
         nativePreviousMs = now;
+    }
+    const bool resized = width != nativeWidth || height != nativeHeight;
+    if (fresh || resized) {
+        nativeWidth = width;
+        nativeHeight = height;
+        nativePathEnd = nativePathCount = 0;
     }
     const float elapsed = s.paused ? 0.f : std::min<uint32_t>(now - nativePreviousMs, 100) * 0.001f;
     nativePreviousMs = now;
@@ -985,7 +1014,7 @@ void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
     const bool hasTrails = base == Trails || (s.layered && base == Gate);
     const bool hasRain = base == Rain || (s.layered && base == Ashfire);
     const bool hasKaleido = base == Kaleido || (s.layered && base == Plasma);
-    if (hasTrails && (fresh || !s.paused)) moveNativeTrails(s.t, width, height);
+    if (hasTrails && (fresh || resized || !s.paused || !nativePathCount)) moveNativeTrails(s.t, width, height);
     if (hasRain) prepareNativeRain(s, elapsed);
     if (base == Ashfire && s.fire && (!s.paused || !s.fire->seeded)) {
         stepFire(s.fire->values, s.visualRng);
@@ -995,16 +1024,23 @@ void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
     if (hasKaleido) kaleido.animate(s.t, width, height);
     const NativeField field(s, width, height);
 
-    // Borrow two strips of the ordinary canvas. Even its RGB332 fallback
-    // has 32,400 bytes, enough for both native RGB565 strips (10,240 bytes).
-    static_assert(2 * NativeEdge * BandHeight * sizeof(lgfx::swap565_t) <= hal::W * hal::H);
+    // The header shares the first strip's storage. Start art in the second
+    // strip, then wait for each transfer before recycling the previous one.
+    constexpr int FirstBandRows = std::max(OY, BandHeight);
+    static_assert(NativeEdge * (FirstBandRows + BandHeight) * sizeof(lgfx::swap565_t) <= hal::W * hal::H);
     Canvas bands[2];
-    const int bandBytes = width * BandHeight * sizeof(lgfx::swap565_t);
+    const int bandBytes = width * (headerVisible ? FirstBandRows : BandHeight) * sizeof(lgfx::swap565_t);
     bands[0].setBuffer(pixels, width, BandHeight, 16);
     bands[1].setBuffer(pixels + bandBytes, width, BandHeight, 16);
-    display.setAddrWindow(0, 0, width, height);
-    for (int y = 0; y < height; y += BandHeight) {
-        Canvas &band = bands[(y / BandHeight) % 2];
+    display.setAddrWindow(0, 0, width, bottom);
+    if (headerVisible) {
+        Canvas header;
+        header.setBuffer(pixels, width, OY, 16);
+        drawVisionsHeader(header, s, base);
+        display.writePixelsDMA(static_cast<const lgfx::swap565_t *>(header.getBuffer()), width * OY);
+    }
+    for (int y = 0, index = headerVisible; y < height; y += BandHeight, index ^= 1) {
+        Canvas &band = bands[index];
         const int rows = std::min(BandHeight, height - y);
         field.draw(band, y, rows);
         if (hasRain) drawNativeRain(band, y, height, s);
@@ -1019,19 +1055,22 @@ void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
 void releaseVisionsMenuBackdrop() {
     menuFire.reset();
     menuBandBuffer.reset();
+    nativeMenuActive = false;
     previousBackdrop = MenuBackdrop::Theme;
 }
 
 void drawVisionsMenuBackdrop(uint32_t now) {
     const auto backdrop = cyd_controls::menuBackdrop();
+    const bool portrait = cyd_controls::isPortrait();
     menuMoteCount = 0;
-    if (backdrop == MenuBackdrop::Theme) {
-        if (previousBackdrop != backdrop) releaseVisionsMenuBackdrop();
+    if (backdrop == MenuBackdrop::Theme && !portrait) {
+        if (nativeMenuActive) releaseVisionsMenuBackdrop();
         theme::drawBackground(hal::canvas());
         return;
     }
-    if (previousBackdrop != backdrop) {
+    if (!nativeMenuActive || previousBackdrop != backdrop) {
         if (!menuBandBuffer) menuBandBuffer.reset(new (std::nothrow) lgfx::swap565_t[MenuBandPixels]);
+        nativeMenuActive = true;
         menuFire.reset();
         previousBackdrop = backdrop;
         if (backdrop == MenuBackdrop::Ashfire) {
@@ -1051,7 +1090,7 @@ void drawVisionsMenuBackdrop(uint32_t now) {
         previousFireMs = now - (now - previousFireMs) % 46;
         stepFire(menuFire->values, menuNoise);
     }
-    clearMenuForeground(hal::canvas());
+    if (!portrait) clearMenuForeground(hal::canvas());
 }
 
 void queueVisionsMenuMote(int x, int y, uint8_t alpha) {
@@ -1073,7 +1112,9 @@ void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now) {
     lgfx::swap565_t source[hal::W];
     const auto key = lgfx::getSwap16(backdropKey);
     std::array<uint8_t, MenuBandWidth> xs;
-    for (int x = 0; x < width; ++x) xs[x] = portrait ? x : (3 * x + 2) / 4;
+    if (!portrait) {
+        for (int x = 0; x < width; ++x) xs[x] = (3 * x + 2) / 4;
+    }
 
     std::optional<NativeField> plasma;
     if (previousBackdrop == MenuBackdrop::Plasma) plasma.emplace(Plasma, width, height, (now / 40) % 1536, false, nullptr, true);
@@ -1102,13 +1143,17 @@ void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now) {
             }
         }
         drawMenuMotes(dest, width, y, rows, top, portrait);
-        for (int row = std::max(0, top - y); row < std::min(rows, sceneBottom - y); ++row) {
-            const int sy = portrait ? y + row - top : (3 * (y + row - top) + 2) / 4;
-            if (sy != previousRow) foreground.readRect(0, sy, hal::W, 1, source);
-            previousRow = sy;
-            auto *line = dest + row * width;
-            for (int x = 0; x < width; ++x) {
-                if (source[xs[x]].get() != key) line[x] = source[xs[x]];
+        if (portrait) {
+            drawPortraitMenu(band, y, now);
+        } else {
+            for (int row = std::max(0, top - y); row < std::min(rows, sceneBottom - y); ++row) {
+                const int sy = (3 * (y + row - top) + 2) / 4;
+                if (sy != previousRow) foreground.readRect(0, sy, hal::W, 1, source);
+                previousRow = sy;
+                auto *line = dest + row * width;
+                for (int x = 0; x < width; ++x) {
+                    if (source[xs[x]].get() != key) line[x] = source[xs[x]];
+                }
             }
         }
         if (menuBandBuffer) {

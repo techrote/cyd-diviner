@@ -43,9 +43,10 @@ are for the Cardputer ADV.
 
 ### Touch and sound
 
-- Tap either side of the carousel to browse and the centre to open the selected
-  rite. The compact cards frame the rite names, with the selected rite's
-  subtitle and description below.
+- In landscape, tap either side of the carousel to browse and the centre to
+  open the selected rite. In portrait, tap the card above or below to browse,
+  and the selected card in the middle to open it. The compact cards frame the
+  rite names, with the selected rite's description below.
 - The touch controls start hidden. In landscape, the backdrop fills the 320×240
   LCD around the centred 320×180 artwork. Patterns and the carousel's drifting
   particles continue into the top and bottom margins.
@@ -54,7 +55,7 @@ are for the Cardputer ADV.
 - Show the controls to access each rite's buttons. **Menu** or the board's
   **BOOT** button takes you back to the carousel while the firmware is running.
 - Open the **Settings** tile to reach **Volume**, **Theme**, **Display**, and
-  the **Palette** editor. The settings pages use the centre of the screen.
+  the **Palette** editor. Portrait pages use the full height of the screen.
   The carousel dock offers **Previous**, **Open**, and **Next**.
 - In **seq**, tap the grid to edit steps and the A–D buttons to select banks.
   **More** opens tempo and pattern controls.
@@ -89,10 +90,17 @@ and **< Grimoire** to return to the carousel.
   as the carousel backdrop. Both choices apply immediately and survive reboots.
 - **Palette** opens the colourway editor with the current theme as its draft.
 
-In portrait, the 240×135 artwork stays proportional on the 240×320 LCD.
-The dock and on-screen keyboard sit below it. The animated carousel backdrops
-reach the edges in both orientations and render at LCD resolution using the
-active theme's colours. Rain lets each glyph trail fall fully offscreen.
+Portrait has native 240×320 layouts for the carousel, Settings, and Palette.
+The theme gallery uses three columns, and Palette places a wider preview above
+longer RGB sliders with its actions at the bottom. Text and artwork draw at
+their authored pixel sizes. These pages stream strips through the existing
+canvas memory, without allocating a full portrait framebuffer.
+
+Portrait Visions renders at LCD resolution below its header, with its hidden
+control dock at the bottom. The other rites keep their proportional 240×135
+artwork, with the dock and on-screen keyboard below it. Animated carousel
+backdrops reach the edges in both orientations using the active theme's
+colours. Rain lets each glyph trail fall fully offscreen.
 Ashfire rises from the bottom and interpolates a compact heat simulation
 across the LCD pixels. Plasma computes its waves at each LCD pixel.
 
@@ -286,10 +294,11 @@ and **1–6** to select effects.
 Tap the animation or the expand icon in the CYD header to go fullscreen.
 Visions draws at LCD resolution in either orientation, streaming strips
 through the existing canvas memory. The header and touch controls disappear.
-Tap anywhere again to restore the previous view. **Back** in the header
+Tap anywhere again to restore the previous view. Portrait also renders its
+ordinary view natively between the header and the revealed dock. **Back** in the header
 returns to the carousel.
 
-In fullscreen, diagnostics report drawing and LCD transfer together in
+In fullscreen and the native portrait view, diagnostics report drawing and LCD transfer together in
 `present_us`.
 
 | Pair | How it is drawn |
@@ -314,8 +323,8 @@ colour detail. Switching formats clears the trails. Gate + Trails uses its
 
 These are heap measurements from CYD diagnostics, including allocator
 overhead and excluding the shared canvas and audio. The history covers the
-240×116 animation area in the ordinary view. Fullscreen reuses the existing
-canvas memory and stores trails as short paths. History and effect buffers are
+240×116 animation area in the ordinary landscape view. Native portrait and
+fullscreen reuse the existing canvas memory and store trails as short paths. History and effect buffers are
 released when the scene no longer needs them or you leave Visions.
 
 ## Development and verification
