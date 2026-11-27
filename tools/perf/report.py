@@ -95,7 +95,10 @@ def generate(result: dict, label: str, input_sha256: str, plots: list[str] | Non
         f"Instrumentation A/B scope: `{info.get('instrumentation_ab_scope', 'UNKNOWN')}`. "
         "The enable switch controls histogram insertion while timestamps, hooks, frame/block counts and retained sampling remain. "
         "The on/off rows therefore measure that insertion change only. Total overhead relative to an ordinary firmware binary is not established by this switch. "
-        "Disabled histograms give unavailable timing distributions rather than zero-duration work.", "",
+        "Disabled histograms give unavailable timing distributions rather than zero-duration work. "
+        "The approved primary image reserves 24,008 bytes in its static histogram/sample arrays alone; other profiler state, queues and task stacks are additional. "
+        "These arrays remain with insertion disabled. Reported heap describes the profiling image and workload history; ordinary firmware headroom cannot be inferred by subtracting only this footprint. "
+        "Detailed source and method audits are in the repository's `evidence/method-notes.md`.", "",
         "## Physical scene envelopes", ""]
     rows = []
     name_counts = collections.Counter(row["workload"] for row in summary["scenes"])
@@ -209,6 +212,8 @@ def generate(result: dict, label: str, input_sha256: str, plots: list[str] | Non
         "Raw readings are uncalibrated indications. The reported °C values are the firmware's conversion, not independently calibrated die temperature. Ambient temperature was "
         f"{board.get('ambient_temperature_method', 'NOT MEASURED')}. Retained intervals, raw ticks and all sensor samples are available in [samples.csv](samples.csv). "
         "The confirmation predicate requires a completed ≥360-second window, ≥360 seconds of retained sample span, valid CPU hooks and ≥95% weighted busy time on both cores.", "",
+        "Stress iteration counters are unsigned 32-bit modular progress indicators, incremented in batches of 256; they can wrap modulo 2^32. "
+        "They are not throughput totals. Timed windows and retained raw per-core tick observations support the sustained-load assessment.", "",
         "## SPI and portable kernels", ""]
     all_temperatures = [record["temperature_raw"] for run in measured for record in run.get("target", [])
                         if record.get("type") in ("sample", "state") and isinstance(record.get("temperature_raw"), (int, float))]
@@ -253,6 +258,8 @@ def generate(result: dict, label: str, input_sha256: str, plots: list[str] | Non
         "as measured fullscreen history occupancy. Sampled heap provides the in-window evidence. These paths are not numerically identical rendering kernels.", "",
         "## Wireless scope", "",
         "Radio rows measure isolated controller initialization and its effect on local scenes. They perform no peer discovery, association or traffic. "
+        "Radio-off acknowledgements record requested software state; disable/deinitialize return statuses and actual RF emissions are not independently exported or measured. "
+        "This is a requested-state baseline, not independently verified RF-off operation. "
         "No measured goodput, RTT, jitter/loss under traffic, or Wi-Fi/BLE/ESP-NOW coexistence envelope is established by these rows.", ""]
     radio_rows = []
     for row in summary["scenes"]:

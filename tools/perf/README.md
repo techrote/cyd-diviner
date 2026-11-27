@@ -191,6 +191,33 @@ Its touch table reports measured XPT polling-call count per target second and
 control-dispatch invocation durations, including no-contact samples. These do
 not establish physical touch latency or count distinct contacts.
 
+After all campaigns are complete, raw files can be archived separately and the
+compact derived evidence prepared for Git review. `publish_evidence.py` never
+creates or updates an archive. It requires an existing final ZIP and a genuinely
+complete capture whose planned repetitions, NOT RUN entries and artifact hashes
+match. Generate the summary and figures first; stale summaries or figure
+provenance fail verification. The input capture folder remains unchanged.
+
+```powershell
+python tools/perf/publish_evidence.py --capture evidence/physical/full-01 `
+  --output evidence/campaign-01 --archive evidence/CYD-PHYSICAL-CAPTURES.zip `
+  --archive-prefix physical/full-01 --label full-01
+python tools/perf/publish_evidence.py --capture evidence/physical/events-01 `
+  --output evidence/events-01 --archive evidence/CYD-PHYSICAL-CAPTURES.zip `
+  --archive-prefix physical/events-01 --label events-01
+```
+
+The ZIP must contain the exact `physical/full-01/...` and
+`physical/events-01/...` member paths. Create it only after both captures finish,
+so its hash stays stable. The helper verifies archived raw bytes against the
+completed source files, then publishes compact comparative JSON, five summary
+CSVs, PNG/SVG figures and their manifest, a stress-only sample CSV with full
+source/firmware/profile provenance, and editable Markdown. Raw-file report links
+point to the ZIP and state the exact archive member path. An output manifest
+records every input/output hash and the final archive hash. Existing output
+directories are never overwritten; failures retain a clearly named staging
+folder and do not publish a partial output directory.
+
 Read back the physical display outside all measurement and PCM windows:
 
 ```powershell

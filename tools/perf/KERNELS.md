@@ -44,7 +44,14 @@ missed. Work units are samples, voice samples, points, cells, particles or
 pixels as stated, not estimated instruction counts. Keep these distinctions
 when comparing compute per returned byte for offload decisions.
 
-FNV-1a checksums describe the output after the specified iteration count.
+Checksums describe the output after the specified iteration count. For FFT,
+the legacy `checksum_fnv1a` field contains
+`FNV1a32(real_float_array_bytes) XOR FNV1a32(imag_float_array_bytes)`.
+It is not canonical FNV-1a over the concatenated complex output. Preserve that
+composition when comparing existing records; all other kernels use a single
+FNV-1a chain over their output bytes (particles serialize their fields
+explicitly). These fingerprints are separate from the independent numeric
+DFT/DSP checks below.
 Seeds use xorshift32, substituting `0x6d2b79f5` for zero. Integer outputs use
 little-endian checksums on the supported ESP targets. Floating FFT checksums
 can differ with compiler, floating contraction, math library or architecture;

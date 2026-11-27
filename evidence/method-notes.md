@@ -6,6 +6,31 @@ the active primary hardware campaign was not changed. A separately identified
 supplementary event-queue build is described below; compilation or presence of
 that code is not a physical measurement.
 
+## Profiler memory footprint and portable output fingerprints
+
+The approved primary profiling ELF allocates 21,120 bytes for the fixed
+480-entry CPU/heap/temperature sample array and 2,888 bytes for the 19 bounded
+timing/counter histograms: **24,008 bytes in these two static arrays alone**.
+The ELF symbols are `perf_profile`'s `samples` (`0x5280` bytes) and `hist`
+(`0x0b48` bytes). Other profiler state, PCM queue/task storage, optional stress
+task stacks and normal application/display allocations are additional.
+`perf enable 0` retains these arrays and the other documented observer work.
+Available heap and largest-block measurements describe this profiling image
+under its actual preceding workload history; they cannot be substituted for
+ordinary firmware memory headroom or adjusted by subtracting just this array
+footprint. Allocation-success receipts and measured heap/stack values must
+accompany scene and kernel timings, especially after radio initialization.
+
+The FFT kernel's legacy `checksum_fnv1a` field is a composed fingerprint:
+`FNV1a32(real_float_array_bytes) XOR FNV1a32(imag_float_array_bytes)`, with each
+array covering the reported complex-point count. It is not a single canonical
+FNV-1a chain over the complete complex output. Other kernel outputs use one
+FNV-1a chain; particle fields are explicitly serialized little-endian. Raw
+records retain the original field name and values. Cross-architecture floating
+checksums can differ with compiler/math behavior; numeric error is assessed
+separately by the host double-precision DFT and DSP output comparisons. Host
+validation and S3/C3 compile results establish no physical FPU/throughput claim.
+
 ## Classic ESP32 temperature indication
 
 For `CONFIG_IDF_TARGET_ESP32`, Arduino 2.0.17 declares the undocumented
@@ -145,3 +170,56 @@ g++ -std=c++17 -Wall -Wextra -pedantic tools/perf/test_i2s_events.cpp -o /tmp/cy
 It checks inclusive start/exclusive end, collection gating, stale-drain rejection
 after reset, separate event categories, saturation observations and an observed
 empty drain. It does not simulate the ESP32 ISR, UART, DAC or a physical underflow.
+
+## Pinned watchdog configuration and audit limits
+
+The actual classic ESP32 SDK `tools/sdk/esp32/sdkconfig` contains the following
+settings; the corresponding `qio_qspi/include/sdkconfig.h` agrees:
+
+| Setting | Pinned value |
+|---|---|
+| `CONFIG_ESP_TASK_WDT` | enabled |
+| `CONFIG_ESP_TASK_WDT_PANIC` | enabled |
+| `CONFIG_ESP_TASK_WDT_TIMEOUT_S` | 5 seconds |
+| `CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU0` | enabled |
+| `CONFIG_ESP_TASK_WDT_CHECK_IDLE_TASK_CPU1` | **not set** |
+| `CONFIG_ESP_INT_WDT` / `CONFIG_ESP_INT_WDT_CHECK_CPU1` | both enabled |
+| `CONFIG_ESP_INT_WDT_TIMEOUT_MS` | 300 ms |
+| `CONFIG_ESP_SYSTEM_PANIC_PRINT_REBOOT` | enabled |
+
+SDK-config SHA256:
+`a4fe490abd8cd6447874edd79bde1e78d9630af7845bd53f70440a56b3504907`.
+Generated-header SHA256:
+`93480847ddf04cf0bb3c1e2aba1b0707eca15ec4d5acdba93a0b3dce32be2241`.
+
+Arduino 2.0.17 starts its priority-1 loop task on core 1 with
+`loopTaskWDTEnabled=false`. Repository source has no call enabling the loop or
+CPU1-idle task watchdog. IDF startup subscribes each idle task only when its
+specific configuration flag is set.
+[Arduino startup](https://github.com/espressif/arduino-esp32/blob/2.0.17/cores/esp32/main.cpp#L64-L66),
+[IDF startup subscriptions](https://github.com/espressif/esp-idf/blob/v4.4.7/components/freertos/port/port_common.c#L107-L126)
+
+The worker's 99 ms busy interval plus `vTaskDelay(1)` permits idle execution but
+does not guarantee it: another ready task can consume that opportunity. In this
+pinned configuration, however, lack of CPU1 idle execution alone cannot expire a
+CPU1-idle TWDT subscription because that subscription is absent. CPU0 idle remains
+watched. Interrupt-watchdog coverage of CPU1 is separate; ordinary busy task work
+with interrupts enabled is not itself evidence of blocked tick interrupts.
+[IDF watchdog distinctions](https://docs.espressif.com/projects/esp-idf/en/v4.4.7/esp32/api-reference/system/wdts.html)
+
+If a task-watchdog diagnostic occurs, the missed-subscriber list identifies who
+failed to reset; the separate list of currently running tasks is contextual and
+does not make every named CPU/task an offender. Panic/reboot is enabled here, so
+such an interruption must remain a failed or incomplete capture, not be hidden
+by retaining only earlier samples.
+[IDF diagnostic implementation](https://github.com/espressif/esp-idf/blob/v4.4.7/components/esp_system/task_wdt.c#L140-L161)
+
+Two additional source audits bound interpretation. Stress-iteration counters are
+unsigned 32-bit values incremented in batches of 256 and can wrap modulo 2^32;
+they are progress indicators, not benchmark throughput totals. Use the timed
+window and retained per-core tick observations for sustained-load evidence.
+Radio `off` acknowledgments report requested software state. Disable/deinitialize
+return statuses and actual RF emissions are not independently exported or
+measured; this audit found no observed failure, but it does not establish a
+physically verified RF-off baseline. Radio comparisons remain controller-init
+and requested-state measurements without peer traffic or RF verification.
