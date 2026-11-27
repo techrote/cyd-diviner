@@ -1,0 +1,106 @@
+workload,status,completed_repetitions,planned_repetitions,reason
+menu/landscape/theme,MEASURED,3,3,
+menu/landscape/rain,MEASURED,3,3,
+menu/landscape/ashfire,MEASURED,3,3,
+menu/landscape/plasma,MEASURED,3,3,
+menu/portrait/theme,MEASURED,3,3,
+menu/portrait/rain,MEASURED,3,3,
+menu/portrait/ashfire,MEASURED,3,3,
+menu/portrait/plasma,MEASURED,3,3,
+visions/landscape/ui/plasma,MEASURED,3,3,
+visions/landscape/ui/gate,MEASURED,3,3,
+visions/landscape/ui/ashfire,MEASURED,3,3,
+visions/landscape/ui/rain,MEASURED,3,3,
+visions/landscape/ui/kaleido,MEASURED,3,3,
+visions/landscape/ui/trails/rgb444,MEASURED,3,3,
+visions/landscape/ui/trails/rgb565,MEASURED,3,3,
+visions/landscape/ui/plasma-kaleido,MEASURED,3,3,
+visions/landscape/ui/gate-trails,MEASURED,3,3,
+visions/landscape/ui/ashfire-rain,MEASURED,3,3,
+visions/landscape/fullscreen/plasma,MEASURED,3,3,
+visions/landscape/fullscreen/gate,MEASURED,3,3,
+visions/landscape/fullscreen/ashfire,MEASURED,3,3,
+visions/landscape/fullscreen/rain,MEASURED,3,3,
+visions/landscape/fullscreen/kaleido,MEASURED,3,3,
+visions/landscape/fullscreen/trails/rgb444,MEASURED,3,3,
+visions/landscape/fullscreen/trails/rgb565,MEASURED,3,3,
+visions/landscape/fullscreen/plasma-kaleido,MEASURED,3,3,
+visions/landscape/fullscreen/gate-trails,MEASURED,3,3,
+visions/landscape/fullscreen/ashfire-rain,MEASURED,3,3,
+visions/portrait/ui/plasma,IN PROGRESS,2,3,Primary capture in progress
+visions/portrait/ui/gate,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/ashfire,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/rain,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/kaleido,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/trails/rgb444,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/trails/rgb565,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/plasma-kaleido,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/gate-trails,PENDING,0,3,Primary capture in progress
+visions/portrait/ui/ashfire-rain,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/plasma,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/gate,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/ashfire,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/rain,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/kaleido,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/trails/rgb444,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/trails/rgb565,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/plasma-kaleido,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/gate-trails,PENDING,0,3,Primary capture in progress
+visions/portrait/fullscreen/ashfire-rain,PENDING,0,3,Primary capture in progress
+audio/drone/landscape/local,PENDING,0,3,Primary capture in progress
+audio/drone/portrait/local,PENDING,0,3,Primary capture in progress
+audio/drone/local-and-pcm,PENDING,0,3,Primary capture in progress
+audio/seq/landscape/local,PENDING,0,3,Primary capture in progress
+audio/seq/portrait/local,PENDING,0,3,Primary capture in progress
+audio/seq/local-and-pcm,PENDING,0,3,Primary capture in progress
+audio/beat/landscape/local,PENDING,0,3,Primary capture in progress
+audio/beat/portrait/local,PENDING,0,3,Primary capture in progress
+audio/beat/local-and-pcm,PENDING,0,3,Primary capture in progress
+visions/fullscreen/layered/pcm,PENDING,0,3,Primary capture in progress
+combined/fullscreen/gate-trails/drone,PENDING,0,3,Primary capture in progress
+combined/fullscreen/gate-trails/seq,PENDING,0,3,Primary capture in progress
+combined/fullscreen/gate-trails/beat,PENDING,0,3,Primary capture in progress
+instrumentation/off/menu,PENDING,0,3,Primary capture in progress
+instrumentation/on/menu,PENDING,0,3,Primary capture in progress
+radio-init/wifi/menu,PENDING,0,3,Primary capture in progress
+radio-init/wifi/fullscreen-layered,PENDING,0,3,Primary capture in progress
+radio-init/ble/menu,PENDING,0,3,Primary capture in progress
+radio-init/ble/fullscreen-layered,PENDING,0,3,Primary capture in progress
+radio-init/espnow/menu,PENDING,0,3,Primary capture in progress
+radio-init/espnow/fullscreen-layered,PENDING,0,3,Primary capture in progress
+touch/scripted-menu-rapid,PENDING,0,3,Primary capture in progress
+touch/visions-fullscreen-transitions,PENDING,0,3,Primary capture in progress
+sustained/cpu-both-cores,PENDING,0,1,Primary capture in progress
+post-stress/visions-fullscreen-layered,PENDING,0,3,Primary capture in progress
+spi/full-frame-rgb565,PENDING,0,3,Primary capture in progress
+kernel/osc-f32/realistic,PENDING,0,3,Primary capture in progress
+kernel/osc-f32/large,PENDING,0,3,Primary capture in progress
+kernel/osc-q15/realistic,PENDING,0,3,Primary capture in progress
+kernel/osc-q15/large,PENDING,0,3,Primary capture in progress
+kernel/filter-f32/realistic,PENDING,0,3,Primary capture in progress
+kernel/filter-f32/large,PENDING,0,3,Primary capture in progress
+kernel/filter-q15/realistic,PENDING,0,3,Primary capture in progress
+kernel/filter-q15/large,PENDING,0,3,Primary capture in progress
+kernel/modal-f32/realistic,PENDING,0,3,Primary capture in progress
+kernel/modal-f32/large,PENDING,0,3,Primary capture in progress
+kernel/modal-q15/realistic,PENDING,0,3,Primary capture in progress
+kernel/modal-q15/large,PENDING,0,3,Primary capture in progress
+kernel/fft-f32/realistic,PENDING,0,3,Primary capture in progress
+kernel/fft-f32/large,PENDING,0,3,Primary capture in progress
+kernel/cellular/realistic,PENDING,0,3,Primary capture in progress
+kernel/cellular/large,PENDING,0,3,Primary capture in progress
+kernel/particles/realistic,PENDING,0,3,Primary capture in progress
+kernel/particles/large,PENDING,0,3,Primary capture in progress
+kernel/feedback/realistic,PENDING,0,3,Primary capture in progress
+kernel/feedback/large,PENDING,0,3,Primary capture in progress
+kernel/stripe-rgb565/realistic,PENDING,0,3,Primary capture in progress
+kernel/stripe-rgb565/large,PENDING,0,3,Primary capture in progress
+physical/contact-to-photon,NOT RUN,0,0,Requires owner-operated physical touch stimulus and external optical timing fixture.
+audio/usb-only-dac-disabled,NOT RUN,0,0,Existing PCM streams the same mixed blocks sent to the local DAC; independent DAC-disable path is not assumed.
+audio/external-dac-loopback,NOT RUN,0,0,External acquisition fixture required to detect analog gaps/distortion independently.
+wireless/wifi-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized owned AP/peer and configured traffic endpoint; no network probes are automatic.
+wireless/ble-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized BLE peer; no scans/probes of unrelated devices.
+wireless/espnow-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized ESP-NOW peer and owned channel.
+wireless/coexistence,NOT RUN,0,0,Requires explicitly authorized Wi-Fi/BLE/ESP-NOW peers and separately captured local-workload baseline.
+portable/esp32-s3-physical,NOT RUN,0,0,Physical S3 board identity/backup/flash authorization required; compile-only is distinct evidence.
+portable/esp32-c3-physical,NOT RUN,0,0,Physical C3 board identity/backup/flash authorization required; compile-only is distinct evidence.

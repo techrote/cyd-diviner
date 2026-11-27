@@ -1,0 +1,16 @@
+{
+  "schema": "cyd-perf-native-replay/1",
+  "evidence_class": "host_replay",
+  "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "source_tree_sha256": "eff036bcc084e7691e5dbdc5d386664a32b498c2a6cfcab4717e046c5912534d",
+  "build_status": "PASS",
+  "replay_status": "PASS",
+  "wav_rate_hz": 24000,
+  "wav_frames": 60672,
+  "wav_peak_abs": 18078,
+  "wav_nonzero_samples": 59886,
+  "limitations": [
+    "SDL output, not physical LCD or DAC capture.",
+    "Native real-time timing is not ESP32 performance."
+  ]
+}

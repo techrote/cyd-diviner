@@ -1,0 +1,480 @@
+Processing cyd-profile (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Library Manager: Installing lovyan03/LovyanGFX @ 1.2.32
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Library Manager: LovyanGFX@1.2.32 has been installed!
+Library Manager: Installing git+https://github.com/PaulStoffregen/XPT2046_Touchscreen.git#v1.4
+git version 2.55.0.windows.5
+Cloning into 'C:\Users\_\.platformio\.cache\tmp\pkg-installing-wq6f2fkv'...
+Note: switching to 'd57f64c8b5f2bc5b8d10d121550806eeff7b06d9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Library Manager: XPT2046_Touchscreen@0.0.0+sha.d57f64c has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build\cyd-profile\libdf6\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\beat.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\drone.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\gemini.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\kin.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\link.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\listen.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\netscan.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\oracle.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\palette.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\pulse.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\scry.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\sentinel.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\seq.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\visions.cpp.o
+Compiling .pio\build\cyd-profile\src\apps\wired.cpp.o
+Compiling .pio\build\cyd-profile\src\cyd_controls.cpp.o
+Compiling .pio\build\cyd-profile\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build\cyd-profile\src\hal_cyd.cpp.o
+Compiling .pio\build\cyd-profile\src\main.cpp.o
+Compiling .pio\build\cyd-profile\src\net_device.cpp.o
+Compiling .pio\build\cyd-profile\src\perf_kernel_main.cpp.o
+Compiling .pio\build\cyd-profile\src\perf_kernels.cpp.o
+Compiling .pio\build\cyd-profile\src\perf_profile.cpp.o
+Compiling .pio\build\cyd-profile\src\perf_radio.cpp.o
+Compiling .pio\build\cyd-profile\src\theme.cpp.o
+Building .pio\build\cyd-profile\bootloader.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Generating partitions .pio\build\cyd-profile\partitions.bin
+Compiling .pio\build\cyd-profile\lib700\SPI\SPI.cpp.o
+Compiling .pio\build\cyd-profile\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build\cyd-profile\lib715\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build\cyd-profile\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEAddress.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEAdvertisedDevice.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEAdvertising.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEBeacon.cpp.o
+Archiving .pio\build\cyd-profile\lib700\libSPI.a
+Compiling .pio\build\cyd-profile\liba76\BLE\BLECharacteristic.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLECharacteristicMap.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEClient.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEDescriptor.cpp.o
+Archiving .pio\build\cyd-profile\libcfa\libWire.a
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEDescriptorMap.cpp.o
+Archiving .pio\build\cyd-profile\lib715\libXPT2046_Touchscreen.a
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEDevice.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEEddystoneTLM.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEEddystoneURL.cpp.o
+Archiving .pio\build\cyd-profile\lib66a\libPreferences.a
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEExceptions.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEHIDDevice.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLERemoteCharacteristic.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLERemoteDescriptor.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLERemoteService.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEScan.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLESecurity.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEServer.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEService.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEServiceMap.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEUUID.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEUtils.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\BLEValue.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\FreeRTOS.cpp.o
+Compiling .pio\build\cyd-profile\liba76\BLE\GeneralUtils.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFi.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiAP.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build\cyd-profile\lib5c0\WiFi\WiFiUdp.cpp.o
+Compiling .pio\build\cyd-profile\lib418\WiFiClientSecure\WiFiClientSecure.cpp.o
+Compiling .pio\build\cyd-profile\lib418\WiFiClientSecure\esp_crt_bundle.c.o
+Archiving .pio\build\cyd-profile\liba76\libBLE.a
+Compiling .pio\build\cyd-profile\lib418\WiFiClientSecure\ssl_client.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\StreamString.cpp.o
+Archiving .pio\build\cyd-profile\lib5c0\libWiFi.a
+Compiling .pio\build\cyd-profile\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\WString.cpp.o
+Archiving .pio\build\cyd-profile\lib418\libWiFiClientSecure.a
+Compiling .pio\build\cyd-profile\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\main.cpp.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\cyd-profile\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\cyd-profile\libFrameworkArduino.a
+Linking .pio\build\cyd-profile\firmware.elf
+Retrieving maximum program size .pio\build\cyd-profile\firmware.elf
+Checking size .pio\build\cyd-profile\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [===       ]  29.8% (used 97736 bytes from 327680 bytes)
+Flash: [======    ]  64.4% (used 2026621 bytes from 3145728 bytes)
+Building .pio\build\cyd-profile\firmware.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 27 ELF sections
+Successfully created esp32 image.
+========================= [SUCCESS] Took 85.02 seconds =========================
+
+Processing kernel-esp32 (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 33 compatible libraries
+Scanning dependencies...
+No dependencies
+Building in release mode
+Compiling .pio\build\kernel-esp32\src\perf_kernel_main.cpp.o
+Compiling .pio\build\kernel-esp32\src\perf_kernels.cpp.o
+Building .pio\build\kernel-esp32\bootloader.bin
+Generating partitions .pio\build\kernel-esp32\partitions.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Compiling .pio\build\kernel-esp32\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\StreamString.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\main.cpp.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\kernel-esp32\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\kernel-esp32\libFrameworkArduino.a
+Linking .pio\build\kernel-esp32\firmware.elf
+Retrieving maximum program size .pio\build\kernel-esp32\firmware.elf
+Checking size .pio\build\kernel-esp32\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [=         ]   6.6% (used 21600 bytes from 327680 bytes)
+Flash: [==        ]  23.8% (used 312209 bytes from 1310720 bytes)
+Building .pio\build\kernel-esp32\firmware.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 2 ELF sections
+Successfully created esp32 image.
+========================= [SUCCESS] Took 16.68 seconds =========================
+
+Processing kernel-s3 (board: esp32-s3-devkitc-1; platform: espressif32 @ 7.1.3; framework: arduino)
+--------------------------------------------------------------------------------
+Tool Manager: Installing espressif/toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+Downloading 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Tool Manager: toolchain-xtensa-esp32s3@8.4.0+2021r2-patch5 has been installed!
+Tool Manager: Installing espressif/toolchain-riscv32-esp @ 8.4.0+2021r2-patch5
+Downloading 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Tool Manager: toolchain-riscv32-esp@8.4.0+2021r2-patch5 has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32-s3-devkitc-1.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+HARDWARE: ESP32S3 240MHz, 320KB RAM, 8MB Flash
+DEBUG: Current (esp-builtin) On-board (esp-builtin) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5 
+ - toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 33 compatible libraries
+Scanning dependencies...
+No dependencies
+Building in release mode
+Compiling .pio\build\kernel-s3\src\perf_kernel_main.cpp.o
+Compiling .pio\build\kernel-s3\src\perf_kernels.cpp.o
+Building .pio\build\kernel-s3\bootloader.bin
+Generating partitions .pio\build\kernel-s3\partitions.bin
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 1 ELF section
+Successfully created esp32s3 image.
+Compiling .pio\build\kernel-s3\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\StreamString.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\main.cpp.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\kernel-s3\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\kernel-s3\libFrameworkArduino.a
+Linking .pio\build\kernel-s3\firmware.elf
+Retrieving maximum program size .pio\build\kernel-s3\firmware.elf
+Checking size .pio\build\kernel-s3\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [=         ]   5.7% (used 18568 bytes from 327680 bytes)
+Flash: [=         ]   9.2% (used 307849 bytes from 3342336 bytes)
+Building .pio\build\kernel-s3\firmware.bin
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+========================= [SUCCESS] Took 70.62 seconds =========================
+
+Processing kernel-c3 (board: esp32-c3-devkitm-1; platform: espressif32 @ 7.1.3; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32-c3-devkitm-1.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32-C3-DevKitM-1
+HARDWARE: ESP32C3 160MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-builtin, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 33 compatible libraries
+Scanning dependencies...
+No dependencies
+Building in release mode
+Compiling .pio\build\kernel-c3\src\perf_kernel_main.cpp.o
+Compiling .pio\build\kernel-c3\src\perf_kernels.cpp.o
+Building .pio\build\kernel-c3\bootloader.bin
+Generating partitions .pio\build\kernel-c3\partitions.bin
+esptool.py v4.11.0
+Creating esp32c3 image...
+Merged 1 ELF section
+Successfully created esp32c3 image.
+Compiling .pio\build\kernel-c3\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\StreamString.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\Tone.cpp.o
+src/perf_kernels.cpp: In function 'int16_t perf_kernels::{anonymous}::q30ToQ15(int32_t)':
+src/perf_kernels.cpp:35:73: error: no matching function for call to 'min(int, const int32_t&)'
+     return static_cast<int16_t>(std::max(-32768, std::min(32767, rounded)));
+                                                                         ^
+In file included from c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\algorithm:61,
+                 from src/perf_kernels.cpp:2:
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algobase.h:195:5: note: candidate: 'template<class _Tp> constexpr const _Tp& std::min(const _Tp&, const _Tp&)'
+     min(const _Tp& __a, const _Tp& __b)
+     ^~~
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algobase.h:195:5: note:   template argument deduction/substitution failed:
+src/perf_kernels.cpp:35:73: note:   deduced conflicting types for parameter 'const _Tp' ('int' and 'int32_t' {aka 'long int'})
+     return static_cast<int16_t>(std::max(-32768, std::min(32767, rounded)));
+                                                                         ^
+In file included from c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\algorithm:61,
+                 from src/perf_kernels.cpp:2:
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algobase.h:243:5: note: candidate: 'template<class _Tp, class _Compare> constexpr const _Tp& std::min(const _Tp&, const _Tp&, _Compare)'
+     min(const _Tp& __a, const _Tp& __b, _Compare __comp)
+     ^~~
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algobase.h:243:5: note:   template argument deduction/substitution failed:
+src/perf_kernels.cpp:35:73: note:   deduced conflicting types for parameter 'const _Tp' ('int' and 'int32_t' {aka 'long int'})
+     return static_cast<int16_t>(std::max(-32768, std::min(32767, rounded)));
+                                                                         ^
+In file included from c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\algorithm:62,
+                 from src/perf_kernels.cpp:2:
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algo.h:3450:5: note: candidate: 'template<class _Tp> constexpr _Tp std::min(std::initializer_list<_Tp>)'
+     min(initializer_list<_Tp> __l)
+     ^~~
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algo.h:3450:5: note:   template argument deduction/substitution failed:
+src/perf_kernels.cpp:35:73: note:   mismatched types 'std::initializer_list<_Tp>' and 'int'
+     return static_cast<int16_t>(std::max(-32768, std::min(32767, rounded)));
+                                                                         ^
+In file included from c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\algorithm:62,
+                 from src/perf_kernels.cpp:2:
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algo.h:3456:5: note: candidate: 'template<class _Tp, class _Compare> constexpr _Tp std::min(std::initializer_list<_Tp>, _Compare)'
+     min(initializer_list<_Tp> __l, _Compare __comp)
+     ^~~
+c:\users\_\.platformio\packages\toolchain-riscv32-esp\riscv32-esp-elf\include\c++\8.4.0\bits\stl_algo.h:3456:5: note:   template argument deduction/substitution failed:
+src/perf_kernels.cpp:35:73: note:   mismatched types 'std::initializer_list<_Tp>' and 'int'
+     return static_cast<int16_t>(std::max(-32768, std::min(32767, rounded)));
+                                                                         ^
+Compiling .pio\build\kernel-c3\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\kernel-c3\FrameworkArduino\WString.cpp.o
+*** [.pio\build\kernel-c3\src\perf_kernels.cpp.o] Error 1
+========================= [FAILED] Took 12.88 seconds =========================
+
+Environment    Status    Duration
+-------------  --------  ------------
+cyd-profile    SUCCESS   00:01:25.016
+kernel-esp32   SUCCESS   00:00:16.677
+kernel-s3      SUCCESS   00:01:10.619
+kernel-c3      FAILED    00:00:12.885
+==================== 1 failed, 3 succeeded in 00:03:05.196 ====================

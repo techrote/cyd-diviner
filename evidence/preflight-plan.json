@@ -1,0 +1,53 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 1,
+  "duration_ms": 3000,
+  "warmup_ms": 1000,
+  "workloads": [
+    {
+      "name": "menu/landscape/theme",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu"
+      ],
+      "orientation": "landscape",
+      "backdrop": "theme",
+      "audio": "local_dac"
+    },
+    {
+      "name": "visions/landscape/fullscreen/gate-trails",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "layered": true,
+      "trail_format": "indexed",
+      "audio": "local_dac"
+    },
+    {
+      "name": "audio/drone/local-and-pcm",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene drone"
+      ],
+      "audio": "local_dac_and_usb_pcm",
+      "pcm": true,
+      "scene": "drone"
+    }
+  ]
+}

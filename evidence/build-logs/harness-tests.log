@@ -1,0 +1,44 @@
+test_c3_identity_uses_chip_id_instead_of_esp32_magic_register (test_board_backup.BackupTests.test_c3_identity_uses_chip_id_instead_of_esp32_magic_register) ... ok
+test_cleanup_failure_does_not_claim_known_final_stub_state (test_board_backup.BackupTests.test_cleanup_failure_does_not_claim_known_final_stub_state) ... ok
+test_existing_directory_and_backup_are_not_overwritten (test_board_backup.BackupTests.test_existing_directory_and_backup_are_not_overwritten) ... ok
+test_failed_connect_reopens_port_and_uses_fresh_loader_at_fallback (test_board_backup.BackupTests.test_failed_connect_reopens_port_and_uses_fresh_loader_at_fallback) ... ok
+fake serial sync
+test_interrupt_is_retained_as_failure_and_serial_is_closed (test_board_backup.BackupTests.test_interrupt_is_retained_as_failure_and_serial_is_closed) ... ok
+test_md5_failure_preserves_unverified_file_and_error_receipt (test_board_backup.BackupTests.test_md5_failure_preserves_unverified_file_and_error_receipt) ... ok
+test_short_flash_read_never_claims_verification (test_board_backup.BackupTests.test_short_flash_read_never_claims_verification) ... ok
+test_success_hash_verified_and_stub_left_at_known_baud (test_board_backup.BackupTests.test_success_hash_verified_and_stub_left_at_known_baud) ... ok
+test_unknown_capacity_is_not_extrapolated (test_board_backup.BackupTests.test_unknown_capacity_is_not_extrapolated) ... ok
+test_unpinned_esptool_rejected_before_serial_open (test_board_backup.BackupTests.test_unpinned_esptool_rejected_before_serial_open) ... ok
+fake serial sync
+test_wrong_capacity_fails_before_read_and_still_restores_stub_baud (test_board_backup.BackupTests.test_wrong_capacity_fails_before_read_and_still_restores_stub_baud) ... ok
+fake serial sync
+test_wrong_chip_rejected_before_ram_stub_or_flash_read (test_board_backup.BackupTests.test_wrong_chip_rejected_before_ram_stub_or_flash_read) ... ok
+test_csv_preserves_units_histogram_bound_names_and_not_run (test_capture.ProtocolTests.test_csv_preserves_units_histogram_bound_names_and_not_run) ... ok
+test_host_arrivals_do_not_claim_target_cadence (test_capture.ProtocolTests.test_host_arrivals_do_not_claim_target_cadence) ... ok
+test_missing_metrics_incomplete_and_empty_histograms_are_honest (test_capture.ProtocolTests.test_missing_metrics_incomplete_and_empty_histograms_are_honest) ... ok
+test_nearest_rank_and_missing_data (test_capture.ProtocolTests.test_nearest_rank_and_missing_data) ... ok
+test_partial_magic_survives_reads (test_capture.ProtocolTests.test_partial_magic_survives_reads) ... ok
+test_pcm_arbitrary_chunks_crc_noise_loss_wrap (test_capture.ProtocolTests.test_pcm_arbitrary_chunks_crc_noise_loss_wrap) ... ok
+test_pcm_backward_sequence_is_discontinuity_not_billions_lost (test_capture.ProtocolTests.test_pcm_backward_sequence_is_discontinuity_not_billions_lost) ... ok
+test_perf_schema_validation_and_unrelated_lines (test_capture.ProtocolTests.test_perf_schema_validation_and_unrelated_lines) ... ok
+test_plans_valid_and_stress_cannot_be_too_short (test_capture.ProtocolTests.test_plans_valid_and_stress_cannot_be_too_short) ... ok
+test_stress_needs_both_cores_observed (test_capture.ProtocolTests.test_stress_needs_both_cores_observed) ... ok
+test_deferred_export_split_records_and_wrong_run_id (test_capture.TransportTests.test_deferred_export_split_records_and_wrong_run_id) ... ok
+test_target_kernel_error_aborts_and_preserves_bytes (test_capture.TransportTests.test_target_kernel_error_aborts_and_preserves_bytes) ... ok
+r001_1 pcm (10s)
+test_pcm_absence_must_fail_with_raw_and_partial_results (test_capture_mission.MissionProtocolTests.test_pcm_absence_must_fail_with_raw_and_partial_results) ... ok
+r001_1 scene (10s)
+r002_1 kernel (kernel)
+r003_1 spi (spi)
+r004_1 pcm (10s)
+test_scene_kernel_spi_and_pcm_end_to_end (test_capture_mission.MissionProtocolTests.test_scene_kernel_spi_and_pcm_end_to_end) ... ok
+test_actual_allocation_and_duration_differences_split_pooling_scope (test_report.ReportTests.test_actual_allocation_and_duration_differences_split_pooling_scope) ... ok
+test_corrupt_histogram_and_false_completion_not_reported_as_measured (test_report.ReportTests.test_corrupt_histogram_and_false_completion_not_reported_as_measured) ... ok
+test_host_receive_time_does_not_split_matching_repetitions_or_invent_cpu (test_report.ReportTests.test_host_receive_time_does_not_split_matching_repetitions_or_invent_cpu) ... ok
+test_human_bounds_cap_at_observed_max_without_mutating_raw_histogram (test_report.ReportTests.test_human_bounds_cap_at_observed_max_without_mutating_raw_histogram) ... ok
+test_preflight_missing_stress_wireless_and_analog_remain_unknown (test_report.ReportTests.test_preflight_missing_stress_wireless_and_analog_remain_unknown) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 1.282s
+
+OK

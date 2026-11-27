@@ -1,0 +1,283 @@
+{
+  "schema": "cyd-perf-build/1",
+  "utc": "2026-11-27T17:50:22.740457+00:00",
+  "host": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.10",
+  "source": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "dirty": true,
+  "source_dirty": false,
+  "source_tree_sha256": "eff036bcc084e7691e5dbdc5d386664a32b498c2a6cfcab4717e046c5912534d",
+  "git_status": {
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "returncode": 0,
+    "stdout": "?? evidence/\n",
+    "stderr": ""
+  },
+  "pio": {
+    "command": [
+      "C:/cyd-diviner/.venv/Scripts/pio.exe",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "PlatformIO Core, version 6.2.0\n",
+    "stderr": ""
+  },
+  "profiles": {
+    "cyd": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 2004080,
+          "sha256": "a4809d23f4b665cefb03ae0c03b621c026375fe412eb3914b9cd829e9ed34a1e"
+        },
+        "firmware.elf": {
+          "bytes": 38478684,
+          "sha256": "3391d7b43513acb4dac3cda46a9e8e87b802049cab1d18a69a4be8ddacb747af"
+        },
+        "firmware.map": {
+          "bytes": 20282853,
+          "sha256": "3e82e0bae23cae55aff24afbecfadd9f12ece9b8eab87fa71cc501999d1eef74"
+        },
+        "bootloader.bin": {
+          "bytes": 17536,
+          "sha256": "3d234a7471f67b013686dabd4dee7c1fa915c9928463616a94bc9297acf1abf8"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "aaae2888c5a6a348004b5b436f47abb25ae32e72d9003902955a998eda723edd"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "cyd"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving cyd dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "cyd-diagnostics": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 2006912,
+          "sha256": "aa7b180db36d1f71d54df5258461488a3c2f6b8955d97057516386befa222175"
+        },
+        "firmware.elf": {
+          "bytes": 38513820,
+          "sha256": "67cb86d423d51c01ecf5dcd950e52d5e58cf277a4431269a10e4ff9fb78c3ca1"
+        },
+        "firmware.map": {
+          "bytes": 20566779,
+          "sha256": "cbcdd5e78b2cbbe57ee028599677f924aa39175277a93d8825f343aa04d1f47b"
+        },
+        "bootloader.bin": {
+          "bytes": 17536,
+          "sha256": "3d234a7471f67b013686dabd4dee7c1fa915c9928463616a94bc9297acf1abf8"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "aaae2888c5a6a348004b5b436f47abb25ae32e72d9003902955a998eda723edd"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "cyd-diagnostics"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving cyd-diagnostics dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "cyd-pcm": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 2005344,
+          "sha256": "5543d42fba8d5747688694bf6c00d63c06685cd9109d79987664f4b1ad76b36d"
+        },
+        "firmware.elf": {
+          "bytes": 38598696,
+          "sha256": "8c26774f66e5c160fe42c121b193c42e81115d19f9a795c717fdc0adf5d2af90"
+        },
+        "firmware.map": {
+          "bytes": 20382048,
+          "sha256": "1a52482a09799f7bd98426078771d9d2c3f55c693d3099f4e4aa96b4fdac2d5c"
+        },
+        "bootloader.bin": {
+          "bytes": 17536,
+          "sha256": "3d234a7471f67b013686dabd4dee7c1fa915c9928463616a94bc9297acf1abf8"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "aaae2888c5a6a348004b5b436f47abb25ae32e72d9003902955a998eda723edd"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "cyd-pcm"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving cyd-pcm dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "cyd-profile": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 2036064,
+          "sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c"
+        },
+        "firmware.elf": {
+          "bytes": 39196192,
+          "sha256": "b3f21b18e859c5417990a88feb5cb5e1d40a8fb148a96f6ac5fba0c83920adaa"
+        },
+        "firmware.map": {
+          "bytes": 20600065,
+          "sha256": "e5c947b9b2a45c4d406f0267f4a14d2e60d34c6d29d303582ef8d14cc749747e"
+        },
+        "bootloader.bin": {
+          "bytes": 17536,
+          "sha256": "3d234a7471f67b013686dabd4dee7c1fa915c9928463616a94bc9297acf1abf8"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "aaae2888c5a6a348004b5b436f47abb25ae32e72d9003902955a998eda723edd"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "cyd-profile"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving cyd-profile dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "kernel-esp32": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 312736,
+          "sha256": "58ba2bccebdc2af700baa4c20b550a62f9b775b986c0d06ea1c5fd6747924322"
+        },
+        "firmware.elf": {
+          "bytes": 6909132,
+          "sha256": "c7711e3b8eeeb683725ffe033ee51d82753d9546d7c674b1c3248a328902da7a"
+        },
+        "firmware.map": {
+          "bytes": 9294244,
+          "sha256": "bdc5c253bda36cfaf3197a215a779c1d8efbb464484afedd0ec77b3cf04925e2"
+        },
+        "bootloader.bin": {
+          "bytes": 17536,
+          "sha256": "3d234a7471f67b013686dabd4dee7c1fa915c9928463616a94bc9297acf1abf8"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "kernel-esp32"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving kernel-esp32 dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "kernel-s3": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 308352,
+          "sha256": "488af3f769db0fab16dd18ab6f0039ed5b9ed3c737d8a707d3ec447e546c1870"
+        },
+        "firmware.elf": {
+          "bytes": 7469640,
+          "sha256": "f8872ef852481d69425d9676d310133887d83b483f3159a28780b7bfaeac636b"
+        },
+        "firmware.map": {
+          "bytes": 9919264,
+          "sha256": "57b487c6d77e4a92317d4f06f29c45454338b928220958f6ccade39bc8690484"
+        },
+        "bootloader.bin": {
+          "bytes": 15104,
+          "sha256": "1776e4dd896a69d0a5c2e79957b0e2a88aa4129b1381d6478683515a1f6af343"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "1d9cca96de0fe07ad7fc0648b9878ddecd9ce565e38b589ad20fea698ed4c80c"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "kernel-s3"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving kernel-s3 dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    },
+    "kernel-c3": {
+      "artifacts": {
+        "firmware.bin": {
+          "bytes": 310928,
+          "sha256": "741a64891b979c0eb4d2184f72337e41ed7800006bf537b5b6e3998487982676"
+        },
+        "firmware.elf": {
+          "bytes": 6795600,
+          "sha256": "beef04f57b9bcc55741a5f9ce5171100cd8bff903c14a17b54d37958b9eb7244"
+        },
+        "firmware.map": {
+          "bytes": 7901255,
+          "sha256": "014d911be8d0702e90811582a8b385237dc22f579ca2737938b0683007814ef3"
+        },
+        "bootloader.bin": {
+          "bytes": 13248,
+          "sha256": "30d47ab1f344cfa69f6b2f718ffa72fc7baea6db047eaabefea162db29e6821c"
+        },
+        "partitions.bin": {
+          "bytes": 3072,
+          "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+        }
+      },
+      "dependencies": {
+        "command": [
+          "C:/cyd-diviner/.venv/Scripts/pio.exe",
+          "pkg",
+          "list",
+          "-e",
+          "kernel-c3"
+        ],
+        "returncode": 1,
+        "stdout": "Resolving kernel-c3 dependencies...\nPlatform espressif32 @ 7.1.3 (required: espressif32 @ 7.1.3)\n",
+        "stderr": "UnicodeEncodeError: Traceback (most recent call last):\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 103, in main\n    cli()  # pylint: disable=no-value-for-parameter\n    ^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1653, in __call__\n    return self.main(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1560, in main\n    rv = self.invoke(ctx)\n         ^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\cli.py\", line 85, in invoke\n    return super().invoke(ctx)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 2054, in invoke\n    return _process_result(sub_ctx.command.invoke(sub_ctx))\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 1414, in invoke\n    return ctx.invoke(self.callback, **ctx.params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\core.py\", line 911, in invoke\n    return callback(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 56, in package_list_cmd\n    list_project_packages(options)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 179, in list_project_packages\n    _found = print_project_env_platform_packages(env, options)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 205, in print_project_env_platform_packages\n    print_dependency_tree(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\package\\commands\\list.py\", line 99, in print_dependency_tree\n    click.echo(\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 89, in <lambda>\n    click.echo = lambda *args, **kwargs: _safe_echo(0, *args, **kwargs)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\platformio\\__main__.py\", line 83, in _safe_echo\n    click_echo_origin[origin](*args, **kwargs)\n  File \"C:\\cyd-diviner\\.venv\\Lib\\site-packages\\click\\utils.py\", line 333, in echo\n    file.write(out)  # type: ignore\n    ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\_\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>\n\n============================================================\n\nAn unexpected error occurred. Further steps:\n\n* Verify that you have the latest version of PlatformIO using\n  `python -m pip install -U platformio` command\n\n* Try to find answer in FAQ Troubleshooting section\n  https://docs.platformio.org/page/faq/index.html\n\n* Report this problem to the developers\n  https://github.com/platformio/platformio-core/issues\n\n============================================================\n\n"
+      }
+    }
+  }
+}
