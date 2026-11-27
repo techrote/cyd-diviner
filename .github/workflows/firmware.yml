@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, cyd-profile-link, cyd-profile-color, kernel-esp32, kernel-s3, kernel-s3-n4r2, kernel-s3-n4r2-peer, kernel-c3]
+        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, cyd-profile-link, cyd-profile-color, cyd-profile-audio, kernel-esp32, kernel-s3, kernel-s3-n4r2, kernel-s3-n4r2-peer, kernel-s3-n4r2-audio, kernel-c3]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -67,6 +67,14 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=address,undefined tools/perf/test_i2s_events.cpp -o /tmp/cyd-i2s-events-test
           /tmp/cyd-i2s-events-test
+      - name: Validate packed colour and bounded audio cores
+        run: |
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined tools/perf/test_color_packing.cpp -o /tmp/cyd-color-packing-test
+          /tmp/cyd-color-packing-test
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF_COLOR=1 -Itools/perf/fakes/color tools/perf/test_color_pipeline.cpp src/perf_color.cpp -o /tmp/cyd-color-pipeline-test
+          /tmp/cyd-color-pipeline-test
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF_AUDIO_CORE_STANDALONE=1 tools/perf/test_audio_core.cpp src/perf_audio_core.cpp -o /tmp/cyd-audio-core-test
+          /tmp/cyd-audio-core-test
 
   native:
     runs-on: ubuntu-latest

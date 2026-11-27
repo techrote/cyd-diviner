@@ -11,6 +11,9 @@
 #ifdef GRIM_PERF_LINK
 #include "perf_link.h"
 #endif
+#ifdef GRIM_PERF_AUDIO_MVP
+#include "perf_audio_mvp.h"
+#endif
 #ifndef GRIM_PERF_SOURCE
 #define GRIM_PERF_SOURCE "unknown"
 #endif
@@ -87,6 +90,9 @@ void setup() {
     information("kernel_identity");
 }
 void loop() {
+#ifdef GRIM_PERF_AUDIO_MVP
+    perf_audio_mvp::poll();
+#endif
 #ifdef GRIM_PERF_LINK
     perf_link::poll();
 #endif
@@ -94,7 +100,11 @@ void loop() {
         const int byte = Serial.read();
         if (byte == '\n') {
             command_line[command_length] = 0;
-            bool handled = !overflow && (standaloneCommand(command_line) || perf_kernels::command(command_line));
+            bool handled = false;
+#ifdef GRIM_PERF_AUDIO_MVP
+            if (!overflow) handled = perf_audio_mvp::command(command_line);
+#endif
+            if (!overflow && !handled) handled = standaloneCommand(command_line) || perf_kernels::command(command_line);
 #ifdef GRIM_PERF_LINK
             if (!overflow && !handled) handled = perf_link::command(command_line);
 #endif

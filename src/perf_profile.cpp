@@ -10,6 +10,9 @@
 #ifdef GRIM_PERF_COLOR
 #include "perf_color.h"
 #endif
+#ifdef GRIM_PERF_AUDIO_MVP
+#include "perf_audio_mvp.h"
+#endif
 #include "theme.h"
 #include <Arduino.h>
 #include <esp_freertos_hooks.h>
@@ -282,6 +285,9 @@ void poll() {
 bool command(const char *line) {
     if (strncmp(line, "perf ", 5)) return false;
     if (!quiet()) return true;
+#ifdef GRIM_PERF_AUDIO_MVP
+    if (perf_audio_mvp::command(line)) return true;
+#endif
 #ifdef GRIM_PERF_LINK
     if (perf_link::command(line)) return true;
 #endif
