@@ -66,7 +66,11 @@ Acquisition validates finite terminal boundaries, snapshot counts, native format
 CRC/following LF, hardware completion, tail canaries, unchanged-sentinel count,
 owner/lane restoration and transfer-failure counters. TX checks `tx_result`,
 exact trace/segment totals and the final `tx_end`, initialization/mode/observer
-settings, restored word and applicable Wi-Fi teardown codes. A direct PHY
+settings, restored word and applicable Wi-Fi teardown codes. Every TX
+teardown requires aggregate teardown_status0 and false residual
+owned Wi-Fi driver/default-event-loop flags; missing fields or cleanup failures
+cannot become `ACQUIRED`. An already-stopped Wi-Fi status0x3002 is allowed only
+with successful deinit and aggregate cleanup. A direct PHY
 disable is a void API and has no return-status proof. Incomplete/malformed
 transfers fail with raw/partial evidence retained; no control query is injected
 into an uncertain payload boundary. `ACQUIRED` does not mean physical RF edges,

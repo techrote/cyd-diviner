@@ -187,6 +187,17 @@ def validate_snapshot(receipt, run_id, case, bench=False):
         raise RuntimeError("Snapshot owner/lane readback mismatch")
 
 
+def validate_tx_cleanup(result):
+    if (result.get("teardown_status") != 0 or result.get("wifi_driver_owned_after") is not False
+        or result.get("default_event_loop_owned_after") is not False):
+        raise RuntimeError("Metal TX teardown failed or driver/default-event-loop ownership remains")
+    if result.get("radio_stop_api") == "WiFi_stop_deinit":
+        # Pinned SDK ESP_ERR_WIFI_NOT_STARTED is0x3002. The firmware explicitly
+        # accepts that already-stopped condition before successful deinit.
+        if result.get("wifi_stop_status") not in (0, 0x3002) or result.get("wifi_deinit_status") != 0:
+            raise RuntimeError("Metal Wi-Fi stop/deinit reported failure")
+
+
 def execute_run(run, tx, rx, plan, plan_path, folder, guard):
     folder.mkdir()
     case, run_id = run["settings"], run["run_id"]
@@ -303,8 +314,7 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
             or len(traces) != result.get("trace_count") or len(segments) != result.get("segment_records")
             or result.get("restored_word_readback") != result.get("restored_word_requested")):
             raise RuntimeError("Metal TX mode/timing/trace/restore correlation failed")
-        if result.get("radio_stop_api") == "WiFi_stop_deinit" and (result.get("wifi_stop_status") != 0 or result.get("wifi_deinit_status") != 0):
-            raise RuntimeError("Metal Wi-Fi teardown reported failure")
+        validate_tx_cleanup(result)
         if ended_tx[-1].get("trace_records") != len(traces) or ended_tx[-1].get("segment_records") != len(segments):
             raise RuntimeError("Metal TX terminal record differs from observed trace/segment counts")
         run["transmitter_result"] = result

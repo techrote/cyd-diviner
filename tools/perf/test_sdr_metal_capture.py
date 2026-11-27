@@ -9,7 +9,7 @@ import unittest
 from unittest import mock
 
 from link_capture import SecretGuard
-from sdr_metal_capture import SnapshotDecoder, default_plan, execute_run, validate_plan, validate_snapshot
+from sdr_metal_capture import SnapshotDecoder, default_plan, execute_run, validate_plan, validate_snapshot, validate_tx_cleanup
 from test_link_mission import Clock
 
 
@@ -29,6 +29,17 @@ def snapshot(run_id="m001_1", request_id=None, rep=1, source_rep=1, count=16):
 
 
 class SnapshotFramingTests(unittest.TestCase):
+    def test_teardown_or_residual_owned_driver_loop_cannot_be_acquired(self):
+        good = {"teardown_status": 0, "wifi_driver_owned_after": False, "default_event_loop_owned_after": False,
+                "radio_stop_api": "WiFi_stop_deinit", "wifi_stop_status": 0, "wifi_deinit_status": 0}
+        validate_tx_cleanup(good)
+        validate_tx_cleanup({**good, "wifi_stop_status": 0x3002})
+        for changed in ({"teardown_status": 1}, {"wifi_driver_owned_after": True}, {"default_event_loop_owned_after": True},
+                        {"wifi_stop_status": 123}, {"wifi_deinit_status": 1}):
+            with self.subTest(changed=changed), self.assertRaises(RuntimeError):
+                validate_tx_cleanup({**good, **changed})
+        with self.assertRaises(RuntimeError): validate_tx_cleanup({"radio_stop_api": "esp_phy_disable_void"})
+
     def test_every_split_uses_exact_binary_length_even_for_embedded_text(self):
         record, payload = snapshot()
         stream = wire(record) + payload + b"\n" + wire({"type": "run_end", "id": "m001_1", "ok": True})
@@ -87,7 +98,8 @@ class TXFixture:
                 "requested_duration_us": 200000, "requested_mask_segment_us": 0, "backoff0_quarter_db": 96,
                 "backoff1_quarter_db": 112, "unpaced": True, "trace_stride": 0, "init_path": "experimental_direct_PHY",
                 "pattern_bits": 64, "processed_bits": 1000, "trace_count": 0, "segment_records": 0,
-                "restored_word_readback": 32, "restored_word_requested": 32, "radio_stop_api": "esp_phy_disable_void"},
+                "restored_word_readback": 32, "restored_word_requested": 32, "radio_stop_api": "esp_phy_disable_void",
+                "teardown_status": 0, "wifi_driver_owned_after": False, "default_event_loop_owned_after": False},
                 {"type": "tx_end", "trace_records": 0, "segment_records": 0}])
 
 
