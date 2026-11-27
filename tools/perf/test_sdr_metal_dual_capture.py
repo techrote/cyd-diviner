@@ -110,6 +110,7 @@ class DualTests(unittest.TestCase):
             self.assertFalse(execute_dual_run(run, ports, plan, root / "plan.json", folders, SecretGuard()))
             self.assertEqual(run["receivers"]["rx"]["status"], "ACQUIRED")
             self.assertEqual(run["receivers"]["rx2"]["status"], "FAILED")
+            self.assertFalse(run["receivers"]["rx2"]["snapshots"][0]["header"]["tail_canary_ok"])
             self.assertEqual(ports["tx"].dispatches, 1)
             self.assertTrue((folders["rx2"] / "snapshot-0001.native32le").is_file())
 
@@ -132,6 +133,18 @@ class DualTests(unittest.TestCase):
             identities["tx"]["port"] = "COM13"
             path = root / "ids.json"; path.write_text(json.dumps(identities))
             with self.assertRaisesRegex(ValueError, "Three distinct"): read_identities(path)
+
+    def test_constructor_failure_preserves_original_error_and_parent_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp); plan = dual_plan()
+            planpath = root / "plan.json"; planpath.write_text(json.dumps(plan))
+            args = types.SimpleNamespace(identities=root / "ids.json", plan=planpath, output=root / "capture", rf_authorized=True)
+            with mock.patch("sdr_metal_dual_capture.read_identities", return_value={"tx": {}}), mock.patch("sdr_metal_dual_capture.SDRPort", side_effect=OSError("fixture port unavailable")):
+                with self.assertRaisesRegex(OSError, "fixture port unavailable"): capture(args)
+            result = json.loads((args.output / "results.json").read_text())
+            self.assertEqual(result["status"], "FAILED")
+            self.assertIn("fixture port unavailable", result["error"])
+            self.assertTrue((args.output / "artifact-hashes.json").is_file())
 
     def test_closed_children_are_reusable_single_rx_results_and_bind_shared_tx_logs(self):
         with tempfile.TemporaryDirectory() as tmp, mock.patch("sdr_metal_dual_capture.time.perf_counter", Clock()), mock.patch("sdr_metal_dual_capture.time.sleep"):

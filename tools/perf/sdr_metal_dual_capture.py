@@ -217,13 +217,16 @@ def execute_dual_run(run, ports, plan, plan_path, folders, guard):
             child.update(status="ACQUIRED", receiver_run_end=end, snapshots=snapshots, armed=received.get(name), physical_rf_verified=None)
         except (RuntimeError, ValueError, TimeoutError) as error:
             failures[name] = str(error); child.update(status="FAILED", error=str(error))
+        child["snapshots"] = port.decoder.snapshots[snapshot_cursors[name]:]
+        child["receiver_run_end"] = ends.get(name)
+        child["armed"] = received.get(name)
         child["rx_target"] = port.records[cursors[name]:]
         port.decoder.sink = None
     run["tx_target"] = tx.records[cursors["tx"]:]
     # Queries are safe only after each endpoint's own complete terminal boundary.
     run["temperature_after"] = {}
     for name, port in ports.items():
-        safe = (name == "tx" and (not sent_tx or any(r.get("type") == "tx_end" for r in run["tx_target"]))) or (name in ends and name not in failures)
+        safe = (name == "tx" and name not in failures and (not sent_tx or any(r.get("type") == "tx_end" for r in run["tx_target"]))) or (name in ends and name not in failures)
         run["temperature_after"][name] = temperature(port, name != "tx", plan.get("temperature_queries", True)) if safe else {
             "status": "NOT MEASURED", "reason": "uncertain or failed terminal boundary; no query injected"}
     run["failures"] = failures
@@ -322,6 +325,7 @@ def capture(args):
                 for p in sorted((args.output / "tx").rglob("*")) if p.is_file()}
         write_results()
         for root in [*(args.output / n for n in RECEIVERS), args.output]:
+            if not root.is_dir(): continue
             hashes = {p.relative_to(root).as_posix(): digest(p) for p in sorted(root.rglob("*")) if p.is_file() and p != root / "artifact-hashes.json"}
             (root / "artifact-hashes.json").write_text(json.dumps(hashes, indent=2) + "\n", encoding="utf-8")
     return 0
