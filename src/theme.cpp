@@ -294,6 +294,20 @@ uint16_t blend(uint16_t fg, uint16_t bg, uint8_t a) {
     return blend565(fg, bg, a);
 }
 
+int luma(uint16_t colour) {
+    const int r = ((colour >> 11) & 31) * 255 / 31;
+    const int g = ((colour >> 5) & 63) * 255 / 63;
+    const int b = (colour & 31) * 255 / 31;
+    return (299 * r + 587 * g + 114 * b) / 1000;
+}
+
+uint16_t readableInk(uint16_t preferred, uint16_t background) {
+    const int tone = luma(background);
+    const int delta = luma(preferred) - tone;
+    if (delta >= 96 || delta <= -96) return preferred;
+    return tone < 128 ? 0xffff : 0;
+}
+
 template <typename Surface>
 static void drawBlend(Surface &canvas, int x, int y, int w, int h,
                       uint16_t start, uint16_t end, int maxBands) {
@@ -460,13 +474,27 @@ void drawSceneBackground(Canvas &canvas, int x, int y, int w, int h, const Palet
     drawBackdrop(canvas, x, y, w, h, colours, true);
 }
 
+#ifdef GRIM_CYD
+namespace {
+struct BackdropSpan { int top, height; };
+
+BackdropSpan backdropSpan(int originY) {
+    if (originY <= 0) return {0, hal::H};
+    if (cyd_controls::isPortrait()) {
+        return {-originY, cyd_controls::viewportBottom()};
+    }
+    return {-FullBackdropMargin, hal::H + 2 * FullBackdropMargin};
+}
+} // namespace
+#endif
+
 void drawBackground(Canvas &canvas) {
 #ifdef GRIM_CYD
-    const int margin = cyd_controls::viewportTop() > 0 ? FullBackdropMargin : 0;
+    const auto span = backdropSpan(cyd_controls::viewportTop());
+    drawSceneBackground(canvas, 0, span.top, hal::W, span.height, palette());
 #else
-    constexpr int margin = 0;
+    drawSceneBackground(canvas, 0, 0, hal::W, hal::H, palette());
 #endif
-    drawSceneBackground(canvas, 0, -margin, hal::W, hal::H + 2 * margin, palette());
 }
 
 #ifdef GRIM_CYD
@@ -482,14 +510,17 @@ struct ScaledBackdrop {
     lgfx::LGFXBase &display;
     int originY;
     int clipLeft, clipTop, clipRight, clipBottom;
+    bool portrait;
+
+    int edge(int coordinate) const { return portrait ? coordinate : scaledEdge(coordinate); }
 
     bool intersectsClip(int left, int top, int right, int bottom) const {
         return left < clipRight && right > clipLeft && top < clipBottom && bottom > clipTop;
     }
 
     void fillRect(int x, int y, int w, int h, uint16_t colour) {
-        const int left = scaledEdge(x), top = originY + scaledEdge(y);
-        const int right = scaledEdge(x + w), bottom = originY + scaledEdge(y + h);
+        const int left = edge(x), top = originY + edge(y);
+        const int right = edge(x + w), bottom = originY + edge(y + h);
         if (intersectsClip(left, top, right, bottom)) display.fillRect(left, top, right - left, bottom - top, colour);
     }
 
@@ -498,8 +529,8 @@ struct ScaledBackdrop {
     void drawFastHLine(int x, int y, int w, uint16_t colour) { fillRect(x, y, w, 1, colour); }
 
     void drawLine(int x0, int y0, int x1, int y1, uint16_t colour) {
-        if (!intersectsClip(scaledEdge(std::min(x0, x1)), originY + scaledEdge(std::min(y0, y1)),
-                            scaledEdge(std::max(x0, x1) + 1), originY + scaledEdge(std::max(y0, y1) + 1))) return;
+        if (!intersectsClip(edge(std::min(x0, x1)), originY + edge(std::min(y0, y1)),
+                            edge(std::max(x0, x1) + 1), originY + edge(std::max(y0, y1) + 1))) return;
         // Rasterize at logical resolution, so diagonal patterns have the same
         // shape and line widths as the sprite on the other side of the clip.
         const bool steep = std::abs(y1 - y0) > std::abs(x1 - x0);
@@ -528,16 +559,18 @@ struct ScaledBackdrop {
 
 void drawBackdropPatch(lgfx::LGFXBase &display, int originY, int x, int y, int w, int h, const Palette &colours) {
     if (w <= 0 || h <= 0) return;
-    ScaledBackdrop surface{display, originY, x, y, x + w, y + h};
+    const bool portrait = display.width() == hal::W;
+    const auto span = backdropSpan(originY);
+    ScaledBackdrop surface{display, originY, x, y, x + w, y + h, portrait};
     display.setClipRect(x, y, w, h);
-    drawBackdrop(surface, 0, -FullBackdropMargin, hal::W, hal::H + 2 * FullBackdropMargin, colours, true);
+    drawBackdrop(surface, 0, span.top, hal::W, span.height, colours, true);
     display.clearClipRect();
 }
 
 void drawBackdropMargins(lgfx::LGFXBase &display, int originY, const Palette &colours) {
-    const int end = originY + scaledEdge(hal::H);
+    const int end = originY + cyd_controls::viewportHeight();
     drawBackdropPatch(display, originY, 0, 0, display.width(), originY, colours);
-    drawBackdropPatch(display, originY, 0, end, display.width(), display.height() - end, colours);
+    drawBackdropPatch(display, originY, 0, end, display.width(), cyd_controls::viewportBottom() - end, colours);
 }
 #endif
 
@@ -548,8 +581,7 @@ static int glyphIndex(char c) {
 
 // Glyph pixels are blended against whatever is already in the canvas, so
 // glyphs can sit on plasma, frames, anything.
-static int drawGlyph(const DaedricFont &f, int idx, int x, int y, uint16_t fg) {
-    Canvas &cv = hal::canvas();
+static int drawGlyph(Canvas &cv, const DaedricFont &f, int idx, int x, int y, uint16_t fg, uint8_t opacity, int transparent) {
     const DaedricGlyph &g = f.glyphs[idx];
     const uint8_t *d = f.data + g.offset;
     const int stride = (g.w + 3) / 4;
@@ -557,16 +589,17 @@ static int drawGlyph(const DaedricFont &f, int idx, int x, int y, uint16_t fg) {
     for (int row = 0; row < f.h; ++row) {
         const uint8_t *line = d + row * stride;
         int py = y + row;
-        if (py < 0 || py >= hal::H) continue;
+        if (py < 0 || py >= cv.height()) continue;
         for (int col = 0; col < g.w; ++col) {
             uint8_t a = (line[col >> 2] >> (6 - 2 * (col & 3))) & 3;
             if (!a) continue;
             int px = x + col;
-            if (px < 0 || px >= hal::W) continue;
-            if (a == 3) cv.drawPixel(px, py, fg);
+            if (px < 0 || px >= cv.width()) continue;
+            const uint8_t coverage = opacity == 255 ? alpha[a] : alpha[a] * opacity / 255;
+            if (coverage == 255) cv.drawPixel(px, py, fg);
             else {
                 uint16_t bg = cv.readPixel(px, py);
-                cv.drawPixel(px, py, blend(fg, bg, alpha[a]));
+                cv.drawPixel(px, py, bg == transparent ? fg : blend(fg, bg, coverage));
             }
         }
     }
@@ -582,13 +615,18 @@ int glyphWidth(const DaedricFont &f, const char *text, int spacing) {
     return w > 0 ? w - spacing : 0;
 }
 
-int glyphs(const DaedricFont &f, const char *text, int x, int y, uint16_t fg, int spacing) {
+int glyphs(Canvas &cv, const DaedricFont &f, const char *text, int x, int y, uint16_t fg,
+           int spacing, uint8_t opacity, int transparent) {
     int cx = x;
     for (const char *p = text; *p; ++p) {
         int idx = glyphIndex(*p);
-        cx += (idx < 0 ? f.space : drawGlyph(f, idx, cx, y, fg)) + spacing;
+        cx += (idx < 0 ? f.space : drawGlyph(cv, f, idx, cx, y, fg, opacity, transparent)) + spacing;
     }
     return cx - x;
+}
+
+int glyphs(const DaedricFont &f, const char *text, int x, int y, uint16_t fg, int spacing) {
+    return glyphs(hal::canvas(), f, text, x, y, fg, spacing);
 }
 
 void glyphsCentre(const DaedricFont &f, const char *text, int cx, int y, uint16_t fg) {
@@ -651,9 +689,9 @@ void textRight(const char *s, int rx, int y, uint16_t c, int size) {
     text(s, rx - (int)strlen(s) * 6 * size, y, c, size);
 }
 
-void header(const char *daedric, const char *latin) {
+void header(const char *daedric, const char *latin, int transparent) {
     Canvas &cv = hal::canvas();
-    int w = glyphs(DAEDRIC_S, daedric, 4, 1, C_EMBER);
+    int w = glyphs(cv, DAEDRIC_S, daedric, 4, 1, C_EMBER, 2, 255, transparent);
     text(latin, 4 + w + 6, 5, C_DIM);
     int b = hal::batteryPercent();
     if (b >= 0) {

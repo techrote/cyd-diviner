@@ -21,7 +21,8 @@
 
 namespace hal {
 namespace {
-constexpr int ScreenW = 320, ScreenH = 240;
+constexpr int PanelWidth = 240, PanelHeight = 320;
+constexpr int TouchMin = 200, TouchMax = 3900;
 constexpr int BacklightPin = 21, BootPin = 0;
 constexpr int BlueLedPin = 17;
 constexpr int TouchCs = 33, TouchMosi = 32, TouchMiso = 39, TouchClk = 25;
@@ -59,6 +60,48 @@ Canvas cv(&lcd);
 SPIClass touchSpi(VSPI);
 XPT2046_Touchscreen touch(TouchCs);
 bool displayReady = false, canvasReady = false;
+using cyd_controls::Orientation;
+Orientation displayOrientation = Orientation::Landscape;
+
+struct OrientationTransform {
+    uint8_t rotation;
+    bool portrait;
+    bool flipped;
+};
+
+OrientationTransform orientationTransform(Orientation orientation) {
+    // The ILI9341 uses MV in landscape, and MX in normal portrait.
+    switch (orientation) {
+    case Orientation::Landscape:    return {5, false, false};
+    case Orientation::Portrait:     return {6, true, false};
+    case Orientation::Landscape180: return {7, false, true};
+    case Orientation::Portrait180:  return {4, true, true};
+    }
+    return {5, false, false};
+}
+
+void rotateDisplay(Orientation orientation) {
+    lcd.setRotation(orientationTransform(orientation).rotation);
+    lcd.clearClipRect();
+    displayOrientation = orientation;
+}
+
+int scaleTouch(int raw, int extent) {
+    return std::clamp(raw - TouchMin, 0, TouchMax - TouchMin) * (extent - 1) / (TouchMax - TouchMin);
+}
+
+struct TouchPoint { int x, y; };
+
+TouchPoint calibratedTouch(int rawX, int rawY, Orientation orientation) {
+    const auto transform = orientationTransform(orientation);
+    const int width = transform.portrait ? PanelWidth : PanelHeight;
+    const int height = transform.portrait ? PanelHeight : PanelWidth;
+    // XPT2046 rotation 0 follows the MAD_MX portrait axes used in CISmon.
+    const int x = scaleTouch(transform.portrait ? rawX : rawY, width);
+    const int y = scaleTouch(transform.portrait ? rawY : TouchMax + TouchMin - rawX, height);
+    if (transform.flipped) return {width - 1 - x, height - 1 - y};
+    return {x, y};
+}
 
 struct BackdropMote {
     int16_t x, y;
@@ -85,23 +128,26 @@ struct Rectangle {
 std::array<BackdropMote, 18> backdropMotes{};
 size_t backdropMoteCount = 0;
 std::array<Rectangle, 2> backdropDamage{};
+bool fullscreenFrameWritten = false;
 
 // Sprite zoom uses a half-pixel pivot. This is the first output pixel that
 // samples a given logical coordinate at 4/3 scale, including negative rows.
-int rasterEdge(int coordinate) {
+int rasterEdge(int coordinate, bool portrait) {
+    if (portrait) return coordinate;
     const int scaled = 4 * coordinate - 2;
     return scaled >= 0 ? (scaled + 2) / 3 : scaled / 3;
 }
 
-void drawBackdropMotes(int origin, int sceneBottom) {
+void drawBackdropMotes(int left, int origin, int sceneBottom, int width, int clipBottom) {
+    const bool portrait = orientationTransform(displayOrientation).portrait;
     for (size_t i = 0; i < backdropMoteCount; ++i) {
         const auto &mote = backdropMotes[i];
         const bool above = mote.y < 0;
         const Rectangle pixels{
-            rasterEdge(mote.x),
-            std::max(above ? 0 : sceneBottom, origin + rasterEdge(mote.y)),
-            std::min(ScreenW, rasterEdge(mote.x + 1)),
-            std::min(above ? origin : ScreenH, origin + rasterEdge(mote.y + 1)),
+            left + rasterEdge(mote.x, portrait),
+            std::max(above ? 0 : sceneBottom, origin + rasterEdge(mote.y, portrait)),
+            std::min(width, left + rasterEdge(mote.x + 1, portrait)),
+            std::min(above ? origin : clipBottom, origin + rasterEdge(mote.y + 1, portrait)),
         };
         if (pixels.empty()) continue;
         const uint16_t behind = lcd.readPixel(pixels.left, pixels.top);
@@ -118,7 +164,7 @@ AudioFn audioFn = nullptr, overlayFn = nullptr;
 std::atomic<uint8_t> level{140};
 #ifdef GRIM_CYD_DIAGNOSTICS
 std::atomic<uint32_t> audioBlocks{0}, signalBlocks{0};
-uint32_t presentUs = 0;
+uint32_t presentUs = 0, frameDrawUs = 0;
 #endif
 
 void audioTask(void *) {
@@ -234,11 +280,12 @@ bool pcmStreaming() {
 void shot() {
     // Read the physical controller after both the app and controls are drawn.
     // Payload has one little-endian RGB565 word per pixel, left-to-right.
-    Serial.printf("shot %d %d rgb565le\n", ScreenW, ScreenH);
-    lgfx::rgb565_t row[ScreenW];
-    for (int y = 0; y < ScreenH; ++y) {
-        lcd.readRect(0, y, ScreenW, 1, row);
-        Serial.write(reinterpret_cast<const uint8_t *>(row), sizeof(row));
+    const int width = lcd.width(), height = lcd.height();
+    Serial.printf("shot %d %d rgb565le\n", width, height);
+    lgfx::rgb565_t row[PanelHeight];
+    for (int y = 0; y < height; ++y) {
+        lcd.readRect(0, y, width, 1, row);
+        Serial.write(reinterpret_cast<const uint8_t *>(row), width * sizeof(row[0]));
         delay(1);
     }
 }
@@ -247,7 +294,7 @@ void diagnostic(const char *cmd, uint32_t now) {
     int x, y;
     bool tap = sscanf(cmd, "tap %d %d", &x, &y) == 2;
     if (tap || sscanf(cmd, "touch %d %d", &x, &y) == 2) {
-        if (x < 0 || x >= ScreenW || y < 0 || y >= ScreenH) return;
+        if (x < 0 || x >= cyd_controls::displayWidth() || y < 0 || y >= cyd_controls::displayHeight()) return;
         if (tap && syntheticDown) sendTouch(false, syntheticX, syntheticY, now);
         sendTouch(true, x, y, now);
         if (tap) sendTouch(false, x, y, now);
@@ -261,11 +308,15 @@ void diagnostic(const char *cmd, uint32_t now) {
     } else if (pcmStreaming()) {
         return;
     } else if (strcmp(cmd, "status") == 0) {
-        Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u theme_id=%u view_h=%d clip_y=%d view_top=%d\n",
+        Serial.printf("heap=%u largest=%u display=%d audio=%d volume=%u present_us=%u audio_blocks=%u signal_blocks=%u "
+                      "theme_id=%u view_h=%d clip_y=%d view_top=%d portrait=%d backdrop=%u screen_w=%d screen_h=%d "
+                      "draw_us=%u orientation=%u\n",
                       ESP.getFreeHeap(), ESP.getMaxAllocHeap(), displayReady, audioLock != nullptr, volume(),
                       presentUs, audioBlocks.load(std::memory_order_relaxed), signalBlocks.load(std::memory_order_relaxed),
                       static_cast<unsigned>(theme::colourScheme()), cyd_controls::viewportHeight(),
-                      cyd_controls::viewportBottom(), cyd_controls::viewportTop());
+                      cyd_controls::viewportBottom(), cyd_controls::viewportTop(),
+                      orientationTransform(displayOrientation).portrait, static_cast<unsigned>(cyd_controls::menuBackdrop()),
+                      lcd.width(), lcd.height(), frameDrawUs, static_cast<unsigned>(displayOrientation));
     } else if (strcmp(cmd, "shot") == 0 && displayReady) {
         shot();
     }
@@ -331,16 +382,15 @@ void scanInput() {
     {
         const auto p = touch.getPoint();
         const bool down = p.z >= 400;
-        // CISmon calibrated XPT2046 rotation 0 in portrait. Convert that
-        // coordinate pair to the panel's TFT_eSPI-compatible landscape view.
-        const int x = constrain(map(p.y, 200, 3900, 0, ScreenW - 1), 0, ScreenW - 1);
-        const int y = constrain(map(p.x, 3900, 200, 0, ScreenH - 1), 0, ScreenH - 1);
-        sendTouch(down, x, y, now);
+        const TouchPoint point = calibratedTouch(p.x, p.y, displayOrientation);
+        // The tap which changed orientation may still be held until the first
+        // frame in the new orientation. Keep its release, without remapping it.
+        if (!down || displayOrientation == cyd_controls::orientation()) sendTouch(down, point.x, point.y, now);
 #ifdef GRIM_CYD_DIAGNOSTICS
         static bool wasDown = false;
         if (down && !wasDown && !pcmStreaming() &&
             cyd_controls::viewportBottom() >= cyd_controls::viewportHeight()) {
-            Serial.printf("screen touch %d %d pressure %d\n", x, y, p.z);
+            Serial.printf("screen touch %d %d pressure %d\n", point.x, point.y, p.z);
         }
         wasDown = down;
 #endif
@@ -376,7 +426,7 @@ void begin() {
     digitalWrite(BacklightPin, LOW);
     displayReady = lcd.init();
     if (displayReady) {
-        lcd.setRotation(5); // Same memory access directions as TFT_eSPI rotation 1.
+        rotateDisplay(cyd_controls::orientation());
         lcd.fillScreen(static_cast<uint16_t>(0));
         digitalWrite(BacklightPin, HIGH);
     }
@@ -403,35 +453,74 @@ void begin() {
 
 Canvas &canvas() { return cv; }
 
+#ifdef GRIM_CYD_DIAGNOSTICS
+void setFrameDrawUs(uint32_t elapsed) { frameDrawUs = elapsed; }
+#endif
+
+static void presentDirect(FullscreenRenderer render, uint32_t now, bool menu) {
+    if (!displayReady || !render) return;
+#ifdef GRIM_CYD_DIAGNOSTICS
+    const uint32_t start = micros();
+#endif
+    const auto orientation = cyd_controls::orientation();
+    if (orientation != displayOrientation) rotateDisplay(orientation);
+
+    lcd.clearClipRect();
+    lcd.startWrite();
+    render(lcd, now);
+    lcd.clearClipRect();
+    if (menu) cyd_controls::draw(lcd);
+    lcd.endWrite();
+    fullscreenFrameWritten = true;
+    backdropMoteCount = 0;
+    backdropDamage = {};
+#ifdef GRIM_CYD_DIAGNOSTICS
+    // Rendering and transfer are interleaved in the direct frame.
+    if (!menu) frameDrawUs = 0;
+    presentUs = micros() - start;
+#endif
+}
+
+void drawVisionsFullscreen(FullscreenRenderer render, uint32_t now) { presentDirect(render, now, false); }
+void presentNativeMenu(FullscreenRenderer render, uint32_t now) { presentDirect(render, now, true); }
+
 void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha) {
     if (!alpha || backdropMoteCount == backdropMotes.size() || x < 0 || x >= W ||
-        y < -theme::FullBackdropMargin || y >= H + theme::FullBackdropMargin ||
+        y < -PanelHeight || y >= H + PanelHeight ||
         (y >= 0 && y < H)) return;
     backdropMotes[backdropMoteCount++] = {static_cast<int16_t>(x), static_cast<int16_t>(y), colour, alpha};
 }
 
 void present() {
-    if (!displayReady || !canvasReady) {
+    if (!displayReady || !canvasReady || cyd_controls::visionsImmersive()) {
         backdropMoteCount = 0;
         return;
     }
 #ifdef GRIM_CYD_DIAGNOSTICS
     const uint32_t start = micros();
 #endif
+    const auto orientation = cyd_controls::orientation();
+    const bool portrait = orientationTransform(orientation).portrait;
+    const bool rotated = orientation != displayOrientation;
+    if (rotated) rotateDisplay(orientation);
+    const int screenWidth = lcd.width();
+    const int left = cyd_controls::viewportLeft();
     const int top = cyd_controls::viewportTop();
     const int viewHeight = cyd_controls::viewportHeight();
     const int clipBottom = cyd_controls::viewportBottom();
-    static int marginOrigin = 0;
+    const int sceneBottom = top + viewHeight;
+    const bool hasMargins = top > 0 || sceneBottom < clipBottom;
+    static int marginOrigin = -1, marginClip = -1;
     static std::array<uint16_t, 8> previousBackdrop{};
     lcd.startWrite();
-    if (top > 0) {
+    if (hasMargins) {
         const auto &colours = theme::palette();
         const std::array<uint16_t, 8> backdrop{
             colours.background, colours.ember, colours.dusk, colours.bone, colours.gradientTop,
             colours.gradientBottom, static_cast<uint16_t>(colours.backgroundStyle),
             static_cast<uint16_t>(colours.gradientMode),
         };
-        if (marginOrigin != top || backdrop != previousBackdrop) {
+        if (fullscreenFrameWritten || rotated || marginOrigin != top || marginClip != clipBottom || backdrop != previousBackdrop) {
             theme::drawBackdropMargins(lcd, top, colours);
             previousBackdrop = backdrop;
         } else {
@@ -443,13 +532,17 @@ void present() {
             }
         }
     }
-    marginOrigin = top > 0 ? top : 0;
+    marginOrigin = hasMargins ? top : -1;
+    marginClip = hasMargins ? clipBottom : -1;
     backdropDamage = {};
-    lcd.setClipRect(0, 0, ScreenW, clipBottom);
-    constexpr float scale = static_cast<float>(ScreenW) / W;
-    cv.pushRotateZoom(0, top, 0, scale, scale);
+    fullscreenFrameWritten = false;
+
+    const float scale = static_cast<float>(cyd_controls::viewportWidth()) / W;
+    lcd.setClipRect(0, 0, screenWidth, clipBottom);
+    if (portrait) cv.pushSprite(left, top);
+    else cv.pushRotateZoom(left, top, 0, scale, scale);
     lcd.clearClipRect();
-    if (top > 0) drawBackdropMotes(top, top + viewHeight);
+    if (hasMargins) drawBackdropMotes(left, top, sceneBottom, screenWidth, clipBottom);
     backdropMoteCount = 0;
     cyd_controls::draw(lcd);
     lcd.endWrite();

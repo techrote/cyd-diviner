@@ -32,4 +32,10 @@ extern const Rite RITE_PULSE;
 extern const Rite RITE_PROBE;
 #ifdef GRIM_CYD
 extern const Rite RITE_PALETTE;
+void drawVisionsMenuBackdrop(uint32_t now);
+void queueVisionsMenuMote(int x, int y, uint8_t alpha);
+void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now);
+int menuBackdropKey();
+void releaseVisionsMenuBackdrop();
+void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now);
 #endif

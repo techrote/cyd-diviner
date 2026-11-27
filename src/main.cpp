@@ -18,6 +18,9 @@
 using namespace theme;
 
 namespace {
+#ifdef GRIM_CYD
+const Rite Settings{"SETTINGS", "settings", "display, sound, and palettes", nullptr, nullptr, nullptr, nullptr};
+#endif
 const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
                              &RITE_WIRED,  &RITE_VISIONS, &RITE_ORACLE,
                              &RITE_LINK,   &RITE_SCRY,   &RITE_LISTEN,
@@ -27,7 +30,7 @@ const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
 #endif
                              &RITE_SENTINEL, &RITE_PULSE,
 #ifdef GRIM_CYD
-                             &RITE_PALETTE,
+                             &Settings,
 #else
                              &RITE_PROBE,
 #endif
@@ -50,39 +53,56 @@ struct Mote {
     uint8_t life;
 } motes[18];
 
+struct MoteBounds { int top, bottom; };
+
+MoteBounds moteBounds() {
 #ifdef GRIM_CYD
-constexpr int MoteMargin = 22; // The centered viewport has 30 physical pixels above and below it.
+    if (cyd_controls::isPortrait()) {
+        const int top = cyd_controls::viewportTop();
+        return {-top, cyd_controls::viewportBottom() - top};
+    }
+    constexpr int margin = 22; // 30 physical pixels at landscape scale.
+    return {-margin, hal::H + margin};
 #else
-constexpr int MoteMargin = 0;
+    return {0, hal::H};
 #endif
-constexpr int MoteTop = -MoteMargin, MoteBottom = hal::H + MoteMargin;
+}
 
 void motesInit() {
+    const auto [top, bottom] = moteBounds();
     for (auto &m : motes) {
         m.x = rand() % hal::W;
-        m.y = MoteTop + rand() % (MoteBottom - MoteTop);
+        m.y = top + rand() % (bottom - top);
         m.vy = 0.15f + (rand() % 100) / 220.f;
         m.life = rand() % 255;
     }
 }
 void motesDraw() {
     Canvas &cv = hal::canvas();
-    const bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
+    const auto [top, bottom] = moteBounds();
+    bool styled = palette().backgroundStyle != BackgroundStyle::Flat;
 #ifdef GRIM_CYD
-    const bool centered = cyd_controls::viewportTop() > 0;
+    const bool nativeMenu = mode == MENU && cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme;
+    const bool hasMargins = cyd_controls::viewportTop() > 0;
 #endif
     for (auto &m : motes) {
         m.y -= m.vy;
         m.life += 3;
-        if (m.y < MoteTop) {
-            m.y = MoteBottom;
+        if (m.y < top || m.y > bottom) {
+            m.y = bottom - 1;
             m.x = rand() % hal::W;
         }
         uint8_t a = (uint8_t)(128 + 127 * sinf(m.life * 0.0245f));
         const int x = static_cast<int>(m.x), y = static_cast<int>(floorf(m.y));
+#ifdef GRIM_CYD
+        if (nativeMenu) {
+            queueVisionsMenuMote(x, y, a);
+            continue;
+        }
+#endif
         if (y < 0 || y >= hal::H) {
 #ifdef GRIM_CYD
-            if (centered && a) hal::queueBackdropMote(x, y, C_EMBER, a);
+            if (hasMargins && a) hal::queueBackdropMote(x, y, C_EMBER, a);
 #endif
             continue;
         }
@@ -174,9 +194,15 @@ void card(const Rite &r, int cx, bool centre, float reveal = 0.f) {
         const int tagY = y - 13, subtitleY = y + h + 5;
         const auto tagAlpha = static_cast<uint8_t>(255 * smoothstep(0.4f, 1.f, reveal));
         const auto subtitleAlpha = static_cast<uint8_t>(255 * smoothstep(0.55f, 1.f, reveal));
-        if (tagAlpha) textCentre("- rite -", cx, tagY, blend(C_DIM, cv.readPixel(cx, tagY + 4), tagAlpha));
-        if (subtitleAlpha) textCentre(r.name, cx, subtitleY,
-                                      blend(C_BONE, cv.readPixel(cx, subtitleY + 4), subtitleAlpha));
+        const auto backdropAt = [&](int y) {
+            const uint16_t colour = cv.readPixel(cx, y);
+#ifdef GRIM_CYD
+            if (colour == menuBackdropKey()) return C_VOID;
+#endif
+            return colour;
+        };
+        if (tagAlpha) textCentre("- rite -", cx, tagY, blend(C_DIM, backdropAt(tagY + 4), tagAlpha));
+        if (subtitleAlpha) textCentre(r.name, cx, subtitleY, blend(C_BONE, backdropAt(subtitleY + 4), subtitleAlpha));
     } else {
         glyphsCentre(font, r.glyph, cx, y + 4, C_BLOOD);
     }
@@ -184,9 +210,22 @@ void card(const Rite &r, int cx, bool centre, float reveal = 0.f) {
 
 void drawMenu(uint32_t now) {
     Canvas &cv = hal::canvas();
+#ifdef GRIM_CYD
+    drawVisionsMenuBackdrop(now);
+#else
     theme::drawBackground(cv);
+#endif
+#ifdef GRIM_CYD
+    if (cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Rain) motesDraw();
+    if (cyd_controls::carouselSettingsVisible()) {
+        cyd_controls::drawCarouselSettings(menuBackdropKey());
+        return;
+    }
+    header("GRIMOIRE", "grimoire", menuBackdropKey());
+#else
     motesDraw();
     header("GRIMOIRE", "grimoire");
+#endif
 
     slide += (sel - slide) * 0.35f;
     if (fabsf(sel - slide) < 0.01f) slide = sel;
@@ -228,11 +267,18 @@ void drawMenu(uint32_t now) {
 #endif
 }
 
-void open(int i) {
+void open(const Rite *rite) {
     uisfx::trigger(uisfx::OPEN);
-    active = RITES[i];
+#ifdef GRIM_CYD
+    if (rite == &Settings) {
+        cyd_controls::openCarouselSettings();
+        return;
+    }
+#endif
+    active = rite;
     mode = RITE;
 #ifdef GRIM_CYD
+    releaseVisionsMenuBackdrop();
     cyd_controls::setRite(active);
 #endif
     if (active->enter) active->enter();
@@ -247,11 +293,15 @@ void close() {
     hal::setAudio(nullptr);
     if (active && active->leave) active->leave();
     uisfx::trigger(uisfx::BACK);
+#ifdef GRIM_CYD
+    const bool returnToSettings = active == &RITE_PALETTE;
+#endif
     active = nullptr;
     mode = MENU;
     selAt = hal::ms();
 #ifdef GRIM_CYD
     cyd_controls::setRite(nullptr);
+    if (returnToSettings) cyd_controls::openCarouselSettings();
 #endif
 #ifdef GRIM_CYD_DIAGNOSTICS
     Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
@@ -301,6 +351,17 @@ void grimLoop() {
         }
         if (mode == MENU) {
             if (volumeKey(k)) continue;
+#ifdef GRIM_CYD
+            if (cyd_controls::carouselSettingsVisible()) {
+                if (k.nav == hal::N_ESC) {
+                    cyd_controls::backCarouselSettings();
+                    uisfx::trigger(uisfx::BACK);
+                } else if (k.ch == 'p') {
+                    open(&RITE_PALETTE);
+                }
+                continue;
+            }
+#endif
 #ifndef GRIM_CYD
             if (k.nav == hal::N_ESC) {
                 if (escArmedAt) hal::backToLauncher();
@@ -312,8 +373,8 @@ void grimLoop() {
 #endif
             if (k.nav == hal::N_LEFT || k.nav == hal::N_UP) { sel = (sel + N_RITES - 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_RIGHT || k.nav == hal::N_DOWN) { sel = (sel + 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
-            else if (k.nav == hal::N_ENTER) open(sel);
-            else if (k.ch >= '1' && k.ch < '1' + N_RITES) open(sel = k.ch - '1');
+            else if (k.nav == hal::N_ENTER) open(RITES[sel]);
+            else if (k.ch >= '1' && k.ch < '1' + N_RITES) open(RITES[sel = k.ch - '1']);
             // keep the carousel from spinning the long way round on wrap
             if (sel - slide > N_RITES / 2.f) slide += N_RITES;
             if (slide - sel > N_RITES / 2.f) slide -= N_RITES;
@@ -333,6 +394,17 @@ void grimLoop() {
     }
 
     uint32_t now = hal::ms();
+#ifdef GRIM_CYD
+    if (active == &RITE_VISIONS && cyd_controls::visionsImmersive()) {
+        hal::drawVisionsFullscreen(drawVisionsNative, now);
+        const uint32_t spent = hal::ms() - start;
+        hal::idle(spent < FRAME_MS ? FRAME_MS - spent : 1);
+        return;
+    }
+#endif
+#ifdef GRIM_CYD_DIAGNOSTICS
+    const uint32_t drawStart = micros();
+#endif
     if (mode == SPLASH) {
         drawSplash(now);
         if (now - t0 > 2600) finishSplash(now);
@@ -349,7 +421,17 @@ void grimLoop() {
         }
 #endif
     }
-    hal::present();
+#ifdef GRIM_CYD_DIAGNOSTICS
+    hal::setFrameDrawUs(micros() - drawStart);
+#endif
+#ifdef GRIM_CYD
+    if (mode == MENU && cyd_controls::menuBackdrop() != cyd_controls::MenuBackdrop::Theme) {
+        hal::presentNativeMenu(renderNativeMenuBackdrop, now);
+    } else
+#endif
+    {
+        hal::present();
+    }
     uint32_t spent = hal::ms() - start;
     hal::idle(spent < FRAME_MS ? FRAME_MS - spent : 1);
 }
