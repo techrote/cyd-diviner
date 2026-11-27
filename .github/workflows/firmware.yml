@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, cyd-profile-link, cyd-profile-color, cyd-profile-audio, kernel-esp32, kernel-s3, kernel-s3-n4r2, kernel-s3-n4r2-peer, kernel-s3-n4r2-audio, kernel-c3]
+        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, cyd-profile-link, cyd-profile-color, cyd-profile-audio, kernel-esp32, kernel-esp32-audio, kernel-s3, kernel-s3-n4r2, kernel-s3-n4r2-peer, kernel-s3-n4r2-audio, kernel-c3]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
