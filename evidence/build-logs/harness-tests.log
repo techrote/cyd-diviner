@@ -32,6 +32,12 @@ r002_1 kernel (kernel)
 r003_1 spi (spi)
 r004_1 pcm (10s)
 test_scene_kernel_spi_and_pcm_end_to_end (test_capture_mission.MissionProtocolTests.test_scene_kernel_spi_and_pcm_end_to_end) ... ok
+test_changed_raw_artifact_and_stale_figures_are_rejected (test_publish_evidence.PublicationTests.test_changed_raw_artifact_and_stale_figures_are_rejected) ... ok
+test_completed_snapshot_publishes_compact_data_and_archive_member_links (test_publish_evidence.PublicationTests.test_completed_snapshot_publishes_compact_data_and_archive_member_links) ... ok
+test_incomplete_status_and_missing_planned_repetitions_are_rejected (test_publish_evidence.PublicationTests.test_incomplete_status_and_missing_planned_repetitions_are_rejected) ... ok
+test_publication_cannot_write_into_raw_folder_or_overwrite_existing_output (test_publish_evidence.PublicationTests.test_publication_cannot_write_into_raw_folder_or_overwrite_existing_output) ... ok
+test_stress_csv_rows_preserve_identity_and_warmup_relative_timestamps (test_publish_evidence.PublicationTests.test_stress_csv_rows_preserve_identity_and_warmup_relative_timestamps) ... ok
+test_wrong_archive_prefix_or_member_bytes_cannot_pass_provenance (test_publish_evidence.PublicationTests.test_wrong_archive_prefix_or_member_bytes_cannot_pass_provenance) ... ok
 test_actual_allocation_and_duration_differences_split_pooling_scope (test_report.ReportTests.test_actual_allocation_and_duration_differences_split_pooling_scope) ... ok
 test_corrupt_histogram_and_false_completion_not_reported_as_measured (test_report.ReportTests.test_corrupt_histogram_and_false_completion_not_reported_as_measured) ... ok
 test_host_receive_time_does_not_split_matching_repetitions_or_invent_cpu (test_report.ReportTests.test_host_receive_time_does_not_split_matching_repetitions_or_invent_cpu) ... ok
@@ -39,6 +45,6 @@ test_human_bounds_cap_at_observed_max_without_mutating_raw_histogram (test_repor
 test_preflight_missing_stress_wireless_and_analog_remain_unknown (test_report.ReportTests.test_preflight_missing_stress_wireless_and_analog_remain_unknown) ... ok
 
 ----------------------------------------------------------------------
-Ran 31 tests in 1.282s
+Ran 37 tests in 1.719s
 
 OK
