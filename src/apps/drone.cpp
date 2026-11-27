@@ -29,7 +29,6 @@ const Scale SCALES[] = {
     {"hijaz", {0, 1, 4, 5, 7, 8, 10}, 7},    {"fifths", {0, 7, 0, 7, 0, 7, 0}, 2},
 };
 constexpr int N_SCALES = sizeof(SCALES) / sizeof(SCALES[0]);
-const char *NOTE_NAMES[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
 // A style is the instrument, independent of the scale: how the bells are
 // struck (2-op FM ratio/index/decay, register, density, clusters), what the
@@ -357,18 +356,13 @@ void draw(uint32_t now) {
     char b[40];
     int px = 132;
     frame(px - 4, 24, 110, 92, C_CLOT, C_UMBER);
-    snprintf(b, sizeof b, "%s%d", NOTE_NAMES[s.root % 12], s.root / 12 - 1);
+    snprintf(b, sizeof b, "%s%d", noteName(s.root), s.root / 12 - 1);
     text("root", px, 29, C_DIM);
     text(b, px + 40, 26, C_GLOW, 2);
     text("mode", px, 46, C_DIM);
     text(SCALES[s.scale].name, px + 40, 46, C_BONE);
-    auto bar = [&](const char *label, float v, int y) {
-        text(label, px, y, C_DIM);
-        cv.drawRect(px + 40, y + 1, 60, 6, C_CLOT);
-        cv.fillRect(px + 41, y + 2, (int)(58 * v), 4, C_RUST);
-    };
-    bar("light", s.bright, 58);
-    bar("drift", s.drift, 70);
+    meter("light", px, 58, px + 40, 60, s.bright);
+    meter("drift", px, 70, px + 40, 60, s.drift);
     snprintf(b, sizeof b, "%s %s %s", s.safeMode ? "SAFE" : (s.wind ? "WIND" : "wind"), s.bells ? "BELL" : "bell",
              s.freeze ? "HOLD" : "flow");
     text(b, px, 84, s.safeMode ? C_GLOW : (s.freeze ? C_GLOW : C_EMBER));

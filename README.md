@@ -29,6 +29,8 @@ blood-and-ember aesthetic, with a hand-rasterised Daedric glyph font.
 |---|---|---|
 | ![drone](docs/previews/drone.png) | ![seq](docs/previews/seq.png) | ![beat](docs/previews/beat.png) |
 | **drone** — generative drone box: 5 drifting voices, resonant LP, wind, FM bells, dark delay; **6 styles on `p`** (temple, tubular, bowl, kalimba, gong, ice) | **seq** — groovebox: kick/snare/hat/acid, euclid fills, **4 pattern banks + song mode + save/load** | **beat** — bytebeat livecoder: type a C expression in `t`, hear it instantly |
+| ![canon](docs/previews/canon.png) | ![spectra](docs/previews/spectra.png) | |
+| **canon** — one phrase on four tape-loop reels of slightly different lengths, drifting out of phase into endless counterpoint; type your own phrase on the piano row | **spectra** — the air sings: every nearby Wi-Fi AP or BLE device becomes a choir voice (address → note, signal → loudness), arrivals bloom, departures sigh; waterfall of the air | |
 
 ### ◈ sight
 | | | |

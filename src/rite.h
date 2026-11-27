@@ -17,6 +17,8 @@ struct Rite {
 extern const Rite RITE_DRONE;
 extern const Rite RITE_SEQ;
 extern const Rite RITE_BEAT;
+extern const Rite RITE_CANON;
+extern const Rite RITE_SPECTRA;
 extern const Rite RITE_WIRED;
 extern const Rite RITE_VISIONS;
 extern const Rite RITE_ORACLE;
