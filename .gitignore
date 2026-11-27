@@ -2,3 +2,4 @@
 *.ppm
 *.wav
 compile_commands.json
+__pycache__/

@@ -1,0 +1,141 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "duration_ms": 10000,
+  "warmup_ms": 2000,
+  "workloads": [
+    {
+      "name": "menu/landscape/theme",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu"
+      ],
+      "orientation": "landscape",
+      "backdrop": "theme",
+      "audio": "local_dac"
+    },
+    {
+      "name": "visions/landscape/fullscreen/gate-trails",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "layered": true,
+      "trail_format": "indexed",
+      "audio": "local_dac"
+    },
+    {
+      "name": "audio/drone/landscape/local",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene drone"
+      ],
+      "orientation": "landscape",
+      "audio": "local_dac",
+      "scene": "drone"
+    },
+    {
+      "name": "audio/drone/local-and-pcm",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene drone"
+      ],
+      "audio": "local_dac_and_usb_pcm",
+      "pcm": true,
+      "scene": "drone"
+    },
+    {
+      "name": "sustained/cpu-both-cores",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene menu"
+      ],
+      "stress_seconds": 365,
+      "warmup_ms": 0,
+      "duration_ms": 365000,
+      "repetitions": 1,
+      "limitation": "Near 100% CPU requires measured busy percentages; sensor indication is uncalibrated unless independently calibrated."
+    },
+    {
+      "name": "post-stress/visions-fullscreen-layered",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "audio": "local_dac",
+      "effect": "gate-trails",
+      "fullscreen": true,
+      "layered": true
+    },
+    {
+      "name": "physical/contact-to-photon",
+      "status": "NOT RUN",
+      "reason": "Requires owner-operated physical touch stimulus and external optical timing fixture."
+    },
+    {
+      "name": "audio/usb-only-dac-disabled",
+      "status": "NOT RUN",
+      "reason": "Existing PCM streams the same mixed blocks sent to the local DAC; independent DAC-disable path is not assumed."
+    },
+    {
+      "name": "audio/external-dac-loopback",
+      "status": "NOT RUN",
+      "reason": "External acquisition fixture required to detect analog gaps/distortion independently."
+    },
+    {
+      "name": "wireless/wifi-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized owned AP/peer and configured traffic endpoint; no network probes are automatic."
+    },
+    {
+      "name": "wireless/ble-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized BLE peer; no scans/probes of unrelated devices."
+    },
+    {
+      "name": "wireless/espnow-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized ESP-NOW peer and owned channel."
+    },
+    {
+      "name": "wireless/coexistence",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized Wi-Fi/BLE/ESP-NOW peers and separately captured local-workload baseline."
+    },
+    {
+      "name": "portable/esp32-s3-physical",
+      "status": "NOT RUN",
+      "reason": "Physical S3 board identity/backup/flash authorization required; compile-only is distinct evidence."
+    },
+    {
+      "name": "portable/esp32-c3-physical",
+      "status": "NOT RUN",
+      "reason": "Physical C3 board identity/backup/flash authorization required; compile-only is distinct evidence."
+    }
+  ]
+}

@@ -10,6 +10,7 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include "../perf_profile.h"
 #include <algorithm>
 #include <array>
 #include <math.h>
@@ -111,7 +112,7 @@ struct TrailHistory {
         }
 #if defined(GRIM_DEVICE) && defined(GRIM_CYD_DIAGNOSTICS)
         const auto after = heap_caps_get_free_size(HeapCaps);
-        Serial.printf("Diviner trails format=%s payload=%u heap_before=%u heap_after=%u heap_delta=%d largest=%u\n",
+        if (perf_profile::quiet()) Serial.printf("Diviner trails format=%s payload=%u heap_before=%u heap_after=%u heap_delta=%d largest=%u\n",
                       indexed ? "LUT8" : rgb444 ? "RGB444" : "RGB565", unsigned(bandBytes * bands.size()),
                       unsigned(before), unsigned(after), int(before) - int(after),
                       unsigned(heap_caps_get_largest_free_block(HeapCaps)));
@@ -792,7 +793,7 @@ void prepareVision() {
     if (base == Ashfire && !s.fire) s.fire.reset(new (std::nothrow) Fire);
     if (wantsHistory && !s.history.ready() && (base != Gate || s.tunnel)) s.history.allocate(indexed);
 #if defined(GRIM_DEVICE) && defined(GRIM_CYD_DIAGNOSTICS)
-    Serial.printf("Diviner layers effect=%s heap=%u largest=%u\n",
+    if (perf_profile::quiet()) Serial.printf("Diviner layers effect=%s heap=%u largest=%u\n",
                   s.layered ? LayerNames[base] : NAMES[base], unsigned(heap_caps_get_free_size(HeapCaps)),
                   unsigned(heap_caps_get_largest_free_block(HeapCaps)));
 #endif
@@ -1123,3 +1124,20 @@ void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now) {
 #endif
 
 const Rite RITE_VISIONS = {"VISIONS", "visions", "plasma, fire, rain, feedback trails", enter, leave, onKey, draw};
+
+#ifdef GRIM_PERF
+bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_t seed) {
+    if (!S || effect >= N_VIS) return false;
+    // Rebuild visual history outside measurement; preserve the callback state.
+    hal::setAudio(nullptr);
+    S->history.release(); S->tunnel.reset(); S->fire.reset();
+    S->vis = static_cast<Vision>(effect); S->layered = layered;
+    S->history.rgb444 = format == 0; S->paused = false; S->sound = true; S->t = 0; S->speed = 1;
+    S->visualRng.s = seed; S->rng.s = seed ^ 0xA5A5A5A5;
+    memset(S->drops, 0, sizeof(S->drops));
+    S->tone.phase = S->tone2.phase = S->lfo.phase = 0;
+    prepareVision(); retone();
+    hal::setAudio(render);
+    return true;
+}
+#endif

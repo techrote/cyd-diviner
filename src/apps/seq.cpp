@@ -8,10 +8,12 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include "../perf_profile.h"
 #ifdef GRIM_CYD
 #include "../cyd_controls.h"
 #endif
 #include <new>
+#include <initializer_list>
 #include <stdio.h>
 #include <string.h>
 #ifdef GRIM_DEVICE
@@ -183,7 +185,7 @@ void rollBass() {
 }
 
 
-#ifdef GRIM_DEVICE
+#if defined(GRIM_DEVICE) && !defined(GRIM_PERF)
 void saveSong() {
     Preferences pr;
     if (!pr.begin("grimseq", false)) return;
@@ -210,12 +212,26 @@ void loadSong() {}
 #endif
 
 void enter() {
-    if (!S) {
+#ifdef GRIM_PERF
+    hal::setAudio(nullptr);
+    if (S) {
+        delete S->delay;
+        S->~State();
+        new (S) State();
+    }
+    const bool initialize = true;
+#else
+    const bool initialize = !S;
+#endif
+    if (initialize) {
 #ifdef GRIM_CYD
         static State state;
         S = &state;
 #else
         S = new State();
+#endif
+#ifdef GRIM_PERF
+        S->noise.s = perf_profile::seed();
 #endif
         S->kickAmp.time(0.32f);
         S->kickPitch.time(0.035f);
@@ -237,6 +253,15 @@ void enter() {
     }
 #ifdef GRIM_CYD
     if (!S->delay) S->delay = new (std::nothrow) Echo();
+#endif
+#ifdef GRIM_PERF
+    uint32_t patternHash = 2166136261u;
+    for (const auto &bank : S->bank) for (const auto &track : bank.pat) for (const auto &step : track) {
+        for (uint8_t value : {uint8_t(step.on), uint8_t(step.accent), uint8_t(step.slide), uint8_t(step.note)}) patternHash = (patternHash ^ value) * 16777619u;
+    }
+    char settings[256];
+    snprintf(settings, sizeof(settings), "\"bpm\":%d,\"swing\":%.3f,\"bass_root_midi\":%d,\"playing\":%s,\"pattern\":%d,\"pattern_fields_fnv1a32\":%u,\"echo_samples\":%d,\"echo_allocated\":%s", S->bpm, S->swing, S->bassRoot, S->playing ? "true" : "false", int(S->cur), patternHash, EchoSamples, S->echo() ? "true" : "false");
+    perf_profile::sceneSettings("seq", settings);
 #endif
     hal::setAudio(render);
 }

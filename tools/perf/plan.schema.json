@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/techrote/cyd-diviner/tools/perf/plan.schema.json",
+  "title": "CYD physical capture plan version 1",
+  "type": "object",
+  "required": ["schema", "workloads"],
+  "properties": {
+    "schema": {"const": "cyd-perf-plan/1"},
+    "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+    "repetitions": {"type": "integer", "minimum": 1, "maximum": 100},
+    "duration_ms": {"type": "integer", "minimum": 1, "maximum": 600000},
+    "warmup_ms": {"type": "integer", "minimum": 0, "maximum": 60000},
+    "workloads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "status": {"enum": ["NOT RUN"]},
+          "reason": {"type": "string"},
+          "kind": {"enum": ["kernel", "spi"]},
+          "commands": {"type": "array", "items": {"type": "string", "pattern": "^perf "}},
+          "pcm": {"type": "boolean"},
+          "stress_seconds": {"type": "number", "minimum": 360},
+          "repetitions": {"type": "integer", "minimum": 1, "maximum": 100},
+          "duration_ms": {"type": "integer", "minimum": 1, "maximum": 600000},
+          "warmup_ms": {"type": "integer", "minimum": 0, "maximum": 60000},
+          "kernel": {"type": "string"},
+          "kernel_samples": {"const": 256},
+          "samples": {"type": "integer", "minimum": 3, "maximum": 128},
+          "actions": {"type": "array", "items": {"type": "object", "required": ["at_ms", "command"]}}
+        }
+      }
+    }
+  }
+}
