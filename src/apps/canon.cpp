@@ -11,6 +11,7 @@
 #include "../rite.h"
 #include "../theme.h"
 #include <stdio.h>
+#include <new>
 #include <string.h>
 
 using namespace theme;
@@ -172,8 +173,8 @@ void render(int16_t *out, int n) {
 }
 
 void enter() {
-    if (!S) S = new State();
-    if (!S) return;
+    if (!S) S = new (std::nothrow) State();
+    if (!S) return; // no heap: the shell will show an empty rite, not reboot
     S->rng.s ^= hal::ms() * 2654435761u;
     S->tone.set(2400, 0.1f);
     retime();

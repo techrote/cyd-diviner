@@ -11,6 +11,7 @@
 #include "../rite.h"
 #include "../theme.h"
 #include <stdio.h>
+#include <new>
 #include <string.h>
 
 using namespace theme;
@@ -198,8 +199,8 @@ void startBand() {
 }
 
 void enter() {
-    if (!S) S = new State();
-    if (!S) return;
+    if (!S) S = new (std::nothrow) State();
+    if (!S) return; // no heap: the shell will show an empty rite, not reboot
     S->bellEnv.time(2.6f);
     S->bellModEnv.time(0.5f);
     startBand();

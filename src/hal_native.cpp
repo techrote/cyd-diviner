@@ -43,6 +43,7 @@ struct Board : public lgfx::LGFX_Device {
 Board *lcd = nullptr;
 Canvas *cv = nullptr;
 std::atomic<hal::AudioFn> audioFn{nullptr};
+std::atomic<bool> rendering{false};
 std::atomic<hal::AudioFn> overlayFn{nullptr};
 uint8_t vol = 140;
 
@@ -212,9 +213,11 @@ void runScript() {
 
 // --- audio -------------------------------------------------------------------
 void render(int16_t *out, int n, bool scale = true) {
+    rendering = true;
     hal::AudioFn fn = audioFn.load();
     if (fn) fn(out, n);
     else memset(out, 0, n * 2);
+    rendering = false;
     hal::AudioFn ofn = overlayFn.load(); // UI sfx mixed over the main voice
     if (ofn && n <= 4096) {
         int16_t ob[4096];
@@ -310,7 +313,10 @@ bool anyHeld() {
         if (st[i]) return true;
     return false;
 }
-void setAudio(AudioFn fn) { audioFn = fn; }
+void setAudio(AudioFn fn) {
+    audioFn = fn;
+    while (rendering) SDL_Delay(1); // let an in-flight block finish
+}
 void setOverlayAudio(AudioFn fn) { overlayFn = fn; }
 void setVolume(uint8_t v) { vol = v; }
 uint8_t volume() { return vol; }
