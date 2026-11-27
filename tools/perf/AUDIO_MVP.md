@@ -1,5 +1,9 @@
 # Tiny packetized PCM MVP and optional packetized PDM comparison
 
+For dual-board capture, validation and offline analysis commands, see the
+[audio evidence tools](AUDIO-MVP.md). This document describes the firmware
+method and its measurement limits.
+
 The default physical MVP is **synthetic multichannel PCM16 over ESP-NOW
 broadcast**, with bounded local buffering, deadline drops, no application
 retransmission and digital reconstruction/quality measurement. No microphone,

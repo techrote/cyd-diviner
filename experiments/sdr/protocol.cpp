@@ -64,9 +64,17 @@ struct Search {
     const std::vector<double> &sum;
     const ReceiveOptions &options;
     DecodeStats &stats;
+    double integral(double position) const {
+        const size_t n=size_t(position);
+        if(n+1>=sum.size())return sum.back();
+        return sum[n]+(position-n)*(sum[n+1]-sum[n]);
+    }
     double mean(double start,double period,unsigned symbol) const {
-        const size_t a=size_t(start+period*symbol),b=size_t(start+period*(symbol+1));
-        return b>a&&b<sum.size()?(sum[b]-sum[a])/double(b-a):0;
+        const double a=start+period*symbol,b=start+period*(symbol+1);
+        // Fractional sample windows avoid a whole-sample timing quantization
+        // when only four to six IQ samples represent a symbol. IQ metrics
+        // are piecewise constant over each sample's interval.
+        return b>a&&b<sum.size()?(integral(b)-integral(a))/(b-a):0;
     }
     bool candidate(double start,double period,Frame &frame,double &threshold,double &contrast) {
         if(start+period*(TrainingSymbols+SyncSymbols+HeaderBytes*8)>=sum.size())return false;
@@ -105,7 +113,7 @@ struct Search {
 }
 bool demodulate(const IQ *iq,size_t count,const ReceiveOptions &o,FrameSink sink,void *context,DecodeStats &stats) {
     stats=DecodeStats{};stats.input_samples=count;
-    if(!iq||!count||count>10000000||!sink||!std::isfinite(o.sample_rate_hz)||!std::isfinite(o.symbol_rate)||o.symbol_rate<=0||o.sample_rate_hz/o.symbol_rate<8||o.sample_rate_hz/o.symbol_rate>1024||!std::isfinite(o.clock_search_ppm)||o.clock_search_ppm<0||o.clock_search_ppm>20000||!std::isfinite(o.clock_step_ppm)||o.clock_step_ppm<=0||o.clock_step_ppm>20000||2*o.clock_search_ppm/o.clock_step_ppm>128)return false;
+    if(!iq||!count||count>10000000||!sink||!std::isfinite(o.sample_rate_hz)||!std::isfinite(o.symbol_rate)||o.symbol_rate<=0||o.sample_rate_hz/o.symbol_rate<4||o.sample_rate_hz/o.symbol_rate>1024||!std::isfinite(o.clock_search_ppm)||o.clock_search_ppm<0||o.clock_search_ppm>20000||!std::isfinite(o.clock_step_ppm)||o.clock_step_ppm<=0||o.clock_step_ppm>20000||2*o.clock_search_ppm/o.clock_step_ppm>128)return false;
     std::vector<double> sum(count+1,0);
     for(size_t i=0;i<count;++i) {
         if(!std::isfinite(iq[i].i)||!std::isfinite(iq[i].q))return false;
@@ -131,7 +139,7 @@ bool demodulate(const IQ *iq,size_t count,const ReceiveOptions &o,FrameSink sink
         if(!found)continue;
         // Refine sample phase after finding a CRC-valid header; no payload CRC
         // or known payload is used to choose the clock or accept the frame.
-        for(double p=std::max(0.,position-scanStep);p<=position+nominal/2;p+=1)consider(p);
+        for(double p=std::max(0.,position-scanStep);p<=position+nominal/2;p+=.25)consider(p);
         search.payload(bestStart,bestPeriod,bestThreshold,bestContrast,best);
         if(previous){const uint16_t delta=uint16_t(best.sequence-last);if(!delta)++stats.duplicates;else if(delta>1&&delta<32768)stats.sequence_gaps+=delta-1;}
         previous=true;last=best.sequence;++stats.frames;stats.payload_bits+=best.config.payload_bits;sink(best,context);

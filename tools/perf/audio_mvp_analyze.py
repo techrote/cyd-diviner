@@ -42,6 +42,7 @@ def analyze(result):
         row = {"run_id": run["run_id"], "workload": run["workload"], "status": run["status"],
                "analysis_status": run["status"], "scope": scope_id, "repetition": run["repetition"], "settings": run["settings"],
                "error": run.get("error"), "sender_summary": run.get("sender_summary"), "receiver_summary": run.get("receiver_summary")}
+        row["outside_window_temperature"] = run.get("outside_window_temperature", {"status": "NOT MEASURED"})
         if run["status"] == "MEASURED":
             try:
                 row["derived"] = validate_run(run, result["plan"].get("duration_ms", 3000), result["plan"].get("seed", 23063))

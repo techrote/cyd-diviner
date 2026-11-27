@@ -52,6 +52,7 @@ def summary(case, role, run_id="a001_1", duration=100):
 class AudioFirmware:
     commands = []
     fail_first_rx, failed = False, False
+    state_available = True
 
     def __init__(self, **_):
         self.chunks, self.active, self.role, self.run_id = [], False, "idle", "none"
@@ -73,6 +74,12 @@ class AudioFirmware:
         parts = command.split()
         if command == "perf info":
             self.emit({"type": "info", "source_sha": "a" * 40, "source_digest": "b" * 64, "profile": "fixture-audio"})
+        elif command == "perf sample":
+            if self.state_available:
+                self.emit({"type": "state", "run_id": "separate-profiler-context", "temperature_raw": 128,
+                           "temperature_method": "fixture_only_uncalibrated"})
+            else:
+                self.emit({"type": "error", "message": "fixture state unavailable"})
         elif command == "perf audio info":
             self.emit({"type": "audio_info", "configured": True, "session_authorized": True,
                 "role": self.role, "active": self.active, "radio_initialized": self.active,
@@ -131,16 +138,23 @@ class AudioCaptureTests(unittest.TestCase):
         with self.assertRaises(ValueError): validate_plan(plan)
 
     def test_rx_first_no_stream_queries_failed_case_continuation_and_private_session(self):
-        for fail in (False, True):
+        for fail, state_available in ((False, True), (True, True), (False, False)):
             with tempfile.TemporaryDirectory() as temporary:
                 args = arguments(pathlib.Path(temporary))
                 AudioFirmware.commands, AudioFirmware.fail_first_rx, AudioFirmware.failed = [], fail, False
+                AudioFirmware.state_available = state_available
                 with mock.patch.dict("sys.modules", {"serial": mock.Mock(Serial=AudioFirmware)}), mock.patch("audio_mvp_capture.time.perf_counter", Clock()), mock.patch("audio_mvp_capture.secrets.token_hex", return_value="cafebabe"):
                     self.assertEqual(capture(args), 2 if fail else 0)
                 result = json.loads((args.output / "results.json").read_text())
                 self.assertEqual(result["status"], "FAILED" if fail else "CAPTURE COMPLETE")
                 self.assertEqual(result["runs"][-1]["status"], "MEASURED")
                 self.assertIsNone(result["runs"][-1]["derived"]["one_way_latency_us"])
+                states = result["runs"][-1]["outside_window_temperature"]["endpoints"]
+                for state in states.values():
+                    self.assertEqual(state["status"], "MEASURED" if state_available else "NOT MEASURED")
+                    if state_available:
+                        self.assertEqual(state["records"][0]["run_id"], "separate-profiler-context")
+                        self.assertNotEqual(state["records"][0]["run_id"], result["runs"][-1]["run_id"])
                 commands = [command for _, command in AudioFirmware.commands]
                 for index, command in enumerate(commands):
                     if command.startswith("perf audio run "):

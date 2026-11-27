@@ -28,7 +28,17 @@ captures. Their two interrupted plans retain FAILED status. The 365-second
 stress window met the near-full CPU requirement; its raw temperature indication
 stayed at code 128 and does not establish a calibrated temperature or thermal
 rise. The initial S3 capture completed five windows before a truncated USB
-status record stopped it; complete S3 and wireless supplements remain pending.
+status record stopped it. That historical failure is preserved; the later
+[complete S3 internal/PSRAM matrix](../evidence/S3-COMPARISON.md) and
+[owned-peer wireless supplements](../evidence/WIRELESS-FINDINGS.md) are now
+closed and published separately. Expanded packed-colour, PCM and greenfield SDR
+work remains outside those closed captures; see the current mission status.
+
+The separately authorized SDR calibration stage now has
+[received-envelope evidence](../evidence/SDR-CALIBRATION-INTERPRETATION.md), with
+explicit receiver passband/sample-gap limits. Calibration envelope periodicity
+does not establish proprietary frame decoding, audio reconstruction or analog
+latency; subsequent experimental stages retain their own evidence scope.
 
 `cyd-profile-link` adds I2S events and explicitly commanded owned-peer traffic.
 `kernel-s3-n4r2-peer` adds the matching S3 endpoint and verified internal/PSRAM

@@ -1,0 +1,79 @@
+{
+  "schema": "greenfield_sdr_model_tests/1",
+  "evidence_class": "OFFLINE_MODEL",
+  "no_RF_measurement": true,
+  "cases": [
+    {
+      "case": "clean",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 6731.33958129,
+      "full_source_snr_db": 6.23699541958,
+      "header_crc_reject_candidates": 414
+    },
+    {
+      "case": "awgn20",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 6731.33958129,
+      "full_source_snr_db": 6.23699541958,
+      "header_crc_reject_candidates": 432
+    },
+    {
+      "case": "cfo5000",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 6731.33958129,
+      "full_source_snr_db": 6.23699541958,
+      "header_crc_reject_candidates": 412
+    },
+    {
+      "case": "clock2000ppm",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 6731.33958129,
+      "full_source_snr_db": 6.23699541958,
+      "header_crc_reject_candidates": 495
+    },
+    {
+      "case": "payload_burst16",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 16,
+      "full_source_zero_filled_missing_error_rms_lsb": 7206.91810406,
+      "full_source_snr_db": 5.64403368632,
+      "header_crc_reject_candidates": 414
+    },
+    {
+      "case": "header_error",
+      "frames_received": 7,
+      "frames_missing": 1,
+      "payload_bits_compared": 1792,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 8247.26777804,
+      "full_source_snr_db": 4.47282351045,
+      "header_crc_reject_candidates": 433
+    },
+    {
+      "case": "fsk_model",
+      "frames_received": 8,
+      "frames_missing": 0,
+      "payload_bits_compared": 2048,
+      "payload_bit_errors": 0,
+      "full_source_zero_filled_missing_error_rms_lsb": 6731.33958129,
+      "full_source_snr_db": 6.23699541958,
+      "header_crc_reject_candidates": 401
+    }
+  ],
+  "checks": 52896,
+  "valid": true
+}

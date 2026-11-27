@@ -1,5 +1,9 @@
 # Audio MVP evidence tools
 
+The matching [firmware method](AUDIO_MVP.md) defines buffering, deadlines,
+reconstruction and measurement limits; this document covers host execution
+and evidence handling.
+
 These tools keep three experiments separate: finite PCM16 packet streaming over
 ESP-NOW broadcast, finite packetized PDM streaming over ESP-NOW broadcast, and an
 offline continuous raw-PDM impairment model. Neither PDM experiment implements

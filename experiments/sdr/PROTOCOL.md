@@ -46,9 +46,11 @@ effective audio rate = actual baud * payload_bits / (frame_symbols*channels*OSR)
 ```
 
 For example, 2 kHz/two-channel/OSR4 and 4 kHz/mono/OSR4 each need 23,000
-symbols/s with 256-bit payloads. The host receiver requires at least eight
-IQ samples per symbol; 250 kS/s therefore permits at most 31,250 symbols/s
-under this requirement. Advertising a high source-rate code does not make
+symbols/s with 256-bit payloads. The revised host receiver accepts at least four
+IQ samples per symbol; 125 kS/s therefore permits at most 31,250 symbols/s
+under this input guard. The exact 125,000/23,000 = 5.43478 samples/symbol
+case has a separate synthetic validation cohort. This guard is not a claim
+that arbitrary RF filtering, timing jitter or SNR will decode at that rate. Advertising a high source-rate code does not make
 the radio or USB carry it: `--emit` reports both configured source rate and
 effective audio rate at the selected baud.
 
@@ -74,7 +76,9 @@ CRC. All payload bits are then emitted, with confidence diagnostics.
 
 The current search is per-frame batch clock recovery, not a streaming PLL.
 Input is capped at ten million IQ pairs, period-search grids at 129 points,
-and samples/symbol at 8–1,024. CRC-reject counts are **overlapping search
+and nominal samples/symbol at 4–1,024. Fractional sample-window integration
+and quarter-sample phase refinement avoid the whole-sample timing quantization
+that produced payload errors when the old guard alone was relaxed. CRC-reject counts are **overlapping search
 candidates**, not independent received packets or an RF error rate. Sequence
 gaps and duplicate decoded sequences are separate counters. Unknown headers,
 lost bit synchronization and false sync must remain inspectable.
@@ -145,4 +149,20 @@ invalid arguments/I/O return 2. The receiving host can create WAV files using
 the declared rate/channels, while preserving any mismatch with effective
 transport rate and any known capture gaps.
 
-`protocol-manifest.json` pins the source hashes and validated host-test scope.
+`protocol-manifest.json` and `host-validation.json` retain the original
+eight-sample receiver evidence. `protocol-manifest-low-sps.json`,
+`host-validation-low-sps.json` and `host-regression-low-sps.json` identify the
+revised host receiver and its separate validation cohort. The original
+`.pio/sdr-model-test` executable is retained; build the revised receiver as
+`.pio/sdr-model-test-low-sps` and run `--low-sps-tests` for its additional cohort.
+
+The new 43-case cohort includes sixteen independent fractional start phases at
+125 kS/s and 23 ksymbol/s, AWGN at 20 dB configured carrier SNR with +3,500 and
+−3,500 ppm transmitter clock offsets across eight phases each, accepted payload
+inversions, a rejected header followed by resynchronization, combined
+impairments and eight exact four-sample phase cases. Noise-only input and the
+below-four-sample guard are checked. These are ideal-passband, quantized-IQ
+model tests; they do not establish RF latency, filter tolerance or a guaranteed
+physical bit error rate. A byte-for-byte comparison of eight emitted frames,
+reference PCM and boxcar PCM against the retained original executable verifies
+that this receiver change does not alter the example transmitter stimulus.

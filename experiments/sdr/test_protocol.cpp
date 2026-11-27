@@ -31,14 +31,14 @@ struct Model {
     double baud=0,sample_rate=250000,noise_sigma=0,true_period=0;
     unsigned changed_payload_symbols=0;
 };
-static Model model(double snr,double cfo,double drift,unsigned burst,s::Modulation modulation,bool corruptHeader=false) {
-    Model m;m.baud=s::requiredBaud(m.config);m.true_period=m.sample_rate/(m.baud*(1+drift*1e-6));
+static Model model(double snr,double cfo,double drift,unsigned burst,s::Modulation modulation,bool corruptHeader=false,double sampleRate=250000,double lead=37.25) {
+    Model m;m.sample_rate=sampleRate;m.baud=s::requiredBaud(m.config);m.true_period=m.sample_rate/(m.baud*(1+drift*1e-6));
     s::PdmSource source;source.reset(23063);constexpr unsigned Count=8;
     for(unsigned seq=0;seq<Count;++seq){uint8_t bits[32],wire[s::MaxFrameSymbols];int16_t ideal[s::MaxAudioSamples];need(source.payload(m.config,bits,sizeof(bits),ideal));m.payloads.emplace_back(bits,bits+32);m.ideal.insert(m.ideal.end(),ideal,ideal+s::audioFrames(m.config)*m.config.channels);const size_t n=s::buildFrame(m.config,uint16_t(seq),bits,wire,sizeof(wire));need(n==368);m.symbols.insert(m.symbols.end(),wire,wire+n);}
     const size_t payloadStart=s::TrainingSymbols+s::SyncSymbols+s::HeaderBytes*8;
     for(unsigned i=0;i<std::min<unsigned>(burst,m.config.payload_bits);++i){m.symbols[2*368+payloadStart+i]^=1;++m.changed_payload_symbols;}
     if(corruptHeader)m.symbols[3*368+s::TrainingSymbols+s::SyncSymbols+3]^=1;
-    const double lead=37.25;const size_t count=size_t(std::ceil(lead+m.true_period*m.symbols.size()+m.true_period*4));m.iq.resize(count);
+    const size_t count=size_t(std::ceil(lead+m.true_period*m.symbols.size()+m.true_period*4));m.iq.resize(count);
     m.noise_sigma=.8/std::sqrt(2*std::pow(10.,snr/10));uint32_t state=0x56b47u;double phase=0;
     for(size_t n=0;n<count;++n){const double symbol=(double(n)-lead)/m.true_period;const bool in=symbol>=0&&symbol<m.symbols.size();const unsigned bit=in?m.symbols[size_t(symbol)]:0;const double frequency=cfo+(modulation==s::Modulation::Fsk2?(bit?m.sample_rate/32:-m.sample_rate/32):0);phase+=2*Pi*frequency/m.sample_rate;const double amplitude=modulation==s::Modulation::Fsk2?.8:(bit?.8:.04);double i=amplitude*std::cos(phase)+normal(state)*m.noise_sigma,q=amplitude*std::sin(phase)+normal(state)*m.noise_sigma;
         // Quantized int8 IQ is the actual model/demod boundary, matching the
@@ -70,6 +70,54 @@ static void tests() {
     need(s::demodulate(noise.data(),noise.size(),bounded,Capture::sink,&empty,noiseStats));need(empty.frames.empty());
     bounded.clock_search_ppm=4000;bounded.clock_step_ppm=1e-12;need(!s::demodulate(noise.data(),noise.size(),bounded,Capture::sink,&empty,noiseStats));
     std::printf("],\"checks\":%llu,\"valid\":true}\n",(unsigned long long)checks);
+}
+// Separate cohort: retain the original host-validation.json as historical evidence.
+static void lowSpsTests() {
+    std::printf("{\"schema\":\"greenfield_sdr_low_sps_tests/1\",\"evidence_class\":\"OFFLINE_MODEL\",\"no_RF_measurement\":true,\"wire_or_source_algorithm_changed\":false,\"cases\":[");
+    struct Case {const char *name;double rate,snr,drift,lead;unsigned burst;bool header;};
+    std::vector<Case> cases;
+    // Independently vary the first edge over an entire symbol, including
+    // sub-sample phases. These are separate IQ realizations, not shifted
+    // decoder output compared against itself.
+    for(unsigned phase=0;phase<16;++phase)
+        cases.push_back({"phase_sweep",125000,100,0,37.+phase*(125000./23000)/16.,0,false});
+    for(unsigned phase=0;phase<8;++phase) {
+        const double lead=19.125+phase*(125000./23000)/8.;
+        cases.push_back({"awgn20_drift_positive",125000,20,3500,lead,0,false});
+        cases.push_back({"awgn20_drift_negative",125000,20,-3500,lead,0,false});
+    }
+    cases.push_back({"payload_burst16",125000,100,0,37.25,16,false});
+    cases.push_back({"header_error_resync",125000,100,0,37.25,0,true});
+    cases.push_back({"combined_impairments",125000,20,2000,41.75,16,true});
+    for(unsigned phase=0;phase<8;++phase)
+        cases.push_back({"four_sps_boundary",92000,30,0,23.+phase/2.,0,false});
+    bool first=true;
+    for(const auto &c:cases) {
+        const auto m=model(c.snr,5000,c.drift,c.burst,s::Modulation::Ook,c.header,c.rate,c.lead);
+        s::ReceiveOptions opts;opts.sample_rate_hz=m.sample_rate;opts.symbol_rate=m.baud;
+        Capture decoded;s::DecodeStats stats;
+        need(s::demodulate(m.iq.data(),m.iq.size(),opts,Capture::sink,&decoded,stats));
+        const auto q=quality(m,decoded);
+        if(q.received_frames!=(c.header?7u:8u)||(!c.burst&&q.bit_errors)||q.bit_errors<c.burst) {
+            std::fprintf(stderr,"Low-SPS case %s rate %.1f phase %.12g drift %.1f: frames %llu errors %llu\n",c.name,c.rate,c.lead,c.drift,(unsigned long long)q.received_frames,(unsigned long long)q.bit_errors);
+            need(false);
+        }
+        need(q.received_frames==(c.header?7u:8u));need(c.burst?q.bit_errors>=c.burst:q.bit_errors==0);
+        for(const auto &frame:decoded.frames) {
+            need(frame.config.channels==2&&frame.config.oversample==4&&frame.config.source_rate_hz==2000);
+            need(frame.recovered_samples_per_symbol>=3.9&&frame.recovered_samples_per_symbol<=5.6);
+        }
+        std::printf("%s{\"case\":\"%s\",\"iq_sample_rate_hz\":%.12g,\"symbol_rate\":%.12g,\"nominal_samples_per_symbol\":%.12g,\"first_symbol_sample\":%.12g,\"snr_on_carrier_db\":%.12g,\"cfo_hz\":5000,\"clock_drift_ppm\":%.12g,\"payload_symbols_inverted\":%u,\"header_symbol_inverted\":%s,\"frames_source\":8,\"frames_received\":%llu,\"frames_missing\":%llu,\"payload_bits_compared\":%llu,\"payload_bit_errors\":%llu,\"sequence_gaps\":%llu,\"header_crc_reject_candidates\":%llu}",first?"":",",c.name,m.sample_rate,m.baud,m.sample_rate/m.baud,c.lead,c.snr,c.drift,c.burst,c.header?"true":"false",(unsigned long long)q.received_frames,(unsigned long long)q.missing_frames,(unsigned long long)q.compared_bits,(unsigned long long)q.bit_errors,(unsigned long long)stats.sequence_gaps,(unsigned long long)stats.header_crc_rejects);
+        first=false;
+    }
+    // Boundary validation is explicit; <4 SPS is unsupported. Pure noise
+    // at the newly admitted sample density must not become a known frame.
+    std::vector<s::IQ> noise(20000);uint32_t state=0x92b7;
+    for(auto &v:noise)v={float(normal(state)),float(normal(state))};
+    s::ReceiveOptions opts;opts.sample_rate_hz=125000;opts.symbol_rate=23000;
+    Capture empty;s::DecodeStats stats;need(s::demodulate(noise.data(),noise.size(),opts,Capture::sink,&empty,stats));need(empty.frames.empty());
+    opts.sample_rate_hz=91999;need(!s::demodulate(noise.data(),noise.size(),opts,Capture::sink,&empty,stats));
+    std::printf("],\"noise_only_frames\":0,\"below_four_sps_rejected\":true,\"checks\":%llu,\"valid\":true}\n",(unsigned long long)checks);
 }
 static int demodCli(int argc,char **argv) {
     if(argc!=8)return 2;
@@ -104,6 +152,6 @@ static int emitCli(int argc,char **argv) {
     std::printf("{\"schema\":\"greenfield_sdr_emit/1\",\"evidence_class\":\"GENERATED_STIMULUS\",\"symbol_bit_order\":\"MSB_first_per_byte\",\"source_rate_hz\":%u,\"effective_audio_rate_hz_at_requested_baud\":%.12g,\"channels\":%u,\"oversample\":%u,\"payload_bits\":%u,\"baud_requested\":%u,\"baud_required_for_source_rate\":%.12g,\"frame_count\":%u,\"frame_symbols\":%zu,\"symbols_total\":%llu,\"packed_bytes\":%llu,\"pcm_frames\":%llu,\"pcm_bytes\":%llu,\"seed\":%u,\"stream_id\":%u,\"source_frequency0_hz\":30,\"no_RF_measurement\":true,\"payload_crc_present\":false}\n",rate,effective,ch,osr,payload,baud,s::requiredBaud(config),count,s::frameSymbols(config),(unsigned long long)symbols,(unsigned long long)(symbols/8),(unsigned long long)audioFrames,(unsigned long long)(audioFrames*ch*2),seed,stream);return 0;
 }
 int main(int argc,char **argv) {
-    try {if(argc==1){tests();return 0;}if(!std::strcmp(argv[1],"--demod-i8"))return demodCli(argc,argv);if(!std::strcmp(argv[1],"--model"))return modelCli(argc,argv);if(!std::strcmp(argv[1],"--emit"))return emitCli(argc,argv);std::fprintf(stderr,"Unknown command\n");return 2;}
+    try {if(argc==1){tests();return 0;}if(argc==2&&!std::strcmp(argv[1],"--low-sps-tests")){lowSpsTests();return 0;}if(!std::strcmp(argv[1],"--demod-i8"))return demodCli(argc,argv);if(!std::strcmp(argv[1],"--model"))return modelCli(argc,argv);if(!std::strcmp(argv[1],"--emit"))return emitCli(argc,argv);std::fprintf(stderr,"Unknown command\n");return 2;}
     catch(const std::exception&e){std::fprintf(stderr,"%s\n",e.what());return 2;}catch(const std::string&e){std::fprintf(stderr,"%s\n",e.c_str());return 2;}
 }

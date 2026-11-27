@@ -212,6 +212,15 @@ def execute_run(run, endpoints, plan, guard, metadata):
         endpoint.audio("perf audio stop")
     run["post_info"] = {name: endpoint.audio_info() for name, endpoint in endpoints.items()}
     run["post_info_scope"] = "outside finite source/receiver windows after stop; not in-window heap"
+    run["outside_window_temperature"] = {"scope": "after finite audio export and stop; target state run_id retained; not an in-window sample",
+                                         "endpoints": {}}
+    for name, endpoint in endpoints.items():
+        try:
+            records = endpoint.request("perf sample", {"state"}, timeout=3)
+            run["outside_window_temperature"]["endpoints"][name] = {"status": "MEASURED",
+                "records": [record for record in records if record["type"] == "state"]}
+        except (RuntimeError, TimeoutError, ValueError) as error:
+            run["outside_window_temperature"]["endpoints"][name] = {"status": "NOT MEASURED", "reason": guard.clean(str(error))}
     run["status"] = "MEASURED"
 
 

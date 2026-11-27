@@ -55,8 +55,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install capture dependency
-        run: python -m pip install -r tools/perf/requirements.txt
+      - name: Install capture and analysis dependencies
+        run: python -m pip install -r tools/perf/requirements.txt -r tools/perf/analysis-requirements.txt
       - name: Validate serial capture and evidence interpretation
         run: python -m unittest discover -s tools/perf -p 'test_*.py' -v
       - name: Validate portable kernels with independent numeric oracles
@@ -79,6 +79,7 @@ jobs:
         run: |
           g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr/test_protocol.cpp experiments/sdr/protocol.cpp -o /tmp/cyd-sdr-protocol-test
           /tmp/cyd-sdr-protocol-test
+          /tmp/cyd-sdr-protocol-test --low-sps-tests
 
   native:
     runs-on: ubuntu-latest
