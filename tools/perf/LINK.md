@@ -120,3 +120,20 @@ remain MEASURED separately when end-to-end traffic fails. Global UART corruption
 disconnects or interruption abort safely and retain partial evidence. All owned
 board services are stopped and requested off during cleanup; no hotspot settings
 or unrelated devices are changed.
+
+Analyze the resulting public/redacted records without opening either port:
+
+```powershell
+python tools/perf/link_analyze.py evidence/physical/link-ble-01/results.json
+python tools/perf/link_analyze.py evidence/physical/link-wifi-01/results.json
+```
+
+This writes `LINK-REPORT.md`, `link-summary.json`, per-run/group CSVs and an
+input/output/tool hash manifest. It preserves FAILED/BLOCKED case status and
+separately valid CYD profiler windows. Only matching successful contexts enter
+successful-link aggregates. Idle RTT/goodput remain unavailable. RTT distributions
+are conditional on valid replies, with sender/peer/round-trip response counts
+alongside the tails. The not-observed fraction is not isolated RF loss: the
+64-sequence horizon, callback queues and bounded receive tail limit attribution.
+TCP frames created in the marked steady window may finish API acceptance during
+the defined tail. Goodput and its limits retain those exact packet-window scopes.

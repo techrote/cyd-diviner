@@ -1,0 +1,129 @@
+{
+  "schema": "cyd-perf-ci/1",
+  "run_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873",
+  "source_sha": "91d4bfa25893e433f94e12c7dfadaf53daeaf4c3",
+  "evidence_class": "ci_compile_and_host_checks",
+  "jobs": [
+    {
+      "name": "performance-tools",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:19:36Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698052828"
+    },
+    {
+      "name": "cardputer",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:22Z",
+      "completed_at": "2026-11-27T19:23:30Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053065"
+    },
+    {
+      "name": "native",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:20:50Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053079"
+    },
+    {
+      "name": "vlc-plugin",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:19:45Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053096"
+    },
+    {
+      "name": "cyd (cyd-profile)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:21:18Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053125"
+    },
+    {
+      "name": "cyd (kernel-esp32)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:22Z",
+      "completed_at": "2026-11-27T19:20:09Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053137"
+    },
+    {
+      "name": "cyd (kernel-s3-n4r2)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:20:12Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053170"
+    },
+    {
+      "name": "cyd (cyd-profile-link)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:21:36Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053177"
+    },
+    {
+      "name": "cyd (cyd-profile-events)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:21:31Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053186"
+    },
+    {
+      "name": "cyd (kernel-s3)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:20:18Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053205"
+    },
+    {
+      "name": "cyd (cyd-diagnostics)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:21:16Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053209"
+    },
+    {
+      "name": "cyd (cyd)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:21:05Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053212"
+    },
+    {
+      "name": "cyd (kernel-s3-n4r2-peer)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:21Z",
+      "completed_at": "2026-11-27T19:20:26Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053239"
+    },
+    {
+      "name": "cyd (cyd-pcm)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:22Z",
+      "completed_at": "2026-11-27T19:21:42Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053293"
+    },
+    {
+      "name": "cyd (kernel-c3)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-27T19:19:22Z",
+      "completed_at": "2026-11-27T19:20:13Z",
+      "html_url": "https://github.com/techrote/cyd-diviner/actions/runs/46055856873/job/140698053295"
+    }
+  ],
+  "note": "CI is compile/host/fixture evidence; it is not physical board measurement."
+}
