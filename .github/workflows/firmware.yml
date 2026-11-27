@@ -73,7 +73,7 @@ jobs:
           /tmp/cyd-color-packing-test
           g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF=1 -DGRIM_PERF_COLOR=1 -Itools/perf/fakes/color tools/perf/test_color_pipeline.cpp src/perf_color.cpp -o /tmp/cyd-color-pipeline-test
           /tmp/cyd-color-pipeline-test
-          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -DGRIM_PERF_AUDIO_CORE_STANDALONE=1 tools/perf/test_audio_core.cpp src/perf_audio_core.cpp -o /tmp/cyd-audio-core-test
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined -Isrc -DGRIM_PERF_AUDIO_CORE_STANDALONE=1 tools/perf/test_audio_core.cpp src/perf_audio_core.cpp -o /tmp/cyd-audio-core-test
           /tmp/cyd-audio-core-test
       - name: Validate greenfield SDR framing and host demodulation models
         run: |
