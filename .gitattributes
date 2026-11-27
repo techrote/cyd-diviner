@@ -1,0 +1,4 @@
+# Preserve captured tool output exactly; whitespace is evidence in raw logs.
+evidence/**/*.log -text -whitespace
+evidence/**/*.zip -text
+evidence/**/*.bin -text
