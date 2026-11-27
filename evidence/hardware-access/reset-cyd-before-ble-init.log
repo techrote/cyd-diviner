@@ -1,0 +1,2 @@
+2026-11-27 approximately20:08:54 UTC (inferred from subsequent capture start) Explicit test reboot: COM21 opened with DTR false, RTS true150ms thenfalse; serialclosedafter1.2s. No flash write.
+Initial boot text logging failed because CP1252 could not encode a replacement character from non-UTF8 boot bytes. Those bytes were not retained; no measured capture data was affected. Subsequent BLE capture identified the approved source/profile.

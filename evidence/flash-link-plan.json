@@ -1,6 +1,6 @@
 {
   "schema": "cyd-perf-flash-pair-plan/1",
-  "status": "AWAITING OWNER AUTHORIZATION",
+  "status": "FLASHED AND TOOL DIGEST VERIFIED",
   "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
   "source_digest": "1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
   "utc": "2026-11-27T19:17:53.104547+00:00",
@@ -45,5 +45,24 @@
   ],
   "credential_handling": "Private provisioning outside Git; no credentials in public plans/logs; RAM-only Wi-Fi config",
   "requested_end_state": "Leave profilers installed, radio services stopped, CYD menu orientation3 backdrop1 restored in RAM",
-  "authorization": null
+  "authorization": {
+    "utc": "2026-11-27T19:54:23.554044+00:00",
+    "owner_response": "Authorize both updates and tests; leave both profilers installed. Hotspot is on, and I have reconnected the CYD while holding BOOT and released it. Ready."
+  },
+  "flash_receipts": [
+    {
+      "port": "COM21",
+      "same_mac_as_previous_verified_flash": true,
+      "mac": "a4:f0:0f:5f:ff:54",
+      "tool_digest_verified": true,
+      "log": "link-cyd-flash.log"
+    },
+    {
+      "port": "COM22",
+      "same_mac_as_previous_verified_flash": true,
+      "mac": "1c:29:04:be:c3:a0",
+      "tool_digest_verified": true,
+      "log": "link-s3-flash.log"
+    }
+  ]
 }

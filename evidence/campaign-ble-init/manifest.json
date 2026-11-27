@@ -1,0 +1,202 @@
+{
+  "schema": "cyd-perf-publication/1",
+  "label": "BLE controller initialization only",
+  "capture_status": "CAPTURE COMPLETE",
+  "publication_scope": "complete_capture",
+  "allow_partial_requested": false,
+  "measured_run_count": 6,
+  "evidence_class": "physical_measured",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "a980f7e2b9409686ae2d325ebeddfd525966f06e8ded03b2d8a723b36771ab11",
+  "profile": "cyd-profile-link",
+  "source_tree_state": "sha256:1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
+  "input_results_sha256": "1f46018d16ccf450ae2460e7534c570e446ec3ec69be1ec703b95e25addb970b",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "member_prefix": "physical/ble-init-link-01",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7",
+    "verified_members": {
+      "physical/ble-init-link-01/artifact-hashes.json": {
+        "bytes": 623,
+        "sha256": "849e3427076ba35fd259ce1196e626636d824ea9a2ef31b5a40f2027fdb8c939",
+        "compressed_bytes": 343
+      },
+      "physical/ble-init-link-01/metrics.csv": {
+        "bytes": 88134,
+        "sha256": "aeb16abd027a7e42a6a29f7c7ae910c7a6df6aedf6b3d855bbc8e403c2a51ff0",
+        "compressed_bytes": 3993
+      },
+      "physical/ble-init-link-01/results.json": {
+        "bytes": 209507,
+        "sha256": "1f46018d16ccf450ae2460e7534c570e446ec3ec69be1ec703b95e25addb970b",
+        "compressed_bytes": 15885
+      },
+      "physical/ble-init-link-01/samples.csv": {
+        "bytes": 34756,
+        "sha256": "7265e933e65f31015eb35b7433be3388ad88d0980e69f83b201083628c207569",
+        "compressed_bytes": 2199
+      },
+      "physical/ble-init-link-01/serial-events.jsonl": {
+        "bytes": 638474,
+        "sha256": "230b9d1e98e274f64e529e8b98b525df0a5373a0ad531187fc50316d55bfa3b1",
+        "compressed_bytes": 63999
+      },
+      "physical/ble-init-link-01/serial-rx.bin": {
+        "bytes": 72401,
+        "sha256": "51322d5fe9023f7a24b029ccb1f1f8622896502a86112225344065eeb6fc86d1",
+        "compressed_bytes": 5910
+      },
+      "physical/ble-init-link-01/serial-text.log": {
+        "bytes": 72401,
+        "sha256": "51322d5fe9023f7a24b029ccb1f1f8622896502a86112225344065eeb6fc86d1",
+        "compressed_bytes": 5910
+      },
+      "physical/ble-init-link-01/target.jsonl": {
+        "bytes": 91393,
+        "sha256": "ef4b3cdd78010149f09a874fa1d982b9feb7fbd0d613326985c9ab46b90882e8",
+        "compressed_bytes": 8702
+      }
+    }
+  },
+  "inputs": {
+    "artifact-hashes.json": {
+      "bytes": 623,
+      "sha256": "849e3427076ba35fd259ce1196e626636d824ea9a2ef31b5a40f2027fdb8c939"
+    },
+    "metrics.csv": {
+      "bytes": 88134,
+      "sha256": "aeb16abd027a7e42a6a29f7c7ae910c7a6df6aedf6b3d855bbc8e403c2a51ff0"
+    },
+    "results.json": {
+      "bytes": 209507,
+      "sha256": "1f46018d16ccf450ae2460e7534c570e446ec3ec69be1ec703b95e25addb970b"
+    },
+    "samples.csv": {
+      "bytes": 34756,
+      "sha256": "7265e933e65f31015eb35b7433be3388ad88d0980e69f83b201083628c207569"
+    },
+    "serial-events.jsonl": {
+      "bytes": 638474,
+      "sha256": "230b9d1e98e274f64e529e8b98b525df0a5373a0ad531187fc50316d55bfa3b1"
+    },
+    "serial-rx.bin": {
+      "bytes": 72401,
+      "sha256": "51322d5fe9023f7a24b029ccb1f1f8622896502a86112225344065eeb6fc86d1"
+    },
+    "serial-text.log": {
+      "bytes": 72401,
+      "sha256": "51322d5fe9023f7a24b029ccb1f1f8622896502a86112225344065eeb6fc86d1"
+    },
+    "target.jsonl": {
+      "bytes": 91393,
+      "sha256": "ef4b3cdd78010149f09a874fa1d982b9feb7fbd0d613326985c9ab46b90882e8"
+    },
+    "summary.json": {
+      "bytes": 19139,
+      "sha256": "9f3bb59cd1138ed542052f5428a1e37bce8edc92553769e60ad13f458062ab4e"
+    },
+    "summary-scenes.csv": {
+      "bytes": 961,
+      "sha256": "94b77d411f9be4fcf12c3d154072ba93b299b87bff415cabc6846b8454dc0a82"
+    },
+    "summary-metrics.csv": {
+      "bytes": 5526,
+      "sha256": "c4b85fe7bba9e54a2e1e26ed98c3eea6c1d9c58ac0355fa23b827794c75753a1"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "figures/manifest.json": {
+      "bytes": 4290,
+      "sha256": "5255ce8ae417b99a0f57f87c2f541cd239cb507dc1c08295ad69b48797cc28a8"
+    },
+    "figures/fps-radio.png": {
+      "bytes": 78103,
+      "sha256": "6f730507ad7026d3f0f93f209ed99c87b2592405af8b59755da72fe9bec94ae5"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10865,
+      "sha256": "40d6206e0499106571b475e016a08ce26656a0f013213e20cb8a130fe5b2029b"
+    }
+  },
+  "outputs": {
+    "figures/fps-radio.png": {
+      "bytes": 78103,
+      "sha256": "6f730507ad7026d3f0f93f209ed99c87b2592405af8b59755da72fe9bec94ae5"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10865,
+      "sha256": "40d6206e0499106571b475e016a08ce26656a0f013213e20cb8a130fe5b2029b"
+    },
+    "figures/manifest.json": {
+      "bytes": 4290,
+      "sha256": "5255ce8ae417b99a0f57f87c2f541cd239cb507dc1c08295ad69b48797cc28a8"
+    },
+    "REPORT.md": {
+      "bytes": 16413,
+      "sha256": "12077445ffdef6e69a8c02e034571f0c202b3bae3d37b0d85df99d566847cfa5"
+    },
+    "stress-samples.csv": {
+      "bytes": 350,
+      "sha256": "2168f4206ad3eacbb80d144961d3be84b5291a55b35be1148f54924885f4a55d"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-metrics.csv": {
+      "bytes": 5526,
+      "sha256": "c4b85fe7bba9e54a2e1e26ed98c3eea6c1d9c58ac0355fa23b827794c75753a1"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-scenes.csv": {
+      "bytes": 961,
+      "sha256": "94b77d411f9be4fcf12c3d154072ba93b299b87bff415cabc6846b8454dc0a82"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary.json": {
+      "bytes": 13490,
+      "sha256": "2c770b0df347ffe09b1df867d78aa3b0c7348f07aa8bc164126482bd89d92dfc"
+    }
+  },
+  "stress_rows": 0,
+  "tools": {
+    "publish_evidence.py": {
+      "bytes": 17922,
+      "sha256": "efb24ea5b397326a7386e33bfaf1eae5230c6903c40615ce7b3712f1c464c456"
+    },
+    "report.py": {
+      "bytes": 39621,
+      "sha256": "f42734404218a4e1c4028621da9cc9582fb32c770e97474610b232c8ff52a3c9"
+    },
+    "summarize.py": {
+      "bytes": 11400,
+      "sha256": "f0738c3ee838c429d4b83ec27c2a541f46609754b708df015b3b241ddffef452"
+    },
+    "capture.py": {
+      "bytes": 43047,
+      "sha256": "c98d541c781af8e03971c64e54d816e0c67548e3089a9a55ef9109a2ffa16163"
+    }
+  },
+  "limitations": [
+    "Raw archive membership and source hashes are verified; this tool does not independently attest hardware readings or the flashed image.",
+    "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
+    "Manifest excludes its own digest to avoid a self-referential hash."
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "cyd-perf-link-publication/1",
+  "capture_status": "FAILED",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "member_prefix": "physical/link-wifi-02",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7"
+  },
+  "input_results_sha256": "14563e4539e86e77d35a4f22c50af574f5278e22efc10113c19a0d93dafb471a",
+  "verified_raw_members": {
+    "artifact-hashes.json": {
+      "bytes": 1081,
+      "sha256": "6f9348539e87e3037f16bf5ec36000cbcb5bc26599b68efc77f597fb6e18960c"
+    },
+    "cyd/serial-events.redacted.jsonl": {
+      "bytes": 11128854,
+      "sha256": "6b94f9e2e77e3e6feca14457213a492d9628e042e01850ef497e2d69ac37348c"
+    },
+    "cyd/serial-rx.redacted.bin": {
+      "bytes": 1250851,
+      "sha256": "bb6483f509e873ff41ebd7a47f2a370f32cdcb6e265f085d58529bee3f4cf0fc"
+    },
+    "cyd/target.redacted.jsonl": {
+      "bytes": 1496209,
+      "sha256": "50dca5f38eba942180551d6499eff74d4f8b375cb7c6cdd897a59deb52dfc1db"
+    },
+    "link-derived.csv": {
+      "bytes": 23051,
+      "sha256": "b028d6c56925b686256664bfff63f62e49b92004e2ba8d037cec687af15c7389"
+    },
+    "link-metrics.csv": {
+      "bytes": 55885,
+      "sha256": "e0b6986f6612c9f60e733461a85de6eb58709b572cba20ca8f75ad267062deb1"
+    },
+    "peer/serial-events.redacted.jsonl": {
+      "bytes": 305404,
+      "sha256": "2b091e9132719797b75e35c2dd0dad1687547aa2b408786906c90e46dfdab0f6"
+    },
+    "peer/serial-rx.redacted.bin": {
+      "bytes": 647580,
+      "sha256": "52d1727ba259c04ddb1eefaba31a7418d2c90e622ccb10b8897969d9e36da45e"
+    },
+    "peer/target.redacted.jsonl": {
+      "bytes": 726532,
+      "sha256": "c8c048854ba0b18c2301db708a23514c6cfd4cb63b8328135c76b2f6844ed349"
+    },
+    "profile-metrics.csv": {
+      "bytes": 466941,
+      "sha256": "6d48b1ee25b3791aa93999777ba99bd0326948caa7298feb38ec7b871ca76ef5"
+    },
+    "profile-samples.csv": {
+      "bytes": 150283,
+      "sha256": "3b8b570189723fcd77b0a42a26af86d8d0fa5fb139e81d104c91d54bcc1766f6"
+    },
+    "results.json": {
+      "bytes": 4809562,
+      "sha256": "14563e4539e86e77d35a4f22c50af574f5278e22efc10113c19a0d93dafb471a"
+    }
+  },
+  "tools": {
+    "publish_link_evidence.py": {
+      "bytes": 3780,
+      "sha256": "4ee8117e11b9c1061486f22eff3fc6132925aa87ee0920d8c9c71a691dd89c43"
+    },
+    "link_analyze.py": {
+      "bytes": 28353,
+      "sha256": "5286af71cc623743d03013c849ac8b62b0eae4e3c15a801a29af0198babbbd73"
+    }
+  },
+  "outputs": {
+    "link-groups.csv": {
+      "bytes": 92741,
+      "sha256": "b1ac0a8fb29cbe0aa47c583c29693f2bace6462793b0f474d7d09fd60fc3ea7b"
+    },
+    "LINK-REPORT.md": {
+      "bytes": 26908,
+      "sha256": "7b33e85081464d28c2b37506bbcc2eb8d7147fb3c8faba82474f6c4fb7e4c08c"
+    },
+    "link-runs.csv": {
+      "bytes": 879922,
+      "sha256": "567d8277931ec88ff51a0578a91bea28e2fe304875e2a6fa294060fc088c0fe3"
+    },
+    "link-summary.json": {
+      "bytes": 2051441,
+      "sha256": "6c35f96e3984f71077546f307acf55a5d3131cedfe791e74469c45328fd7b1db"
+    }
+  },
+  "derived_generation_note": "Published analysis uses arithmetic median for even finite repetition counts. Raw capture and immutable archive are unchanged; any older derived analysis in the archive is superseded by this publication."
+}

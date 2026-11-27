@@ -97,7 +97,16 @@ Every run uses a fresh private token, a named responder session, acknowledged
 scene settings, bounded payload/rate and the CYD profiler's exact target window.
 The worker sends warmup packets marked as such; responder counters exclude them.
 After the fixed end, replies drain for at least 500 ms before both links stop and
-export. RTT uses one initiator clock. Receiver goodput divides unique marked
+export. Connection readiness is checked in a temporary menu before applying the
+requested scene. The host sends `perf link idle` after stopping the CYD service
+and before arming: this clears the approved image's retained completion flag so
+TCP connection polling can proceed without starting application traffic.
+After profile export and both link stops, the host returns the CYD to menu before
+allocating link export/info formatters. Prewarm setup and post-window cleanup
+receipts remain separate from the requested measured-scene `setup_target`.
+Post-cleanup info describes stopped services with DSP released; in-window profile
+samples describe workload heap/CPU. Link heap minima can extend through the reply
+tail and profile export until stop. RTT uses one initiator clock. Receiver goodput divides unique marked
 payload bytes by the initiator's fixed window, including the defined receive
 tail, and excludes the 40-byte application header/PHY overhead. It is not derived
 from unsynchronized board clocks or UART arrival timing.

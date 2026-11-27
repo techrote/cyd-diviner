@@ -1,0 +1,234 @@
+{
+  "schema": "cyd-perf-backup/2",
+  "utc": "2026-11-27T19:54:24.037413+00:00",
+  "port": "COM21",
+  "chip_requested": "esp32",
+  "requested_backup_bytes": null,
+  "requested_transfer_baud": 460800,
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "operations": [
+    {
+      "operation": "serial.open",
+      "arguments": {
+        "port": "COM21",
+        "baud": 115200,
+        "dtr": false,
+        "rts": false
+      },
+      "utc": "2026-11-27T19:54:24.104591+00:00",
+      "ok": true,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.020947300014086068
+    },
+    {
+      "operation": "esptool.connect",
+      "arguments": {
+        "chip": "esp32",
+        "baud": 115200,
+        "mode": "no_reset",
+        "attempts": 1
+      },
+      "utc": "2026-11-27T19:54:24.126023+00:00",
+      "ok": true,
+      "stdout": "WARNING: Pre-connection option \"no_reset\" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.\nConnecting......\n",
+      "stderr": "",
+      "elapsed_seconds": 0.9419546999852173
+    },
+    {
+      "operation": "esptool.read_reg",
+      "arguments": {
+        "address": 1073745920,
+        "purpose": "chip_identity_magic"
+      },
+      "utc": "2026-11-27T19:54:25.069111+00:00",
+      "ok": true,
+      "result": 15736195,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.01899140002205968
+    },
+    {
+      "operation": "esptool.get_chip_description",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.089448+00:00",
+      "ok": true,
+      "result": "ESP32-D0WD-V3 (revision v3.1)",
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.11496619996614754
+    },
+    {
+      "operation": "esptool.get_chip_revision",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.205333+00:00",
+      "ok": true,
+      "result": 301,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.07677839999087155
+    },
+    {
+      "operation": "esptool.get_chip_features",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.283317+00:00",
+      "ok": true,
+      "result": [
+        "WiFi",
+        "BT",
+        "Dual Core",
+        "240MHz",
+        "VRef calibration in efuse",
+        "Coding Scheme None"
+      ],
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.0780811000149697
+    },
+    {
+      "operation": "esptool.get_crystal_freq",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.362341+00:00",
+      "ok": true,
+      "result": 40,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.018973700003698468
+    },
+    {
+      "operation": "esptool.get_flash_encryption_enabled",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.382872+00:00",
+      "ok": true,
+      "result": false,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.01866220001829788
+    },
+    {
+      "operation": "esptool.get_secure_boot_enabled",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.402926+00:00",
+      "ok": true,
+      "result": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.09480799996526912
+    },
+    {
+      "operation": "esptool.get_encrypted_download_disabled",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.498780+00:00",
+      "ok": true,
+      "result": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.018903299991507083
+    },
+    {
+      "operation": "esptool.run_stub",
+      "arguments": {
+        "destination": "RAM_only"
+      },
+      "utc": "2026-11-27T19:54:25.518527+00:00",
+      "ok": true,
+      "stdout": "Uploading stub...\nRunning stub...\nStub running...\n",
+      "stderr": "",
+      "elapsed_seconds": 0.4348267000168562
+    },
+    {
+      "operation": "esptool.flash_spi_attach",
+      "arguments": {
+        "hspi_arg": 0
+      },
+      "utc": "2026-11-27T19:54:25.954711+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.018799800018314272
+    },
+    {
+      "operation": "esptool.flash_id",
+      "arguments": {},
+      "utc": "2026-11-27T19:54:25.973972+00:00",
+      "ok": true,
+      "result": 1458208,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.21576910000294447
+    },
+    {
+      "operation": "esptool.flash_set_parameters",
+      "arguments": {
+        "size": 4194304,
+        "effect": "RAM_geometry_only"
+      },
+      "utc": "2026-11-27T19:54:26.191911+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.020362399984151125
+    },
+    {
+      "operation": "esptool.change_baud",
+      "arguments": {
+        "baud": 115200,
+        "purpose": "leave_known_stub_baud"
+      },
+      "utc": "2026-11-27T19:54:26.213116+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "Changing baud rate to 115200\nChanged.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.07736759999534115
+    },
+    {
+      "operation": "serial.close",
+      "arguments": {
+        "dtr": false,
+        "rts": false,
+        "reset": false
+      },
+      "utc": "2026-11-27T19:54:26.292276+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.004122499958612025
+    }
+  ],
+  "flash_written": false,
+  "flash_erased": false,
+  "efuses_written": false,
+  "verified": false,
+  "ram_stub_left_at_115200": true,
+  "exit_policy": "keep_RAM_stub_running_no_reset_no_app_start",
+  "esptool_version": "4.14.0",
+  "pyserial_version": "3.5",
+  "connected_baud": 115200,
+  "chip_identity_verified": true,
+  "chip_description": "ESP32-D0WD-V3 (revision v3.1)",
+  "chip_revision": 301,
+  "chip_features": [
+    "WiFi",
+    "BT",
+    "Dual Core",
+    "240MHz",
+    "VRef calibration in efuse",
+    "Coding Scheme None"
+  ],
+  "crystal_mhz": 40,
+  "security": {
+    "flash_encryption_enabled": false,
+    "secure_boot_enabled": false,
+    "encrypted_download_disabled": false
+  },
+  "ram_stub_loaded": true,
+  "jedec_hex": "0x164020",
+  "flash_bytes": 4194304,
+  "manufacturer_hex": "0x20",
+  "memory_type_hex": "0x40",
+  "completed": true
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "cyd-perf-link-publication/1",
+  "capture_status": "FAILED",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "member_prefix": "physical/link-ble-01",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7"
+  },
+  "input_results_sha256": "1d231d28c256d1e81fe796e2c683342457893c3df8b6e3a4427faf7e7038fedd",
+  "verified_raw_members": {
+    "artifact-hashes.json": {
+      "bytes": 1081,
+      "sha256": "2ef1edf98861c9ed088378bc8d7ef42f3f92a4cc888baa582c08e76959f2af05"
+    },
+    "cyd/serial-events.redacted.jsonl": {
+      "bytes": 594818,
+      "sha256": "403e656a902cb7166dc52e7d45a38be2637fca5fba7c3af51bb706512f69fd9b"
+    },
+    "cyd/serial-rx.redacted.bin": {
+      "bytes": 62967,
+      "sha256": "966742e11eb883c2102d9d2d46c2350517030ca8a575dedd1bb2b5809c84c675"
+    },
+    "cyd/target.redacted.jsonl": {
+      "bytes": 71827,
+      "sha256": "e0ebd6c384c1a03cc25bb61b077ae38cbbb93438d5a576acad5a4c9ce660d08a"
+    },
+    "link-derived.csv": {
+      "bytes": 4841,
+      "sha256": "7f1d897ca048ff6dc5081692f6981248bcf03d9c77986f7c89a8025d3a70ed5a"
+    },
+    "link-metrics.csv": {
+      "bytes": 24,
+      "sha256": "41c325d41f26ab3503d410f2744bdc2200da7b95e9b8e74c98533b9fee313d0c"
+    },
+    "peer/serial-events.redacted.jsonl": {
+      "bytes": 41946,
+      "sha256": "61014fc6d5239452eb48f8238a927e53f025d8ad206164edc6160ebd734df2af"
+    },
+    "peer/serial-rx.redacted.bin": {
+      "bytes": 37003,
+      "sha256": "564c86f5103510d058cae94f8728976a0ad9720c376ab7123ea46e5f7a345962"
+    },
+    "peer/target.redacted.jsonl": {
+      "bytes": 43584,
+      "sha256": "1fa9e43cd7ec6623a0a29d9b5205aade6badf2e7e4bc75aceb7f6045b712cb33"
+    },
+    "profile-metrics.csv": {
+      "bytes": 24,
+      "sha256": "41c325d41f26ab3503d410f2744bdc2200da7b95e9b8e74c98533b9fee313d0c"
+    },
+    "profile-samples.csv": {
+      "bytes": 24,
+      "sha256": "41c325d41f26ab3503d410f2744bdc2200da7b95e9b8e74c98533b9fee313d0c"
+    },
+    "results.json": {
+      "bytes": 304724,
+      "sha256": "1d231d28c256d1e81fe796e2c683342457893c3df8b6e3a4427faf7e7038fedd"
+    }
+  },
+  "tools": {
+    "publish_link_evidence.py": {
+      "bytes": 3780,
+      "sha256": "4ee8117e11b9c1061486f22eff3fc6132925aa87ee0920d8c9c71a691dd89c43"
+    },
+    "link_analyze.py": {
+      "bytes": 28353,
+      "sha256": "5286af71cc623743d03013c849ac8b62b0eae4e3c15a801a29af0198babbbd73"
+    }
+  },
+  "outputs": {
+    "link-groups.csv": {
+      "bytes": 15823,
+      "sha256": "85ff1a7d0457fd8f4f50929d5cbb026182ce8a071686b20f0d71e4496b6adb21"
+    },
+    "LINK-REPORT.md": {
+      "bytes": 15266,
+      "sha256": "8247812721edca5de0ae23dbec1fc01a7aebfdb733b51718dc8cfba546397aab"
+    },
+    "link-runs.csv": {
+      "bytes": 55120,
+      "sha256": "8550ae398df04bf7aebaa91387605b88a75ef76f1cdb13647f245d47fb599990"
+    },
+    "link-summary.json": {
+      "bytes": 129875,
+      "sha256": "7f7295fc3b956b5b0f48dca5c73254fc2f187c04bbf1fa1434477219b08ec803"
+    }
+  },
+  "derived_generation_note": "Published analysis uses arithmetic median for even finite repetition counts. Raw capture and immutable archive are unchanged; any older derived analysis in the archive is superseded by this publication."
+}

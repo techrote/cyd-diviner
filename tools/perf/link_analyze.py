@@ -10,6 +10,7 @@ import json
 import os
 import pathlib
 import re
+import statistics
 
 from capture import percentile, validate_end
 from link_capture import derive_link
@@ -21,7 +22,7 @@ def digest(path):
 
 def value_range(values):
     values = [value for value in values if isinstance(value, (int, float))]
-    return {"n": len(values), "median": percentile(values, 50), "min": min(values) if values else None,
+    return {"n": len(values), "median": statistics.median(values) if values else None, "min": min(values) if values else None,
             "max": max(values) if values else None}
 
 

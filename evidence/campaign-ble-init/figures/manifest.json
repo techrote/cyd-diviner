@@ -1,0 +1,121 @@
+{
+  "schema": "cyd-perf-figures/1",
+  "generated_utc": "2026-11-27T20:59:29.278397+00:00",
+  "label": "BLE initialization only, no peer traffic",
+  "input": "C:\\cyd-diviner\\perf-characterisation\\evidence\\physical\\ble-init-link-01\\results.json",
+  "input_sha256": "1f46018d16ccf450ae2460e7534c570e446ec3ec69be1ec703b95e25addb970b",
+  "capture_status": "CAPTURE COMPLETE",
+  "evidence_class": "physical_measured",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "a980f7e2b9409686ae2d325ebeddfd525966f06e8ded03b2d8a723b36771ab11",
+  "profile": "cyd-profile-link",
+  "measured_runs": 6,
+  "figures": [
+    {
+      "name": "fps-radio",
+      "title": "Actual presentation rate",
+      "sample_note": "6 measured repetitions; 1,566 completed presentations; r per row.",
+      "observations": {
+        "radio-init/ble/menu": [
+          {
+            "run_id": "r001_1",
+            "scope": "1264279f6f41",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r002_2",
+            "scope": "1264279f6f41",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r003_3",
+            "scope": "1264279f6f41",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "radio-init/ble/fullscreen-layered": [
+          {
+            "run_id": "r004_1",
+            "scope": "54fdde5b657d",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r005_2",
+            "scope": "54fdde5b657d",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r006_3",
+            "scope": "54fdde5b657d",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-radio.png",
+          "sha256": "6f730507ad7026d3f0f93f209ed99c87b2592405af8b59755da72fe9bec94ae5"
+        },
+        {
+          "file": "fps-radio.svg",
+          "sha256": "40d6206e0499106571b475e016a08ce26656a0f013213e20cb8a130fe5b2029b"
+        }
+      ]
+    }
+  ],
+  "omitted": [
+    {
+      "figure": "audio-tails",
+      "reason": "No observed callback/mix/enqueue timings"
+    },
+    {
+      "figure": "kernel-dsp",
+      "reason": "No exact target kernel timing samples"
+    },
+    {
+      "figure": "stress-temperature",
+      "reason": "No completed retained stress samples"
+    }
+  ],
+  "tool_sha256": "6b4ed5ab761b52b2f0afd4e403450e807557c307686ca3e566c53094ad98fd1c",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "analysis_packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "contourpy": "1.4.0",
+    "fonttools": "4.69.1",
+    "kiwisolver": "1.5.1",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "4.0.0"
+  },
+  "limitations": [
+    "Only completed MEASURED runs are plotted; missing data are not synthesized.",
+    "Repetition ranges use matching requested settings, windows, instrumentation and actual scene/allocation receipts; differing scopes are labelled separately.",
+    "Histogram p99 values are power-of-two upper bounds, distinct from exact observed maxima.",
+    "Per-run FPS uses completed physical presentations divided by the target measurement window.",
+    "CPU utilization is target tick sampling, not cycle-exact utilization.",
+    "Temperature codes come from an undocumented RTC-library function; they are uncalibrated sensor indications, not calibrated die temperatures.",
+    "Primary capture's ESP32_ROM_raw_uncalibrated tag is retained verbatim in raw evidence; its ROM attribution is a legacy inaccurate label."
+  ],
+  "command_argv": [
+    "tools/perf/plot_results.py",
+    "evidence/physical/ble-init-link-01/results.json",
+    "--output",
+    "evidence/physical/ble-init-link-01/figures",
+    "--label",
+    "BLE initialization only, no peer traffic"
+  ]
+}

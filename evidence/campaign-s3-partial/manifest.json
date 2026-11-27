@@ -111,8 +111,8 @@
       "sha256": "a7ad43dbfbc4c481bc7d943fa61401b0faadebe782422184ee205c57d6d4177e"
     },
     "summary.json": {
-      "bytes": 1903,
-      "sha256": "695de9b6669256772214efca1ade1fd60c4a893cca6add82ce6f5c545ec9b12c"
+      "bytes": 2110,
+      "sha256": "10aee816d98a24fbb8f44c8949e7e66055876b34f5564ff2ae6d49a88366288e"
     },
     "summary-scenes.csv": {
       "bytes": 17,
@@ -161,8 +161,8 @@
       "sha256": "622c2717e0e728e975e54aab20bae08298411c986ca04656b55a6a653e58e67f"
     },
     "REPORT.md": {
-      "bytes": 6370,
-      "sha256": "2e9d3f51b96583b02c8d87d2a5ea99ed9c87c2781b596a42414f06fa4f0e6fca"
+      "bytes": 6617,
+      "sha256": "4acbfed6ec51429adea98721cfe64918352b5e5449d00e209235f0266137a384"
     },
     "stress-samples.csv": {
       "bytes": 350,
@@ -189,23 +189,23 @@
       "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
     },
     "summary.json": {
-      "bytes": 1500,
-      "sha256": "9cca50449ae16824a1511afc1dec95ac00e68b045f7fddb6c1347f07d63e63a0"
+      "bytes": 1702,
+      "sha256": "126ded285bd90e63a55a51c902860de5eb5cafcc914c03c9b34d61052f1d9dbe"
     }
   },
   "stress_rows": 0,
   "tools": {
     "publish_evidence.py": {
-      "bytes": 17926,
-      "sha256": "0860e70e9c62619b74001f72791e3807a8fd4afc738cfdcfaad37c9c09ece209"
+      "bytes": 17922,
+      "sha256": "efb24ea5b397326a7386e33bfaf1eae5230c6903c40615ce7b3712f1c464c456"
     },
     "report.py": {
-      "bytes": 39169,
-      "sha256": "b39ed01437d0fe5feb7c13289d0374d17411e53380f5d1002ad5bda19de42a09"
+      "bytes": 39621,
+      "sha256": "f42734404218a4e1c4028621da9cc9582fb32c770e97474610b232c8ff52a3c9"
     },
     "summarize.py": {
-      "bytes": 10689,
-      "sha256": "06e82c9ae16d882dbff530eb6547a2b4a0e24d294dfebe1c5439a13963c1e7ec"
+      "bytes": 10905,
+      "sha256": "bd4ed0dfd3b4e068fcd8bcf829494316ecc2f2b349c214073f42bd7b7768ef90"
     },
     "capture.py": {
       "bytes": 37365,
@@ -217,33 +217,17 @@
     "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
     "Manifest excludes its own digest to avoid a self-referential hash."
   ],
-  "post_generation_edit": {
-    "reason": "Corrected footer wording without promoting terminal partial status.",
-    "raw_inputs_unchanged": true,
-    "edit": {
-      "from": "An empty table means that no stress workload was present in this completed capture.",
-      "to": "An empty table means that no stress workload was present in this source capture."
+  "post_generation_note": {
+    "reason": "Corrected offload model to matched input/output transport or separately estimated fixed overhead; full payload RTT is not added to transfer cost twice.",
+    "publication_relocation": {
+      "staging_archive_href": "../../../evidence/PHYSICAL-CAPTURES-BASELINE.zip",
+      "final_archive_href": "../PHYSICAL-CAPTURES-BASELINE.zip"
     },
-    "edit_script_sha256": "8d20c400c331c00c4ef95e20c51284f7ae01f5c7c9d6bc4edffede591301ff03"
-  },
-  "post_generation_figure_refresh": {
-    "reason": "Show only actually measured DSP series in the partial S3 legend.",
-    "source_results_unchanged": true,
-    "plot_script_sha256": "6b4ed5ab761b52b2f0afd4e403450e807557c307686ca3e566c53094ad98fd1c",
-    "files": {
-      "figures/kernel-dsp-internal.png": {
-        "bytes": 89157,
-        "sha256": "787fe0d50e357fbe2ac1acacff544d3ddf25cb4374bb73895236b78980a875a2"
-      },
-      "figures/kernel-dsp-internal.svg": {
-        "bytes": 15735,
-        "sha256": "7d1a275c52a17cfd3a390689022d35c923540262af3598359443d5a10f2d70df"
-      },
-      "figures/manifest.json": {
-        "bytes": 5047,
-        "sha256": "622c2717e0e728e975e54aab20bae08298411c986ca04656b55a6a653e58e67f"
-      }
+    "raw_results_unchanged": {
+      "bytes": 51342,
+      "sha256": "8f841f8d4d6b0fab857e6823652597d6415b3ed6508f2cadde8454e42463449f"
     },
-    "edit_script_sha256": "5fe81ee978800182f9f73052c24a32113603b632562a777cb30588be9b3fd5c7"
+    "original_capture_status_preserved": "FAILED",
+    "correction_script_sha256": "88fe1f7c335934ce99fb42e2640b1b4aa128bffb3d579f60c67c8a8d43e5d9b1"
   }
 }

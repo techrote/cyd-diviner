@@ -1,0 +1,41 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "duration_ms": 10000,
+  "warmup_ms": 2000,
+  "workloads": [
+    {
+      "name": "radio-init/ble/menu",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu",
+        "perf radio ble"
+      ],
+      "radio": "ble",
+      "traffic": "none",
+      "limitation": "Controller initialization only; no scans, association, peers, traffic, or goodput claim."
+    },
+    {
+      "name": "radio-init/ble/fullscreen-layered",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0",
+        "perf radio ble"
+      ],
+      "radio": "ble",
+      "traffic": "none",
+      "fullscreen": true,
+      "layered": true,
+      "limitation": "Controller initialization only; traffic/coexistence measurements require owned peers."
+    }
+  ]
+}

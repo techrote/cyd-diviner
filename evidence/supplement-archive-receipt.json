@@ -1,0 +1,25 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "evidence_class": "physical_measured_raw_mixed_terminal_status",
+  "created_utc": "2026-11-27T20:59:55.076120+00:00",
+  "archive": "PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+  "bytes": 15812579,
+  "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7",
+  "capture_directories": [
+    "ble-init-link-01",
+    "cyd-link-identify-01",
+    "events-link-01",
+    "link-ble-01",
+    "link-fresh-ap-01",
+    "link-wifi-01",
+    "link-wifi-02",
+    "link-wifi-retry-01",
+    "readback-scenes",
+    "s3-kernels-link-01",
+    "s3-kernels-link-02",
+    "s3-kernels-link-03",
+    "s3-link-identify-01",
+    "s3-usb-diagnostic-link-01"
+  ],
+  "scope": "174a796 firmware phase, failed attempts and diagnostics retained. No colour or audio MVP firmware measurements included."
+}

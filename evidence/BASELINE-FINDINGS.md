@@ -31,7 +31,7 @@ usable evidence; they do not turn either earlier capture into a success.
 | Histogram insertion A/B, menu | Disabled: 29.4 frames/s in all three repetitions; enabled: 29.4, 29.4, 29.5 | No frame-rate change resolved at this capped workload. Timestamp hooks, frame/audio counts and static storage remain in both variants. |
 
 The primary local-audio windows observed callback maxima of approximately
-523 µs for drone, 749 µs for sequencer and 325 µs for beat. The primary combined
+523 µs for drone, 759 µs for sequencer and 325 µs for beat. The primary combined
 graphics/audio windows retained approximately 5.33 ms audio periods without
 periods exceeding the profiler's 6 ms late threshold. These are finite observed
 bounds with ordinary callback, mutex, mixing and blocking I2S work separately

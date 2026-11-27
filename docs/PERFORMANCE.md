@@ -193,20 +193,21 @@ both input and output bytes, result rate, precision, serialization cost and
 local degradation during transport. Full-frame transfer must include its actual
 payload and contention costs.
 
-For each candidate, use measured local and remote compute times and measured
-coexistence link tails. A conservative break-even condition is:
+For each candidate, measure local and remote compute with the actual message
+shape and concurrent workload. A complete matched-input/output transport
+measurement already contains its payload transfer:
 
 ```text
-local_compute > link_setup_and_RTT_tail + input_bytes / input_goodput
-              + remote_compute + output_bytes / output_goodput
-              + serialization_and_queue_cost
+local_compute_us > measured_matched_message_transport_us + remote_compute_us
+                 + serialization_and_queue_cost_us
 ```
 
-If a request is overlapped with transfer, measure that pipeline directly rather
-than subtracting costs speculatively. Goodput/RTT/jitter/loss, an owned peer and
-remote target results are currently required before a numeric minimum useful
-compute-to-transfer ratio or wireless offload recommendation can be established.
-Keep missing bounds explicit when reporting to VIBEWARE #8/#9.
+Only an independently separated fixed transport overhead can be combined with
+directional byte/goodput terms; do not count the same payload twice. If a request
+is overlapped with transfer, measure that pipeline directly. The completed
+[wireless observations](../evidence/WIRELESS-FINDINGS.md) and
+[S3 comparison](../evidence/S3-COMPARISON.md) establish no successful job RPC or
+deadline-critical offload win. Keep missing bounds explicit for VIBEWARE #8/#9.
 
 No merge or production promotion is part of this mission. The PR remains
 **Draft/HOLD** pending owner review and physical evidence.
@@ -216,3 +217,9 @@ I2S driver-event collection. It reports free-TX-buffer-queue-full indications,
 DMA descriptor faults and queue/drain observations, while retaining unknown
 analog gap and exact notification-loss counts. Its observer overhead and
 drain-time window assignment are explicit. See [method notes](../evidence/method-notes.md).
+
+The completed [event supplement](../evidence/campaign-events/REPORT.md) contains
+a second 365-second near-full-CPU stress window and raw sensor observations.
+[Packed colour characterization](../tools/perf/COLOR.md) is separately opt-in:
+it measures packed strip intermediates, keeps the existing RGB565 LCD wire
+format, and records actual successful fullscreen one/two-layer frames.

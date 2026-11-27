@@ -1,0 +1,321 @@
+{
+  "schema": "cyd-perf-publication/1",
+  "label": "I2S events and 365-second stress supplement",
+  "capture_status": "CAPTURE COMPLETE",
+  "publication_scope": "complete_capture",
+  "allow_partial_requested": false,
+  "measured_run_count": 31,
+  "evidence_class": "physical_measured",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "a980f7e2b9409686ae2d325ebeddfd525966f06e8ded03b2d8a723b36771ab11",
+  "profile": "cyd-profile-link",
+  "source_tree_state": "sha256:1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
+  "input_results_sha256": "3f342828ff90ef36feb68f815a8e600713385f5ab46d0c9235de9ad36bde54d4",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "member_prefix": "physical/events-link-01",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7",
+    "verified_members": {
+      "physical/events-link-01/artifact-hashes.json": {
+        "bytes": 1157,
+        "sha256": "0bd8fa0c00a084477cdd5c8d94b01b351ed2ac425d25408128eb0c2572329c26",
+        "compressed_bytes": 638
+      },
+      "physical/events-link-01/metrics.csv": {
+        "bytes": 431769,
+        "sha256": "21f18a41ef92ba9c6d61d7264a81e40ae439237841c3a9499a93cfa52acfc75c",
+        "compressed_bytes": 16572
+      },
+      "physical/events-link-01/r013_1-pcm.bin": {
+        "bytes": 611268,
+        "sha256": "8d01925e7902764cb77dff9d675273e92e1eb2c2c47c840a837fc4dd2d16a7f3",
+        "compressed_bytes": 560225
+      },
+      "physical/events-link-01/r014_2-pcm.bin": {
+        "bytes": 611800,
+        "sha256": "1c7c6304978dd546d0474792687067c2c6fa959daa22e05cb656c61f76f09ce6",
+        "compressed_bytes": 560712
+      },
+      "physical/events-link-01/r015_3-pcm.bin": {
+        "bytes": 611268,
+        "sha256": "742652515c69bacc990c2d892b7c76cbf7f6a9b76c4ee5b6d7859fac3a512a6c",
+        "compressed_bytes": 560188
+      },
+      "physical/events-link-01/r016_1-pcm.bin": {
+        "bytes": 611268,
+        "sha256": "b149e176a1dabe51e2ac7103f2b0a6fb16701a386b96776ef6cc3836a1b93f50",
+        "compressed_bytes": 517238
+      },
+      "physical/events-link-01/r017_2-pcm.bin": {
+        "bytes": 609406,
+        "sha256": "f5081bb6dcbf35715ef7e0341c9c73a53883fbfe7a4de30d3bfa49bbe6dc46bd",
+        "compressed_bytes": 515769
+      },
+      "physical/events-link-01/r018_3-pcm.bin": {
+        "bytes": 611002,
+        "sha256": "aa734ae6ff69141dfb7645fe31526cbb7e99c052a8153cbba6424379bdc12403",
+        "compressed_bytes": 517051
+      },
+      "physical/events-link-01/results.json": {
+        "bytes": 1282117,
+        "sha256": "3f342828ff90ef36feb68f815a8e600713385f5ab46d0c9235de9ad36bde54d4",
+        "compressed_bytes": 83196
+      },
+      "physical/events-link-01/samples.csv": {
+        "bytes": 392387,
+        "sha256": "87eeb3154f468c2b8b284d97fa7a750fddc8a21994b138ac1f8f10e82447304b",
+        "compressed_bytes": 18539
+      },
+      "physical/events-link-01/serial-events.jsonl": {
+        "bytes": 37476136,
+        "sha256": "ad3cac8f3b0572adfc6e8cab9819e4d2360b2c21fcc3964c90bb52d43cd998b2",
+        "compressed_bytes": 3411172
+      },
+      "physical/events-link-01/serial-rx.bin": {
+        "bytes": 4166508,
+        "sha256": "e78867a38bc070e9b733129dcbaf70bfd8977278f4415d1e110de93133415ad8",
+        "compressed_bytes": 3273912
+      },
+      "physical/events-link-01/serial-text.log": {
+        "bytes": 500496,
+        "sha256": "eeecdcdd45827e7579d5d53555e10b1f759b762274e305b168084e8e9a8f21ef",
+        "compressed_bytes": 27310
+      },
+      "physical/events-link-01/target.jsonl": {
+        "bytes": 613821,
+        "sha256": "7332d01f7fa302370e622a27c7028b32d7e1a0418472dcad19bc27f7348fb9d3",
+        "compressed_bytes": 43735
+      }
+    }
+  },
+  "inputs": {
+    "artifact-hashes.json": {
+      "bytes": 1157,
+      "sha256": "0bd8fa0c00a084477cdd5c8d94b01b351ed2ac425d25408128eb0c2572329c26"
+    },
+    "metrics.csv": {
+      "bytes": 431769,
+      "sha256": "21f18a41ef92ba9c6d61d7264a81e40ae439237841c3a9499a93cfa52acfc75c"
+    },
+    "r013_1-pcm.bin": {
+      "bytes": 611268,
+      "sha256": "8d01925e7902764cb77dff9d675273e92e1eb2c2c47c840a837fc4dd2d16a7f3"
+    },
+    "r014_2-pcm.bin": {
+      "bytes": 611800,
+      "sha256": "1c7c6304978dd546d0474792687067c2c6fa959daa22e05cb656c61f76f09ce6"
+    },
+    "r015_3-pcm.bin": {
+      "bytes": 611268,
+      "sha256": "742652515c69bacc990c2d892b7c76cbf7f6a9b76c4ee5b6d7859fac3a512a6c"
+    },
+    "r016_1-pcm.bin": {
+      "bytes": 611268,
+      "sha256": "b149e176a1dabe51e2ac7103f2b0a6fb16701a386b96776ef6cc3836a1b93f50"
+    },
+    "r017_2-pcm.bin": {
+      "bytes": 609406,
+      "sha256": "f5081bb6dcbf35715ef7e0341c9c73a53883fbfe7a4de30d3bfa49bbe6dc46bd"
+    },
+    "r018_3-pcm.bin": {
+      "bytes": 611002,
+      "sha256": "aa734ae6ff69141dfb7645fe31526cbb7e99c052a8153cbba6424379bdc12403"
+    },
+    "results.json": {
+      "bytes": 1282117,
+      "sha256": "3f342828ff90ef36feb68f815a8e600713385f5ab46d0c9235de9ad36bde54d4"
+    },
+    "samples.csv": {
+      "bytes": 392387,
+      "sha256": "87eeb3154f468c2b8b284d97fa7a750fddc8a21994b138ac1f8f10e82447304b"
+    },
+    "serial-events.jsonl": {
+      "bytes": 37476136,
+      "sha256": "ad3cac8f3b0572adfc6e8cab9819e4d2360b2c21fcc3964c90bb52d43cd998b2"
+    },
+    "serial-rx.bin": {
+      "bytes": 4166508,
+      "sha256": "e78867a38bc070e9b733129dcbaf70bfd8977278f4415d1e110de93133415ad8"
+    },
+    "serial-text.log": {
+      "bytes": 500496,
+      "sha256": "eeecdcdd45827e7579d5d53555e10b1f759b762274e305b168084e8e9a8f21ef"
+    },
+    "target.jsonl": {
+      "bytes": 613821,
+      "sha256": "7332d01f7fa302370e622a27c7028b32d7e1a0418472dcad19bc27f7348fb9d3"
+    },
+    "summary.json": {
+      "bytes": 102246,
+      "sha256": "dbc4b6b410cc25c31d45db81f804082a4a04a091ed272e69cb08f3c522a6f391"
+    },
+    "summary-scenes.csv": {
+      "bytes": 3916,
+      "sha256": "7ce2b4429996732157f736b5897ba596988200eda73fc2d668b89542937a55a7"
+    },
+    "summary-metrics.csv": {
+      "bytes": 30401,
+      "sha256": "a73332716ef1838716fda6fbd77c3ae88e781e6cd2c113c29ca105431aed32a1"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "figures/manifest.json": {
+      "bytes": 96628,
+      "sha256": "0191642a595b68b6558c380da4dd686c3beb9c9b92560666616eb424a466b602"
+    },
+    "figures/fps-scenes.png": {
+      "bytes": 95534,
+      "sha256": "ede5d14d0912f937dbc2b46e5525b9d77c354155f2895d56861a063e7da2556c"
+    },
+    "figures/fps-scenes.svg": {
+      "bytes": 13833,
+      "sha256": "678ae07f52e1ba53b2504ee56aefa76d631f642c145983c8fb4cd7bb3560b8d2"
+    },
+    "figures/fps-audio.png": {
+      "bytes": 102606,
+      "sha256": "16af00da8dcd60adb724dff506544def9ed0bc71b84d543b8d4dc4b28ac6b6c0"
+    },
+    "figures/fps-audio.svg": {
+      "bytes": 15286,
+      "sha256": "781de200a83d21638884b9635e080dcffc389d2437a037a8689cd0a98978dce5"
+    },
+    "figures/fps-radio.png": {
+      "bytes": 84376,
+      "sha256": "5227f909123d4520574f2d057be5a5677f3edd8533ea5e76813364782f7169cb"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10262,
+      "sha256": "207c9283bdd592f145c39ef0fe3b227909015500fbb1d86837ab5d5814327a0e"
+    },
+    "figures/audio-tails.png": {
+      "bytes": 148255,
+      "sha256": "a2052371d350adb570b817ef827ce6ffe5cb7977ee1706e0045df835b3bcf297"
+    },
+    "figures/audio-tails.svg": {
+      "bytes": 44174,
+      "sha256": "3f48ce080f9e1a634e554e227de737901e4ba6edacd0e8ae0fb6d8ed3cc34f8e"
+    },
+    "figures/stress-temperature.png": {
+      "bytes": 169343,
+      "sha256": "2124cfdb55da92c7083e787f7a2220808fed30bad09df1b321a178cf1a0b4d1d"
+    },
+    "figures/stress-temperature.svg": {
+      "bytes": 74254,
+      "sha256": "c462a7f29a1a57e6cb00590bbdf2a4a996a3288ffc5c14f492f05ce3a9f30f5a"
+    }
+  },
+  "outputs": {
+    "figures/audio-tails.png": {
+      "bytes": 148255,
+      "sha256": "a2052371d350adb570b817ef827ce6ffe5cb7977ee1706e0045df835b3bcf297"
+    },
+    "figures/audio-tails.svg": {
+      "bytes": 44174,
+      "sha256": "3f48ce080f9e1a634e554e227de737901e4ba6edacd0e8ae0fb6d8ed3cc34f8e"
+    },
+    "figures/fps-audio.png": {
+      "bytes": 102606,
+      "sha256": "16af00da8dcd60adb724dff506544def9ed0bc71b84d543b8d4dc4b28ac6b6c0"
+    },
+    "figures/fps-audio.svg": {
+      "bytes": 15286,
+      "sha256": "781de200a83d21638884b9635e080dcffc389d2437a037a8689cd0a98978dce5"
+    },
+    "figures/fps-radio.png": {
+      "bytes": 84376,
+      "sha256": "5227f909123d4520574f2d057be5a5677f3edd8533ea5e76813364782f7169cb"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10262,
+      "sha256": "207c9283bdd592f145c39ef0fe3b227909015500fbb1d86837ab5d5814327a0e"
+    },
+    "figures/fps-scenes.png": {
+      "bytes": 95534,
+      "sha256": "ede5d14d0912f937dbc2b46e5525b9d77c354155f2895d56861a063e7da2556c"
+    },
+    "figures/fps-scenes.svg": {
+      "bytes": 13833,
+      "sha256": "678ae07f52e1ba53b2504ee56aefa76d631f642c145983c8fb4cd7bb3560b8d2"
+    },
+    "figures/manifest.json": {
+      "bytes": 96628,
+      "sha256": "0191642a595b68b6558c380da4dd686c3beb9c9b92560666616eb424a466b602"
+    },
+    "figures/stress-temperature.png": {
+      "bytes": 169343,
+      "sha256": "2124cfdb55da92c7083e787f7a2220808fed30bad09df1b321a178cf1a0b4d1d"
+    },
+    "figures/stress-temperature.svg": {
+      "bytes": 74254,
+      "sha256": "c462a7f29a1a57e6cb00590bbdf2a4a996a3288ffc5c14f492f05ce3a9f30f5a"
+    },
+    "REPORT.md": {
+      "bytes": 23728,
+      "sha256": "57eadfa43ec4408d83257fb1822ca37c50309c8cc84563bfb7a3d165f80b4d13"
+    },
+    "stress-samples.csv": {
+      "bytes": 101908,
+      "sha256": "23552f97bc73959134b4894acf8f9abaaa9b676cf3fb877aed9471f08ab64fd1"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-metrics.csv": {
+      "bytes": 30401,
+      "sha256": "a73332716ef1838716fda6fbd77c3ae88e781e6cd2c113c29ca105431aed32a1"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-scenes.csv": {
+      "bytes": 3916,
+      "sha256": "7ce2b4429996732157f736b5897ba596988200eda73fc2d668b89542937a55a7"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary.json": {
+      "bytes": 71514,
+      "sha256": "faa26fd2a77dfd5eece70bbb69e666c110bf367dafae2ac242d61622b8ee5f35"
+    }
+  },
+  "stress_rows": 356,
+  "tools": {
+    "publish_evidence.py": {
+      "bytes": 17922,
+      "sha256": "efb24ea5b397326a7386e33bfaf1eae5230c6903c40615ce7b3712f1c464c456"
+    },
+    "report.py": {
+      "bytes": 39621,
+      "sha256": "f42734404218a4e1c4028621da9cc9582fb32c770e97474610b232c8ff52a3c9"
+    },
+    "summarize.py": {
+      "bytes": 11400,
+      "sha256": "f0738c3ee838c429d4b83ec27c2a541f46609754b708df015b3b241ddffef452"
+    },
+    "capture.py": {
+      "bytes": 43047,
+      "sha256": "c98d541c781af8e03971c64e54d816e0c67548e3089a9a55ef9109a2ffa16163"
+    }
+  },
+  "limitations": [
+    "Raw archive membership and source hashes are verified; this tool does not independently attest hardware readings or the flashed image.",
+    "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
+    "Manifest excludes its own digest to avoid a self-referential hash."
+  ],
+  "derived_generation_note": "Offload formula in published summary includes matched transport once. Raw source unchanged; archived older derived summary superseded."
+}

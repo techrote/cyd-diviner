@@ -8,7 +8,7 @@ import unittest
 from unittest import mock
 
 from capture import METRIC_NAMES
-from link_analyze import analyze, report, main
+from link_analyze import analyze, report, main, value_range
 
 
 def profile(run_id):
@@ -58,6 +58,11 @@ def capture(runs):
 
 
 class LinkAnalysisTests(unittest.TestCase):
+    def test_even_repetition_median_averages_middle_values(self):
+        self.assertEqual(value_range([10, 30])["median"], 20)
+        self.assertEqual(value_range([10, 30, 50])["median"], 30)
+        self.assertIsNone(value_range([])["median"])
+
     def test_raw_panic_and_later_startup_do_not_become_hardware_unsupported_or_zero_rtt(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

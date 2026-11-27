@@ -1,0 +1,13 @@
+capture,capture_status,retained_records_in_valid_windows,temperature_raw_min,temperature_raw_max,temperature_c_uncalibrated_min,temperature_c_uncalibrated_max,temperature_c_indication_min,temperature_c_indication_max
+ble-init-link-01,CAPTURE COMPLETE,54,128,128,53.333,53.333,,
+continuation-01,FAILED,496,128,151,53.333,66.111,,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,132,137,139,,,,
+events-link-01,CAPTURE COMPLETE,626,135,146,57.222,63.333,,
+full-01,FAILED,1755,130,151,54.444,66.111,,
+link-fresh-ap-01,FAILED,72,147,156,63.889,68.889,,
+link-wifi-02,FAILED,486,144,165,62.222,73.889,,
+link-wifi-retry-01,FAILED,252,148,165,64.444,73.889,,
+preflight-01,CAPTURE COMPLETE,6,129,130,53.889,54.444,,
+s3-kernels-01,FAILED,10,,,,,34.1,36.1
+s3-kernels-link-02,FAILED,160,,,,,35.1,40.1
+s3-kernels-link-03,CAPTURE COMPLETE,265,,,,,37.1,42.1

@@ -201,8 +201,8 @@
       "sha256": "025aaed05b65f76dedc6b5592d4ce1e8312915fec98067fdc53308ba482b568a"
     },
     "summary.json": {
-      "bytes": 603271,
-      "sha256": "3d04eb8fb8808f50d28f8df09ef9a3d28b95ba19f0e9b43ac4f2d3129b7c0ea3"
+      "bytes": 603478,
+      "sha256": "deb6d1badc392a8d679d0f5e944b8dfa3d6a7e42af91e97fc3243e9f0e8f70c4"
     },
     "summary-scenes.csv": {
       "bytes": 24072,
@@ -331,8 +331,8 @@
       "sha256": "4a1e5021680c992cc009e98b1eb4c1450a6f328df50111428b2f701cd6555071"
     },
     "REPORT.md": {
-      "bytes": 43101,
-      "sha256": "2bf7aabfaa535bcdf994ea41c76c1a489c39324ce6dff6781c7b6b7526e07747"
+      "bytes": 43252,
+      "sha256": "eded54d844e2059f5870d390b45c02d3586e0f6e825b9c95c60e251763ac154c"
     },
     "stress-samples.csv": {
       "bytes": 350,
@@ -359,23 +359,23 @@
       "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
     },
     "summary.json": {
-      "bytes": 422003,
-      "sha256": "2dbd6b87676fb015eb3a31e16e28bf89c2619e390a64c9fa17b0264b44364fa6"
+      "bytes": 422205,
+      "sha256": "e783d588425c3e0a9aef3bac2dea551d183bb895ff1b203d714d9ccd917d700f"
     }
   },
   "stress_rows": 0,
   "tools": {
     "publish_evidence.py": {
-      "bytes": 17926,
-      "sha256": "0860e70e9c62619b74001f72791e3807a8fd4afc738cfdcfaad37c9c09ece209"
+      "bytes": 17922,
+      "sha256": "efb24ea5b397326a7386e33bfaf1eae5230c6903c40615ce7b3712f1c464c456"
     },
     "report.py": {
-      "bytes": 39169,
-      "sha256": "b39ed01437d0fe5feb7c13289d0374d17411e53380f5d1002ad5bda19de42a09"
+      "bytes": 39621,
+      "sha256": "f42734404218a4e1c4028621da9cc9582fb32c770e97474610b232c8ff52a3c9"
     },
     "summarize.py": {
-      "bytes": 10689,
-      "sha256": "06e82c9ae16d882dbff530eb6547a2b4a0e24d294dfebe1c5439a13963c1e7ec"
+      "bytes": 10905,
+      "sha256": "bd4ed0dfd3b4e068fcd8bcf829494316ecc2f2b349c214073f42bd7b7768ef90"
     },
     "capture.py": {
       "bytes": 37365,
@@ -387,13 +387,17 @@
     "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
     "Manifest excludes its own digest to avoid a self-referential hash."
   ],
-  "post_generation_edit": {
-    "reason": "Corrected footer wording without promoting terminal partial status.",
-    "raw_inputs_unchanged": true,
-    "edit": {
-      "from": "An empty table means that no stress workload was present in this completed capture.",
-      "to": "An empty table means that no stress workload was present in this source capture."
+  "post_generation_note": {
+    "reason": "Corrected offload model to matched input/output transport or separately estimated fixed overhead; full payload RTT is not added to transfer cost twice.",
+    "publication_relocation": {
+      "staging_archive_href": "../../../evidence/PHYSICAL-CAPTURES-BASELINE.zip",
+      "final_archive_href": "../PHYSICAL-CAPTURES-BASELINE.zip"
     },
-    "edit_script_sha256": "8d20c400c331c00c4ef95e20c51284f7ae01f5c7c9d6bc4edffede591301ff03"
+    "raw_results_unchanged": {
+      "bytes": 6203287,
+      "sha256": "9adfeeca8f4ab91c8b3b3e6722128b913bda571218c16be720d702fbdbdbf715"
+    },
+    "original_capture_status_preserved": "FAILED",
+    "correction_script_sha256": "88fe1f7c335934ce99fb42e2640b1b4aa128bffb3d579f60c67c8a8d43e5d9b1"
   }
 }

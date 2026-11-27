@@ -1,0 +1,115 @@
+{
+  "schema": "cyd-perf-physical-readbacks/1",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "a980f7e2b9409686ae2d325ebeddfd525966f06e8ded03b2d8a723b36771ab11",
+  "scope": "Physical controller RGB565 readback outside measurement windows; not an optical latency measurement.",
+  "readbacks": [
+    {
+      "workload": "visions/landscape/fullscreen/gate-trails",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "warm_seconds": 1,
+      "directory": "gate-trails-full",
+      "png_sha256": "0a4b79eb11b29488a89d09ef2c9aee666c7da2a5096a83f55d8431a59e618e61",
+      "physical_readback": {
+        "schema": "cyd-display-readback/1",
+        "width": 320,
+        "height": 240,
+        "sha256": "69e3068d94eae70bbfd0e14caa9191a5e871997da6ae701ebb303a0d72751013",
+        "evidence": "physical_controller_readback_outside_measurement_window"
+      },
+      "observed_outcome": "Rendered fullscreen Gate/Trails",
+      "shot_command_utc": "2026-11-27T20:33:32.067947+00:00"
+    },
+    {
+      "workload": "visions/portrait/fullscreen/plasma-kaleido",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 1",
+        "perf scene visions",
+        "perf vision 0 1 1 0"
+      ],
+      "warm_seconds": 1,
+      "directory": "plasma-kaleido-portrait",
+      "png_sha256": "d0b713f1ae0541891a5680a9feec66d5f49beaa0ca2e63ac284033959eec7cb3",
+      "physical_readback": {
+        "schema": "cyd-display-readback/1",
+        "width": 240,
+        "height": 320,
+        "sha256": "78ec69f24565787de8464f8860511bd9396ae3257461c575e0fecc9f22c771fd",
+        "evidence": "physical_controller_readback_outside_measurement_window"
+      },
+      "observed_outcome": "Rendered fullscreen Plasma/Kaleido in portrait",
+      "shot_command_utc": "2026-11-27T20:33:37.267150+00:00"
+    },
+    {
+      "workload": "visions/landscape/ui/trails/rgb444",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 5 0 0 0"
+      ],
+      "warm_seconds": 1,
+      "directory": "trails-rgb444",
+      "png_sha256": "7089eab7422205257bb99d32c220c501f4cc53b4e910ad72eecf69bd83c644fa",
+      "physical_readback": {
+        "schema": "cyd-display-readback/1",
+        "width": 320,
+        "height": 240,
+        "sha256": "856b4e074f817cb181c7b572a0fe9785a0d94ee445c4ba058e417f4c2eaed885",
+        "evidence": "physical_controller_readback_outside_measurement_window"
+      },
+      "observed_outcome": "Displayed allocation failure in UI after radio/scene history",
+      "shot_command_utc": "2026-11-27T20:33:42.111437+00:00"
+    },
+    {
+      "workload": "visions/landscape/ui/trails/rgb565",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 5 0 0 1"
+      ],
+      "warm_seconds": 1,
+      "directory": "trails-rgb565",
+      "png_sha256": "361fcd8a5f3cb7046708d269d3fafb7201c80f6092e2c53517c3b844e0ffabe7",
+      "physical_readback": {
+        "schema": "cyd-display-readback/1",
+        "width": 320,
+        "height": 240,
+        "sha256": "c17c317067a973402ae362c930624cb7796509ee20f034bd45ce8ae6b6adda06",
+        "evidence": "physical_controller_readback_outside_measurement_window"
+      },
+      "observed_outcome": "Displayed allocation failure in UI after radio/scene history",
+      "shot_command_utc": "2026-11-27T20:33:47.145641+00:00"
+    },
+    {
+      "workload": "Owner-selected fullscreen Trails",
+      "directory": "trails-manual-fullscreen",
+      "observed_outcome": "Rendered fullscreen trails after owner manually changed mode",
+      "format": "Not independently queried at this readback",
+      "physical_readback": {
+        "schema": "cyd-display-readback/1",
+        "width": 320,
+        "height": 240,
+        "sha256": "fe4679e0a0b518164fcd888ea4cb90b8f039edb5f585fd25a16a5a8c74d2f9e7",
+        "evidence": "physical_controller_readback_outside_measurement_window"
+      },
+      "png_sha256": "b9b628b39b7c7e0ef20a59df602c53def1cf3e23428c480df815998a12e8df42",
+      "shot_command_utc": "2026-11-27T20:34:51.441473+00:00"
+    }
+  ]
+}
