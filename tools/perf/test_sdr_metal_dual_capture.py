@@ -11,6 +11,7 @@ from link_capture import SecretGuard
 from sdr_metal_capture import SnapshotDecoder
 from sdr_metal_dual_capture import capture, dual_plan, execute_dual_run, read_identities
 from test_sdr_metal_capture import TXFixture, snapshot, wire
+import test_sdr_metal_transport as output_fixture
 
 
 class Clock:
@@ -133,6 +134,35 @@ class DualTests(unittest.TestCase):
             identities["tx"]["port"] = "COM13"
             path = root / "ids.json"; path.write_text(json.dumps(identities))
             with self.assertRaisesRegex(ValueError, "Three distinct"): read_identities(path)
+
+    def test_new_transport_queries_post_info_after_terminal_and_cleanup_only(self):
+        for teardown_failure in (False, True):
+            with self.subTest(teardown_failure=teardown_failure), tempfile.TemporaryDirectory() as tmp, mock.patch("sdr_metal_dual_capture.time.perf_counter", Clock()), mock.patch("sdr_metal_dual_capture.time.sleep"):
+                root = pathlib.Path(tmp); plan, run, ports, events, folders = self.setup_run(root)
+                plan["temperature_queries"] = False
+                class OutputTX(TX):
+                    def __init__(self):
+                        super().__init__(events); self.records.append(output_fixture.info()); self.post_queries = 0
+                    def request(self, command, *args, **kwargs):
+                        if command == "info":
+                            assert any(r.get("type") == "tx_end" for r in self.records)
+                            self.post_queries += 1
+                            record = output_fixture.info(13, 7600); self.records.append(record); return record
+                        return super().request(command, *args, **kwargs)
+                    def read(self, nonblocking=False):
+                        was_pending = bool(self.pending); super().read(nonblocking=nonblocking)
+                        if was_pending:
+                            self.records[-1] = output_fixture.terminal()
+                        if teardown_failure:
+                            for record in self.records:
+                                if record.get("type") == "tx_result": record["direct_power_domain_owned_after"] = True
+                tx = OutputTX(); ports["tx"] = tx
+                for name in ("rx", "rx2"): ports[name].tx = tx
+                ok = execute_dual_run(run, ports, plan, root / "plan.json", folders, SecretGuard())
+                self.assertEqual(ok, not teardown_failure)
+                self.assertEqual(tx.post_queries, 0 if teardown_failure else 1)
+                if not teardown_failure: self.assertEqual(run["transmitter_output_validation"]["status"], "VALIDATED")
+                else: self.assertIn("tx", run["failures"])
 
     def test_constructor_failure_preserves_original_error_and_parent_manifest(self):
         with tempfile.TemporaryDirectory() as tmp:

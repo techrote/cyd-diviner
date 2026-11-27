@@ -50,6 +50,16 @@ to their finite terminal boundaries. Any failed case stops later cases without
 automatic retry or retransmission. Native data already collected from the
 other receiver remain available under their own acquisition status.
 
+New serializer-capable TX images additionally use the shared conditional
+transport validator. The last pre-window runtime info records its capability
+and counters; after all finite terminal boundaries and successful legacy TX
+cleanup, a fresh outside-window `info` observes the final output flush. Parsed
+result/trace/segment/end acceptance and cumulative zero-failure counters must
+agree. Legacy images without that capability retain their original validation
+scope and do not receive the extra query. Failed TX cleanup suppresses the query.
+See `SDR-METAL-TX-OUTPUT.md` for the exact driver-acceptance and retry semantics;
+none of these receipts independently measures RF cessation.
+
 The output layout is:
 
 - `results.json`: dual campaign, shared TX exposure and per-receiver statuses.

@@ -17,7 +17,8 @@ from capture import utc_now
 from link_capture import SecretGuard
 from sdr_capture import SDRPort, digest
 from sdr_metal_capture import (MetalRX, default_plan, validate_plan, validate_snapshot,
-                               validate_tx_cleanup, validate_sensor_cleanup)
+                               validate_tx_cleanup, validate_sensor_cleanup,
+                               tx_output_transport_info, validate_tx_transport)
 
 RECEIVERS = ("rx", "rx2")
 
@@ -97,6 +98,7 @@ def execute_dual_run(run, ports, plan, plan_path, folders, guard):
     if case["arm_delay_us"] != 500000:
         raise ValueError("Dual-receiver experiment requires explicit 500,000us arm delay")
     cursors = {name: len(port.records) for name, port in ports.items()}
+    output_before = tx_output_transport_info(tx.records)
     snapshot_cursors = {name: len(ports[name].decoder.snapshots) for name in RECEIVERS}
     received, failures = {}, {}
     run["receivers"] = {name: {"status": "IN PROGRESS", "shared_exposure_id": run_id} for name in RECEIVERS}
@@ -188,8 +190,17 @@ def execute_dual_run(run, ports, plan, plan_path, folders, guard):
             if name not in ends: failures.setdefault(name, "Missing finite receiver terminal boundary; no recovery command injected")
         if sent_tx and not any(r.get("type") == "tx_end" for r in tx.records[cursors["tx"]:]): failures["tx"] = "Missing TX terminal boundary"
     if sent_tx and "tx" not in failures:
-        try: run["transmitter_result"] = validate_tx(tx.records[cursors["tx"]:], case, plan)
-        except RuntimeError as error: failures["tx"] = str(error)
+        try:
+            run["transmitter_result"] = validate_tx(tx.records[cursors["tx"]:], case, plan)
+            output_after = None
+            if (output_before or {}).get("output_transport") is not None:
+                # All finite endpoints have ended, and legacy cleanup passed.
+                # Only this fresh outside-window info can attest tx_end's flush.
+                run["transmitter_output_before"] = output_before
+                output_after = tx.request("info", lambda r: r.get("type") == "info", records=True)
+                run["transmitter_output_after"] = output_after
+            run["transmitter_output_validation"] = validate_tx_transport(tx.records[cursors["tx"]:], output_before, output_after)
+        except (RuntimeError, TimeoutError, ValueError, OSError) as error: failures["tx"] = str(error)
     # A terminal receiver may be read even if the other receiver failed.
     for name in RECEIVERS:
         port, child = ports[name], run["receivers"][name]
