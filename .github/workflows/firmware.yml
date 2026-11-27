@@ -80,6 +80,14 @@ jobs:
           g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr/test_protocol.cpp experiments/sdr/protocol.cpp -o /tmp/cyd-sdr-protocol-test
           /tmp/cyd-sdr-protocol-test
           /tmp/cyd-sdr-protocol-test --low-sps-tests
+      - name: Validate isolated SDR register and memory contracts
+        run: |
+          python experiments/sdr-metal/rx/test_snapshot_host.py --output /tmp/cyd-metal-rx-tests
+          python experiments/sdr-metal/rx/test_output_bounds.py
+          gcc -std=c11 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr-metal/tx/test_words.c -o /tmp/cyd-metal-tx-words
+          /tmp/cyd-metal-tx-words
+          gcc -std=c11 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr-metal/tx-s3/test_words.c -o /tmp/cyd-metal-tx-s3-words
+          /tmp/cyd-metal-tx-s3-words
 
   native:
     runs-on: ubuntu-latest
