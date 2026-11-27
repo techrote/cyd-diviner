@@ -20,6 +20,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pio", default="pio")
     parser.add_argument("--out", type=pathlib.Path, required=True)
+    parser.add_argument("--build-dir", type=pathlib.Path, default=ROOT / ".pio" / "build")
     parser.add_argument("profiles", nargs="+")
     args = parser.parse_args()
     status = command(["git", "status", "--porcelain"])
@@ -36,7 +37,7 @@ def main():
                "source_tree_sha256": source.hexdigest(),
                "git_status": status, "pio": command([args.pio, "--version"]), "profiles": {}}
     for profile in args.profiles:
-        build = ROOT / ".pio" / "build" / profile
+        build = args.build_dir / profile
         artifacts = {}
         for name in ("firmware.bin", "firmware.elf", "firmware.map", "bootloader.bin", "partitions.bin"):
             path = build / name

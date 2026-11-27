@@ -15,6 +15,9 @@
 #include <driver/i2s.h>
 #ifdef GRIM_PERF
 #include <esp_heap_caps.h>
+#ifdef GRIM_PERF_I2S_EVENTS
+#include <esp_timer.h>
+#endif
 #endif
 #include <lgfx/v1/panel/Panel_ILI9341.hpp>
 #include <lgfx/v1/platforms/esp32/Bus_SPI.hpp>
@@ -164,6 +167,35 @@ void drawBackdropMotes(int left, int origin, int sceneBottom, int width, int cli
 constexpr int AudioBlock = 128;
 constexpr i2s_port_t AudioPort = I2S_NUM_0;
 SemaphoreHandle_t audioLock = nullptr;
+#ifdef GRIM_PERF_I2S_EVENTS
+QueueHandle_t audioEvents = nullptr;
+
+void drainAudioEvents() {
+    if (!audioEvents) return;
+    const uint64_t start = esp_timer_get_time();
+    static uint64_t previousDrain = 0;
+    perf_i2s_events::Drain drain;
+    drain.pendingBefore = uxQueueMessagesWaiting(audioEvents);
+    i2s_event_t event;
+    // Bounded consumer work, including outside measurement windows. Queue
+    // saturation between these observations is not a counted loss detector.
+    while (drain.events < perf_i2s_events::QueueCapacity && xQueueReceive(audioEvents, &event, 0) == pdTRUE) {
+        ++drain.events;
+        switch (event.type) {
+        case I2S_EVENT_TX_Q_OVF: ++drain.txUnderflow; break;
+        case I2S_EVENT_DMA_ERROR: ++drain.descriptorFault; break;
+        case I2S_EVENT_TX_DONE: ++drain.txDone; break;
+        default: ++drain.other; break;
+        }
+    }
+    drain.pendingAfter = uxQueueMessagesWaiting(audioEvents);
+    const uint64_t end = esp_timer_get_time();
+    drain.durationUs = static_cast<uint32_t>(end - start);
+    drain.intervalUs = previousDrain ? static_cast<uint32_t>(end - previousDrain) : 0;
+    previousDrain = end;
+    perf_profile::i2sEventDrain(drain, end);
+}
+#endif
 AudioFn audioFn = nullptr, overlayFn = nullptr;
 std::atomic<uint8_t> level{140};
 #ifdef GRIM_CYD_DIAGNOSTICS
@@ -182,6 +214,9 @@ void audioTask(void *) {
     uint32_t previousBlock = 0;
 #endif
     for (;;) {
+#ifdef GRIM_PERF_I2S_EVENTS
+        drainAudioEvents();
+#endif
 #ifdef GRIM_PERF
         const uint32_t blockAt = micros();
         if (previousBlock) {
@@ -285,7 +320,12 @@ bool beginAudio() {
     cfg.dma_buf_count = 4;
     cfg.dma_buf_len = AudioBlock;
     cfg.tx_desc_auto_clear = true;
+#ifdef GRIM_PERF_I2S_EVENTS
+    const bool installed = i2s_driver_install(AudioPort, &cfg, perf_i2s_events::QueueCapacity, &audioEvents) == ESP_OK;
+    perf_profile::i2sEventQueueAvailable(installed && audioEvents != nullptr);
+#else
     const bool installed = i2s_driver_install(AudioPort, &cfg, 0, nullptr) == ESP_OK;
+#endif
     if (installed && i2s_set_dac_mode(I2S_DAC_CHANNEL_LEFT_EN) == ESP_OK &&
         xTaskCreatePinnedToCore(audioTask, "grim-audio", 4096, nullptr, 5, nullptr, 0) == pdPASS) {
         return true;
@@ -294,6 +334,10 @@ bool beginAudio() {
         i2s_set_dac_mode(I2S_DAC_CHANNEL_DISABLE);
         i2s_driver_uninstall(AudioPort);
     }
+#ifdef GRIM_PERF_I2S_EVENTS
+    audioEvents = nullptr;
+    perf_profile::i2sEventQueueAvailable(false);
+#endif
     vSemaphoreDelete(audioLock);
     audioLock = nullptr;
     return false;

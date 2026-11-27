@@ -43,6 +43,17 @@ bool scheduled = false, completed = false, steadyStarted = false;
 uint64_t warmUntil = 0, endAt = 0, startedAt = 0, finishedAt = 0;
 uint32_t lastFrame = 0, frames = 0, directFrames = 0, warmupMs = 0, durationMs = 0;
 char runId[32] = "none";
+#ifdef GRIM_PERF_I2S_EVENTS
+constexpr bool I2sEventsEnabled = true;
+constexpr uint32_t I2sEventsCapacity = perf_i2s_events::QueueCapacity;
+constexpr const char *TemperatureMethod = "RTC_library_raw_undocumented_uncalibrated";
+bool i2sQueueReady = false;
+perf_i2s_events::Counters i2sCounters{};
+#else
+constexpr bool I2sEventsEnabled = false;
+constexpr uint32_t I2sEventsCapacity = 0;
+constexpr const char *TemperatureMethod = "ESP32_ROM_raw_uncalibrated";
+#endif
 volatile uint32_t totalTicks[2]{}, busyTicks[2]{};
 portMUX_TYPE cpuMux[2] = {portMUX_INITIALIZER_UNLOCKED, portMUX_INITIALIZER_UNLOCKED};
 TaskHandle_t idleTasks[2]{}, audioHandle = nullptr, loopHandle = nullptr, stressTasks[2]{};
@@ -130,6 +141,27 @@ void displaySettings() {
     for (unsigned i = 0; i < p.intensity.size(); ++i) Serial.printf(i ? ",%u" : "%u", p.intensity[i]);
     Serial.println("]}");
 }
+bool i2sEventsAvailable() {
+#ifdef GRIM_PERF_I2S_EVENTS
+    bool available;
+    portENTER_CRITICAL(&mux); available = i2sQueueReady; portEXIT_CRITICAL(&mux);
+    return available;
+#else
+    return false;
+#endif
+}
+void exportI2sEvents() {
+#ifdef GRIM_PERF_I2S_EVENTS
+    perf_i2s_events::Counters c;
+    bool available;
+    portENTER_CRITICAL(&mux); c = i2sCounters; available = i2sQueueReady; portEXIT_CRITICAL(&mux);
+    Serial.printf("PERF {\"schema\":1,\"type\":\"i2s_events\",\"run_id\":\"%s\",\"enabled\":true,\"queue_available\":%s,\"queue_capacity\":%u,\"observed\":%s,\"drain_calls\":%u,\"events_observed\":%u,\"tx_underflow_indications\":%u,\"dma_descriptor_faults\":%u,\"tx_done_events\":%u,\"other_events\":%u,\"pending_max\":%u,\"queue_full_observations\":%u,\"drain_limit_hits\":%u,\"max_drain_us\":%u,\"max_drain_interval_us\":%u,\"first_drain_offset_us\":%u,\"last_drain_offset_us\":%u,\"event_loss_count\":null,\"analog_gap_count\":null,\"window_assignment\":\"drain_completion_time\",\"drain_timing_scope\":\"queue_reads_only_excludes_counter_fold\",\"underflow_semantics\":\"IDF4.4.7_TX_Q_OVF_free_TX_buffer_queue_full\",\"saturation_limit\":\"queue_full_between_drains_and_exact_event_loss_unknown\"}\n",
+        runId, available ? "true" : "false", I2sEventsCapacity, available && c.drains ? "true" : "false",
+        c.drains, c.events, c.txUnderflow, c.descriptorFault, c.txDone, c.other, c.pendingMax,
+        c.queueFullObservations, c.drainLimitHits, c.maxDrainUs, c.maxDrainIntervalUs,
+        c.firstDrainOffsetUs, c.lastDrainOffsetUs);
+#endif
+}
 void exportResults() {
     poll();
     if (scheduled) { Serial.printf("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"run active; export after window\"}\n"); return; }
@@ -155,10 +187,11 @@ void exportResults() {
         Serial.println("]}");
         delay(1);
     }
-    Serial.printf("PERF {\"schema\":1,\"type\":\"end\",\"run_id\":\"%s\",\"complete\":%s,\"warmup_ms\":%u,\"duration_ms\":%u,\"elapsed_us\":%llu,\"frames\":%u,\"audio_completed_blocks\":%u,\"interleaved_frames\":%u,\"samples\":%u,\"samples_dropped\":%u,\"instrumentation\":%s,\"histograms_enabled\":%s,\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"dma_underruns\":null,\"physical_touch_latency_us\":null,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"ESP32_ROM_raw_uncalibrated\",\"stress_iterations_core0\":%u,\"stress_iterations_core1\":%u}\n",
+    exportI2sEvents();
+    Serial.printf("PERF {\"schema\":1,\"type\":\"end\",\"run_id\":\"%s\",\"complete\":%s,\"warmup_ms\":%u,\"duration_ms\":%u,\"elapsed_us\":%llu,\"frames\":%u,\"audio_completed_blocks\":%u,\"interleaved_frames\":%u,\"samples\":%u,\"samples_dropped\":%u,\"instrumentation\":%s,\"histograms_enabled\":%s,\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"dma_underruns\":null,\"physical_touch_latency_us\":null,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"%s\",\"stress_iterations_core0\":%u,\"stress_iterations_core1\":%u}\n",
         runId, completed ? "true" : "false", warmupMs, durationMs,
         static_cast<unsigned long long>(finishedAt > warmUntil ? finishedAt - warmUntil : 0),
-        frames, audioBlocks.load(), directFrames, sampleCount, samplesDropped, enabled.load() ? "true" : "false", enabled.load() ? "true" : "false", stressIterations[0].load(), stressIterations[1].load());
+        frames, audioBlocks.load(), directFrames, sampleCount, samplesDropped, enabled.load() ? "true" : "false", enabled.load() ? "true" : "false", TemperatureMethod, stressIterations[0].load(), stressIterations[1].load());
 }
 }
 
@@ -182,6 +215,19 @@ void audioBlock() {
     if (collecting.load(std::memory_order_acquire) && t >= warmUntil && t < endAt) audioBlocks.fetch_add(1, std::memory_order_relaxed);
     portEXIT_CRITICAL(&mux);
 }
+#ifdef GRIM_PERF_I2S_EVENTS
+void i2sEventQueueAvailable(bool available) {
+    portENTER_CRITICAL(&mux); i2sQueueReady = available; portEXIT_CRITICAL(&mux);
+}
+void i2sEventDrain(const perf_i2s_events::Drain &drain, uint64_t drainedAtUs) {
+    if (!collecting.load(std::memory_order_acquire)) return;
+    portENTER_CRITICAL(&mux);
+    // Recheck after acquiring the run/reset lock: a drain from an old run
+    // must never land in freshly reset counters on the UI core.
+    if (collecting.load(std::memory_order_acquire)) i2sCounters.add(drain, drainedAtUs, true, warmUntil, endAt);
+    portEXIT_CRITICAL(&mux);
+}
+#endif
 void begin() {
     loopHandle = xTaskGetCurrentTaskHandle();
     idleTasks[0] = xTaskGetIdleTaskHandleForCPU(0); idleTasks[1] = xTaskGetIdleTaskHandleForCPU(1);
@@ -229,15 +275,19 @@ bool command(const char *line) {
     if (!quiet()) return true;
     if (!strcmp(line, "perf info")) {
         displaySettings();
-        Serial.printf("PERF {\"schema\":1,\"type\":\"info\",\"source_sha\":\"%s\",\"profile\":\"%s\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"seed\":%u,\"scene_reset_policy\":\"fresh_audio_DSP_state_each_entry_seeded_no_song_persistence\",\"audio_window_alignment\":\"real_setup_and_warmup_elapsed_not_sample_aligned\",\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"radio\":\"%s\",\"cpu0_hook\":%s,\"cpu1_hook\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"heap_bytes\":%u,\"sdk\":\"%s\",\"lcd_spi_hz\":40000000,\"lcd_read_hz\":8000000,\"audio_rate\":24000,\"audio_block\":128,\"audio_core\":0,\"audio_priority\":5,\"pcm_core\":1,\"pcm_priority\":2,\"serial_baud\":533333,\"histogram_method\":\"ceil_log2_upper_bounds\",\"sample_capacity\":%u,\"sample_period_ms\":1000,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"ESP32_ROM_raw_uncalibrated\",\"temperature_raw\":%u}\n",
-            GRIM_PERF_SOURCE, GRIM_PERF_PROFILE, GRIM_PERF_SOURCE_DIGEST, GRIM_PERF_DIRTY ? "true" : "false", seed(), perf_radio::mode(), cpuHooks[0] ? "true" : "false", cpuHooks[1] ? "true" : "false", ESP.getChipModel(), ESP.getChipRevision(), ESP.getChipCores(), ESP.getCpuFreqMHz(), ESP.getFlashChipSize(), ESP.getFlashChipSpeed(), ESP.getPsramSize(), ESP.getFreeHeap(), ESP.getSdkVersion(), MaxSamples, temprature_sens_read());
+        Serial.printf("PERF {\"schema\":1,\"type\":\"info\",\"source_sha\":\"%s\",\"profile\":\"%s\",\"i2s_event_queue_enabled\":%s,\"i2s_event_queue_capacity\":%u,\"i2s_event_queue_available\":%s,\"i2s_event_window_assignment\":\"drain_completion_time\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"seed\":%u,\"scene_reset_policy\":\"fresh_audio_DSP_state_each_entry_seeded_no_song_persistence\",\"audio_window_alignment\":\"real_setup_and_warmup_elapsed_not_sample_aligned\",\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"radio\":\"%s\",\"cpu0_hook\":%s,\"cpu1_hook\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"heap_bytes\":%u,\"sdk\":\"%s\",\"lcd_spi_hz\":40000000,\"lcd_read_hz\":8000000,\"audio_rate\":24000,\"audio_block\":128,\"audio_core\":0,\"audio_priority\":5,\"pcm_core\":1,\"pcm_priority\":2,\"serial_baud\":533333,\"histogram_method\":\"ceil_log2_upper_bounds\",\"sample_capacity\":%u,\"sample_period_ms\":1000,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"%s\",\"temperature_raw\":%u}\n",
+            GRIM_PERF_SOURCE, GRIM_PERF_PROFILE, I2sEventsEnabled ? "true" : "false", I2sEventsCapacity, i2sEventsAvailable() ? "true" : "false", GRIM_PERF_SOURCE_DIGEST, GRIM_PERF_DIRTY ? "true" : "false", seed(), perf_radio::mode(), cpuHooks[0] ? "true" : "false", cpuHooks[1] ? "true" : "false", ESP.getChipModel(), ESP.getChipRevision(), ESP.getChipCores(), ESP.getCpuFreqMHz(), ESP.getFlashChipSize(), ESP.getFlashChipSpeed(), ESP.getPsramSize(), ESP.getFreeHeap(), ESP.getSdkVersion(), MaxSamples, TemperatureMethod, temprature_sens_read());
         return true;
     }
     unsigned warm, duration; char id[32];
     if (sscanf(line, "perf run %31s %u %u", id, &warm, &duration) == 3 || sscanf(line, "perf start %31s %u %u", id, &warm, &duration) == 3) {
         for (char c : id) { if (!c) break; if (!isalnum(static_cast<unsigned char>(c)) && c != '_' && c != '-') { Serial.println("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"invalid run id\"}"); return true; } }
         if (scheduled || !duration || duration > 600000 || warm > 60000) { Serial.println("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"invalid run duration or run active\"}"); return true; }
-        collecting.store(false); portENTER_CRITICAL(&mux); memset(hist, 0, sizeof(hist)); portEXIT_CRITICAL(&mux);
+        collecting.store(false); portENTER_CRITICAL(&mux); memset(hist, 0, sizeof(hist));
+#ifdef GRIM_PERF_I2S_EVENTS
+        i2sCounters = {};
+#endif
+        portEXIT_CRITICAL(&mux);
         audioBlocks.store(0); strcpy(runId, id); warmupMs = warm; durationMs = duration; frames = directFrames = lastFrame = 0; sampleCount = samplesDropped = 0;
         startedAt = esp_timer_get_time(); warmUntil = startedAt + uint64_t(warm) * 1000; endAt = warmUntil + uint64_t(duration) * 1000;
         finishedAt = 0; scheduled = true; completed = false; steadyStarted = false; collecting.store(true);
