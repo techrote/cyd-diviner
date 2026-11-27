@@ -1,6 +1,7 @@
 // Standalone comparative build: deliberately excludes Diviner, LCD and audio.
 #ifdef GRIM_PERF_KERNEL_STANDALONE
 #include "perf_kernels.h"
+#include "perf_output.h"
 #include <Arduino.h>
 #include <esp_chip_info.h>
 #include <esp_heap_caps.h>
@@ -40,31 +41,36 @@ SensorReading readSensor() {
 #endif
     return reading;
 }
-void sensorFields(const SensorReading &reading) {
+void sensorFields(perf_output::Line &line, const SensorReading &reading) {
 #if CONFIG_IDF_TARGET_ESP32
-    Serial.printf("\"temperature_raw\":%u,\"temperature_c_indication\":null,\"temperature_method\":\"RTC_library_raw_undocumented_uncalibrated\"", unsigned(reading.raw));
+    line.printf("\"temperature_raw\":%u,\"temperature_c_indication\":null,\"temperature_method\":\"RTC_library_raw_undocumented_uncalibrated\"", unsigned(reading.raw));
 #else
-    Serial.print("\"temperature_raw\":null,\"temperature_c_indication\":");
-    if (std::isfinite(reading.celsius)) Serial.printf("%.3f", double(reading.celsius));
-    else Serial.print("null");
-    Serial.print(",\"temperature_method\":\"Arduino_IDF_driver_Celsius_indication_external_accuracy_not_verified\"");
+    line.print("\"temperature_raw\":null,\"temperature_c_indication\":");
+    if (std::isfinite(reading.celsius)) line.printf("%.3f", double(reading.celsius));
+    else line.print("null");
+    line.print(",\"temperature_method\":\"Arduino_IDF_driver_Celsius_indication_external_accuracy_not_verified\"");
 #endif
 }
 void information(const char *type) {
     esp_chip_info_t chip; esp_chip_info(&chip);
     // Driver diagnostics, if any, must precede the machine-readable JSON line.
     const SensorReading sensor = readSensor();
-    Serial.printf("PERF {\"schema\":1,\"type\":\"%s\",\"source_sha\":\"%s\",\"source\":\"%s\",\"profile\":\"%s\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"workspace_bytes\":%u,\"framework\":\"%s\",\"serial_baud\":115200,\"standalone\":true,\"ordinary_audio_worker\":false,\"ordinary_display_worker\":false,\"kernel_default_memory\":\"internal\",\"heap_internal_free_bytes\":%u,\"heap_internal_largest_bytes\":%u,\"heap_psram_free_bytes\":%u,\"heap_psram_largest_bytes\":%u,\"uptime_us\":%llu,",
+    perf_output::Line line(2048);
+    line.printf("PERF {\"schema\":1,\"type\":\"%s\",\"source_sha\":\"%s\",\"source\":\"%s\",\"profile\":\"%s\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"workspace_bytes\":%u,\"framework\":\"%s\",\"serial_baud\":115200,\"standalone\":true,\"ordinary_audio_worker\":false,\"ordinary_display_worker\":false,\"kernel_default_memory\":\"internal\",\"heap_internal_free_bytes\":%u,\"heap_internal_largest_bytes\":%u,\"heap_psram_free_bytes\":%u,\"heap_psram_largest_bytes\":%u,\"uptime_us\":%llu,",
         type, GRIM_PERF_SOURCE, GRIM_PERF_SOURCE, GRIM_PERF_PROFILE, GRIM_PERF_SOURCE_DIGEST, GRIM_PERF_DIRTY ? "true" : "false",
         ESP.getChipModel(), unsigned(chip.revision), unsigned(chip.cores), unsigned(ESP.getCpuFreqMHz()), unsigned(ESP.getFlashChipSize()), unsigned(ESP.getFlashChipSpeed()), unsigned(ESP.getPsramSize()), unsigned(sizeof(perf_kernels::Workspace)), ESP.getSdkVersion(),
         unsigned(heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)), unsigned(heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)),
         unsigned(heap_caps_get_free_size(MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)), unsigned(heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)), static_cast<unsigned long long>(esp_timer_get_time()));
-    sensorFields(sensor);
+    sensorFields(line, sensor);
+    line.printf(",\"native_usb\":%s,\"usb_tx_buffer_bytes\":%u,\"usb_tx_buffer_configured\":%s,\"telemetry_max_record_bytes\":%u,\"telemetry_write_failures\":%u,\"telemetry_short_writes\":%u",
+        perf_output::nativeUsb() ? "true" : "false", perf_output::nativeUsb() ? unsigned(perf_output::UsbTxBytes) : 0u,
+        perf_output::usbBufferConfigured ? "true" : "false", unsigned(perf_output::MaxRecordBytes), unsigned(perf_output::writeFailures), unsigned(perf_output::shortWrites));
 #ifdef GRIM_PERF_LINK_PEER
-    Serial.println(",\"link_peer_compiled\":true}");
+    line.println(",\"link_peer_compiled\":true}");
 #else
-    Serial.println(",\"link_peer_compiled\":false}");
+    line.println(",\"link_peer_compiled\":false}");
 #endif
+    line.send();
 }
 bool standaloneCommand(const char *line) {
     if (!std::strcmp(line, "perf info")) { information("info"); return true; }
@@ -73,7 +79,7 @@ bool standaloneCommand(const char *line) {
 }
 }
 void setup() {
-    Serial.begin(115200);
+    perf_output::configureStandalone();
     delay(500);
 #ifdef GRIM_PERF_LINK
     perf_link::begin();

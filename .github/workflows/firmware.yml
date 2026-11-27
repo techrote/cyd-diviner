@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, kernel-esp32, kernel-s3, kernel-c3]
+        target: [cyd, cyd-diagnostics, cyd-pcm, cyd-profile, cyd-profile-events, cyd-profile-link, kernel-esp32, kernel-s3, kernel-s3-n4r2, kernel-s3-n4r2-peer, kernel-c3]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -61,6 +61,8 @@ jobs:
         run: python -m unittest discover -s tools/perf -p 'test_*.py' -v
       - name: Validate portable kernels with independent numeric oracles
         run: python tools/perf/validate_kernels.py --sanitize
+      - name: Check bounded telemetry record capacity
+        run: python tools/perf/check_output_bounds.py
       - name: Validate bounded I2S event aggregation
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=address,undefined tools/perf/test_i2s_events.cpp -o /tmp/cyd-i2s-events-test

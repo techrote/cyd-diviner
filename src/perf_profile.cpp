@@ -4,6 +4,9 @@
 #include "cyd_controls.h"
 #include "perf_kernels.h"
 #include "perf_radio.h"
+#ifdef GRIM_PERF_LINK
+#include "perf_link.h"
+#endif
 #include "theme.h"
 #include <Arduino.h>
 #include <esp_freertos_hooks.h>
@@ -273,6 +276,9 @@ void poll() {
 bool command(const char *line) {
     if (strncmp(line, "perf ", 5)) return false;
     if (!quiet()) return true;
+#ifdef GRIM_PERF_LINK
+    if (perf_link::command(line)) return true;
+#endif
     if (!strcmp(line, "perf info")) {
         displaySettings();
         Serial.printf("PERF {\"schema\":1,\"type\":\"info\",\"source_sha\":\"%s\",\"profile\":\"%s\",\"i2s_event_queue_enabled\":%s,\"i2s_event_queue_capacity\":%u,\"i2s_event_queue_available\":%s,\"i2s_event_window_assignment\":\"drain_completion_time\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"seed\":%u,\"scene_reset_policy\":\"fresh_audio_DSP_state_each_entry_seeded_no_song_persistence\",\"audio_window_alignment\":\"real_setup_and_warmup_elapsed_not_sample_aligned\",\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"radio\":\"%s\",\"cpu0_hook\":%s,\"cpu1_hook\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"heap_bytes\":%u,\"sdk\":\"%s\",\"lcd_spi_hz\":40000000,\"lcd_read_hz\":8000000,\"audio_rate\":24000,\"audio_block\":128,\"audio_core\":0,\"audio_priority\":5,\"pcm_core\":1,\"pcm_priority\":2,\"serial_baud\":533333,\"histogram_method\":\"ceil_log2_upper_bounds\",\"sample_capacity\":%u,\"sample_period_ms\":1000,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"%s\",\"temperature_raw\":%u}\n",
@@ -291,6 +297,9 @@ bool command(const char *line) {
         audioBlocks.store(0); strcpy(runId, id); warmupMs = warm; durationMs = duration; frames = directFrames = lastFrame = 0; sampleCount = samplesDropped = 0;
         startedAt = esp_timer_get_time(); warmUntil = startedAt + uint64_t(warm) * 1000; endAt = warmUntil + uint64_t(duration) * 1000;
         finishedAt = 0; scheduled = true; completed = false; steadyStarted = false; collecting.store(true);
+#ifdef GRIM_PERF_LINK
+        perf_link::onRun(runId, warmUntil, endAt);
+#endif
         Serial.printf("PERF {\"schema\":1,\"type\":\"run\",\"run_id\":\"%s\",\"warmup_ms\":%u,\"duration_ms\":%u,\"target_start_us\":%llu}\n", runId, warm, duration, static_cast<unsigned long long>(startedAt)); return true;
     }
     if (!strcmp(line, "perf export")) { exportResults(); return true; }
@@ -311,8 +320,10 @@ bool command(const char *line) {
     }
     char radioMode[16];
     if (sscanf(line, "perf radio %15s", radioMode) == 1) {
-        if (perf_radio::set(radioMode)) ack("radio");
-        else Serial.println("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"radio mode unsupported\"}");
+        const bool okay = perf_radio::set(radioMode);
+        perf_radio::report();
+        if (okay) ack("radio");
+        else Serial.println("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"radio initialization failed; see radio_state\"}");
         return true;
     }
     if (running() && !strncmp(line, "perf kernel", 11)) {

@@ -467,7 +467,11 @@ void dispatchSerial(char *line, unsigned length, uint32_t now) {
 }
 
 void serialInput(uint32_t now) {
+#ifdef GRIM_PERF_LINK
+    static char line[320]; // Private provisioning is parsed without echo.
+#else
     static char line[128];
+#endif
     static unsigned length = 0;
     static bool overflow = false;
     uint8_t bytes[64];

@@ -376,13 +376,15 @@ FftComparison validateFft(Workspace &w, bool large, uint32_t seed) {
 #include <soc/soc_memory_types.h>
 #include <cstdio>
 #include <memory>
+#include "perf_output.h"
 namespace perf_kernels {
 bool command(const char *line) {
     if (std::strncmp(line, "perf kernel", 11) != 0) return false;
     if (std::strcmp(line, "perf kernel list") == 0) {
-        Serial.print("PERF {\"schema\":1,\"type\":\"kernel_list\",\"kernels\":[");
-        for (unsigned i = 0; i < static_cast<unsigned>(Id::Count); ++i) Serial.printf("%s\"%s\"", i ? "," : "", descriptor(static_cast<Id>(i)).name);
-        Serial.println("]}"); return true;
+        perf_output::Line outputLine(512);
+        outputLine.print("PERF {\"schema\":1,\"type\":\"kernel_list\",\"kernels\":[");
+        for (unsigned i = 0; i < static_cast<unsigned>(Id::Count); ++i) outputLine.printf("%s\"%s\"", i ? "," : "", descriptor(static_cast<Id>(i)).name);
+        outputLine.println("]}"); outputLine.send(); return true;
     }
     char name[32], memory[16] = "internal", extra; unsigned long seed, iterations; unsigned large;
     const int arguments = std::sscanf(line, "perf kernel %31s %lu %lu %u %15s %c", name, &seed, &iterations, &large, memory, &extra);
@@ -429,14 +431,15 @@ bool command(const char *line) {
     uint32_t ordered[256]; std::memcpy(ordered, samples, iterations * sizeof(samples[0]));
     std::sort(ordered, ordered + iterations);
     const auto percentile = [&](unsigned percent) { return ordered[(iterations * percent + 99) / 100 - 1]; };
-    Serial.printf("PERF {\"schema\":1,\"type\":\"kernel\",\"kernel\":\"%s\",\"algorithm\":\"%s\",\"precision\":\"%s\",\"work_unit\":\"%s\",\"seed\":%lu,\"large\":%u,\"warmup\":3,\"samples\":%lu,\"elapsed_us\":%llu,\"sum_us\":%llu,\"min_us\":%u,\"median_us\":%u,\"p95_us\":%u,\"p99_us\":%u,\"max_us\":%u,\"percentile_method\":\"exact nearest rank\",\"timing_scope\":\"step only; output inspection excluded; RTOS preemption included\",\"workspace_allocated_bytes\":%u,\"working_bytes\":%u,\"output_bytes\":%u,\"work_units_per_step\":%u,\"checksum_fnv1a\":%u,\"output_min\":%.9g,\"output_max\":%.9g,\"output_sum\":%.12g,\"finite\":%s,\"heap_before\":%u,\"heap_min\":%u,\"cpu_mhz\":%u,\"memory_requested\":\"%s\",\"memory_region\":\"%s\",\"memory_caps\":\"%s|MALLOC_CAP_8BIT\",\"allocation_alignment_bytes\":%u,\"region_free_before\":%u,\"region_largest_before\":%u,\"region_free_min\":%u,\"samples_us\":[",
+    perf_output::Line outputLine;
+    outputLine.printf("PERF {\"schema\":1,\"type\":\"kernel\",\"kernel\":\"%s\",\"algorithm\":\"%s\",\"precision\":\"%s\",\"work_unit\":\"%s\",\"seed\":%lu,\"large\":%u,\"warmup\":3,\"samples\":%lu,\"elapsed_us\":%llu,\"sum_us\":%llu,\"min_us\":%u,\"median_us\":%u,\"p95_us\":%u,\"p99_us\":%u,\"max_us\":%u,\"percentile_method\":\"exact nearest rank\",\"timing_scope\":\"step only; output inspection excluded; RTOS preemption included\",\"workspace_allocated_bytes\":%u,\"working_bytes\":%u,\"output_bytes\":%u,\"work_units_per_step\":%u,\"checksum_fnv1a\":%u,\"output_min\":%.9g,\"output_max\":%.9g,\"output_sum\":%.12g,\"finite\":%s,\"heap_before\":%u,\"heap_min\":%u,\"cpu_mhz\":%u,\"memory_requested\":\"%s\",\"memory_region\":\"%s\",\"memory_caps\":\"%s|MALLOC_CAP_8BIT\",\"allocation_alignment_bytes\":%u,\"region_free_before\":%u,\"region_largest_before\":%u,\"region_free_min\":%u,\"samples_us\":[",
         d.name, d.algorithm, d.precision, d.work_unit, seed, large, iterations,
         static_cast<unsigned long long>(elapsed), static_cast<unsigned long long>(sum), ordered[0], percentile(50), percentile(95), percentile(99), ordered[iterations - 1],
         static_cast<unsigned>(sizeof(Workspace)), output.working_bytes, output.output_bytes, output.work_units, output.checksum,
         output.output_min, output.output_max, output.output_sum, output.finite ? "true" : "false", unsigned(heap_before), unsigned(heap_min), unsigned(ESP.getCpuFreqMHz()),
         memory, actualExternal ? "psram" : "internal", external ? "MALLOC_CAP_SPIRAM" : "MALLOC_CAP_INTERNAL", unsigned(alignof(Workspace)), unsigned(region_before), unsigned(region_largest_before), unsigned(region_min));
-    for (unsigned i = 0; i < iterations; ++i) Serial.printf(i ? ",%u" : "%u", unsigned(samples[i]));
-    Serial.println("]}");
+    for (unsigned i = 0; i < iterations; ++i) outputLine.printf(i ? ",%u" : "%u", unsigned(samples[i]));
+    outputLine.println("]}"); outputLine.send();
     return true;
 }
 } // namespace perf_kernels
