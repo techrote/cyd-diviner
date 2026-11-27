@@ -1,6 +1,7 @@
 # Preserve captured tool output exactly; whitespace is evidence in raw logs.
 evidence/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
 experiments/sdr/** -text
+experiments/sdr-metal/** -text
 evidence/**/*.log -text -whitespace
 evidence/**/*.zip -text
 evidence/**/*.bin -text

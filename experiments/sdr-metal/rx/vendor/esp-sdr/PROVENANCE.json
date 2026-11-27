@@ -1,0 +1,37 @@
+{
+  "schema": "sdr-metal-vendor-source/1",
+  "upstream": "https://github.com/ESPARGOS/esp-sdr",
+  "commit": "3ab3b65bb62f2d9427ee33c2c3b627427e729294",
+  "license": "GPL-3.0; exact upstream LICENSE retained",
+  "scope": "Exact unmodified gain/DC calibration helpers only. Own snapshot adapter follows register facts in pinned main/targets/esp32s3/receiver.c; no continuous ring/FIR/FFT implementation imported.",
+  "files": {
+    "main/common/rx_gain_verify.c": {
+      "vendored_file": "rx_gain_verify.c",
+      "sha256": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde"
+    },
+    "main/common/rx_gain_force.h": {
+      "vendored_file": "rx_gain_force.h",
+      "sha256": "879c74193af509446ce64b2f487df7a035029b6ad608fa426ba256db8e1d85a7"
+    },
+    "main/common/rx_recalibration.c": {
+      "vendored_file": "rx_recalibration.c",
+      "sha256": "dae0ab7bf554dc2c897eaf90f1416990a7bce800401423d956a4802719265dba"
+    },
+    "main/common/rx_recalibration.h": {
+      "vendored_file": "rx_recalibration.h",
+      "sha256": "0e5abc0f88bfcd9404edf6698ba910df72d91b998b1cbf3d4ae2e86f32757959"
+    },
+    "main/common/rx_calibration_state.c": {
+      "vendored_file": "rx_calibration_state.c",
+      "sha256": "b636eaf6b234c580c124c201b008ea3d276d423fe546786b34d400c6e30a8735"
+    },
+    "main/common/rx_lo.h": {
+      "vendored_file": "rx_lo.h",
+      "sha256": "8ff2a0871a8ed6a5db11b79180381ee966fc64aeea115c154ae3430ab70feaea"
+    },
+    "LICENSE": {
+      "vendored_file": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    }
+  }
+}

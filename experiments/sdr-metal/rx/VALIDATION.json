@@ -1,0 +1,124 @@
+{
+  "schema": "sdr-metal-rx-build-validation/1",
+  "evidence_class": "COMPILE_AND_HOST_SHIM_ONLY",
+  "generated_utc": "2026-11-27T22:21:52.366151+00:00",
+  "identity": {
+    "METAL_SOURCE_SHA": "0cfa046426dbe171614a94e026f4388322b795cc",
+    "METAL_SOURCE_DIGEST": "02cf2fd7ac33bd7b0b659084275bce4fd7e84be59926e376e27ad4c943e0380d",
+    "METAL_SDK_SHA": "b774170ff46c393eeb5e495ea37936038d3f4f4f"
+  },
+  "artifacts": {
+    "s3_metal_snapshot.bin": {
+      "bytes": 579808,
+      "sha256": "0e0a9ae6e3a82591dc825c1dd96cb6ab5060fe114e542ee7b5db78db9232ae85"
+    },
+    "s3_metal_snapshot.elf": {
+      "bytes": 7645660,
+      "sha256": "2490a93a575d744f90dbc6d697ca2aaebd1b67469f05fc1c217898295178eeab"
+    },
+    "s3_metal_snapshot.map": {
+      "bytes": 7422176,
+      "sha256": "9c284441ebe4631dd4742e6246e59f80bf1139cffc454bcc20fd1db9c2c241ec"
+    },
+    "bootloader/bootloader.bin": {
+      "bytes": 20848,
+      "sha256": "77bd8ce4e8bea2adaa816fd44e8c71e8855920f4f2ed58c13d57634423da1fde"
+    },
+    "partition_table/partition-table.bin": {
+      "bytes": 3072,
+      "sha256": "64b0450eb90ab040cf6ba74f734a47dad4a5b792df61eb6633565eaad7480a8c"
+    }
+  },
+  "sources_sha256": {
+    "build.ps1": "06061bf9c9a5372be285ad2cb062363e5356ae1b463efeae0e8c0933158e3e15",
+    "CMakeLists.txt": "bc37d339396f99cd560929a954a19332425a92fbdd78cf8c27dba5c00c3e5dfc",
+    "main/CMakeLists.txt": "8d418b97f4201c968aaa4f734b673de3ca0619e01ceb20b6e82c7110e1ad0a13",
+    "main/main.c": "80658919a6e3a2af595c88b9f6c0722f726a68bc8fce4e23f8df18f62044f9bc",
+    "main/snapshot.c": "12ba1cdb64ce3ff4278a8e72af457d5d9b1992fb4b9d50ab92d751a4cb00377c",
+    "main/snapshot.h": "2cdbafe17d165eab33c6b314217a77f9be2368721fd4c65e9fc81e435802a884",
+    "main/source_identity.h.in": "8bcbfa3b727fc61862b3a08eff909b38a8e8f354de1d061fad2c6686c8e8a5cc",
+    "main/sram_guard.ld": "9e27e65bf31a6acc94582420efcd45d9beef7d4f3ab4a82d1ad4ed0dded9f9e1",
+    "partitions.csv": "453dca502d9f8c84575e66e3e61b1a27d5005acf9d4ae30a83f9a19a3db25e4a",
+    "README.md": "d23d4fc8148ff6908b9de81130ad6494e7989eff8670c01eed156bd315aadc9c",
+    "sdkconfig.defaults": "e80e235ec98ba3a0c66a2639ca604897ffb61fb770c62618456d5d9fbd0915a8",
+    "test_output_bounds.py": "018ddec7819611348a8ed53b6a67bd1a23baacf35a217303c91ec62120775c3a",
+    "test_snapshot_host.py": "eaedd8191ac45038f77290a25625537d7e64304cd9bee916f398aae5e2b4f966",
+    "vendor/esp-sdr/LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "vendor/esp-sdr/PROVENANCE.json": "2a3c48262b48315decc3e096dde7a20143dd4899a2d04518dd8676bfc45988b2",
+    "vendor/esp-sdr/rx_calibration_state.c": "b636eaf6b234c580c124c201b008ea3d276d423fe546786b34d400c6e30a8735",
+    "vendor/esp-sdr/rx_gain_force.h": "879c74193af509446ce64b2f487df7a035029b6ad608fa426ba256db8e1d85a7",
+    "vendor/esp-sdr/rx_gain_verify.c": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde",
+    "vendor/esp-sdr/rx_lo.h": "8ff2a0871a8ed6a5db11b79180381ee966fc64aeea115c154ae3430ab70feaea",
+    "vendor/esp-sdr/rx_recalibration.c": "dae0ab7bf554dc2c897eaf90f1416990a7bce800401423d956a4802719265dba",
+    "vendor/esp-sdr/rx_recalibration.h": "0e5abc0f88bfcd9404edf6698ba910df72d91b998b1cbf3d4ae2e86f32757959"
+  },
+  "host_mmio_shim": {
+    "schema": "sdr-metal-snapshot-host-test/1",
+    "evidence_class": "HOST_MMIO_SHIM",
+    "checks": 110,
+    "valid": true,
+    "RF_measurement": false
+  },
+  "output_bounds": {
+    "schema": "sdr-metal-output-bounds/1",
+    "evidence_class": "STATIC_BOUND",
+    "max_dynamic_string_bytes_assumed": 64,
+    "records": [
+      {
+        "type": "error",
+        "upper_bound_including_NUL": 111,
+        "capacity": 2048
+      },
+      {
+        "type": "info",
+        "upper_bound_including_NUL": 1631,
+        "capacity": 2048
+      },
+      {
+        "type": "snapshot",
+        "upper_bound_including_NUL": 1158,
+        "capacity": 2048
+      },
+      {
+        "type": "armed",
+        "upper_bound_including_NUL": 352,
+        "capacity": 2048
+      },
+      {
+        "type": "run_end",
+        "upper_bound_including_NUL": 1373,
+        "capacity": 2048
+      },
+      {
+        "type": "init",
+        "upper_bound_including_NUL": 365,
+        "capacity": 2048
+      },
+      {
+        "type": "tune",
+        "upper_bound_including_NUL": 187,
+        "capacity": 2048
+      }
+    ],
+    "valid": true
+  },
+  "firmware_build_log_sha256": "6f1fb975037f374daad5e903110171b385b98be5e86cd67842f21d93a2f0ce0b",
+  "default_init_mode": "direct_PHY",
+  "explicit_fallback": "WiFi_NULL",
+  "direct_enable_returns_status": false,
+  "verified_gain_required_before_capture": true,
+  "psram_enabled": false,
+  "phy_calibration_storage_enabled": false,
+  "no_serial_access_or_flashing": true,
+  "physical_capture": "NOT_RUN",
+  "linked_static_end_symbols": {
+    "_iram_end": "40389800",
+    "_data_end": "3fc9e024",
+    "_bss_end": "3fca1478"
+  },
+  "hardware_aperture": [
+    "3fcd0000",
+    "3fce0000"
+  ],
+  "IRAM_alias_begin": "403c0000"
+}

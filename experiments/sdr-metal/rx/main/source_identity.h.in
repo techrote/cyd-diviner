@@ -1,0 +1,4 @@
+#pragma once
+#define METAL_SOURCE_SHA "@source_sha@"
+#define METAL_SOURCE_DIGEST "@source_digest@"
+#define METAL_SDK_SHA "@sdk_sha@"
