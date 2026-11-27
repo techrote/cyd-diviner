@@ -78,9 +78,13 @@ modulation rate or cessation have been independently verified.
 
 Temperature control occurs only outside timed loops. Classic TX retains raw RTC
 indications; an S3 TX uses its explicit install/read/disable/uninstall sensor
-command, retaining all returned status fields and unavailable values. The RX
-snapshot contract currently has no sensor command, so its temperature remains
-`NOT MEASURED`. No sensor task or handle is added to the timed path by the host.
+command, retaining all returned status fields and unavailable values. RX uses
+`metal temperature` before armed and after the completed run/read boundary.
+Every invoked sensor disable/uninstall must succeed; a failed read can remain
+`NOT MEASURED` after proven cleanup, while missing lifecycle proof or cleanup
+failure aborts further work for owner recovery. No persistent sensor task or
+handle is added to the timed path. Plans can explicitly disable these queries,
+which leaves their temperature scope `NOT MEASURED`.
 
 Raw serial/event logs, snapshot files, source/image provenance, JSON and an
 artifact-hash manifest are retained. Offline analysis requires a closed physical

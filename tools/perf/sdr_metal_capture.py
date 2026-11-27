@@ -18,6 +18,17 @@ from link_capture import SecretGuard
 from sdr_capture import SDRPort, digest
 
 RAW_FORMAT = "LE32_I10_Q10_metadata12_native"
+STATUS_NOT_CALLED = -2147483648
+
+
+def validate_sensor_cleanup(record):
+    keys = ("install_status", "enable_status", "read_status", "disable_status", "uninstall_status")
+    if any(type(record.get(key)) is not int for key in keys):
+        raise RuntimeError("Temperature query lacks sensor lifecycle proof; stop/recover before continuing")
+    if (record["disable_status"] not in (0, STATUS_NOT_CALLED) or record["uninstall_status"] not in (0, STATUS_NOT_CALLED)
+        or (record["install_status"] == 0 and record["uninstall_status"] != 0)
+        or (record["enable_status"] == 0 and record["disable_status"] != 0)):
+        raise RuntimeError("Temperature sensor disable/uninstall failed; stop/recover before continuing")
 
 
 class SnapshotDecoder:
@@ -209,18 +220,16 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
         receipt["file"] = filename
         receipt["sha256"] = digest(path)
     rx.decoder.sink = save_snapshot
-    def temperature():
+    def temperature(endpoint, rx_sensor=False):
         if not plan.get("temperature_queries", True): return {"status": "NOT MEASURED", "reason": "disabled by plan"}
-        is_s3 = tx.identity["expected_info"]["profile"] == "s3-sdr-metal-tx"
-        try:
-            record = tx.request("temperature" if is_s3 else "info", lambda r: r.get("type") == ("temperature" if is_s3 else "info"), records=True)
-            value = record.get("temperature_c_driver" if is_s3 else "temperature_raw")
-            observed = type(value) in (int, float) and math.isfinite(value)
-            return {"status": "RECORDED" if observed else "NOT MEASURED", "scope": "outside timed RF/snapshot loop", "target": record}
-        except (RuntimeError, TimeoutError, ValueError) as error:
-            return {"status": "NOT MEASURED", "reason": str(error), "scope": "outside timed RF/snapshot loop"}
-    run["temperature_before"] = temperature()
-    run["rx_temperature"] = {"status": "NOT MEASURED", "reason": "snapshot RX contract has no sensor command"}
+        is_s3 = rx_sensor or endpoint.identity["expected_info"]["profile"] == "s3-sdr-metal-tx"
+        command = "metal temperature" if rx_sensor else "temperature" if is_s3 else "info"
+        record = endpoint.request(command, lambda r: r.get("type") == ("temperature" if is_s3 else "info"), records=True)
+        if is_s3: validate_sensor_cleanup(record)
+        value = record.get("temperature_c_driver" if is_s3 else "temperature_raw")
+        observed = type(value) in (int, float) and math.isfinite(value)
+        return {"status": "RECORDED" if observed else "NOT MEASURED", "scope": "outside timed RF/snapshot loop", "target": record}
+    run["temperature_before"] = {"tx": temperature(tx), "rx": temperature(rx, True)}
     if case["tx_enabled"]:
         if case.get("pattern") == "alternating":
             packed = b"\x55" * ((case["bit_count"] + 7) // 8)
@@ -319,7 +328,7 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
             raise RuntimeError("Metal TX terminal record differs from observed trace/segment counts")
         run["transmitter_result"] = result
     run["physical_rf_verified"] = None
-    run["temperature_after"] = temperature()
+    run["temperature_after"] = {"tx": temperature(tx), "rx": temperature(rx, True)}
     run["status"] = "ACQUIRED"
     run["snapshot_scope"] = "Separate native SRAM snapshots; sample index resets0 per burst, deferred USB outside capture"
     rx.decoder.sink = None

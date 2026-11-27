@@ -1,0 +1,95 @@
+{
+  "schema": "sdr-metal-rx-temperature-validation/1",
+  "evidence_class": "SOURCE_AND_HOST_SHIM_ONLY",
+  "generated_utc": "2026-11-27T22:31:06.422451+00:00",
+  "parent_source_sha": "dec45f0f6649c3c7276e27d9aa0f78541280f05a",
+  "source_files_sha256": {
+    "main/main.c": "6c9c3d76d51fafa81f49f0bb06ff83d0d9cd6f3a84b06d7c002870719aff6bef",
+    "main/CMakeLists.txt": "335e895216f364807d82572fb289d6561c50133541a02f740c461e22778ddf92",
+    "main/snapshot.c": "12ba1cdb64ce3ff4278a8e72af457d5d9b1992fb4b9d50ab92d751a4cb00377c",
+    "README.md": "3d5d4269c92595609de79a872b70637357a3685fe78ad254f5ab3a0cf9123204",
+    "test_output_bounds.py": "cd35f1ac6abe7f5a46c8c74713cf7561225f298337fd0656a378b978e7fc9075",
+    "test_temperature_host.py": "f262e0c204dac6c8b7d77b35cf9add4e07a0d4154d7dfee5bb86a7d14751eed7"
+  },
+  "snapshot_body_identical_to_parent_commit": true,
+  "snapshot_body_sha256": "12ba1cdb64ce3ff4278a8e72af457d5d9b1992fb4b9d50ab92d751a4cb00377c",
+  "temperature_shim": {
+    "schema": "sdr-metal-temperature-host-test/1",
+    "evidence_class": "HOST_SENSOR_SHIM",
+    "cases": 9,
+    "source_function_sha256": "05da8ee057352c552d1297fe621e8132358fbb23f9694ac116bee677863ccc0d",
+    "tested": [
+      "success",
+      "install_failure",
+      "enable_failure",
+      "read_failure",
+      "disable_failure",
+      "uninstall_failure",
+      "NaN",
+      "finite_formatter_overflow",
+      "infinity"
+    ],
+    "valid": true,
+    "temperature_accuracy_measured": false,
+    "RF_measurement": false
+  },
+  "mmio_shim": {
+    "schema": "sdr-metal-snapshot-host-test/1",
+    "evidence_class": "HOST_MMIO_SHIM",
+    "checks": 110,
+    "valid": true,
+    "RF_measurement": false
+  },
+  "output_bounds": {
+    "schema": "sdr-metal-output-bounds/1",
+    "evidence_class": "STATIC_BOUND",
+    "max_dynamic_string_bytes_assumed": 64,
+    "records": [
+      {
+        "type": "error",
+        "upper_bound_including_NUL": 111,
+        "capacity": 2048
+      },
+      {
+        "type": "temperature",
+        "upper_bound_including_NUL": 515,
+        "capacity": 2048
+      },
+      {
+        "type": "info",
+        "upper_bound_including_NUL": 1631,
+        "capacity": 2048
+      },
+      {
+        "type": "snapshot",
+        "upper_bound_including_NUL": 1158,
+        "capacity": 2048
+      },
+      {
+        "type": "armed",
+        "upper_bound_including_NUL": 352,
+        "capacity": 2048
+      },
+      {
+        "type": "run_end",
+        "upper_bound_including_NUL": 1373,
+        "capacity": 2048
+      },
+      {
+        "type": "init",
+        "upper_bound_including_NUL": 365,
+        "capacity": 2048
+      },
+      {
+        "type": "tune",
+        "upper_bound_including_NUL": 187,
+        "capacity": 2048
+      }
+    ],
+    "valid": true
+  },
+  "target_build": "PENDING_ROOT_INCREMENTAL_REBUILD",
+  "physical_temperature": "NOT_RUN",
+  "serial_or_flash_access": false,
+  "prior_build_receipt": "VALIDATION.json (historical pre-temperature candidate; hashes distinguish scope)"
+}

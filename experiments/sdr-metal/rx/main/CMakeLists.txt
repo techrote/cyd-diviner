@@ -2,7 +2,7 @@ set(vendor "../vendor/esp-sdr")
 idf_component_register(SRCS "main.c" "snapshot.c"
     "${vendor}/rx_gain_verify.c" "${vendor}/rx_recalibration.c" "${vendor}/rx_calibration_state.c"
     INCLUDE_DIRS "." "${vendor}"
-    REQUIRES esp_driver_usb_serial_jtag esp_hw_support esp_phy esp_wifi esp_timer heap esp_event)
+    REQUIRES esp_driver_usb_serial_jtag esp_driver_tsens esp_hw_support esp_phy esp_wifi esp_timer heap esp_event)
 target_link_options(${COMPONENT_LIB} INTERFACE
     "-T${CMAKE_CURRENT_LIST_DIR}/sram_guard.ld"
     "-Wl,--wrap=chip_v7_set_chan_ana" "-Wl,--wrap=set_rx_gain_table" "-Wl,--wrap=set_rx_gain_cal_dc")

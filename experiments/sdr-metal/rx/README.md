@@ -77,6 +77,7 @@ terminal `error`; this is a single command loop, not a multiplexed transport.
 
 ```text
 metal info
+metal temperature
 metal init phy|wifi
 metal tune MHZ FOFS_KHZ GAIN_INDEX
 metal capture ID RATE_HZ SAMPLES REPEATS ARM_DELAY_US GAP_US TIMEOUT_US
@@ -130,6 +131,28 @@ requested count/rate/repetitions, arm delay, gap and timeout. That line is
 flushed before the delay begins. The pre-arm delay allows a separately
 controlled transmitter to run during the receive snapshot; it does not
 synchronize independent boards' clocks.
+
+### Explicit temperature queries outside capture windows
+
+`metal temperature` emits one `METAL` type `temperature` JSON acknowledgment,
+with `temperature_c_driver` numeric or null, `temperature_value_valid`,
+`install_status`, `enable_status`, `read_status`, `disable_status` and
+`uninstall_status`. `status_not_called=-2147483648` marks stages not invoked.
+The command locally installs the S3 sensor for the SDK's 10–80 °C configured
+range, enables/reads/disables/uninstalls it, and retains no successful handle or
+polling task. Read failure, nonfinite value or numeric formatting failure leaves
+temperature null. The raw SDK statuses remain inspectable. A cleanup failure is
+not silently treated as a clean sensor release; the host should reject that
+case and stop the measurement sequence for recovery.
+
+`query_completed_us` timestamps completion of the query/cleanup on the receiver
+clock. `scope` is `explicit_outside_RF_window; SDK_driver_not_independently_calibrated`.
+The driver Celsius indication is not independently calibrated die temperature
+and is not interchangeable with classic ESP32 RTC-library raw sensor codes.
+The host should query before arming and after `run_end`, or after a completed
+`read` payload. It must not queue the query into an active capture command or
+include its installation/read/cleanup time in capture or no-export bench timing.
+The default capture loop and its register/timing behavior do not poll the sensor.
 
 ### Capture mode binary boundary
 

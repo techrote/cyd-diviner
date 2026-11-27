@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
 #include <stdarg.h>
@@ -11,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "driver/usb_serial_jtag.h"
+#include "driver/temperature_sensor.h"
 #include "esp_chip_info.h"
 #include "esp_event.h"
 #include "esp_heap_caps.h"
@@ -123,6 +125,33 @@ static bool initialize(bool wifi) {
     }
     initialized = result == ESP_OK; initialization_error = result;
     return initialized;
+}
+/* Explicit outside-window query; no persistent sensor handle or polling. */
+static void temperature(void) {
+    temperature_sensor_handle_t sensor = NULL;
+    temperature_sensor_config_t config = TEMPERATURE_SENSOR_CONFIG_DEFAULT(10, 80);
+    int install = temperature_sensor_install(&config, &sensor);
+    int enable = INT_MIN, read = INT_MIN, disable = INT_MIN, uninstall = INT_MIN;
+    float value = 0;
+    if (install == ESP_OK) {
+        enable = temperature_sensor_enable(sensor);
+        if (enable == ESP_OK) {
+            read = temperature_sensor_get_celsius(sensor, &value);
+            disable = temperature_sensor_disable(sensor);
+        }
+        uninstall = temperature_sensor_uninstall(sensor);
+    }
+    char number[32] = "null";
+    bool valid = read == ESP_OK && isfinite(value);
+    if (valid) {
+        int count = snprintf(number, sizeof(number), "%.4f", (double)value);
+        if (count < 0 || (size_t)count >= sizeof(number)) { memcpy(number, "null", 5); valid = false; }
+    }
+    (void)line("METAL {\"schema\":1,\"type\":\"temperature\",\"temperature_c_driver\":%s,"
+        "\"temperature_value_valid\":%s,\"install_status\":%d,\"enable_status\":%d,\"read_status\":%d,"
+        "\"disable_status\":%d,\"uninstall_status\":%d,\"status_not_called\":-2147483648,"
+        "\"query_completed_us\":%" PRId64 ",\"scope\":\"explicit_outside_RF_window; SDK_driver_not_independently_calibrated\"}\n",
+        number, valid ? "true" : "false", install, enable, read, disable, uninstall, esp_timer_get_time());
 }
 static void info(void) {
     heap_t h = heap(); uint8_t mac[6]; esp_read_mac(mac, ESP_MAC_WIFI_STA);
@@ -257,6 +286,7 @@ static void command(const char *text) {
     }
     if (count < 2 || strcmp(part[0], "metal")) { error("command"); return; }
     if (count == 2 && !strcmp(part[1], "info")) { info(); return; }
+    if (count == 2 && !strcmp(part[1], "temperature")) { temperature(); return; }
     if (count == 3 && !strcmp(part[1], "init") && (!strcmp(part[2], "phy") || !strcmp(part[2], "wifi"))) {
         bool ok = initialize(!strcmp(part[2], "wifi"));
         (void)line("METAL {\"schema\":1,\"type\":\"init\",\"ok\":%s,\"requested\":\"%s\",\"actual_mode\":\"%s\",\"error_code\":%d,\"rx_ready\":%s}\n", ok ? "true" : "false", part[2], init_mode(), initialization_error, metal_rx_config.ready ? "true" : "false");

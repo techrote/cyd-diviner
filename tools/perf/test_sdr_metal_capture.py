@@ -9,7 +9,7 @@ import unittest
 from unittest import mock
 
 from link_capture import SecretGuard
-from sdr_metal_capture import SnapshotDecoder, default_plan, execute_run, validate_plan, validate_snapshot, validate_tx_cleanup
+from sdr_metal_capture import SnapshotDecoder, default_plan, execute_run, validate_plan, validate_snapshot, validate_tx_cleanup, validate_sensor_cleanup
 from test_link_mission import Clock
 
 
@@ -29,6 +29,14 @@ def snapshot(run_id="m001_1", request_id=None, rep=1, source_rep=1, count=16):
 
 
 class SnapshotFramingTests(unittest.TestCase):
+    def test_sensor_read_failure_can_be_unavailable_but_cleanup_failure_aborts(self):
+        good = {"install_status": 0, "enable_status": 0, "read_status": 0, "disable_status": 0, "uninstall_status": 0}
+        validate_sensor_cleanup(good)
+        validate_sensor_cleanup({**good, "read_status": 1})
+        for changed in ({"disable_status": 1}, {"uninstall_status": 1}, {"disable_status": -2147483648}, {"uninstall_status": -2147483648}):
+            with self.subTest(changed=changed), self.assertRaises(RuntimeError):
+                validate_sensor_cleanup({**good, **changed})
+
     def test_teardown_or_residual_owned_driver_loop_cannot_be_acquired(self):
         good = {"teardown_status": 0, "wifi_driver_owned_after": False, "default_event_loop_owned_after": False,
                 "radio_stop_api": "WiFi_stop_deinit", "wifi_stop_status": 0, "wifi_deinit_status": 0}
@@ -108,6 +116,9 @@ class RXFixture:
     @property
     def records(self): return self.decoder.records
     def request(self, command, *_args, **_kwargs):
+        if command == "metal temperature":
+            return {"type": "temperature", "temperature_c_driver": 25.0, "install_status": 0, "enable_status": 0,
+                    "read_status": 0, "disable_status": 0, "uninstall_status": 0}
         parts = command.split(); self.case_mode, self.run_id = parts[1], parts[2]
         self.count, self.repeats = int(parts[4]), int(parts[5])
         record = {"type": "armed", "id": self.run_id, "mode": self.case_mode, "sample_count": self.count,
