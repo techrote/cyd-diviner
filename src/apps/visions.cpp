@@ -1136,7 +1136,38 @@ bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_
     S->visualRng.s = seed; S->rng.s = seed ^ 0xA5A5A5A5;
     memset(S->drops, 0, sizeof(S->drops));
     S->tone.phase = S->tone2.phase = S->lfo.phase = 0;
+    S->windF = dsp::SVF{};
     prepareVision(); retone();
+    // Describe actual allocations after prepareVision(), rather than assuming
+    // that the requested trail format or auxiliary allocation succeeded.
+    const Vision base = S->base();
+    unsigned allocatedBands = 0;
+    size_t historyBytes = 0;
+    for (const auto &band : S->history.bands) if (band) {
+        ++allocatedBands;
+        historyBytes += S->history.stride() * TrailHistory::BandRows;
+    }
+    const bool historyReady = S->history.ready();
+    const bool historyRequested = base == Trails || (S->layered && base == Gate);
+    const char *historyFormat = !historyReady ? "NONE" : S->history.indexed ? "LUT8" : S->history.rgb444 ? "RGB444" : "RGB565";
+    char settings[1536];
+    snprintf(settings, sizeof(settings),
+        "\"requested_effect_index\":%u,\"requested_effect\":\"%s\",\"requested_layered\":%s,\"requested_trail_format\":\"%s\","
+        "\"actual_base_effect_index\":%u,\"actual_base_effect\":\"%s\",\"actual_layered\":%s,\"audio_enabled\":%s,\"vision_seed\":%u,"
+        "\"history_requested\":%s,\"history_ready\":%s,\"history_format\":\"%s\",\"history_payload_bytes\":%u,"
+        "\"history_width_px\":%u,\"history_height_px\":%u,\"history_stride_bytes\":%u,\"history_band_rows\":%u,\"history_allocated_bands\":%u,"
+        "\"tunnel_required\":%s,\"tunnel_allocated\":%s,\"tunnel_payload_bytes\":%u,\"fire_required\":%s,\"fire_allocated\":%s,\"fire_payload_bytes\":%u,"
+        "\"native_fullscreen_at_receipt\":%s,\"receipt_scope\":\"after_configuration_before_next_frame\","
+        "\"native_fullscreen_history_method\":\"bounded_geometric_paths; first fullscreen frame releases pixel history and tunnel\"",
+        effect, NAMES[effect], layered ? "true" : "false", format == 0 ? "RGB444" : "RGB565",
+        unsigned(base), NAMES[base], S->layered ? "true" : "false", S->sound ? "true" : "false", unsigned(seed),
+        historyRequested ? "true" : "false", historyReady ? "true" : "false", historyFormat, unsigned(historyBytes),
+        historyReady ? unsigned(hal::W) : 0u, allocatedBands * TrailHistory::BandRows,
+        allocatedBands ? unsigned(S->history.stride()) : 0u, unsigned(TrailHistory::BandRows), allocatedBands,
+        base == Gate ? "true" : "false", S->tunnel ? "true" : "false", S->tunnel ? unsigned(sizeof(Tunnel)) : 0u,
+        base == Ashfire ? "true" : "false", S->fire ? "true" : "false", S->fire ? unsigned(sizeof(Fire)) : 0u,
+        S->nativeFullscreen ? "true" : "false");
+    perf_profile::sceneSettings("visions", settings);
     hal::setAudio(render);
     return true;
 }

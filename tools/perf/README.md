@@ -18,6 +18,31 @@ unchanged to the Python CLI. Output directories must be new, preventing accident
 replacement of earlier evidence. Close VLC and other serial-port consumers first.
 DTR and RTS are disabled before opening the serial port.
 
+The separate read-only backup helper requires its own pinned esptool API:
+
+```powershell
+python -m pip install -r tools/perf/backup-requirements.txt
+python -m unittest discover -s tools/perf -p test_board_backup.py -v
+```
+
+`board_backup.py` uses esptool 4.14.0 in one persistent serial session, starts at
+115200 baud, and retries the requested `--baud` if an existing RAM stub was left
+at that speed. It verifies the requested silicon identity, reads named non-key
+security flags, and checks the JEDEC capacity before reading. The optional full
+backup is hashed locally and independently checked with the target's flash MD5.
+Use a new output directory outside the repository; neither an earlier backup nor
+its receipt can be replaced. Each API operation records arguments, output,
+duration and any failure. Classic ESP32's unsupported `get_security_info` CLI
+command and separate espefuse subprocesses are not used. The capture dependency
+list remains serial-only.
+
+On completion or a recoverable failure, the helper requests 115200 baud and
+leaves the RAM stub running without soft/hard reset or application start. The
+receipt reports whether that state was reached; failed sync or cleanup must not
+be treated as a confirmed recovery state. RAM stub upload and volatile flash
+geometry setup do not write flash, NVS or eFuses. Private backups and receipts
+stay on the owner's machine.
+
 After the owner has flashed the positively identified profiling image, inspect its
 reported identity without starting a benchmark:
 

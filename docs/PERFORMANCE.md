@@ -34,7 +34,9 @@ USB avoids using RESET.** Do not open a case or change wiring as an automatic
 step. A failed automatic reset is an access blocker for both flash readback
 and flashing; omitting a backup does not solve download-mode access.
 
-The read-only backup helper runs esptool with `no_reset`, records inventory and
+Install `tools/perf/backup-requirements.txt` (esptool 4.14.0) before using the
+separate backup helper; capture itself only needs its serial dependency.
+The read-only backup helper uses one esptool API session with `no_reset`, records inventory and
 security state, requires an independently checked flash capacity, reads the
 whole chip, hashes the image and verifies it against the board:
 
@@ -47,6 +49,12 @@ python tools/perf/board_backup.py --port COM21 --chip esp32 `
 ```
 
 `0x400000` is an example requiring confirmation, not a detected capacity.
+It initially connects at 115200, retries `--baud` for an existing RAM stub,
+then leaves that stub at 115200 without resetting into the app. The receipt
+records every API operation and whether this final state was reached. A sync
+failure or cleanup error requires manual recovery; it is never reported as a
+successful final state. Classic ESP32 security flags use non-key target methods,
+without the unsupported `get_security_info` command or an espefuse subprocess.
 Keep full-flash images outside Git: they include NVS, potentially credentials.
 The backup preserves settings and exact recovery; a normal Diviner rebuild
 restores application code but is not a substitute for those saved bytes.

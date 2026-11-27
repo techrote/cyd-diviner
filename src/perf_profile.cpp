@@ -4,6 +4,7 @@
 #include "cyd_controls.h"
 #include "perf_kernels.h"
 #include "perf_radio.h"
+#include "theme.h"
 #include <Arduino.h>
 #include <esp_freertos_hooks.h>
 #include <esp_heap_caps.h>
@@ -116,6 +117,19 @@ uint32_t percentile(const Histogram &h, unsigned pct) {
 void ack(const char *action) {
     Serial.printf("PERF {\"schema\":1,\"type\":\"ack\",\"action\":\"%s\",\"ok\":true}\n", action);
 }
+void displaySettings() {
+    const auto &p = theme::palette();
+    const uint16_t roles[] = {p.background, p.ash, p.dusk, p.clot, p.blood, p.rust,
+        p.ember, p.glow, p.bone, p.dim, p.umber, p.stone};
+    Serial.printf("PERF {\"schema\":1,\"type\":\"display_settings\",\"theme_id\":%u,\"background_style\":%u,\"gradient_mode\":%u,\"gradient_top\":%u,\"gradient_bottom\":%u,\"orientation\":%u,\"menu_backdrop\":%u,\"canvas_depth\":%u,\"i2s_dma_buffers\":4,\"i2s_dma_frames_per_buffer\":128,\"i2s_slots\":2,\"dac_gpio\":26,\"palette_roles_rgb565\":[",
+        unsigned(theme::colourScheme()), unsigned(p.backgroundStyle), unsigned(p.gradientMode),
+        p.gradientTop, p.gradientBottom, unsigned(cyd_controls::orientation()),
+        unsigned(cyd_controls::menuBackdrop()), unsigned(hal::canvas().getColorDepth()));
+    for (unsigned i = 0; i < 12; ++i) Serial.printf(i ? ",%u" : "%u", roles[i]);
+    Serial.print("],\"intensity_rgb565\":[");
+    for (unsigned i = 0; i < p.intensity.size(); ++i) Serial.printf(i ? ",%u" : "%u", p.intensity[i]);
+    Serial.println("]}");
+}
 void exportResults() {
     poll();
     if (scheduled) { Serial.printf("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"run active; export after window\"}\n"); return; }
@@ -214,6 +228,7 @@ bool command(const char *line) {
     if (strncmp(line, "perf ", 5)) return false;
     if (!quiet()) return true;
     if (!strcmp(line, "perf info")) {
+        displaySettings();
         Serial.printf("PERF {\"schema\":1,\"type\":\"info\",\"source_sha\":\"%s\",\"profile\":\"%s\",\"source_digest\":\"%s\",\"source_dirty\":%s,\"seed\":%u,\"scene_reset_policy\":\"fresh_audio_DSP_state_each_entry_seeded_no_song_persistence\",\"audio_window_alignment\":\"real_setup_and_warmup_elapsed_not_sample_aligned\",\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"radio\":\"%s\",\"cpu0_hook\":%s,\"cpu1_hook\":%s,\"chip\":\"%s\",\"revision\":%u,\"cores\":%u,\"cpu_mhz\":%u,\"flash_bytes\":%u,\"flash_hz\":%u,\"psram_bytes\":%u,\"heap_bytes\":%u,\"sdk\":\"%s\",\"lcd_spi_hz\":40000000,\"lcd_read_hz\":8000000,\"audio_rate\":24000,\"audio_block\":128,\"audio_core\":0,\"audio_priority\":5,\"pcm_core\":1,\"pcm_priority\":2,\"serial_baud\":533333,\"histogram_method\":\"ceil_log2_upper_bounds\",\"sample_capacity\":%u,\"sample_period_ms\":1000,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"ESP32_ROM_raw_uncalibrated\",\"temperature_raw\":%u}\n",
             GRIM_PERF_SOURCE, GRIM_PERF_PROFILE, GRIM_PERF_SOURCE_DIGEST, GRIM_PERF_DIRTY ? "true" : "false", seed(), perf_radio::mode(), cpuHooks[0] ? "true" : "false", cpuHooks[1] ? "true" : "false", ESP.getChipModel(), ESP.getChipRevision(), ESP.getChipCores(), ESP.getCpuFreqMHz(), ESP.getFlashChipSize(), ESP.getFlashChipSpeed(), ESP.getPsramSize(), ESP.getFreeHeap(), ESP.getSdkVersion(), MaxSamples, temprature_sens_read());
         return true;
