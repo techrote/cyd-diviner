@@ -1,0 +1,2176 @@
+{
+  "schema": "cyd-perf-figures/1",
+  "generated_utc": "2026-11-27T19:10:21.115881+00:00",
+  "label": "full-01 physical terminal partial capture",
+  "input": "C:\\cyd-diviner\\perf-characterisation\\evidence\\physical\\full-01\\results.json",
+  "input_sha256": "9adfeeca8f4ab91c8b3b3e6722128b913bda571218c16be720d702fbdbdbf715",
+  "capture_status": "FAILED",
+  "evidence_class": "physical_measured",
+  "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+  "profile": "cyd-profile",
+  "measured_runs": 195,
+  "figures": [
+    {
+      "name": "fps-scenes-1",
+      "title": "Actual presentation rate",
+      "sample_note": "72 measured repetitions; 18,839 completed presentations; r per row.",
+      "observations": {
+        "menu/landscape/theme": [
+          {
+            "run_id": "r001_1",
+            "scope": "d1831df0c059",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r002_2",
+            "scope": "d1831df0c059",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r003_3",
+            "scope": "d1831df0c059",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "menu/landscape/rain": [
+          {
+            "run_id": "r004_1",
+            "scope": "6b34fe2b148c",
+            "frames": 274,
+            "elapsed_us": 10000000,
+            "fps": 27.4
+          },
+          {
+            "run_id": "r005_2",
+            "scope": "6b34fe2b148c",
+            "frames": 276,
+            "elapsed_us": 10000000,
+            "fps": 27.6
+          },
+          {
+            "run_id": "r006_3",
+            "scope": "6b34fe2b148c",
+            "frames": 274,
+            "elapsed_us": 10000000,
+            "fps": 27.4
+          }
+        ],
+        "menu/landscape/ashfire": [
+          {
+            "run_id": "r007_1",
+            "scope": "286d62dd3172",
+            "frames": 232,
+            "elapsed_us": 10000000,
+            "fps": 23.2
+          },
+          {
+            "run_id": "r008_2",
+            "scope": "286d62dd3172",
+            "frames": 232,
+            "elapsed_us": 10000000,
+            "fps": 23.2
+          },
+          {
+            "run_id": "r009_3",
+            "scope": "286d62dd3172",
+            "frames": 232,
+            "elapsed_us": 10000000,
+            "fps": 23.2
+          }
+        ],
+        "menu/landscape/plasma": [
+          {
+            "run_id": "r010_1",
+            "scope": "846cd6fea54b",
+            "frames": 238,
+            "elapsed_us": 10000000,
+            "fps": 23.8
+          },
+          {
+            "run_id": "r011_2",
+            "scope": "846cd6fea54b",
+            "frames": 238,
+            "elapsed_us": 10000000,
+            "fps": 23.8
+          },
+          {
+            "run_id": "r012_3",
+            "scope": "846cd6fea54b",
+            "frames": 238,
+            "elapsed_us": 10000000,
+            "fps": 23.8
+          }
+        ],
+        "menu/portrait/theme": [
+          {
+            "run_id": "r013_1",
+            "scope": "b21842a9b4cb",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r014_2",
+            "scope": "b21842a9b4cb",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r015_3",
+            "scope": "b21842a9b4cb",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "menu/portrait/rain": [
+          {
+            "run_id": "r016_1",
+            "scope": "9afffd62153b",
+            "frames": 275,
+            "elapsed_us": 10000000,
+            "fps": 27.5
+          },
+          {
+            "run_id": "r017_2",
+            "scope": "9afffd62153b",
+            "frames": 274,
+            "elapsed_us": 10000000,
+            "fps": 27.4
+          },
+          {
+            "run_id": "r018_3",
+            "scope": "9afffd62153b",
+            "frames": 275,
+            "elapsed_us": 10000000,
+            "fps": 27.5
+          }
+        ],
+        "menu/portrait/ashfire": [
+          {
+            "run_id": "r019_1",
+            "scope": "70635eedce45",
+            "frames": 245,
+            "elapsed_us": 10000000,
+            "fps": 24.5
+          },
+          {
+            "run_id": "r020_2",
+            "scope": "70635eedce45",
+            "frames": 245,
+            "elapsed_us": 10000000,
+            "fps": 24.5
+          },
+          {
+            "run_id": "r021_3",
+            "scope": "70635eedce45",
+            "frames": 245,
+            "elapsed_us": 10000000,
+            "fps": 24.5
+          }
+        ],
+        "menu/portrait/plasma": [
+          {
+            "run_id": "r022_1",
+            "scope": "0b767d02fdc2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r023_2",
+            "scope": "0b767d02fdc2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r024_3",
+            "scope": "0b767d02fdc2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          }
+        ],
+        "visions/landscape/ui/plasma": [
+          {
+            "run_id": "r025_1",
+            "scope": "a73c4518edf5",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r026_2",
+            "scope": "a73c4518edf5",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r027_3",
+            "scope": "a73c4518edf5",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          }
+        ],
+        "visions/landscape/ui/gate": [
+          {
+            "run_id": "r028_1",
+            "scope": "c6ca1984d42e",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r029_2",
+            "scope": "c6ca1984d42e",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r030_3",
+            "scope": "c6ca1984d42e",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          }
+        ],
+        "visions/landscape/ui/ashfire": [
+          {
+            "run_id": "r031_1",
+            "scope": "14834e246fd2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r032_2",
+            "scope": "14834e246fd2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          },
+          {
+            "run_id": "r033_3",
+            "scope": "14834e246fd2",
+            "frames": 244,
+            "elapsed_us": 10000000,
+            "fps": 24.4
+          }
+        ],
+        "visions/landscape/ui/rain": [
+          {
+            "run_id": "r034_1",
+            "scope": "a8fbea40fbe7",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r035_2",
+            "scope": "a8fbea40fbe7",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r036_3",
+            "scope": "a8fbea40fbe7",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          }
+        ],
+        "visions/landscape/ui/kaleido": [
+          {
+            "run_id": "r037_1",
+            "scope": "1d2677a249b7",
+            "frames": 302,
+            "elapsed_us": 10000000,
+            "fps": 30.2
+          },
+          {
+            "run_id": "r038_2",
+            "scope": "1d2677a249b7",
+            "frames": 302,
+            "elapsed_us": 10000000,
+            "fps": 30.2
+          },
+          {
+            "run_id": "r039_3",
+            "scope": "1d2677a249b7",
+            "frames": 302,
+            "elapsed_us": 10000000,
+            "fps": 30.2
+          }
+        ],
+        "visions/landscape/ui/trails/rgb444": [
+          {
+            "run_id": "r040_1",
+            "scope": "ce528461c161",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r041_2",
+            "scope": "ce528461c161",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r042_3",
+            "scope": "ce528461c161",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          }
+        ],
+        "visions/landscape/ui/trails/rgb565": [
+          {
+            "run_id": "r043_1",
+            "scope": "7d3e8b90f8cd",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r044_2",
+            "scope": "7d3e8b90f8cd",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r045_3",
+            "scope": "7d3e8b90f8cd",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          }
+        ],
+        "visions/landscape/ui/plasma-kaleido": [
+          {
+            "run_id": "r046_1",
+            "scope": "bd04bc485715",
+            "frames": 208,
+            "elapsed_us": 10000000,
+            "fps": 20.8
+          },
+          {
+            "run_id": "r047_2",
+            "scope": "bd04bc485715",
+            "frames": 208,
+            "elapsed_us": 10000000,
+            "fps": 20.8
+          },
+          {
+            "run_id": "r048_3",
+            "scope": "bd04bc485715",
+            "frames": 208,
+            "elapsed_us": 10000000,
+            "fps": 20.8
+          }
+        ],
+        "visions/landscape/ui/gate-trails": [
+          {
+            "run_id": "r049_1",
+            "scope": "9efd5378632e",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r050_2",
+            "scope": "9efd5378632e",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r051_3",
+            "scope": "9efd5378632e",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          }
+        ],
+        "visions/landscape/ui/ashfire-rain": [
+          {
+            "run_id": "r052_1",
+            "scope": "57af6efb0f52",
+            "frames": 218,
+            "elapsed_us": 10000000,
+            "fps": 21.8
+          },
+          {
+            "run_id": "r053_2",
+            "scope": "57af6efb0f52",
+            "frames": 218,
+            "elapsed_us": 10000000,
+            "fps": 21.8
+          },
+          {
+            "run_id": "r054_3",
+            "scope": "57af6efb0f52",
+            "frames": 218,
+            "elapsed_us": 10000000,
+            "fps": 21.8
+          }
+        ],
+        "visions/landscape/fullscreen/plasma": [
+          {
+            "run_id": "r055_1",
+            "scope": "32bd71bf0e21",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r056_2",
+            "scope": "32bd71bf0e21",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r057_3",
+            "scope": "32bd71bf0e21",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          }
+        ],
+        "visions/landscape/fullscreen/gate": [
+          {
+            "run_id": "r058_1",
+            "scope": "858a9eb38b4a",
+            "frames": 256,
+            "elapsed_us": 10000000,
+            "fps": 25.6
+          },
+          {
+            "run_id": "r059_2",
+            "scope": "858a9eb38b4a",
+            "frames": 256,
+            "elapsed_us": 10000000,
+            "fps": 25.6
+          },
+          {
+            "run_id": "r060_3",
+            "scope": "858a9eb38b4a",
+            "frames": 256,
+            "elapsed_us": 10000000,
+            "fps": 25.6
+          }
+        ],
+        "visions/landscape/fullscreen/ashfire": [
+          {
+            "run_id": "r061_1",
+            "scope": "877dcc17fad5",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r062_2",
+            "scope": "877dcc17fad5",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r063_3",
+            "scope": "877dcc17fad5",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          }
+        ],
+        "visions/landscape/fullscreen/rain": [
+          {
+            "run_id": "r064_1",
+            "scope": "06fdc03079b5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r065_2",
+            "scope": "06fdc03079b5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r066_3",
+            "scope": "06fdc03079b5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/landscape/fullscreen/kaleido": [
+          {
+            "run_id": "r067_1",
+            "scope": "f34482cb0c14",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r068_2",
+            "scope": "f34482cb0c14",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r069_3",
+            "scope": "f34482cb0c14",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/landscape/fullscreen/trails/rgb444": [
+          {
+            "run_id": "r070_1",
+            "scope": "29cbf2edf20a",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r071_2",
+            "scope": "29cbf2edf20a",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r072_3",
+            "scope": "29cbf2edf20a",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-scenes-1.png",
+          "sha256": "96fa1cba913bc63f4e4799f2c568671c3a976c23e9d0d258a8b89e8a6c56d46c"
+        },
+        {
+          "file": "fps-scenes-1.svg",
+          "sha256": "a673dadd40803395976f1a36c9b0222227aa9f3dffc1d4c1a0a77169d14a45ea"
+        }
+      ]
+    },
+    {
+      "name": "fps-scenes-2",
+      "title": "Actual presentation rate",
+      "sample_note": "72 measured repetitions; 20,159 completed presentations; r per row.",
+      "observations": {
+        "visions/landscape/fullscreen/trails/rgb565": [
+          {
+            "run_id": "r073_1",
+            "scope": "c718bde908d2",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r074_2",
+            "scope": "c718bde908d2",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r075_3",
+            "scope": "c718bde908d2",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "visions/landscape/fullscreen/plasma-kaleido": [
+          {
+            "run_id": "r076_1",
+            "scope": "3d7dcb5f11de",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r077_2",
+            "scope": "3d7dcb5f11de",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r078_3",
+            "scope": "3d7dcb5f11de",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          }
+        ],
+        "visions/landscape/fullscreen/gate-trails": [
+          {
+            "run_id": "r079_1",
+            "scope": "a71fa7b4bd63",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r080_2",
+            "scope": "a71fa7b4bd63",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r081_3",
+            "scope": "a71fa7b4bd63",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ],
+        "visions/landscape/fullscreen/ashfire-rain": [
+          {
+            "run_id": "r082_1",
+            "scope": "49c13c6f2914",
+            "frames": 271,
+            "elapsed_us": 10000000,
+            "fps": 27.1
+          },
+          {
+            "run_id": "r083_2",
+            "scope": "49c13c6f2914",
+            "frames": 271,
+            "elapsed_us": 10000000,
+            "fps": 27.1
+          },
+          {
+            "run_id": "r084_3",
+            "scope": "49c13c6f2914",
+            "frames": 269,
+            "elapsed_us": 10000000,
+            "fps": 26.9
+          }
+        ],
+        "visions/portrait/ui/plasma": [
+          {
+            "run_id": "r085_1",
+            "scope": "db578d876164",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r086_2",
+            "scope": "db578d876164",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r087_3",
+            "scope": "db578d876164",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          }
+        ],
+        "visions/portrait/ui/gate": [
+          {
+            "run_id": "r088_1",
+            "scope": "b678de18484c",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r089_2",
+            "scope": "b678de18484c",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r090_3",
+            "scope": "b678de18484c",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "visions/portrait/ui/ashfire": [
+          {
+            "run_id": "r091_1",
+            "scope": "f11ef215c38b",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r092_2",
+            "scope": "f11ef215c38b",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r093_3",
+            "scope": "f11ef215c38b",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/ui/rain": [
+          {
+            "run_id": "r094_1",
+            "scope": "7c0192226e66",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r095_2",
+            "scope": "7c0192226e66",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r096_3",
+            "scope": "7c0192226e66",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          }
+        ],
+        "visions/portrait/ui/kaleido": [
+          {
+            "run_id": "r097_1",
+            "scope": "6961006b684d",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r098_2",
+            "scope": "6961006b684d",
+            "frames": 297,
+            "elapsed_us": 10000000,
+            "fps": 29.7
+          },
+          {
+            "run_id": "r099_3",
+            "scope": "6961006b684d",
+            "frames": 298,
+            "elapsed_us": 10000000,
+            "fps": 29.8
+          }
+        ],
+        "visions/portrait/ui/trails/rgb444": [
+          {
+            "run_id": "r100_1",
+            "scope": "5068aa10fd46",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r101_2",
+            "scope": "5068aa10fd46",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r102_3",
+            "scope": "5068aa10fd46",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/ui/trails/rgb565": [
+          {
+            "run_id": "r103_1",
+            "scope": "8cb723775abd",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r104_2",
+            "scope": "8cb723775abd",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r105_3",
+            "scope": "8cb723775abd",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/ui/plasma-kaleido": [
+          {
+            "run_id": "r106_1",
+            "scope": "dec3a55f295a",
+            "frames": 270,
+            "elapsed_us": 10000000,
+            "fps": 27.0
+          },
+          {
+            "run_id": "r107_2",
+            "scope": "dec3a55f295a",
+            "frames": 270,
+            "elapsed_us": 10000000,
+            "fps": 27.0
+          },
+          {
+            "run_id": "r108_3",
+            "scope": "dec3a55f295a",
+            "frames": 270,
+            "elapsed_us": 10000000,
+            "fps": 27.0
+          }
+        ],
+        "visions/portrait/ui/gate-trails": [
+          {
+            "run_id": "r109_1",
+            "scope": "8467f8dbda98",
+            "frames": 286,
+            "elapsed_us": 10000000,
+            "fps": 28.6
+          },
+          {
+            "run_id": "r110_2",
+            "scope": "8467f8dbda98",
+            "frames": 287,
+            "elapsed_us": 10000000,
+            "fps": 28.7
+          },
+          {
+            "run_id": "r111_3",
+            "scope": "8467f8dbda98",
+            "frames": 287,
+            "elapsed_us": 10000000,
+            "fps": 28.7
+          }
+        ],
+        "visions/portrait/ui/ashfire-rain": [
+          {
+            "run_id": "r112_1",
+            "scope": "b026d6e84aad",
+            "frames": 288,
+            "elapsed_us": 10000000,
+            "fps": 28.8
+          },
+          {
+            "run_id": "r113_2",
+            "scope": "b026d6e84aad",
+            "frames": 288,
+            "elapsed_us": 10000000,
+            "fps": 28.8
+          },
+          {
+            "run_id": "r114_3",
+            "scope": "b026d6e84aad",
+            "frames": 288,
+            "elapsed_us": 10000000,
+            "fps": 28.8
+          }
+        ],
+        "visions/portrait/fullscreen/plasma": [
+          {
+            "run_id": "r115_1",
+            "scope": "9aad80684ba2",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r116_2",
+            "scope": "9aad80684ba2",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          },
+          {
+            "run_id": "r117_3",
+            "scope": "9aad80684ba2",
+            "frames": 285,
+            "elapsed_us": 10000000,
+            "fps": 28.5
+          }
+        ],
+        "visions/portrait/fullscreen/gate": [
+          {
+            "run_id": "r118_1",
+            "scope": "321fa01ecf06",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r119_2",
+            "scope": "321fa01ecf06",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r120_3",
+            "scope": "321fa01ecf06",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          }
+        ],
+        "visions/portrait/fullscreen/ashfire": [
+          {
+            "run_id": "r121_1",
+            "scope": "952de0b3926e",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r122_2",
+            "scope": "952de0b3926e",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          },
+          {
+            "run_id": "r123_3",
+            "scope": "952de0b3926e",
+            "frames": 278,
+            "elapsed_us": 10000000,
+            "fps": 27.8
+          }
+        ],
+        "visions/portrait/fullscreen/rain": [
+          {
+            "run_id": "r124_1",
+            "scope": "9e5e50c2f1f5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r125_2",
+            "scope": "9e5e50c2f1f5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r126_3",
+            "scope": "9e5e50c2f1f5",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/fullscreen/kaleido": [
+          {
+            "run_id": "r127_1",
+            "scope": "3d4a70854d08",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r128_2",
+            "scope": "3d4a70854d08",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r129_3",
+            "scope": "3d4a70854d08",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/fullscreen/trails/rgb444": [
+          {
+            "run_id": "r130_1",
+            "scope": "909d6b2cd186",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r131_2",
+            "scope": "909d6b2cd186",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r132_3",
+            "scope": "909d6b2cd186",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "visions/portrait/fullscreen/trails/rgb565": [
+          {
+            "run_id": "r133_1",
+            "scope": "194e96a2087f",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r134_2",
+            "scope": "194e96a2087f",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r135_3",
+            "scope": "194e96a2087f",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "visions/portrait/fullscreen/plasma-kaleido": [
+          {
+            "run_id": "r136_1",
+            "scope": "0ba6a3c4ca05",
+            "frames": 276,
+            "elapsed_us": 10000000,
+            "fps": 27.6
+          },
+          {
+            "run_id": "r137_2",
+            "scope": "0ba6a3c4ca05",
+            "frames": 275,
+            "elapsed_us": 10000000,
+            "fps": 27.5
+          },
+          {
+            "run_id": "r138_3",
+            "scope": "0ba6a3c4ca05",
+            "frames": 275,
+            "elapsed_us": 10000000,
+            "fps": 27.5
+          }
+        ],
+        "visions/portrait/fullscreen/gate-trails": [
+          {
+            "run_id": "r139_1",
+            "scope": "299e74b5fe52",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r140_2",
+            "scope": "299e74b5fe52",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          },
+          {
+            "run_id": "r141_3",
+            "scope": "299e74b5fe52",
+            "frames": 217,
+            "elapsed_us": 10000000,
+            "fps": 21.7
+          }
+        ],
+        "visions/portrait/fullscreen/ashfire-rain": [
+          {
+            "run_id": "r142_1",
+            "scope": "6447a6855ebe",
+            "frames": 271,
+            "elapsed_us": 10000000,
+            "fps": 27.1
+          },
+          {
+            "run_id": "r143_2",
+            "scope": "6447a6855ebe",
+            "frames": 268,
+            "elapsed_us": 10000000,
+            "fps": 26.8
+          },
+          {
+            "run_id": "r144_3",
+            "scope": "6447a6855ebe",
+            "frames": 268,
+            "elapsed_us": 10000000,
+            "fps": 26.8
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-scenes-2.png",
+          "sha256": "c3af8f55cf3626f607a4efe5a552fca130d5f2c5882b11f32a51b3e3d98f9fbf"
+        },
+        {
+          "file": "fps-scenes-2.svg",
+          "sha256": "7b5830102e04976f9e593244cc6b51d404fb577f2034026cb73252e1a9e03160"
+        }
+      ]
+    },
+    {
+      "name": "fps-scenes-3",
+      "title": "Actual presentation rate",
+      "sample_note": "3 measured repetitions; 625 completed presentations; r per row.",
+      "observations": {
+        "visions/fullscreen/layered/pcm": [
+          {
+            "run_id": "r172_1",
+            "scope": "db8ffd2b8460",
+            "frames": 209,
+            "elapsed_us": 10000000,
+            "fps": 20.9
+          },
+          {
+            "run_id": "r173_2",
+            "scope": "db8ffd2b8460",
+            "frames": 208,
+            "elapsed_us": 10000000,
+            "fps": 20.8
+          },
+          {
+            "run_id": "r174_3",
+            "scope": "db8ffd2b8460",
+            "frames": 208,
+            "elapsed_us": 10000000,
+            "fps": 20.8
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-scenes-3.png",
+          "sha256": "63d4edce38d93364784a72a2dad4f1a1bd150187f07b7890151158e43cf361b9"
+        },
+        {
+          "file": "fps-scenes-3.svg",
+          "sha256": "765a57f4e63fca7fb5a708260c1ca9d35760c2cec53ae2d89877113c72b5e0a6"
+        }
+      ]
+    },
+    {
+      "name": "fps-audio",
+      "title": "Actual presentation rate",
+      "sample_note": "36 measured repetitions; 9,699 completed presentations; r per row.",
+      "observations": {
+        "audio/drone/landscape/local": [
+          {
+            "run_id": "r145_1",
+            "scope": "1671e68464fe",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r146_2",
+            "scope": "1671e68464fe",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r147_3",
+            "scope": "1671e68464fe",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "audio/drone/portrait/local": [
+          {
+            "run_id": "r148_1",
+            "scope": "63868926491c",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r149_2",
+            "scope": "63868926491c",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r150_3",
+            "scope": "63868926491c",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "audio/drone/local-and-pcm": [
+          {
+            "run_id": "r151_1",
+            "scope": "a233caefe746",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r152_2",
+            "scope": "a233caefe746",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r153_3",
+            "scope": "a233caefe746",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          }
+        ],
+        "audio/seq/landscape/local": [
+          {
+            "run_id": "r154_1",
+            "scope": "34dc05fe3759",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          },
+          {
+            "run_id": "r155_2",
+            "scope": "34dc05fe3759",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r156_3",
+            "scope": "34dc05fe3759",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "audio/seq/portrait/local": [
+          {
+            "run_id": "r157_1",
+            "scope": "42ebeb264315",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r158_2",
+            "scope": "42ebeb264315",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r159_3",
+            "scope": "42ebeb264315",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "audio/seq/local-and-pcm": [
+          {
+            "run_id": "r160_1",
+            "scope": "eaf767acfc3c",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r161_2",
+            "scope": "eaf767acfc3c",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          },
+          {
+            "run_id": "r162_3",
+            "scope": "eaf767acfc3c",
+            "frames": 296,
+            "elapsed_us": 10000000,
+            "fps": 29.6
+          }
+        ],
+        "audio/beat/landscape/local": [
+          {
+            "run_id": "r163_1",
+            "scope": "d0ed3be028ad",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r164_2",
+            "scope": "d0ed3be028ad",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r165_3",
+            "scope": "d0ed3be028ad",
+            "frames": 250,
+            "elapsed_us": 10000000,
+            "fps": 25.0
+          }
+        ],
+        "audio/beat/portrait/local": [
+          {
+            "run_id": "r166_1",
+            "scope": "d9367869e0e1",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r167_2",
+            "scope": "d9367869e0e1",
+            "frames": 293,
+            "elapsed_us": 10000000,
+            "fps": 29.3
+          },
+          {
+            "run_id": "r168_3",
+            "scope": "d9367869e0e1",
+            "frames": 293,
+            "elapsed_us": 10000000,
+            "fps": 29.3
+          }
+        ],
+        "audio/beat/local-and-pcm": [
+          {
+            "run_id": "r169_1",
+            "scope": "3d0da6aa5aeb",
+            "frames": 240,
+            "elapsed_us": 10000000,
+            "fps": 24.0
+          },
+          {
+            "run_id": "r170_2",
+            "scope": "3d0da6aa5aeb",
+            "frames": 240,
+            "elapsed_us": 10000000,
+            "fps": 24.0
+          },
+          {
+            "run_id": "r171_3",
+            "scope": "3d0da6aa5aeb",
+            "frames": 240,
+            "elapsed_us": 10000000,
+            "fps": 24.0
+          }
+        ],
+        "combined/fullscreen/gate-trails/drone": [
+          {
+            "run_id": "r175_1",
+            "scope": "9c066ad951d6",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r176_2",
+            "scope": "9c066ad951d6",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r177_3",
+            "scope": "9c066ad951d6",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ],
+        "combined/fullscreen/gate-trails/seq": [
+          {
+            "run_id": "r178_1",
+            "scope": "614f6fb725e8",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r179_2",
+            "scope": "614f6fb725e8",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r180_3",
+            "scope": "614f6fb725e8",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ],
+        "combined/fullscreen/gate-trails/beat": [
+          {
+            "run_id": "r181_1",
+            "scope": "6bc75abcd75f",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r182_2",
+            "scope": "6bc75abcd75f",
+            "frames": 228,
+            "elapsed_us": 10000000,
+            "fps": 22.8
+          },
+          {
+            "run_id": "r183_3",
+            "scope": "6bc75abcd75f",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-audio.png",
+          "sha256": "f7bf52cffc64101eb6f6509411cf75dc4fcfb425c92e06709c078c1b24d090b0"
+        },
+        {
+          "file": "fps-audio.svg",
+          "sha256": "212f3a86c06d93b1f0b3647867d55356c9427057e81f49eb2688b23b3d3c7b81"
+        }
+      ]
+    },
+    {
+      "name": "fps-radio",
+      "title": "Actual presentation rate",
+      "sample_note": "12 measured repetitions; 3,328 completed presentations; r per row.",
+      "observations": {
+        "instrumentation/off/menu": [
+          {
+            "run_id": "r184_1",
+            "scope": "3917d8cb8b6d",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r185_2",
+            "scope": "3917d8cb8b6d",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r186_3",
+            "scope": "3917d8cb8b6d",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "instrumentation/on/menu": [
+          {
+            "run_id": "r187_1",
+            "scope": "f8bb254641d1",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r188_2",
+            "scope": "f8bb254641d1",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r189_3",
+            "scope": "f8bb254641d1",
+            "frames": 295,
+            "elapsed_us": 10000000,
+            "fps": 29.5
+          }
+        ],
+        "radio-init/wifi/menu": [
+          {
+            "run_id": "r190_1",
+            "scope": "4e6049f56b93",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r191_2",
+            "scope": "4e6049f56b93",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          },
+          {
+            "run_id": "r192_3",
+            "scope": "4e6049f56b93",
+            "frames": 294,
+            "elapsed_us": 10000000,
+            "fps": 29.4
+          }
+        ],
+        "radio-init/wifi/fullscreen-layered": [
+          {
+            "run_id": "r193_1",
+            "scope": "39214c92ace2",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r194_2",
+            "scope": "39214c92ace2",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          },
+          {
+            "run_id": "r195_3",
+            "scope": "39214c92ace2",
+            "frames": 227,
+            "elapsed_us": 10000000,
+            "fps": 22.7
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-radio.png",
+          "sha256": "430ca7386357391b2c82b3a08a3141db463622eca19df0c894888f390bf36591"
+        },
+        {
+          "file": "fps-radio.svg",
+          "sha256": "1c99f7483de9c0a6a1091b9833763c1406d333cde67244302438dfcbce6ef7b4"
+        }
+      ]
+    },
+    {
+      "name": "audio-tails",
+      "title": "Audio callback, mixing and I2S timing tails",
+      "sample_note": "253,125 timing observations across the plotted metrics; per-workload counts in manifest; p99 shown only with >=100 samples/run.",
+      "observations": [
+        {
+          "workload": "menu/landscape/theme",
+          "scope": "d1831df0c059",
+          "label": "menu/landscape/theme",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              2,
+              2,
+              2
+            ],
+            "exact_observed_max_us": 2,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 24,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 5226,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "visions/landscape/fullscreen/gate-trails",
+          "scope": "a71fa7b4bd63",
+          "label": "visions/landscape/fullscreen/gate-trails",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              256,
+              256,
+              256
+            ],
+            "exact_observed_max_us": 217,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 23,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 5030,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/drone/landscape/local",
+          "scope": "1671e68464fe",
+          "label": "audio/drone/landscape/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 523,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 23,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4754,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/drone/portrait/local",
+          "scope": "63868926491c",
+          "label": "audio/drone/portrait/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 520,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 23,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4749,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/drone/local-and-pcm",
+          "scope": "a233caefe746",
+          "label": "audio/drone/local-and-pcm",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 503,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 22,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4756,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/seq/landscape/local",
+          "scope": "34dc05fe3759",
+          "label": "audio/seq/landscape/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              1024,
+              1024,
+              1024
+            ],
+            "exact_observed_max_us": 759,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 30,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4769,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/seq/portrait/local",
+          "scope": "42ebeb264315",
+          "label": "audio/seq/portrait/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              1024,
+              1024,
+              1024
+            ],
+            "exact_observed_max_us": 752,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 30,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4760,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/seq/local-and-pcm",
+          "scope": "eaf767acfc3c",
+          "label": "audio/seq/local-and-pcm",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              1024,
+              1024,
+              1024
+            ],
+            "exact_observed_max_us": 753,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 22,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4750,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/beat/landscape/local",
+          "scope": "d0ed3be028ad",
+          "label": "audio/beat/landscape/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 325,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 23,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4907,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/beat/portrait/local",
+          "scope": "d9367869e0e1",
+          "label": "audio/beat/portrait/local",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 324,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 23,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4917,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "audio/beat/local-and-pcm",
+          "scope": "3d0da6aa5aeb",
+          "label": "audio/beat/local-and-pcm",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 324,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 22,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4963,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "visions/fullscreen/layered/pcm",
+          "scope": "db8ffd2b8460",
+          "label": "visions/fullscreen/layered/pcm",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              256,
+              256,
+              256
+            ],
+            "exact_observed_max_us": 214,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 22,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 5017,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "combined/fullscreen/gate-trails/drone",
+          "scope": "9c066ad951d6",
+          "label": "combined/fullscreen/gate-trails/drone",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 521,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 25,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4775,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "combined/fullscreen/gate-trails/seq",
+          "scope": "614f6fb725e8",
+          "label": "combined/fullscreen/gate-trails/seq",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              1024,
+              1024,
+              1024
+            ],
+            "exact_observed_max_us": 763,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 29,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4778,
+            "samples": 5625,
+            "runs": 3
+          }
+        },
+        {
+          "workload": "combined/fullscreen/gate-trails/beat",
+          "scope": "6bc75abcd75f",
+          "label": "combined/fullscreen/gate-trails/beat",
+          "audio_callback_us": {
+            "run_p99_upper_us": [
+              512,
+              512,
+              512
+            ],
+            "exact_observed_max_us": 324,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_mix_us": {
+            "run_p99_upper_us": [
+              32,
+              32,
+              32
+            ],
+            "exact_observed_max_us": 24,
+            "samples": 5625,
+            "runs": 3
+          },
+          "audio_enqueue_us": {
+            "run_p99_upper_us": [
+              8192,
+              8192,
+              8192
+            ],
+            "exact_observed_max_us": 4909,
+            "samples": 5625,
+            "runs": 3
+          }
+        }
+      ],
+      "files": [
+        {
+          "file": "audio-tails.png",
+          "sha256": "e3cdd606fca44ac14190352f1c72d81f7723888fd40bffa61879b9f85378ad44"
+        },
+        {
+          "file": "audio-tails.svg",
+          "sha256": "8c50f2dfbaea5a03d5700d3cef8bac691d2f52973847ecec135910e46ff2998f"
+        }
+      ]
+    }
+  ],
+  "omitted": [
+    {
+      "figure": "kernel-dsp",
+      "reason": "No exact target kernel timing samples"
+    },
+    {
+      "figure": "stress-temperature",
+      "reason": "No completed retained stress samples"
+    }
+  ],
+  "tool_sha256": "8d2047551cf52b86a676ca121d73d70a2cdfff85afacd24c6175b32a459a0f80",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "analysis_packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "contourpy": "1.4.0",
+    "fonttools": "4.69.1",
+    "kiwisolver": "1.5.1",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "4.0.0"
+  },
+  "limitations": [
+    "Only completed MEASURED runs are plotted; missing data are not synthesized.",
+    "Repetition ranges use matching requested settings, windows, instrumentation and actual scene/allocation receipts; differing scopes are labelled separately.",
+    "Histogram p99 values are power-of-two upper bounds, distinct from exact observed maxima.",
+    "Per-run FPS uses completed physical presentations divided by the target measurement window.",
+    "CPU utilization is target tick sampling, not cycle-exact utilization.",
+    "Temperature codes come from an undocumented RTC-library function; they are uncalibrated sensor indications, not calibrated die temperatures.",
+    "Primary capture's ESP32_ROM_raw_uncalibrated tag is retained verbatim in raw evidence; its ROM attribution is a legacy inaccurate label."
+  ],
+  "command_argv": [
+    "tools/perf/plot_results.py",
+    "evidence/physical/full-01/results.json",
+    "--output",
+    "evidence/physical/full-01/figures",
+    "--label",
+    "full-01 physical terminal partial capture"
+  ]
+}

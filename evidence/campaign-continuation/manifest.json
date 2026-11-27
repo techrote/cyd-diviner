@@ -1,0 +1,259 @@
+{
+  "schema": "cyd-perf-publication/1",
+  "label": "continuation-01",
+  "capture_status": "FAILED",
+  "publication_scope": "terminal_partial_capture",
+  "allow_partial_requested": true,
+  "measured_run_count": 19,
+  "evidence_class": "physical_measured",
+  "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+  "profile": "cyd-profile",
+  "source_tree_state": "eff036bcc084e7691e5dbdc5d386664a32b498c2a6cfcab4717e046c5912534d",
+  "input_results_sha256": "0fe7607d7276050cbc1a2cf7f84c1d3182aba8e0b225c9f6d13b1dc1a3ffcfc4",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-BASELINE.zip",
+    "member_prefix": "physical/continuation-01",
+    "bytes": 22071088,
+    "sha256": "41f122a120c5f4207f6d30b01d3c0b4be67728a200ba89154fa3d957d38a7797",
+    "verified_members": {
+      "physical/continuation-01/artifact-hashes.json": {
+        "bytes": 623,
+        "sha256": "90e4ac11b2a5f7223779f137f62c07db07b070fa3e86a507950812a9e185ca73",
+        "compressed_bytes": 343
+      },
+      "physical/continuation-01/metrics.csv": {
+        "bytes": 297730,
+        "sha256": "dd74b51261c210c33324da73b8768639b9fa81537be68f381d2dfa2805a5775e",
+        "compressed_bytes": 10588
+      },
+      "physical/continuation-01/results.json": {
+        "bytes": 792753,
+        "sha256": "0fe7607d7276050cbc1a2cf7f84c1d3182aba8e0b225c9f6d13b1dc1a3ffcfc4",
+        "compressed_bytes": 39120
+      },
+      "physical/continuation-01/samples.csv": {
+        "bytes": 342578,
+        "sha256": "7cc082de6a2f4a97edff747b5a9f79c78f9b1cac40d69e3cf194ce65bbf17a70",
+        "compressed_bytes": 14531
+      },
+      "physical/continuation-01/serial-events.jsonl": {
+        "bytes": 2844986,
+        "sha256": "72a96276a495cb5f091c338a95d0f7c95aeb57e75bb2e2e4bbac8d7947b08ebf",
+        "compressed_bytes": 257049
+      },
+      "physical/continuation-01/serial-rx.bin": {
+        "bytes": 319183,
+        "sha256": "dd15823733614c2352f45e58e4a1f6af7b92af6fbd9d6f57626e93c5550cafac",
+        "compressed_bytes": 17258
+      },
+      "physical/continuation-01/serial-text.log": {
+        "bytes": 319183,
+        "sha256": "dd15823733614c2352f45e58e4a1f6af7b92af6fbd9d6f57626e93c5550cafac",
+        "compressed_bytes": 17258
+      },
+      "physical/continuation-01/target.jsonl": {
+        "bytes": 386676,
+        "sha256": "9c12d7328da0a8fa37973c2c9607b57305c46939a4402cb17dcb5954c7aa8281",
+        "compressed_bytes": 26562
+      }
+    }
+  },
+  "inputs": {
+    "artifact-hashes.json": {
+      "bytes": 623,
+      "sha256": "90e4ac11b2a5f7223779f137f62c07db07b070fa3e86a507950812a9e185ca73"
+    },
+    "metrics.csv": {
+      "bytes": 297730,
+      "sha256": "dd74b51261c210c33324da73b8768639b9fa81537be68f381d2dfa2805a5775e"
+    },
+    "results.json": {
+      "bytes": 792753,
+      "sha256": "0fe7607d7276050cbc1a2cf7f84c1d3182aba8e0b225c9f6d13b1dc1a3ffcfc4"
+    },
+    "samples.csv": {
+      "bytes": 342578,
+      "sha256": "7cc082de6a2f4a97edff747b5a9f79c78f9b1cac40d69e3cf194ce65bbf17a70"
+    },
+    "serial-events.jsonl": {
+      "bytes": 2844986,
+      "sha256": "72a96276a495cb5f091c338a95d0f7c95aeb57e75bb2e2e4bbac8d7947b08ebf"
+    },
+    "serial-rx.bin": {
+      "bytes": 319183,
+      "sha256": "dd15823733614c2352f45e58e4a1f6af7b92af6fbd9d6f57626e93c5550cafac"
+    },
+    "serial-text.log": {
+      "bytes": 319183,
+      "sha256": "dd15823733614c2352f45e58e4a1f6af7b92af6fbd9d6f57626e93c5550cafac"
+    },
+    "target.jsonl": {
+      "bytes": 386676,
+      "sha256": "9c12d7328da0a8fa37973c2c9607b57305c46939a4402cb17dcb5954c7aa8281"
+    },
+    "summary.json": {
+      "bytes": 57334,
+      "sha256": "109c5d885f11e51c25cdff58b5ec8fa7e28a77295bd35c4199c4579ec72f3323"
+    },
+    "summary-scenes.csv": {
+      "bytes": 2539,
+      "sha256": "1d55855455b3841fa100f9e6e238afb9d8dae88c5f23488bf82bf1e3058fdccf"
+    },
+    "summary-metrics.csv": {
+      "bytes": 16880,
+      "sha256": "52c20fd8deb6f6e0f04f3b64dea6af61be7cfd77b5660db8c3dd66d054f7687f"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-spi.csv": {
+      "bytes": 203,
+      "sha256": "13220c851eda8e5670d6f7805f7abd137850f1e832b3363966e3fd98c4945d46"
+    },
+    "summary-missing.csv": {
+      "bytes": 473,
+      "sha256": "0622b72c303601f468783bd7ae6b965debda5ee1ec3a7c27660b92d5e98145aa"
+    },
+    "figures/manifest.json": {
+      "bytes": 86325,
+      "sha256": "449ff927fe84968d186040f76bba18b096aa92b7f97ded3b1d08a3a410738056"
+    },
+    "figures/fps-radio.png": {
+      "bytes": 79918,
+      "sha256": "e59bff4fecfc4bfc944b837984c78251bbb81ca9cd8da6c26c3aa5285274ce7e"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10878,
+      "sha256": "9ddd80540caa80118eb848648c5e0f4b44cb35894400fc2a64593be002a83cb6"
+    },
+    "figures/fps-scenes.png": {
+      "bytes": 92586,
+      "sha256": "286c7cc9a85c88961426cf4f6f2c7c5fd603f82e28f7eb4429bb8415abd80768"
+    },
+    "figures/fps-scenes.svg": {
+      "bytes": 13783,
+      "sha256": "faf4ba0445fc263632f9744b4ea58ecb59a90b0282e2c12291f312fca6551ef0"
+    },
+    "figures/audio-tails.png": {
+      "bytes": 100077,
+      "sha256": "a4f445af27775b2b1448727ae99a3b7913499f28536206cd607b393244de1b00"
+    },
+    "figures/audio-tails.svg": {
+      "bytes": 19399,
+      "sha256": "ccbda95d7036e40fc4760ad27437d24fb0f451da19876aa85bd990d4985e8dab"
+    },
+    "figures/stress-temperature.png": {
+      "bytes": 127028,
+      "sha256": "020ea49fabd93cd54773539e9e7c37b4559c4d41412d3045e75ce8b56e7f7274"
+    },
+    "figures/stress-temperature.svg": {
+      "bytes": 70945,
+      "sha256": "29b3e2093b383ca692d594c26453c55195349ffe664e1f7a05924e61a6253dba"
+    }
+  },
+  "outputs": {
+    "figures/audio-tails.png": {
+      "bytes": 100077,
+      "sha256": "a4f445af27775b2b1448727ae99a3b7913499f28536206cd607b393244de1b00"
+    },
+    "figures/audio-tails.svg": {
+      "bytes": 19399,
+      "sha256": "ccbda95d7036e40fc4760ad27437d24fb0f451da19876aa85bd990d4985e8dab"
+    },
+    "figures/fps-radio.png": {
+      "bytes": 79918,
+      "sha256": "e59bff4fecfc4bfc944b837984c78251bbb81ca9cd8da6c26c3aa5285274ce7e"
+    },
+    "figures/fps-radio.svg": {
+      "bytes": 10878,
+      "sha256": "9ddd80540caa80118eb848648c5e0f4b44cb35894400fc2a64593be002a83cb6"
+    },
+    "figures/fps-scenes.png": {
+      "bytes": 92586,
+      "sha256": "286c7cc9a85c88961426cf4f6f2c7c5fd603f82e28f7eb4429bb8415abd80768"
+    },
+    "figures/fps-scenes.svg": {
+      "bytes": 13783,
+      "sha256": "faf4ba0445fc263632f9744b4ea58ecb59a90b0282e2c12291f312fca6551ef0"
+    },
+    "figures/manifest.json": {
+      "bytes": 86325,
+      "sha256": "449ff927fe84968d186040f76bba18b096aa92b7f97ded3b1d08a3a410738056"
+    },
+    "figures/stress-temperature.png": {
+      "bytes": 127028,
+      "sha256": "020ea49fabd93cd54773539e9e7c37b4559c4d41412d3045e75ce8b56e7f7274"
+    },
+    "figures/stress-temperature.svg": {
+      "bytes": 70945,
+      "sha256": "29b3e2093b383ca692d594c26453c55195349ffe664e1f7a05924e61a6253dba"
+    },
+    "REPORT.md": {
+      "bytes": 19515,
+      "sha256": "663f2f22eebc35f0b322ed279775f84bde6e8c31d30c907bcfd7dc872b6ddbfc"
+    },
+    "stress-samples.csv": {
+      "bytes": 94555,
+      "sha256": "9b9518a8f2658497e43024a84b8363292d45ebb20bf3f2c2f98860b733bd330c"
+    },
+    "summary-kernels.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-metrics.csv": {
+      "bytes": 16880,
+      "sha256": "52c20fd8deb6f6e0f04f3b64dea6af61be7cfd77b5660db8c3dd66d054f7687f"
+    },
+    "summary-missing.csv": {
+      "bytes": 473,
+      "sha256": "0622b72c303601f468783bd7ae6b965debda5ee1ec3a7c27660b92d5e98145aa"
+    },
+    "summary-scenes.csv": {
+      "bytes": 2539,
+      "sha256": "1d55855455b3841fa100f9e6e238afb9d8dae88c5f23488bf82bf1e3058fdccf"
+    },
+    "summary-spi.csv": {
+      "bytes": 203,
+      "sha256": "13220c851eda8e5670d6f7805f7abd137850f1e832b3363966e3fd98c4945d46"
+    },
+    "summary.json": {
+      "bytes": 40315,
+      "sha256": "a3b8da4a4a6a791e4fd6da14c93296a992d047e88ec3d67751d6582a92cc4a82"
+    }
+  },
+  "stress_rows": 355,
+  "tools": {
+    "publish_evidence.py": {
+      "bytes": 17926,
+      "sha256": "0860e70e9c62619b74001f72791e3807a8fd4afc738cfdcfaad37c9c09ece209"
+    },
+    "report.py": {
+      "bytes": 39169,
+      "sha256": "b39ed01437d0fe5feb7c13289d0374d17411e53380f5d1002ad5bda19de42a09"
+    },
+    "summarize.py": {
+      "bytes": 10689,
+      "sha256": "06e82c9ae16d882dbff530eb6547a2b4a0e24d294dfebe1c5439a13963c1e7ec"
+    },
+    "capture.py": {
+      "bytes": 37365,
+      "sha256": "a63355c5cbe7bea2f9df2a685aa8765e13ed2d234a0c7913d62e3f9d7eb81c4e"
+    }
+  },
+  "limitations": [
+    "Raw archive membership and source hashes are verified; this tool does not independently attest hardware readings or the flashed image.",
+    "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
+    "Manifest excludes its own digest to avoid a self-referential hash."
+  ],
+  "post_generation_edit": {
+    "reason": "Corrected footer wording without promoting terminal partial status.",
+    "raw_inputs_unchanged": true,
+    "edit": {
+      "from": "An empty table means that no stress workload was present in this completed capture.",
+      "to": "An empty table means that no stress workload was present in this source capture."
+    },
+    "edit_script_sha256": "8d20c400c331c00c4ef95e20c51284f7ae01f5c7c9d6bc4edffede591301ff03"
+  }
+}

@@ -1,106 +1,291 @@
-workload,status,completed_repetitions,planned_repetitions,reason
-menu/landscape/theme,MEASURED,3,3,
-menu/landscape/rain,MEASURED,3,3,
-menu/landscape/ashfire,MEASURED,3,3,
-menu/landscape/plasma,MEASURED,3,3,
-menu/portrait/theme,MEASURED,3,3,
-menu/portrait/rain,MEASURED,3,3,
-menu/portrait/ashfire,MEASURED,3,3,
-menu/portrait/plasma,MEASURED,3,3,
-visions/landscape/ui/plasma,MEASURED,3,3,
-visions/landscape/ui/gate,MEASURED,3,3,
-visions/landscape/ui/ashfire,MEASURED,3,3,
-visions/landscape/ui/rain,MEASURED,3,3,
-visions/landscape/ui/kaleido,MEASURED,3,3,
-visions/landscape/ui/trails/rgb444,MEASURED,3,3,
-visions/landscape/ui/trails/rgb565,MEASURED,3,3,
-visions/landscape/ui/plasma-kaleido,MEASURED,3,3,
-visions/landscape/ui/gate-trails,MEASURED,3,3,
-visions/landscape/ui/ashfire-rain,MEASURED,3,3,
-visions/landscape/fullscreen/plasma,MEASURED,3,3,
-visions/landscape/fullscreen/gate,MEASURED,3,3,
-visions/landscape/fullscreen/ashfire,MEASURED,3,3,
-visions/landscape/fullscreen/rain,MEASURED,3,3,
-visions/landscape/fullscreen/kaleido,MEASURED,3,3,
-visions/landscape/fullscreen/trails/rgb444,MEASURED,3,3,
-visions/landscape/fullscreen/trails/rgb565,MEASURED,3,3,
-visions/landscape/fullscreen/plasma-kaleido,MEASURED,3,3,
-visions/landscape/fullscreen/gate-trails,MEASURED,3,3,
-visions/landscape/fullscreen/ashfire-rain,MEASURED,3,3,
-visions/portrait/ui/plasma,IN PROGRESS,2,3,Primary capture in progress
-visions/portrait/ui/gate,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/ashfire,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/rain,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/kaleido,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/trails/rgb444,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/trails/rgb565,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/plasma-kaleido,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/gate-trails,PENDING,0,3,Primary capture in progress
-visions/portrait/ui/ashfire-rain,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/plasma,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/gate,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/ashfire,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/rain,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/kaleido,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/trails/rgb444,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/trails/rgb565,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/plasma-kaleido,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/gate-trails,PENDING,0,3,Primary capture in progress
-visions/portrait/fullscreen/ashfire-rain,PENDING,0,3,Primary capture in progress
-audio/drone/landscape/local,PENDING,0,3,Primary capture in progress
-audio/drone/portrait/local,PENDING,0,3,Primary capture in progress
-audio/drone/local-and-pcm,PENDING,0,3,Primary capture in progress
-audio/seq/landscape/local,PENDING,0,3,Primary capture in progress
-audio/seq/portrait/local,PENDING,0,3,Primary capture in progress
-audio/seq/local-and-pcm,PENDING,0,3,Primary capture in progress
-audio/beat/landscape/local,PENDING,0,3,Primary capture in progress
-audio/beat/portrait/local,PENDING,0,3,Primary capture in progress
-audio/beat/local-and-pcm,PENDING,0,3,Primary capture in progress
-visions/fullscreen/layered/pcm,PENDING,0,3,Primary capture in progress
-combined/fullscreen/gate-trails/drone,PENDING,0,3,Primary capture in progress
-combined/fullscreen/gate-trails/seq,PENDING,0,3,Primary capture in progress
-combined/fullscreen/gate-trails/beat,PENDING,0,3,Primary capture in progress
-instrumentation/off/menu,PENDING,0,3,Primary capture in progress
-instrumentation/on/menu,PENDING,0,3,Primary capture in progress
-radio-init/wifi/menu,PENDING,0,3,Primary capture in progress
-radio-init/wifi/fullscreen-layered,PENDING,0,3,Primary capture in progress
-radio-init/ble/menu,PENDING,0,3,Primary capture in progress
-radio-init/ble/fullscreen-layered,PENDING,0,3,Primary capture in progress
-radio-init/espnow/menu,PENDING,0,3,Primary capture in progress
-radio-init/espnow/fullscreen-layered,PENDING,0,3,Primary capture in progress
-touch/scripted-menu-rapid,PENDING,0,3,Primary capture in progress
-touch/visions-fullscreen-transitions,PENDING,0,3,Primary capture in progress
-sustained/cpu-both-cores,PENDING,0,1,Primary capture in progress
-post-stress/visions-fullscreen-layered,PENDING,0,3,Primary capture in progress
-spi/full-frame-rgb565,PENDING,0,3,Primary capture in progress
-kernel/osc-f32/realistic,PENDING,0,3,Primary capture in progress
-kernel/osc-f32/large,PENDING,0,3,Primary capture in progress
-kernel/osc-q15/realistic,PENDING,0,3,Primary capture in progress
-kernel/osc-q15/large,PENDING,0,3,Primary capture in progress
-kernel/filter-f32/realistic,PENDING,0,3,Primary capture in progress
-kernel/filter-f32/large,PENDING,0,3,Primary capture in progress
-kernel/filter-q15/realistic,PENDING,0,3,Primary capture in progress
-kernel/filter-q15/large,PENDING,0,3,Primary capture in progress
-kernel/modal-f32/realistic,PENDING,0,3,Primary capture in progress
-kernel/modal-f32/large,PENDING,0,3,Primary capture in progress
-kernel/modal-q15/realistic,PENDING,0,3,Primary capture in progress
-kernel/modal-q15/large,PENDING,0,3,Primary capture in progress
-kernel/fft-f32/realistic,PENDING,0,3,Primary capture in progress
-kernel/fft-f32/large,PENDING,0,3,Primary capture in progress
-kernel/cellular/realistic,PENDING,0,3,Primary capture in progress
-kernel/cellular/large,PENDING,0,3,Primary capture in progress
-kernel/particles/realistic,PENDING,0,3,Primary capture in progress
-kernel/particles/large,PENDING,0,3,Primary capture in progress
-kernel/feedback/realistic,PENDING,0,3,Primary capture in progress
-kernel/feedback/large,PENDING,0,3,Primary capture in progress
-kernel/stripe-rgb565/realistic,PENDING,0,3,Primary capture in progress
-kernel/stripe-rgb565/large,PENDING,0,3,Primary capture in progress
-physical/contact-to-photon,NOT RUN,0,0,Requires owner-operated physical touch stimulus and external optical timing fixture.
-audio/usb-only-dac-disabled,NOT RUN,0,0,Existing PCM streams the same mixed blocks sent to the local DAC; independent DAC-disable path is not assumed.
-audio/external-dac-loopback,NOT RUN,0,0,External acquisition fixture required to detect analog gaps/distortion independently.
-wireless/wifi-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized owned AP/peer and configured traffic endpoint; no network probes are automatic.
-wireless/ble-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized BLE peer; no scans/probes of unrelated devices.
-wireless/espnow-goodput-rtt,NOT RUN,0,0,Requires explicitly authorized ESP-NOW peer and owned channel.
-wireless/coexistence,NOT RUN,0,0,Requires explicitly authorized Wi-Fi/BLE/ESP-NOW peers and separately captured local-workload baseline.
-portable/esp32-s3-physical,NOT RUN,0,0,Physical S3 board identity/backup/flash authorization required; compile-only is distinct evidence.
-portable/esp32-c3-physical,NOT RUN,0,0,Physical C3 board identity/backup/flash authorization required; compile-only is distinct evidence.
+capture,capture_status,source_sha,firmware_sha256,profile,workload,repetition,status,error
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/theme,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/theme,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/theme,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/landscape/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/theme,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/theme,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/theme,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,menu/portrait/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb444,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb444,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb444,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb565,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb565,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/trails/rgb565,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma-kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma-kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/plasma-kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate-trails,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate-trails,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/gate-trails,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire-rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire-rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/ui/ashfire-rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb444,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb444,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb444,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb565,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb565,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/trails/rgb565,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma-kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma-kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/plasma-kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate-trails,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate-trails,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/gate-trails,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire-rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire-rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/landscape/fullscreen/ashfire-rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb444,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb444,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb444,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb565,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb565,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/trails/rgb565,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma-kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma-kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/plasma-kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate-trails,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate-trails,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/gate-trails,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire-rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire-rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/ui/ashfire-rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb444,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb444,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb444,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb565,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb565,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/trails/rgb565,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma-kaleido,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma-kaleido,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/plasma-kaleido,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate-trails,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate-trails,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/gate-trails,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire-rain,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire-rain,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/portrait/fullscreen/ashfire-rain,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/landscape/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/landscape/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/landscape/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/portrait/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/portrait/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/portrait/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/local-and-pcm,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/local-and-pcm,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/drone/local-and-pcm,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/landscape/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/landscape/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/landscape/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/portrait/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/portrait/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/portrait/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/local-and-pcm,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/local-and-pcm,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/seq/local-and-pcm,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/landscape/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/landscape/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/landscape/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/portrait/local,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/portrait/local,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/portrait/local,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/local-and-pcm,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/local-and-pcm,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,audio/beat/local-and-pcm,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/fullscreen/layered/pcm,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/fullscreen/layered/pcm,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,visions/fullscreen/layered/pcm,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/drone,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/drone,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/drone,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/seq,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/seq,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/seq,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/beat,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/beat,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,combined/fullscreen/gate-trails/beat,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/off/menu,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/off/menu,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/off/menu,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/on/menu,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/on/menu,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,instrumentation/on/menu,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/menu,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/menu,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/menu,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/fullscreen-layered,1,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/fullscreen-layered,2,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/wifi/fullscreen-layered,3,MEASURED,
+full-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/ble/menu,1,IN PROGRESS,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/ble/menu,,NOT RUN,Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware.
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/ble/fullscreen-layered,,NOT RUN,Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware.
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/menu,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/menu,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/menu,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/fullscreen-layered,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/fullscreen-layered,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,radio-init/espnow/fullscreen-layered,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/scripted-menu-rapid,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/scripted-menu-rapid,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/scripted-menu-rapid,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/visions-fullscreen-transitions,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/visions-fullscreen-transitions,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,touch/visions-fullscreen-transitions,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,sustained/cpu-both-cores,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,post-stress/visions-fullscreen-layered,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,post-stress/visions-fullscreen-layered,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,post-stress/visions-fullscreen-layered,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,spi/full-frame-rgb565,1,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,spi/full-frame-rgb565,2,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,spi/full-frame-rgb565,3,MEASURED,
+continuation-01,FAILED,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/realistic,1,IN PROGRESS,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-f32/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/osc-q15/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-f32/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/filter-q15/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-f32/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/modal-q15/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/fft-f32/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/cellular/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/particles/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/feedback/large/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/realistic/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/realistic/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/realistic/internal,3,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/large/internal,1,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/large/internal,2,MEASURED,
+cyd-kernels-fresh-01,CAPTURE COMPLETE,a4549f87cef05d19d9acf96d59ae95a2435ebb67,fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c,cyd-profile,kernel/stripe-rgb565/large/internal,3,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/realistic/internal,1,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/realistic/internal,2,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/realistic/internal,3,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/large/internal,1,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/large/internal,2,MEASURED,
+s3-kernels-01,FAILED,aade0fb9efa7083c4b215791f5bdd43c15040fc5,1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf,kernel-s3-n4r2,kernel/osc-f32/large/internal,3,IN PROGRESS,

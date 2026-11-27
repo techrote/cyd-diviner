@@ -1,0 +1,23 @@
+{
+  "schema": "cyd-perf-link-identities/1",
+  "cyd": {
+    "board": "Owner CYD on COM21",
+    "port": "COM21",
+    "baud": 533333,
+    "profile": "cyd-profile-link",
+    "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+    "source_digest": "1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
+    "firmware_file": "C:/cyd-diviner/link-approved-build/.pio/build/cyd-profile-link/firmware.bin",
+    "firmware_sha256": "a980f7e2b9409686ae2d325ebeddfd525966f06e8ded03b2d8a723b36771ab11"
+  },
+  "peer": {
+    "board": "Owner ESP32-S3 N4R2 on COM22",
+    "port": "COM22",
+    "baud": 115200,
+    "profile": "kernel-s3-n4r2-peer",
+    "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+    "source_digest": "1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
+    "firmware_file": "C:/cyd-diviner/link-approved-build/.pio/build/kernel-s3-n4r2-peer/firmware.bin",
+    "firmware_sha256": "7ac5bf7f79bb2ed6048a40367fe1d3966a1d5e53a999b2f09f28f310456bb681"
+  }
+}

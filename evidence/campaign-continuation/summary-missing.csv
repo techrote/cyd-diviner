@@ -1,0 +1,4 @@
+workload,status,reason
+radio-init/ble/menu,NOT RUN,Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware.
+radio-init/ble/fullscreen-layered,NOT RUN,Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware.
+kernel/osc-f32/realistic,IN PROGRESS,

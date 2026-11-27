@@ -20,6 +20,24 @@ measurements remain **NOT RUN**. Host correctness tests and target compilation
 are different evidence classes. Neither establishes CYD throughput, frame rate,
 temperature rise, audio reliability or wireless performance.
 
+Closed physical baseline captures are now available in
+[the baseline findings](../evidence/BASELINE-FINDINGS.md) and
+[raw archive receipt](../evidence/baseline-archive-receipt.json). They contain
+280 completed CYD windows across the primary, continuation and fresh-boot kernel
+captures. Their two interrupted plans retain FAILED status. The 365-second
+stress window met the near-full CPU requirement; its raw temperature indication
+stayed at code 128 and does not establish a calibrated temperature or thermal
+rise. The initial S3 capture completed five windows before a truncated USB
+status record stopped it; complete S3 and wireless supplements remain pending.
+
+`cyd-profile-link` adds I2S events and explicitly commanded owned-peer traffic.
+`kernel-s3-n4r2-peer` adds the matching S3 endpoint and verified internal/PSRAM
+workspace selection. These are different images from the previously approved
+primary/event-only binaries and require separate owner authorization. See
+[wireless capture](../tools/perf/LINK.md) and
+[packet/counter methods](../tools/perf/LINK_PROTOCOL.md). Credentials stay in
+a private file outside Git and are provisioned into RAM without log echoes.
+
 The Windows host sees COM21 as CH340, VID:PID `1A86:7523`. Initial read-only
 connection attempts observed boot mode `0x13` (application boot). Longer reset
 timing and a Windows combined DTR/RTS change did not enter download mode. Owner

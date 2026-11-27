@@ -1,0 +1,140 @@
+Processing kernel-s3-n4r2-peer (board: esp32-s3-devkitc-1; platform: espressif32 @ 7.1.3; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32-s3-devkitc-1.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+HARDWARE: ESP32S3 240MHz, 320KB RAM, 8MB Flash
+DEBUG: Current (esp-builtin) On-board (esp-builtin) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5 
+ - toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 33 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- WiFi @ 2.0.0
+Building in release mode
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\src\perf_ble.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\src\perf_kernel_main.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\src\perf_kernels.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\src\perf_link.cpp.o
+Building .pio\build-link-check\kernel-s3-n4r2-peer\bootloader.bin
+Generating partitions .pio\build-link-check\kernel-s3-n4r2-peer\partitions.bin
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFi.cpp.o
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 1 ELF section
+Successfully created esp32s3 image.
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiAP.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiUdp.cpp.o
+src/perf_kernels.cpp: In function 'bool perf_kernels::command(const char*)':
+src/perf_kernels.cpp:434:23: error: declaration of 'perf_output::Line line' shadows a parameter
+     perf_output::Line line;
+                       ^~~~
+Compiling .pio\build-link-check\kernel-s3-n4r2-peer\FrameworkArduino\Esp.cpp.o
+*** [.pio\build-link-check\kernel-s3-n4r2-peer\src\perf_kernels.cpp.o] Error 1
+
+========================= [FAILED] Took 11.19 seconds =========================
+Processing cyd-profile-link (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libf63\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\beat.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\drone.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\gemini.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\kin.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\link.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\listen.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\netscan.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\oracle.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\palette.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\pulse.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\scry.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\sentinel.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\seq.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\visions.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\apps\wired.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\cyd_controls.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\hal_cyd.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\main.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\net_device.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_ble.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_kernel_main.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_kernels.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_link.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_profile.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\perf_radio.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\src\theme.cpp.o
+Building .pio\build-link-check\cyd-profile-link\bootloader.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Generating partitions .pio\build-link-check\cyd-profile-link\partitions.bin
+Compiling .pio\build-link-check\cyd-profile-link\lib700\SPI\SPI.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\lib198\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build-link-check\cyd-profile-link\liba76\BLE\BLEAddress.cpp.o
+src/perf_kernels.cpp: In function 'bool perf_kernels::command(const char*)':
+src/perf_kernels.cpp:434:23: error: declaration of 'perf_output::Line line' shadows a parameter
+     perf_output::Line line;
+                       ^~~~
+*** [.pio\build-link-check\cyd-profile-link\src\perf_kernels.cpp.o] Error 1
+========================= [FAILED] Took 32.67 seconds =========================
+
+Environment          Status    Duration
+-------------------  --------  ------------
+kernel-s3-n4r2-peer  FAILED    00:00:11.189
+cyd-profile-link     FAILED    00:00:32.668
+==================== 2 failed, 0 succeeded in 00:00:43.857 ====================

@@ -1,0 +1,137 @@
+{
+  "schema": "cyd-perf-figures/1",
+  "generated_utc": "2026-11-27T19:14:48.112797+00:00",
+  "label": "s3-kernels-01 physical terminal partial capture",
+  "input": "C:\\cyd-diviner\\perf-characterisation\\evidence\\physical\\s3-kernels-01\\results.json",
+  "input_sha256": "8f841f8d4d6b0fab857e6823652597d6415b3ed6508f2cadde8454e42463449f",
+  "capture_status": "FAILED",
+  "evidence_class": "physical_measured",
+  "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+  "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+  "profile": "kernel-s3-n4r2",
+  "measured_runs": 5,
+  "figures": [
+    {
+      "name": "kernel-dsp-internal",
+      "title": "Portable DSP kernels on the measured target \u2014 internal",
+      "sample_note": "1,280 exact timed steps; each dot is a repetition statistic, line spans repetition range.",
+      "observations": [
+        {
+          "kernel": "osc-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k001",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 65,
+              "p99_us": 65,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k002",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 65,
+              "p99_us": 65,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k003",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 65,
+              "p99_us": 65,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k004",
+              "scope": "9e0e2269def4",
+              "samples": 256,
+              "median_us": 256,
+              "p99_us": 256,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k005",
+              "scope": "9e0e2269def4",
+              "samples": 256,
+              "median_us": 256,
+              "p99_us": 256,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "kernel-dsp-internal.png",
+          "sha256": "787fe0d50e357fbe2ac1acacff544d3ddf25cb4374bb73895236b78980a875a2"
+        },
+        {
+          "file": "kernel-dsp-internal.svg",
+          "sha256": "7d1a275c52a17cfd3a390689022d35c923540262af3598359443d5a10f2d70df"
+        }
+      ]
+    }
+  ],
+  "omitted": [
+    {
+      "figure": "fps",
+      "reason": "No completed physical frame counts and elapsed windows"
+    },
+    {
+      "figure": "audio-tails",
+      "reason": "No observed callback/mix/enqueue timings"
+    },
+    {
+      "figure": "stress-temperature",
+      "reason": "No completed retained stress samples"
+    }
+  ],
+  "tool_sha256": "6b4ed5ab761b52b2f0afd4e403450e807557c307686ca3e566c53094ad98fd1c",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "analysis_packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "contourpy": "1.4.0",
+    "fonttools": "4.69.1",
+    "kiwisolver": "1.5.1",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "4.0.0"
+  },
+  "limitations": [
+    "Only completed MEASURED runs are plotted; missing data are not synthesized.",
+    "Repetition ranges use matching requested settings, windows, instrumentation and actual scene/allocation receipts; differing scopes are labelled separately.",
+    "Histogram p99 values are power-of-two upper bounds, distinct from exact observed maxima.",
+    "Per-run FPS uses completed physical presentations divided by the target measurement window.",
+    "CPU utilization is target tick sampling, not cycle-exact utilization.",
+    "Temperature codes come from an undocumented RTC-library function; they are uncalibrated sensor indications, not calibrated die temperatures.",
+    "Primary capture's ESP32_ROM_raw_uncalibrated tag is retained verbatim in raw evidence; its ROM attribution is a legacy inaccurate label."
+  ],
+  "command_argv": [
+    "tools/perf/plot_results.py",
+    "evidence/physical/s3-kernels-01/results.json",
+    "--output",
+    "evidence/physical/s3-kernels-01/figures",
+    "--label",
+    "s3-kernels-01 physical terminal partial capture"
+  ]
+}

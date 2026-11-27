@@ -1,0 +1,2 @@
+workload,scope,repetitions,samples,bytes_per_sample,median_us,p95_us,p99_us,max_us,median_goodput_bytes_per_s
+spi/full-frame-rgb565,1234c3c35e38,3,384,153600,32281,32292,32293,32293,4758216.9077785695

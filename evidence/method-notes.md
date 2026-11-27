@@ -242,3 +242,25 @@ return statuses and actual RF emissions are not independently exported or
 measured; this audit found no observed failure, but it does not establish a
 physically verified RF-off baseline. Radio comparisons remain controller-init
 and requested-state measurements without peer traffic or RF verification.
+
+## Supplemental output and installed-partition context
+
+The reviewed link images are pinned by `build-link-receipt.json` and have not
+inherited approval from the primary/event-only images. Their standalone USB
+writer requests an 8,192-byte TX ring, checks bounded complete records and
+exports write/configuration counters. Physical rerun is still required to
+establish whether the observed S3 truncation has been resolved. The source
+comment suggesting HWCDC is always auto-started before setup is too broad:
+the pinned Arduino startup guards automatic USBCDC startup with
+`!ARDUINO_USB_MODE`. Ending before ring replacement is defensive reconfiguration,
+not proof that native mode 1 was already initialized. This correction does not
+change the pinned binary or its actual explicit setup sequence.
+
+The S3 peer build permits a 3 MB application through `huge_app.csv`, but the
+reviewed 1,282,272-byte image also fits the previously verified installed
+`default.csv` app0 (offset `0x10000`, capacity 1,310,720 bytes). The app-only plan
+retains that installed table and bootloader. It uses no OTA/filesystem path.
+Future images must be checked against the installed 1,310,720-byte capacity,
+not merely PlatformIO's larger build limit. `flash-link-plan.json` pins both
+the actual retained table hash and binary size; no partition replacement is
+authorized or performed by that app-only plan.

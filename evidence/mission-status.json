@@ -1,774 +1,3268 @@
 {
-  "schema": "cyd-perf-mission-status/1",
+  "schema": "cyd-perf-mission-status/2",
   "mission": "CYD-DIVINER-PERF-CHARACTERISATION-001",
-  "utc": "2026-11-27T18:13:11.033880+00:00",
-  "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "utc": "2026-11-27T19:08:07.873822+00:00",
   "accepted_baseline": "7b1b37eec6ac126f334a0b008d91135071ea60fa",
-  "status": "PHYSICAL CAMPAIGN IN PROGRESS",
+  "status": "PHYSICAL SUPPLEMENT PREPARATION IN PROGRESS",
+  "physical_performance_status": "CYD primary workload coverage collected except BLE; event/wireless and full S3 matrix pending",
   "flash_written": true,
-  "backup_status": "VERIFIED full 4194304-byte flash; private backup outside Git",
-  "physical_performance_status": "IN PROGRESS",
-  "stress": {
-    "requested_seconds": 365,
-    "measured_seconds": null,
-    "near_100_percent_confirmed": null,
-    "temperature_raw": null,
-    "temperature_c_uncalibrated": null
-  },
-  "board": {
-    "owner_description": "CYD on COM21",
-    "usb_vid_pid": "1A86:7523",
-    "bridge": "CH340",
-    "rom_family": "classic ESP32",
-    "pcb_revision": null,
-    "chip_revision": "v3.1",
-    "flash_bytes": 4194304,
-    "psram_bytes": 0,
-    "cpu_mhz": 240
-  },
-  "runs": [
-    {
-      "workload": "menu/landscape/theme",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/landscape/rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/landscape/ashfire",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/landscape/plasma",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/portrait/theme",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/portrait/rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/portrait/ashfire",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "menu/portrait/plasma",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/plasma",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/gate",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/ashfire",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/kaleido",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/trails/rgb444",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/trails/rgb565",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/plasma-kaleido",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/gate-trails",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/ui/ashfire-rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/plasma",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/gate",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/ashfire",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/kaleido",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/trails/rgb444",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/trails/rgb565",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/plasma-kaleido",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/gate-trails",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/landscape/fullscreen/ashfire-rain",
-      "status": "MEASURED",
-      "completed_repetitions": 3,
-      "planned_repetitions": 3,
-      "reason": ""
-    },
-    {
-      "workload": "visions/portrait/ui/plasma",
-      "status": "IN PROGRESS",
-      "completed_repetitions": 2,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/gate",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/ashfire",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/rain",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/kaleido",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/trails/rgb444",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/trails/rgb565",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/plasma-kaleido",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/gate-trails",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/ui/ashfire-rain",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/plasma",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/gate",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/ashfire",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/rain",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/kaleido",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/trails/rgb444",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/trails/rgb565",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/plasma-kaleido",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/gate-trails",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/portrait/fullscreen/ashfire-rain",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/drone/landscape/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/drone/portrait/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/drone/local-and-pcm",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/seq/landscape/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/seq/portrait/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/seq/local-and-pcm",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/beat/landscape/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/beat/portrait/local",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "audio/beat/local-and-pcm",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "visions/fullscreen/layered/pcm",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "combined/fullscreen/gate-trails/drone",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "combined/fullscreen/gate-trails/seq",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "combined/fullscreen/gate-trails/beat",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "instrumentation/off/menu",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "instrumentation/on/menu",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/wifi/menu",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/wifi/fullscreen-layered",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/ble/menu",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/ble/fullscreen-layered",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/espnow/menu",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "radio-init/espnow/fullscreen-layered",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "touch/scripted-menu-rapid",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "touch/visions-fullscreen-transitions",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "sustained/cpu-both-cores",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 1,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "post-stress/visions-fullscreen-layered",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "spi/full-frame-rgb565",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/osc-f32/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/osc-f32/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/osc-q15/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/osc-q15/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/filter-f32/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/filter-f32/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/filter-q15/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/filter-q15/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/modal-f32/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/modal-f32/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/modal-q15/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/modal-q15/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/fft-f32/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/fft-f32/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/cellular/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/cellular/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/particles/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/particles/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/feedback/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/feedback/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/stripe-rgb565/realistic",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "kernel/stripe-rgb565/large",
-      "status": "PENDING",
-      "completed_repetitions": 0,
-      "planned_repetitions": 3,
-      "reason": "Primary capture in progress"
-    },
-    {
-      "workload": "physical/contact-to-photon",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Requires owner-operated physical touch stimulus and external optical timing fixture."
-    },
-    {
-      "workload": "audio/usb-only-dac-disabled",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Existing PCM streams the same mixed blocks sent to the local DAC; independent DAC-disable path is not assumed."
-    },
-    {
-      "workload": "audio/external-dac-loopback",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "External acquisition fixture required to detect analog gaps/distortion independently."
-    },
-    {
-      "workload": "wireless/wifi-goodput-rtt",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Requires explicitly authorized owned AP/peer and configured traffic endpoint; no network probes are automatic."
-    },
-    {
-      "workload": "wireless/ble-goodput-rtt",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Requires explicitly authorized BLE peer; no scans/probes of unrelated devices."
-    },
-    {
-      "workload": "wireless/espnow-goodput-rtt",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Requires explicitly authorized ESP-NOW peer and owned channel."
-    },
-    {
-      "workload": "wireless/coexistence",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Requires explicitly authorized Wi-Fi/BLE/ESP-NOW peers and separately captured local-workload baseline."
-    },
-    {
-      "workload": "portable/esp32-s3-physical",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Physical S3 board identity/backup/flash authorization required; compile-only is distinct evidence."
-    },
-    {
-      "workload": "portable/esp32-c3-physical",
-      "status": "NOT RUN",
-      "completed_repetitions": 0,
-      "planned_repetitions": 0,
-      "reason": "Physical C3 board identity/backup/flash authorization required; compile-only is distinct evidence."
+  "backup_status": "Both boards have independently verified private full-flash backups outside Git",
+  "owner_end_state": "Leave profiler installed; original application restoration not requested",
+  "raw_archive": "PHYSICAL-CAPTURES-BASELINE.zip",
+  "captures": [
+    {
+      "name": "full-01",
+      "status": "FAILED",
+      "measured_runs": 195,
+      "error": "RuntimeError('Target error: {\"schema\": 1, \"type\": \"error\", \"message\": \"radio mode unsupported\", \"host_received_elapsed_s\": 2574.806300700002}')",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c"
+    },
+    {
+      "name": "continuation-01",
+      "status": "FAILED",
+      "measured_runs": 19,
+      "error": "RuntimeError('Target error: {\"schema\": 1, \"type\": \"kernel_error\", \"error\": \"workspace allocation failed\", \"host_received_elapsed_s\": 580.5448972000158}')",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c"
+    },
+    {
+      "name": "cyd-kernels-fresh-01",
+      "status": "CAPTURE COMPLETE",
+      "measured_runs": 66,
+      "error": null,
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c"
+    },
+    {
+      "name": "s3-kernels-01",
+      "status": "FAILED",
+      "measured_runs": 5,
+      "error": "TimeoutError(\"No target 'state' record for None after 20s\")",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf"
     }
   ],
-  "full_chip_erased": false,
-  "application_sectors_overwritten": true,
-  "completed_repetitions": 86,
-  "planned_repetitions": 286,
-  "supplement_authorization": "Owner approved after primary completes; image6b75236feaddbe412819a96381d1bc38175ede9e8acaa37898a702e78b6bb4ae",
-  "live_results": "physical/full-01/results.json (raw capture archive on completion)",
-  "backup_sha256": "e370bb16271073a284722328ed6adb39ef305d9bc66686176cef5c8dc702aa06",
-  "explicit_erase_command_issued": false
+  "stress": {
+    "requested_seconds": 365,
+    "measured_seconds": 365.0,
+    "retained_samples": 355,
+    "retained_sample_span_seconds": 362.939,
+    "near_100_percent_confirmed": true,
+    "cpu_method": "1 kHz tick observations of running task versus idle; not cycle-exact",
+    "core0_weighted_busy_percent": 98.99471117521807,
+    "core1_weighted_busy_percent": 99.96016209904526,
+    "temperature_raw_min": 128,
+    "temperature_raw_max": 128,
+    "temperature_method": "Undocumented SDK RTC-library raw sensor reading; original firmware legacy ROM tag retained in raw evidence",
+    "temperature_c_uncalibrated": 53.333,
+    "accurate_die_temperature_c": null,
+    "ambient_temperature_c": null,
+    "temperature_interpretation": "All retained stress raw codes were 128; no measured thermal rise or calibrated thermal margin established"
+  },
+  "pending": [
+    "Supplementary I2S driver events and matching combined workloads",
+    "Complete S3 internal/PSRAM matrix after UART readout repair",
+    "Directed BLE peer traffic from fresh boot",
+    "Direct ESP-NOW, direct SoftAP and owned phone hotspot traffic"
+  ],
+  "unavailable": [
+    "ESP32-C3 physical board",
+    "External physical contact-to-photon fixture",
+    "Analog DAC loopback capture",
+    "Calibrated independent temperature probe",
+    "Physical RF emissions verification"
+  ],
+  "runs": [
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/theme",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/theme",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/theme",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/landscape/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/theme",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/theme",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/theme",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "menu/portrait/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb444",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb444",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb444",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb565",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb565",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/trails/rgb565",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma-kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma-kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/plasma-kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate-trails",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate-trails",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/gate-trails",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire-rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire-rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/ui/ashfire-rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb444",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb444",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb444",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb565",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb565",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/trails/rgb565",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma-kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma-kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/plasma-kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate-trails",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate-trails",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/gate-trails",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire-rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire-rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/landscape/fullscreen/ashfire-rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb444",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb444",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb444",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb565",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb565",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/trails/rgb565",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma-kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma-kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/plasma-kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate-trails",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate-trails",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/gate-trails",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire-rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire-rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/ui/ashfire-rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb444",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb444",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb444",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb565",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb565",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/trails/rgb565",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma-kaleido",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma-kaleido",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/plasma-kaleido",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate-trails",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate-trails",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/gate-trails",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire-rain",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire-rain",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/portrait/fullscreen/ashfire-rain",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/landscape/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/landscape/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/landscape/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/portrait/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/portrait/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/portrait/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/local-and-pcm",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/local-and-pcm",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/drone/local-and-pcm",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/landscape/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/landscape/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/landscape/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/portrait/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/portrait/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/portrait/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/local-and-pcm",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/local-and-pcm",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/seq/local-and-pcm",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/landscape/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/landscape/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/landscape/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/portrait/local",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/portrait/local",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/portrait/local",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/local-and-pcm",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/local-and-pcm",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "audio/beat/local-and-pcm",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/fullscreen/layered/pcm",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/fullscreen/layered/pcm",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "visions/fullscreen/layered/pcm",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/drone",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/drone",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/drone",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/seq",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/seq",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/seq",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/beat",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/beat",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "combined/fullscreen/gate-trails/beat",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/off/menu",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/off/menu",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/off/menu",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/on/menu",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/on/menu",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "instrumentation/on/menu",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/menu",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/menu",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/menu",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/fullscreen-layered",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/fullscreen-layered",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/wifi/fullscreen-layered",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "full-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/ble/menu",
+      "repetition": 1,
+      "status": "IN PROGRESS",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/ble/menu",
+      "repetition": null,
+      "status": "NOT RUN",
+      "error": "Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware."
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/ble/fullscreen-layered",
+      "repetition": null,
+      "status": "NOT RUN",
+      "error": "Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware."
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/menu",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/menu",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/menu",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/fullscreen-layered",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/fullscreen-layered",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "radio-init/espnow/fullscreen-layered",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/scripted-menu-rapid",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/scripted-menu-rapid",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/scripted-menu-rapid",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/visions-fullscreen-transitions",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/visions-fullscreen-transitions",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "touch/visions-fullscreen-transitions",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "sustained/cpu-both-cores",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "post-stress/visions-fullscreen-layered",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "post-stress/visions-fullscreen-layered",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "post-stress/visions-fullscreen-layered",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "spi/full-frame-rgb565",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "spi/full-frame-rgb565",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "spi/full-frame-rgb565",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "continuation-01",
+      "capture_status": "FAILED",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/realistic",
+      "repetition": 1,
+      "status": "IN PROGRESS",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/osc-q15/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-f32/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/filter-q15/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-f32/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/modal-q15/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/fft-f32/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/cellular/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/particles/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/feedback/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+      "firmware_sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c",
+      "profile": "cyd-profile",
+      "workload": "kernel/stripe-rgb565/large/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/realistic/internal",
+      "repetition": 3,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 1,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 2,
+      "status": "MEASURED",
+      "error": ""
+    },
+    {
+      "capture": "s3-kernels-01",
+      "capture_status": "FAILED",
+      "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+      "firmware_sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf",
+      "profile": "kernel-s3-n4r2",
+      "workload": "kernel/osc-f32/large/internal",
+      "repetition": 3,
+      "status": "IN PROGRESS",
+      "error": ""
+    }
+  ]
 }

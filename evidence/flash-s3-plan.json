@@ -1,0 +1,38 @@
+{
+  "schema": "cyd-perf-flash-plan/1",
+  "port": "COM22",
+  "chip": "ESP32-S3 QFN56 revision0.2",
+  "flash_bytes": 4194304,
+  "psram_fused_bytes": 2097152,
+  "original_boot_header": "erased/no valid image",
+  "original_partition_table": "absent",
+  "backup_sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc",
+  "backup_verified": true,
+  "profile": "kernel-s3-n4r2",
+  "source_sha": "aade0fb9efa7083c4b215791f5bdd43c15040fc5",
+  "source_tree_sha256": "de23da6565d4e70fc793de65a9a6a9db563ed1ca1de4bfb077ead7c2b1a9854f",
+  "components": {
+    "bootloader.bin": {
+      "bytes": 15104,
+      "sha256": "e01a2300de23c8d601e9f2a37684b5dbc83ae37132d5a8833e23520afd895f92"
+    },
+    "partitions.bin": {
+      "bytes": 3072,
+      "sha256": "148b959cbff1c38aa8e1d5c0ba9d612c54997b945e56a63f41223eef650653a1"
+    },
+    "firmware.bin": {
+      "bytes": 312160,
+      "sha256": "1e0f2d219ad1dd8837b876151ba41465df71bb78f4d903bfe801a477659ebaaf"
+    }
+  },
+  "write_offsets": {
+    "bootloader.bin": 0,
+    "partitions.bin": 32768,
+    "firmware.bin": 65536
+  },
+  "authorization": {
+    "utc": "2026-11-27T18:53:42.278187+00:00",
+    "owner_response": "Authorize S3 flash and kernel tests"
+  },
+  "flash_scope": "Install bootloader, default 4 MB partition table and standalone kernel application. No eFuse writes or full-chip erase."
+}
