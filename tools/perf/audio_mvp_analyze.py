@@ -28,7 +28,8 @@ def context(result, run):
         ("source_sha", "source_digest", "firmware_sha256", "profile", "board")} for name, endpoint in result["endpoints"].items()}
     actual = {role: {key: run.get(role + "_summary", {}).get(key) for key in AUDIO_CONFIG_FIELDS} for role in ("sender", "receiver")}
     scope = {"settings": run["settings"], "duration_ms": result["plan"].get("duration_ms", 3000),
-             "seed": result["plan"].get("seed", 23063), "identities": identities, "actual_config": actual}
+             "seed": result["plan"].get("seed", 23063), "identities": identities, "actual_config": actual,
+             "metadata_policy": run.get("metadata_policy", result.get("metadata_policy")), "local_context": run.get("local_context")}
     return hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:12], scope
 
 
@@ -43,6 +44,8 @@ def analyze(result):
                "analysis_status": run["status"], "scope": scope_id, "repetition": run["repetition"], "settings": run["settings"],
                "error": run.get("error"), "sender_summary": run.get("sender_summary"), "receiver_summary": run.get("receiver_summary")}
         row["outside_window_temperature"] = run.get("outside_window_temperature", {"status": "NOT MEASURED"})
+        row["metadata_policy"] = run.get("metadata_policy", result.get("metadata_policy"))
+        row["deferred_start_proof"] = run.get("deferred_start_proof")
         if run["status"] == "MEASURED":
             try:
                 row["derived"] = validate_run(run, result["plan"].get("duration_ms", 3000), result["plan"].get("seed", 23063))
@@ -63,6 +66,7 @@ def analyze(result):
             "run_status_counts": dict(collections.Counter(row["status"] for row in rows)),
             "analysis_status_counts": dict(collections.Counter(row["analysis_status"] for row in rows)),
             "source_harness_sha256": result.get("harness_sha256"), "endpoints": result["endpoints"],
+            "metadata_policy": result.get("metadata_policy"),
             "runs": rows, "groups": aggregated, "limitations": result.get("limitations", [])}
 
 
@@ -75,6 +79,10 @@ def markdown(summary, source_link, input_hash):
         f"Capture status **{summary['capture_status']}**; {summary['attempted_repetitions']}/{summary['planned_repetitions']} attempted repetitions. "
         f"Statuses `{summary['run_status_counts']}`; analysis validation `{summary['analysis_status_counts']}`.", "",
         f"[Raw structured source]({source_link}), SHA256 `{input_hash}`. Per-board redacted RX/target/event logs remain separate raw evidence.", ""]
+    if (summary.get("metadata_policy") or {}).get("mode") == "deferred_radio_metadata/1":
+        lines += ["This is the explicit deferred-metadata cohort. Matching successful start ACKs are required, with only the documented post-ACK formatter failure permitted. "
+            "Both radios stop before export. Active channel/power-save readback is **NOT MEASURED**; checked SDK setup is inferred from the ACK/source and later PHY API status. "
+            "Post-stop info describes released radios, and last_error/operation describe post-stop command status. Packet/PLC/error counters retain the finite workload observations.", ""]
     for name, endpoint in summary["endpoints"].items():
         identity = endpoint.get("identity", {})
         lines += [f"- **{name}**: `{identity.get('profile')}`; source `{identity.get('source_sha')}`; "

@@ -50,6 +50,24 @@ progress. It never pokes an empty pending buffer, a private transaction, or a
 streaming interval. Explicit identity `usb_progress_poll: true` permits this for
 the initial identity record; native-USB target metadata enables later recovery.
 
+For an independently labelled firmware cohort with insufficient internal8-bit
+heap for radio-on metadata, a plan may explicitly set `defer_radio_metadata:true`
+(or generate it with `plan --defer-radio-metadata`). Defaults are unchanged.
+This mode requires a matching successful start ACK before any fallback; a missing
+or failed ACK aborts. Only the exact documented `kernel_error` text `bounded
+telemetry allocation or length failure` after that ACK is permitted and retained.
+No active-radio info query or live audio_run wait occurs. After the finite quiet
+interval both radios stop before summary exports, freeing formatter heap. The
+approved firmware preserves complete/stats/runID across stop; the host still
+validates exact source/configuration, source schedule timestamps, finite counts,
+reception and digital quality. A missing audio_run requires the retained formatter
+diagnostic, not silent acceptance. Live channel/power-save readback remains
+`NOT MEASURED`; successful checked SDK setup is inferred from the start ACK and
+source, with PHY API status in the later summary. Stop resets last_error/operation
+command status, so retained RF error counters carry those observations. The
+policy is recorded separately and participates in analysis scope. Start with a
+single new capture case; prior failed captures remain unchanged.
+
 Outputs retain source/image identity, receiver-first setup receipts, both raw
 redacted RX streams, target JSONL, serial event logs, finite completion evidence,
 queue/deadline/loss/PLC counters, and available digital reconstruction metrics.

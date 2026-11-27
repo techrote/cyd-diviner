@@ -21,6 +21,77 @@ AUDIO_CONFIG_FIELDS = ("codec", "channels", "sample_rate_hz", "frames_per_block"
     "max_packet_bytes", "playout_delay_blocks", "rx_slots", "rx_callback_queue_depth", "tx_inflight_limit",
     "worker_core", "worker_priority", "pacing", "transport", "mac_ack_required", "application_retransmission",
     "sink", "i2s_output", "raw_continuous_RF", "clock_scope")
+BOUNDED_TELEMETRY_FAILURE = "bounded telemetry allocation or length failure"
+
+
+def metadata_policy(plan):
+    deferred = plan.get("defer_radio_metadata", False)
+    return {"mode": "deferred_radio_metadata/1" if deferred else "live_start_metadata/1",
+        "start_requirement": "matching successful audio start ACK; missing ACK aborts",
+        "active_radio_info_query": not deferred, "audio_run_record_required_live": not deferred,
+        "export_order": "stop both radios before export" if deferred else "export before stop",
+        "allowed_deferred_diagnostic": BOUNDED_TELEMETRY_FAILURE if deferred else None,
+        "radio_channel_ps_query_scope": "NOT MEASURED while active; checked SDK setup inferred from ACK/source" if deferred else "queried after RX start"}
+
+
+def is_bounded_telemetry_failure(record):
+    return record.get("type") == "kernel_error" and record.get("error") == BOUNDED_TELEMETRY_FAILURE
+
+
+def deferred_ack(endpoint, command, *, started=False, timeout=15):
+    """Accept the exact formatter diagnostic only after a validated start ACK.
+
+    This does not relax Endpoint.until or the default path. A missing/failed ACK,
+    a prior formatter error, malformed JSON or any other error still fails.
+    """
+    action, cursor = command.split()[2], len(endpoint.records)
+    endpoint.send(command)
+    deadline = time.perf_counter() + timeout
+    while time.perf_counter() < deadline:
+        if endpoint.errors:
+            raise RuntimeError("Malformed audio telemetry; deferred mode cannot recover it")
+        acknowledgments, permitted = [], started
+        recent = endpoint.records[cursor:]
+        for record in recent:
+            if record["type"] in ("ack", "audio_ack", "link_ack") and record.get("ok") is False:
+                raise RuntimeError("Deferred audio setup failed: " + json.dumps(endpoint.guard.clean(record)))
+            if record["type"] == "audio_ack" and record.get("action") == action:
+                if record.get("ok") is not True:
+                    raise RuntimeError("Successful matching audio ACK is required")
+                acknowledgments.append(record)
+                if action in ("serve", "run"):
+                    permitted = True
+            if record["type"] in ("error", "audio_error", "link_error", "kernel_error"):
+                if not permitted or not is_bounded_telemetry_failure(record):
+                    raise RuntimeError("Deferred metadata rejected diagnostic: " + json.dumps(endpoint.guard.clean(record)))
+        if acknowledgments:
+            if len(acknowledgments) != 1:
+                raise RuntimeError("Ambiguous matching audio ACK")
+            return recent
+        endpoint.read()
+    raise TimeoutError("Missing successful matching audio ACK; deferred mode aborted")
+
+
+def deferred_start_proof(endpoint, cursor, action, run_id, role, duration, expected_blocks):
+    records = endpoint.records[cursor:]
+    ack_index = next((index for index, record in enumerate(records) if record.get("type") == "audio_ack"
+        and record.get("action") == action and record.get("ok") is True), None)
+    if ack_index is None:
+        raise RuntimeError("Deferred audio start ACK proof is missing")
+    diagnostics = []
+    for index, record in enumerate(records):
+        if record["type"] in ("error", "audio_error", "link_error", "kernel_error"):
+            if index <= ack_index or not is_bounded_telemetry_failure(record):
+                raise RuntimeError("Unpermitted diagnostic in deferred audio start/window")
+            diagnostics.append(record)
+    windows = [record for record in records if record["type"] == "audio_run"]
+    if len(windows) > 1 or (windows and (windows[0].get("run_id") != run_id or windows[0].get("role") != role
+        or windows[0].get("duration_us") != duration * 1000 or windows[0].get("source_total_blocks") != expected_blocks)):
+        raise RuntimeError("Deferred audio_run record correlation failed")
+    if not windows and not diagnostics:
+        raise RuntimeError("Missing audio_run without the documented bounded-telemetry diagnostic")
+    return {"start_ack": records[ack_index], "audio_run_records": windows, "telemetry_diagnostics": diagnostics,
+            "audio_run_observation": "RECEIVED" if windows else "UNAVAILABLE: documented bounded telemetry failure after valid start ACK"}
 
 
 class AudioEndpoint(Endpoint):
@@ -113,6 +184,8 @@ def validate_plan(plan):
             raise ValueError("Invalid finite audio plan " + key)
     if plan.get("channel", 6) != 6:
         raise ValueError("This firmware contract uses owned-board channel6; other channels are not configurable")
+    if "defer_radio_metadata" in plan and type(plan["defer_radio_metadata"]) is not bool:
+        raise ValueError("defer_radio_metadata is an explicit boolean opt-in")
     for case in plan["workloads"]:
         if not isinstance(case.get("name"), str) or not case["name"]:
             raise ValueError("Every audio workload requires a name")
@@ -159,12 +232,20 @@ def save(result, output, guard):
 def execute_run(run, endpoints, plan, guard, metadata):
     case, run_id = run["settings"], run["run_id"]
     sender, receiver = endpoints[case["sender"]], endpoints[case["receiver"]]
+    deferred = plan.get("defer_radio_metadata", False)
+    run["metadata_policy"] = metadata_policy(plan)
     run["setup_target"] = {}
+    run["local_context"] = {}
     for name, endpoint in endpoints.items():
         setup = endpoint.audio("perf audio stop")
         setup += endpoint.request("perf link stop")
         setup += endpoint.request("perf link mode off 0")
-        if name == "cyd":
+        profile = metadata[name].get("identity", {}).get("profile", endpoint.identity.get("profile"))
+        headless = profile == "kernel-s3-n4r2-audio"
+        run["local_context"][name] = {"logical_role": name, "profile": profile,
+            "display_context": "headless standalone audio; no display/menu" if headless else "Diviner menu" if name == "cyd" else "standalone peer",
+            "menu_command": "NOT APPLICABLE" if headless else "perf scene menu" if name == "cyd" else "NOT REQUESTED"}
+        if name == "cyd" and not headless:
             setup += endpoint.request("perf scene menu")
         setup += endpoint.audio(f"perf audio config {case['codec']} {case['channels']} {case['sample_hz']} "
                                 f"{case['frames_per_packet']} {case['osr']} {case['rate_mbps']} {plan.get('seed', 23063)}")
@@ -182,23 +263,38 @@ def execute_run(run, endpoints, plan, guard, metadata):
     cursors = {name: len(endpoint.records) for name, endpoint in endpoints.items()}
     # RX activation is acknowledged before TX is allowed to begin. Both data
     # paths remain inside the boards; the host only records serial telemetry.
-    run["receiver_start"] = receiver.audio(f"perf audio serve {run_id} {duration}")
-    run["receiver_ready"] = receiver.audio_info()
-    ready = run["receiver_ready"]
-    if (ready.get("active") is not True or ready.get("role") != "rx" or ready.get("radio_initialized") is not True
-        or ready.get("actual_channel") != 6 or ready.get("channel_query_status") != 0
-        or ready.get("power_save_enum") != 0 or ready.get("power_save_status") != 0
-        or ready.get("phy_config_status") != 0):
-        raise RuntimeError("Owned receiver did not report active channel6/PS-off/PHY-configured readiness")
-    run["sender_start"] = sender.audio(f"perf audio run {run_id} {duration}")
-    run["sender_window"] = sender.until({"audio_run"}, cursors[case["sender"]], run_id=run_id)
+    if deferred:
+        run["receiver_start"] = deferred_ack(receiver, f"perf audio serve {run_id} {duration}")
+        run["receiver_ready"] = {"status": "NOT MEASURED", "scope": "active channel/power-save queries deferred to avoid formatter pressure",
+            "setup_evidence": "successful matching serve ACK implies checked SDK setup calls succeeded; not an independent state query"}
+        run["sender_start"] = deferred_ack(sender, f"perf audio run {run_id} {duration}")
+    else:
+        run["receiver_start"] = receiver.audio(f"perf audio serve {run_id} {duration}")
+        run["receiver_ready"] = receiver.audio_info()
+        ready = run["receiver_ready"]
+        if (ready.get("active") is not True or ready.get("role") != "rx" or ready.get("radio_initialized") is not True
+            or ready.get("actual_channel") != 6 or ready.get("channel_query_status") != 0
+            or ready.get("power_save_enum") != 0 or ready.get("power_save_status") != 0
+            or ready.get("phy_config_status") != 0):
+            raise RuntimeError("Owned receiver did not report active channel6/PS-off/PHY-configured readiness")
+        run["sender_start"] = sender.audio(f"perf audio run {run_id} {duration}")
+        run["sender_window"] = sender.until({"audio_run"}, cursors[case["sender"]], run_id=run_id)
     run["host_observation_guard_ms"] = 1000 + plan.get("receive_tail_ms", 500)
     deadline = time.perf_counter() + (duration + run["host_observation_guard_ms"]) / 1000
     while time.perf_counter() < deadline:
         for endpoint in endpoints.values():
             endpoint.read()
-    # No control queries are sent within the finite streaming interval. Export
-    # before stop preserves the firmware's natural-completion evidence.
+    # No control queries are sent within the finite streaming interval. Deferred
+    # mode stops both radios to free INTERNAL|8BIT heap before large exports;
+    # this approved firmware preserves complete/stats/runID across stop.
+    if deferred:
+        run["post_window_stop_target"] = {name: deferred_ack(endpoint, "perf audio stop", started=True)
+            for name, endpoint in endpoints.items()}
+        expected_blocks = case["sample_hz"] * duration // (1000 * case["frames_per_packet"])
+        run["deferred_start_proof"] = {
+            "receiver": deferred_start_proof(receiver, cursors[case["receiver"]], "serve", run_id, "rx", duration, expected_blocks),
+            "sender": deferred_start_proof(sender, cursors[case["sender"]], "run", run_id, "tx", duration, expected_blocks)}
+        run["last_error_observation_scope"] = "post-stop command status; stop resets last_error/last_operation, RF counters retained"
     for role in ("sender", "receiver"):
         endpoint = endpoints[case[role]]
         records = endpoint.audio("perf audio export", "audio_summary", run_id=run_id, timeout=20)
@@ -208,8 +304,9 @@ def execute_run(run, endpoints, plan, guard, metadata):
         run[role + "_summary"] = summaries[0]
     run["target_record_start_indices"] = cursors
     run["derived"] = validate_run(run, duration, plan.get("seed", 23063))
-    for endpoint in endpoints.values():
-        endpoint.audio("perf audio stop")
+    if not deferred:
+        for endpoint in endpoints.values():
+            endpoint.audio("perf audio stop")
     run["post_info"] = {name: endpoint.audio_info() for name, endpoint in endpoints.items()}
     run["post_info_scope"] = "outside finite source/receiver windows after stop; not in-window heap"
     run["outside_window_temperature"] = {"scope": "after finite audio export and stop; target state run_id retained; not an in-window sample",
@@ -241,6 +338,9 @@ def validate_run(run, duration_ms, seed=None):
     expected.update(block_payload_bytes=block_bytes, fragments_per_block=(block_bytes + span - 1) // span,
                     playout_delay_blocks=2, rx_slots=8, rx_callback_queue_depth=8, tx_inflight_limit=1)
     expected_blocks = case["sample_hz"] * duration_ms // (1000 * case["frames_per_packet"])
+    if (type(sender.get("target_start_us")) is not int or sender["target_start_us"] <= 0
+        or type(sender.get("target_end_us")) is not int or sender["target_end_us"] - sender["target_start_us"] != duration_ms * 1000):
+        raise RuntimeError("Sender source schedule timestamps do not prove the requested finite window")
     counters = ("source_total_blocks", "source_encoded_blocks", "skipped_source_blocks", "expired_prepared_blocks",
         "encoder_reset_discontinuities", "tx_packet_attempts", "tx_api_accepted_packets", "tx_api_no_mem", "tx_api_other_errors",
         "tx_wire_bytes_accepted", "rx_callback_queue_drops", "rx_wrong_mac", "rx_expired_callback_packets", "rx_callback_age_max_us",
@@ -302,6 +402,7 @@ def capture(args):
     identities, guard = read_identities(args.identities), SecretGuard()
     args.output.mkdir(parents=True, exist_ok=False)
     result = {"schema": "cyd-audio-mvp-capture/1", "evidence_class": "physical_measured", "status": "IN PROGRESS",
+              "metadata_policy": metadata_policy(plan),
               "started_utc": utc_now(), "harness_sha256": digest(pathlib.Path(__file__)),
               "serial_module_sha256": digest(pathlib.Path(__file__).with_name("link_capture.py")),
               "plan": plan, "plan_sha256": digest(args.plan), "endpoints": {}, "runs": [],
@@ -375,6 +476,7 @@ def main():
     child.add_argument("--output", type=pathlib.Path, required=True)
     child.add_argument("--reverse", action="store_true", help="Add CYD-to-peer after the default peer-to-CYD matrix")
     child.add_argument("--include-pdm", action="store_true", help="Add optional packetized-PDM comparisons; not a proprietary SDR TX/RX prototype")
+    child.add_argument("--defer-radio-metadata", action="store_true", help="Explicit opt-in: require start ACK, defer radio-on metadata and stop before export")
     child = commands.add_parser("capture")
     child.add_argument("--identities", type=pathlib.Path, required=True)
     child.add_argument("--plan", type=pathlib.Path, required=True)
@@ -382,6 +484,8 @@ def main():
     args = parser.parse_args()
     if args.command == "plan":
         plan = default_plan(args.reverse, args.include_pdm)
+        if args.defer_radio_metadata:
+            plan["defer_radio_metadata"] = True
         validate_plan(plan)
         args.output.write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
         return 0

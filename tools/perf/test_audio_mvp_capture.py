@@ -53,6 +53,8 @@ class AudioFirmware:
     commands = []
     fail_first_rx, failed = False, False
     state_available = True
+    telemetry_mode = "normal"
+    profile_override = {}
 
     def __init__(self, **_):
         self.chunks, self.active, self.role, self.run_id = [], False, "idle", "none"
@@ -73,7 +75,8 @@ class AudioFirmware:
         AudioFirmware.commands.append((self.port, command))
         parts = command.split()
         if command == "perf info":
-            self.emit({"type": "info", "source_sha": "a" * 40, "source_digest": "b" * 64, "profile": "fixture-audio"})
+            self.emit({"type": "info", "source_sha": "a" * 40, "source_digest": "b" * 64,
+                "profile": self.profile_override.get(self.port, "fixture-audio")})
         elif command == "perf sample":
             if self.state_available:
                 self.emit({"type": "state", "run_id": "separate-profiler-context", "temperature_raw": 128,
@@ -81,6 +84,9 @@ class AudioFirmware:
             else:
                 self.emit({"type": "error", "message": "fixture state unavailable"})
         elif command == "perf audio info":
+            if self.telemetry_mode != "normal" and self.active:
+                self.emit({"type": "kernel_error", "error": "bounded telemetry allocation or length failure"})
+                return len(data)
             self.emit({"type": "audio_info", "configured": True, "session_authorized": True,
                 "role": self.role, "active": self.active, "radio_initialized": self.active,
                 "sta_mac": "020000000001" if self.port == "COM21" else "020000000002",
@@ -95,9 +101,23 @@ class AudioFirmware:
             self.fail = False
             if self.role == "rx" and self.fail_first_rx and not AudioFirmware.failed:
                 self.fail = AudioFirmware.failed = True
-            self.emit({"type": "audio_ack", "action": parts[2], "ok": True})
-            self.emit({"type": "audio_run", "run_id": self.run_id, "role": self.role})
+            failure = {"type": "kernel_error", "error": "bounded telemetry allocation or length failure"}
+            if self.telemetry_mode in ("missing_ack", "before_ack"):
+                self.emit(failure)
+            if self.telemetry_mode != "missing_ack":
+                self.emit({"type": "audio_ack", "action": parts[2], "ok": True})
+            if self.telemetry_mode == "normal":
+                self.emit({"type": "audio_run", "run_id": self.run_id, "role": self.role,
+                    "duration_us": self.duration * 1000,
+                    "source_total_blocks": self.case["sample_hz"] * self.duration // (1000 * self.case["frames_per_packet"])})
+            elif self.telemetry_mode == "after_ack":
+                self.emit(failure)
+            elif self.telemetry_mode == "other_error":
+                self.emit({"type": "audio_error", "error": "fixture unrelated failure"})
         elif command == "perf audio export":
+            if self.telemetry_mode != "normal" and self.active:
+                self.emit({"type": "kernel_error", "error": "bounded telemetry allocation or length failure"})
+                return len(data)
             record = summary(self.case, self.role, self.run_id, self.duration)
             if self.fail:
                 record.update(complete=False, timed_out=True, rx_accepted_packets=0, rx_completed_blocks=0)
@@ -128,6 +148,61 @@ def arguments(root):
 
 
 class AudioCaptureTests(unittest.TestCase):
+    def tearDown(self):
+        AudioFirmware.telemetry_mode = "normal"
+        AudioFirmware.state_available = True
+        AudioFirmware.fail_first_rx = False
+        AudioFirmware.profile_override = {}
+
+    def test_logical_cyd_headless_profile_skips_menu_and_records_actual_context(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            args = arguments(pathlib.Path(temporary))
+            identities = json.loads(args.identities.read_text())
+            identities["cyd"]["profile"] = "kernel-s3-n4r2-audio"
+            args.identities.write_text(json.dumps(identities))
+            AudioFirmware.profile_override = {"COM21": "kernel-s3-n4r2-audio"}
+            AudioFirmware.commands = []
+            with mock.patch.dict("sys.modules", {"serial": mock.Mock(Serial=AudioFirmware)}), mock.patch("audio_mvp_capture.time.perf_counter", Clock()):
+                self.assertEqual(capture(args), 0)
+            result = json.loads((args.output / "results.json").read_text())
+            self.assertTrue(all(run["local_context"]["cyd"]["menu_command"] == "NOT APPLICABLE" for run in result["runs"]))
+            self.assertFalse(any(command == "perf scene menu" for _, command in AudioFirmware.commands))
+
+    def test_deferred_metadata_is_opt_in_preserves_diagnostics_and_stops_before_export(self):
+        for deferred, mode, expected in ((True, "after_ack", 0), (False, "after_ack", 2),
+                                         (True, "missing_ack", 2), (True, "before_ack", 2), (True, "other_error", 2)):
+            with self.subTest(deferred=deferred, mode=mode), tempfile.TemporaryDirectory() as temporary:
+                args = arguments(pathlib.Path(temporary))
+                plan = json.loads(args.plan.read_text())
+                plan["workloads"] = plan["workloads"][:1]
+                if deferred:
+                    plan["defer_radio_metadata"] = True
+                args.plan.write_text(json.dumps(plan))
+                AudioFirmware.commands, AudioFirmware.telemetry_mode = [], mode
+                AudioFirmware.fail_first_rx, AudioFirmware.failed, AudioFirmware.state_available = False, False, True
+                with mock.patch.dict("sys.modules", {"serial": mock.Mock(Serial=AudioFirmware)}), mock.patch("audio_mvp_capture.time.perf_counter", Clock()):
+                    self.assertEqual(capture(args), expected)
+                result = json.loads((args.output / "results.json").read_text())
+                run = result["runs"][0]
+                if expected == 0:
+                    self.assertEqual(run["status"], "MEASURED")
+                    self.assertEqual(run["receiver_ready"]["status"], "NOT MEASURED")
+                    for role in ("sender", "receiver"):
+                        proof = run["deferred_start_proof"][role]
+                        self.assertEqual(proof["audio_run_records"], [])
+                        self.assertEqual(len(proof["telemetry_diagnostics"]), 1)
+                    for port in ("COM21", "COM22"):
+                        commands = [command for endpoint, command in AudioFirmware.commands if endpoint == port]
+                        start = next(i for i, command in enumerate(commands) if command.startswith(("perf audio serve ", "perf audio run ")))
+                        exported = commands.index("perf audio export")
+                        self.assertNotIn("perf audio info", commands[start + 1:exported])
+                        self.assertIn("perf audio stop", commands[start + 1:exported])
+                    self.assertEqual(analyze(result)["analysis_status_counts"], {"MEASURED": 1})
+                else:
+                    self.assertEqual(run["status"], "FAILED")
+                    if mode in ("missing_ack", "before_ack"):
+                        self.assertFalse(any(command.startswith("perf audio run ") for _, command in AudioFirmware.commands))
+
     def test_default_is_pcm_only_with_explicit_optional_pdm_and_reverse(self):
         plan = default_plan()
         validate_plan(plan)
