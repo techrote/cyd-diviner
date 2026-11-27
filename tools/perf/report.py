@@ -41,8 +41,84 @@ def clean_receipt(record):
             if key not in ("schema", "type", "host_received_elapsed_s", "run_id")}
 
 
+def generate_kernel_report(result: dict, label: str, input_sha256: str, summary: dict, plots: list[str]) -> str:
+    measured = [run for run in result["runs"] if run["status"] == "MEASURED"]
+    info = next((record for record in result.get("target_info", []) if record.get("type") == "info"), {})
+    board, plan = result.get("board", {}), result.get("plan", {})
+    registered = sum(case.get("repetitions", plan.get("repetitions", 3)) for case in plan.get("workloads", []) if case.get("status") != "NOT RUN")
+    failed = result["status"] != "CAPTURE COMPLETE"
+    text = [f"# Portable kernel evidence — {label}", "",
+        f"Capture status: **{result['status']}**. Valid completed cases: **{len(measured)}/{registered} registered repetitions**. "
+        "Only MEASURED cases are summarized; partial target records remain raw evidence.", ""]
+    if failed:
+        text += ["This historical portable harness registered its workload plan incrementally. The failed snapshot lists cases reached, "
+                 "not every remaining kernel/size/memory-region combination. Its registered denominator is not a completed full-matrix claim.", "",
+                 f"Recorded failure: `{esc(result.get('error', 'UNSPECIFIED'))}`.", ""]
+    text += [f"Board: {board.get('board', 'UNKNOWN')}; profile `{result['profile']}`. "
+             f"Source [{result['source_sha']}](https://github.com/techrote/cyd-diviner/commit/{result['source_sha']}); "
+             f"firmware SHA256 `{result['firmware_sha256']}`; input results SHA256 `{input_sha256}`.", "",
+        f"CPU {info.get('cpu_mhz', 'UNKNOWN')} MHz; flash {info.get('flash_bytes', 'UNKNOWN')} bytes at {info.get('flash_hz', 'UNKNOWN')} Hz; "
+        f"initialized PSRAM heap {info.get('psram_bytes', 'UNKNOWN')} bytes. Nominal package PSRAM: "
+        f"{board.get('psram_physical_package_bytes', 'NOT SEPARATELY RECORDED')} bytes. "
+        f"Standalone: `{info.get('standalone', False)}`; ordinary audio/display worker flags: "
+        f"`{info.get('ordinary_audio_worker', 'profiling context')}` / `{info.get('ordinary_display_worker', 'profiling context')}`.", "",
+        "The kernel suite uses three warmup steps, reinitializes from the fixed seed, then records 256 exact step timings per case. "
+        "Allocation, preparation, warmup, yields and output inspection are excluded; RTOS preemption during a step is included. "
+        "Percentiles below pool exact timings across matching completed repetitions. Different memory-region/settings scopes remain separate. "
+        "A kernel timing sample is not a physical display frame or audio deadline guarantee.", "",
+        "## Measured kernels", ""]
+    rows = []
+    for row in summary["kernels"]:
+        matching = [run for run in measured if run["workload"] == row["workload"] and settings_scope(run) == row["scope"]]
+        first = matching[0]
+        region = first["settings"].get("memory_region", "NOT RECORDED")
+        method = first["settings"].get("memory_region_method", "NOT RECORDED")
+        rows.append([row["kernel"], "large" if row["large"] else "realistic", f"{region} ({method})", row["repetitions"], row["samples"],
+                     row["median_us"], row["p95_us"], row["p99_us"], row["max_us"], row["working_bytes"], row["output_bytes"],
+                     row["checksum_consistent_across_repetitions"]])
+    text += [table(["Kernel", "size", "memory scope", "reps", "n", "median µs", "p95 µs", "p99 µs", "max µs", "working B", "output B", "fingerprint stable"], rows),
+        "Working bytes are active algorithm state; the target separately reports the complete allocated workspace. "
+        "The same allocation capabilities and data sizes must be used for a cross-board comparison. The classic CYD profiling image has "
+        "concurrent audio/display tasks and a 24,008-byte static observer-array footprint; a standalone S3 image has a different context. "
+        "Ordinary firmware memory headroom cannot be recovered by subtracting that footprint alone. "
+        "The repository's `evidence/method-notes.md` and `tools/perf/KERNELS.md` document context, precision and fingerprint semantics.", "",
+        "FFT's legacy `checksum_fnv1a` field composes separate real/imaginary fingerprints with XOR. "
+        "Float bit fingerprints may differ across architectures; numerical error and host double-precision comparisons are separate correctness evidence. "
+        "Stable repeated fingerprints do not by themselves establish equivalent float/fixed-point precision.", "",
+        "## Sensor and allocation snapshots", ""]
+    sensors = [record for run in measured for record in run.get("target", []) if record.get("type") == "state"]
+    sensor_rows = []
+    for field in ("temperature_raw", "temperature_c_indication", "heap_internal_free_bytes", "heap_internal_largest_bytes", "heap_psram_free_bytes", "heap_psram_largest_bytes"):
+        values = [record[field] for record in sensors if isinstance(record.get(field), (int, float))]
+        if values:
+            sensor_rows.append([field, len(values), fmt(min(values), 3), fmt(max(values), 3)])
+    text += [table(["Field", "n", "minimum", "maximum"], sensor_rows),
+        f"Recorded sensor method: `{info.get('temperature_method', 'UNKNOWN')}`. "
+        + ("The classic ESP32 raw RTC-library indication and its legacy ROM tag are undocumented/uncalibrated; they do not establish accurate die temperature. "
+           if "ESP32_ROM" in info.get("temperature_method", "") or "RTC" in info.get("temperature_method", "") else
+           "The S3 driver Celsius indication has not been independently checked against an external temperature reference. ")
+        + "Snapshot ranges are outside kernel timing windows. Neither these snapshots nor the numeric conversion establish a sustained stress or calibrated cross-chip thermal comparison.", "",
+        "## Bounds and remaining work", "",
+        "Only the listed board/profile, kernel sizes, memory regions and finite repetitions were measured. "
+        "This capture establishes no C3 physical performance, local DAC/display cadence, direct driver-underrun count or wireless throughput/RTT. "
+        "Unlisted combinations in a failed incremental plan remain unmeasured. Preserve the failed stream and protocol error; do not infer timings from truncated JSON.", "",
+        "Compute time per output byte in [summary-kernels.csv](summary-kernels.csv) nominates offload experiments. "
+        "It excludes required input/state transfers, serialization, measured link tails and remote scheduling. "
+        "A speedup requires `local compute > remote compute + RTT + (input+output bytes)/goodput` in consistent units; no wireless benefit is asserted by these kernels alone.", "",
+        "Artifacts: [results.json](results.json), [target records](target.jsonl), [serial RX](serial-rx.bin), "
+        "[serial events](serial-events.jsonl), [samples.csv](samples.csv), [summary.json](summary.json), "
+        "[summary kernels](summary-kernels.csv), [artifact checksums](artifact-hashes.json).", ""]
+    if plots:
+        text += ["## Plots", ""]
+        for plot in plots:
+            text += [f"![{pathlib.Path(plot).stem}]({plot})", ""]
+    return "\n".join(text).rstrip() + "\n"
+
+
 def generate(result: dict, label: str, input_sha256: str, plots: list[str] | None = None) -> str:
     summary = summarize(result)
+    if result.get("capture_kind") == "portable_kernel_matrix":
+        return generate_kernel_report(result, label, input_sha256, summary, plots or [])
     measured = [run for run in result["runs"] if run["status"] == "MEASURED"]
     grouped = collections.defaultdict(list)
     for run in measured:

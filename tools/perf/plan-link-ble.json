@@ -1,0 +1,72 @@
+{
+  "schema": "cyd-perf-link-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "warmup_ms": 2000,
+  "duration_ms": 10000,
+  "direct_channel": 6,
+  "port": 41832,
+  "reply_drain_ms": 700,
+  "workloads": [
+    {
+      "name": "direct_ble/menu/idle_connected",
+      "topology": "direct_ble",
+      "local_workload": "menu",
+      "mode": "idle_connected",
+      "transport": "ble",
+      "pattern": "none",
+      "payload_bytes": 64,
+      "packets_per_second": 1
+    },
+    {
+      "name": "direct_ble/menu/rtt",
+      "topology": "direct_ble",
+      "local_workload": "menu",
+      "mode": "rtt",
+      "transport": "ble",
+      "pattern": "rtt",
+      "payload_bytes": 64,
+      "packets_per_second": 20
+    },
+    {
+      "name": "direct_ble/menu/ble_paced",
+      "topology": "direct_ble",
+      "local_workload": "menu",
+      "mode": "ble_paced",
+      "transport": "ble",
+      "pattern": "oneway",
+      "payload_bytes": 200,
+      "packets_per_second": 50
+    },
+    {
+      "name": "direct_ble/full_gate_drone/idle_connected",
+      "topology": "direct_ble",
+      "local_workload": "full_gate_drone",
+      "mode": "idle_connected",
+      "transport": "ble",
+      "pattern": "none",
+      "payload_bytes": 64,
+      "packets_per_second": 1
+    },
+    {
+      "name": "direct_ble/full_gate_drone/rtt",
+      "topology": "direct_ble",
+      "local_workload": "full_gate_drone",
+      "mode": "rtt",
+      "transport": "ble",
+      "pattern": "rtt",
+      "payload_bytes": 64,
+      "packets_per_second": 20
+    },
+    {
+      "name": "direct_ble/full_gate_drone/ble_paced",
+      "topology": "direct_ble",
+      "local_workload": "full_gate_drone",
+      "mode": "ble_paced",
+      "transport": "ble",
+      "pattern": "oneway",
+      "payload_bytes": 200,
+      "packets_per_second": 50
+    }
+  ]
+}

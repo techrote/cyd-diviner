@@ -49,7 +49,63 @@ def fixture(root):
     return source, archive
 
 
+def refresh_fixture(source, archive):
+    result = json.loads((source / "results.json").read_text())
+    hashes_path = source / "artifact-hashes.json"
+    hashes = json.loads(hashes_path.read_text())
+    hashes["results.json"] = digest(source / "results.json")
+    hashes_path.write_text(json.dumps(hashes) + "\n", encoding="utf-8")
+    summary = summarize(result)
+    (source / "summary.json").write_text(json.dumps(summary) + "\n", encoding="utf-8")
+    for category in ("scenes", "metrics", "kernels", "spi", "missing"):
+        write_csv(source / f"summary-{category}.csv", summary[category])
+    path = source / "figures" / "manifest.json"
+    plots = json.loads(path.read_text())
+    plots.update(input_sha256=digest(source / "results.json"), capture_status=result["status"])
+    path.write_text(json.dumps(plots) + "\n", encoding="utf-8")
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+        for path in sorted(source.rglob("*")):
+            if path.is_file():
+                bundle.write(path, "physical/preflight-fixture/" + path.relative_to(source).as_posix())
+
+
 class PublicationTests(unittest.TestCase):
+    def test_explicit_partial_publication_preserves_failed_status_and_incomplete_coverage(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            source, archive = fixture(root)
+            result = json.loads((source / "results.json").read_text())
+            result.update(status="FAILED", error="owned BLE initialization rejected")
+            result["plan"]["repetitions"] = 2
+            result["runs"].append({"run_id": "r2", "workload": "visions/ui/gate", "status": "IN PROGRESS", "target_partial": []})
+            (source / "results.json").write_text(json.dumps(result), encoding="utf-8")
+            refresh_fixture(source, archive)
+            with self.assertRaises(ValueError):
+                publish(source, root / "default-rejected", archive, "physical/preflight-fixture", "preflight-fixture")
+            output = root / "partial-publication"
+            publish(source, output, archive, "physical/preflight-fixture", "preflight-fixture", allow_partial=True)
+            manifest = json.loads((output / "manifest.json").read_text())
+            self.assertEqual(manifest["capture_status"], "FAILED")
+            self.assertEqual(manifest["publication_scope"], "terminal_partial_capture")
+            self.assertEqual(manifest["measured_run_count"], 1)
+            report = (output / "REPORT.md").read_text(encoding="utf-8")
+            self.assertIn("**FAILED**", report)
+            self.assertIn("**1/2**", report)
+            self.assertIn("not a completed campaign", report)
+            self.assertEqual(json.loads((source / "results.json").read_text())["status"], "FAILED")
+
+    def test_allow_partial_never_accepts_ongoing_capture_or_repairs_false_complete_label(self):
+        for status in ("IN PROGRESS", "CAPTURE COMPLETE"):
+            with tempfile.TemporaryDirectory() as temporary:
+                root = pathlib.Path(temporary)
+                source, archive = fixture(root)
+                result = json.loads((source / "results.json").read_text())
+                result["status"] = status
+                result["plan"]["repetitions"] = 2
+                (source / "results.json").write_text(json.dumps(result), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    publish(source, root / "out", archive, "physical/preflight-fixture", "preflight-fixture", allow_partial=True)
+                self.assertFalse((root / "out").exists())
     def test_stress_csv_rows_preserve_identity_and_warmup_relative_timestamps(self):
         run = measured("sustained/cpu-both-cores")
         run["settings"]["stress_seconds"] = 365

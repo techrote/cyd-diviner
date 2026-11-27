@@ -12,10 +12,20 @@ Use a quiet UART window (stop PCM first):
 perf kernel list
 perf kernel osc-f32 343709 256 0
 perf kernel feedback 343709 256 1
+perf kernel feedback 343709 256 1 psram
 ```
 
 Arguments are name, uint32 seed, timed iteration count (1..256) and size flag
-(`0` representative, `1` larger). All storage allocation, initialization,
+(`0` representative, `1` larger), optionally followed by `internal` or `psram`.
+New images explicitly allocate the workspace with `MALLOC_CAP_INTERNAL |
+MALLOC_CAP_8BIT` by default. The optional PSRAM mode uses `MALLOC_CAP_SPIRAM |
+MALLOC_CAP_8BIT`; allocation is aligned and the actual address region is
+verified. Unsupported or exhausted regions fail without falling back to a
+different region. Requested/actual region, capability flags and region heap
+receipts accompany every new result. The earlier approved classic CYD image
+has no PSRAM and retains its original allocator/receipt format.
+
+All storage allocation, initialization,
 twiddle/LUT generation, three warmup iterations and final output inspection
 are outside timed samples. State is reset after warmup. Each timed sample
 includes RTOS preemption; each iteration is followed by `delay(1)` outside the
@@ -58,6 +68,40 @@ can differ with compiler, floating contraction, math library or architecture;
 use numeric validation rather than demanding bit equality. The float and
 fixed DSP variants intentionally quantize the same output to Q15; their
 coefficient/table precision differs and must be reported with timing.
+
+## Standalone physical capture
+
+Standalone images answer `perf info` with source SHA, exact source digest,
+profile, chip/clock/flash/PSRAM inventory and explicit absence of Diviner's
+ordinary audio/display workers. `perf sample` captures heap and temperature
+indications outside timed kernels. S3/C3 use the Arduino/IDF driver Celsius
+indication; classic ESP32 uses the undocumented RTC-library raw code. External
+temperature accuracy is not independently verified.
+
+`kernel_capture.py` captures all 11 kernels, two sizes, three repetitions and
+256 exact timed samples per repetition with seed 23063. It validates board
+metadata, running source/profile/baud/digest, output sizes, raw timing summaries,
+actual memory region and same-target output fingerprints across repetitions
+and memory regions. It never flashes or accepts network credentials.
+
+```powershell
+python tools/perf/kernel_capture.py --port COM22 --baud 115200 --board evidence/board-com22.json --firmware .pio/build/kernel-s3-n4r2/firmware.bin --profile kernel-s3-n4r2 --source-sha EXACT_40_DIGIT_SHA --source-digest EXACT_64_DIGIT_TREE_DIGEST --memory both --output evidence/physical/s3-kernels-01
+```
+
+`--memory auto` (default) runs internal RAM and PSRAM when initialized; an
+explicit `--memory psram` or `both` fails if PSRAM is unavailable. The portable
+matrix writes the standard raw logs/JSON/metric CSV plus chronological
+`kernel-timings.csv` and before/after `kernel-sensors.csv`. On a peer-enabled
+image it first requests radio-off mode and inventories the link state.
+
+For the earlier approved CYD image, use `--legacy-internal --memory internal`
+and its existing profile/source/digest with baud 533333. This compatibility
+mode is allowed only for an identified board reporting zero PSRAM and labels
+memory placement as inference rather than a direct capability receipt. A
+fresh boot after radio-heavy workloads can restore the contiguous workspace
+block; that fresh-boot context must remain distinct from the sustained mixed
+campaign. Standalone S3 and Diviner CYD concurrency contexts also differ, so
+cross-board timing ratios must disclose those worker differences.
 
 Host validation compiles with warnings as errors, repeats all 22 cases, checks
 deterministic output and finite/range metadata, compares DSP output error over

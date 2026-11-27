@@ -205,7 +205,7 @@ class Figures:
                   "Triangles are histogram upper bounds and can exceed exact maxima. Blocking I2S time includes waiting; neither duration nor count detects DMA underruns.")
 
     def kernels(self) -> None:
-        grouped: dict[tuple[str, int], list[dict[str, Any]]] = collections.defaultdict(list)
+        regions: dict[str, dict[tuple[str, int], list[dict[str, Any]]]] = collections.defaultdict(lambda: collections.defaultdict(list))
         for run in self.runs:
             for record in run.get("target", []):
                 if record.get("type") != "kernel":
@@ -215,6 +215,8 @@ class Figures:
                     continue
                 if record.get("samples") != len(samples):
                     raise ValueError("Kernel samples/count mismatch in " + str(run.get("run_id")))
+                region = record.get("memory_region") or ("internal-inferred" if self.data.get("board", {}).get("psram_bytes") == 0 else "region-unreported")
+                grouped = regions[region]
                 key = (record["kernel"], int(record.get("large", 0)))
                 if grouped[key] and grouped[key][0]["scope"] != settings_scope(run):
                     raise ValueError("Kernel scope changed across repetitions; plot separate captures rather than merge differing settings: " + str(key))
@@ -222,9 +224,13 @@ class Figures:
                     "run_id": run.get("run_id"), "scope": settings_scope(run), "samples": len(samples), "median_us": percentile(samples, 50),
                     "p99_us": percentile(samples, 99), "precision": record.get("precision"),
                     "output_bytes": record.get("output_bytes"), "working_bytes": record.get("working_bytes")})
-        if not grouped:
+        if not regions:
             self.manifest["omitted"].append({"figure": "kernel-dsp", "reason": "No exact target kernel timing samples"})
             return
+        for region, grouped in regions.items():
+            self.kernel_region(grouped, region)
+
+    def kernel_region(self, grouped: dict[tuple[str, int], list[dict[str, Any]]], region: str) -> None:
         dsp = []
         for family in ("osc", "filter", "modal"):
             for large in (0, 1):
@@ -234,11 +240,13 @@ class Figures:
             fig, axes = self.plt.subplots(1, 2, figsize=(12, 5), sharey=True)
             total_samples = 0
             observations = []
+            observed_series = set()
             for y, (family, large) in enumerate(dsp):
                 for offset, suffix, color in ((-.13, "-f32", "#2166ac"), (.13, "-q15", "#b35806")):
                     records = grouped.get((family + suffix, large), [])
                     if not records:
                         continue
+                    observed_series.add(suffix)
                     total_samples += sum(item["samples"] for item in records)
                     observations.append({"kernel": family + suffix, "large": large, "repetitions": records})
                     for axis, statistic in zip(axes, ("median_us", "p99_us")):
@@ -250,9 +258,11 @@ class Figures:
                 self.timing_axis(axis, [record["median_us"] if axis is axes[0] else record["p99_us"] for item in observations for record in item["repetitions"]])
             axes[0].set_yticks(range(len(dsp)), [f"{family}: {'larger' if large else 'representative'}" for family, large in dsp])
             axes[0].invert_yaxis()
-            handles = [self.plt.Line2D([], [], color=color, marker="o", label=name) for color, name in (("#2166ac", "float32"), ("#b35806", "fixed point"))]
+            handles = [self.plt.Line2D([], [], color=color, marker="o", label=name)
+                       for suffix, color, name in (("-f32", "#2166ac", "float32"), ("-q15", "#b35806", "fixed point"))
+                       if suffix in observed_series]
             axes[1].legend(handles=handles)
-            self.save(fig, "kernel-dsp", "Portable DSP kernels on the measured target",
+            self.save(fig, "kernel-dsp-" + region, "Portable DSP kernels on the measured target — " + region,
                       f"{total_samples:,} exact timed steps; each dot is a repetition statistic, line spans repetition range.", observations,
                       "Same workload definitions and Q15 output checks; coefficient/state precision differs. RTOS preemption included; initialization/checksum inspection excluded.")
         other = [(key, records) for key, records in grouped.items() if not key[0].startswith(("osc-", "filter-", "modal-"))]
@@ -272,7 +282,7 @@ class Figures:
                 self.timing_axis(axis, [record["median_us"] if axis is axes[0] else record["p99_us"] for item in observations for record in item["repetitions"]])
             axes[0].set_yticks(range(len(other)), [f"{name}: {'larger' if large else 'representative'}" for (name, large), _ in other])
             axes[0].invert_yaxis()
-            self.save(fig, "kernel-other", "Portable graphics and FFT kernels on the measured target",
+            self.save(fig, "kernel-other-" + region, "Portable graphics and FFT kernels on the measured target — " + region,
                       f"{total:,} exact timed steps; dots and lines show repetition statistics/ranges.", observations,
                       "RGB565 strip generation excludes physical SPI transfer. Kernels are scalar references; numeric outputs and data sizes are recorded in capture JSON.")
 

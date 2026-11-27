@@ -218,6 +218,14 @@ records every input/output hash and the final archive hash. Existing output
 directories are never overwritten; failures retain a clearly named staging
 folder and do not publish a partial output directory.
 
+For a terminal failed/interrupted capture with independently valid completed
+windows, add `--allow-partial`. The published manifest and report retain the
+original `FAILED`/`INTERRUPTED` status, incomplete plan coverage and valid-window
+count; this flag never converts the source into a completed campaign and never
+accepts an `IN PROGRESS` capture. Keep any continuation in a separate capture and
+publication folder with its own identity/coverage. Archive terminal snapshots
+only, after all contributing processes have stopped writing.
+
 Read back the physical display outside all measurement and PCM windows:
 
 ```powershell

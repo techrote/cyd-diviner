@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish compact derived evidence from a completed, already archived capture.
+"""Publish compact derived evidence from a terminal, already archived capture.
 
 This helper is offline. It never opens a serial port, creates an archive, modifies
 the capture folder, or converts an incomplete campaign into completed evidence.
@@ -52,17 +52,20 @@ def safe_child(root: pathlib.Path, name: str) -> pathlib.Path:
     return child
 
 
-def load_complete(capture: pathlib.Path) -> tuple[dict, bytes]:
+def load_complete(capture: pathlib.Path, allow_partial: bool = False) -> tuple[dict, bytes]:
     payload = (capture / "results.json").read_bytes()
     result = json.loads(payload)
     if result.get("schema") != "cyd-perf-capture/1" or result.get("evidence_class") != "physical_measured":
         raise ValueError("Expected physical cyd-perf-capture/1 evidence")
-    if result.get("status") != "CAPTURE COMPLETE" or result.get("parse_errors"):
-        raise ValueError("Only CAPTURE COMPLETE without parse errors can be published")
+    status = result.get("status")
+    terminal_partial = status in ("FAILED", "INTERRUPTED", "CAPTURE COMPLETE WITH PARSE ERRORS")
+    if status != "CAPTURE COMPLETE" or result.get("parse_errors"):
+        if not allow_partial or not terminal_partial:
+            raise ValueError("Only CAPTURE COMPLETE is accepted by default; --allow-partial accepts terminal failed/interrupted evidence without promoting its status")
     if not re.fullmatch(r"[0-9a-f]{40}", result.get("source_sha", "")) or not re.fullmatch(r"[0-9a-f]{64}", result.get("firmware_sha256", "")):
         raise ValueError("Missing exact source/firmware identity")
     plan = result.get("plan", {})
-    if plan.get("schema") != "cyd-perf-plan/1":
+    if plan.get("schema") != "cyd-perf-plan/1" and result.get("capture_kind") != "portable_kernel_matrix":
         raise ValueError("Capture plan identity is missing")
     expected = collections.Counter()
     expected_missing = collections.Counter()
@@ -73,8 +76,11 @@ def load_complete(capture: pathlib.Path) -> tuple[dict, bytes]:
             expected[case["name"]] += case.get("repetitions", plan.get("repetitions", 3))
     measured = collections.Counter(run["workload"] for run in result.get("runs", []) if run.get("status") == "MEASURED")
     missing = collections.Counter(run["workload"] for run in result.get("runs", []) if run.get("status") == "NOT RUN")
-    if not measured or measured != expected or missing != expected_missing or any(run.get("status") not in ("MEASURED", "NOT RUN") for run in result.get("runs", [])):
-        raise ValueError("Completed status does not match all planned repetitions/NOT RUN entries")
+    if status == "CAPTURE COMPLETE":
+        if not measured or measured != expected or missing != expected_missing or any(run.get("status") not in ("MEASURED", "NOT RUN") for run in result.get("runs", [])):
+            raise ValueError("Completed status does not match all planned repetitions/NOT RUN entries")
+    elif not measured or any(count > expected[name] for name, count in measured.items()) or any(count > expected_missing[name] for name, count in missing.items()):
+        raise ValueError("Partial evidence contains no valid windows or unplanned/excess repetitions")
     # This validates completed end markers, raw histogram counts and kernel/SPI
     # sample retention. A status string alone is insufficient.
     summarize(result)
@@ -151,8 +157,8 @@ def read_figures(capture: pathlib.Path, result: dict, input_hash: str) -> dict:
     directory = capture / "figures"
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema") != "cyd-perf-figures/1" or manifest.get("capture_status") != "CAPTURE COMPLETE":
-        raise ValueError("Figures require a completed physical capture manifest")
+    if manifest.get("schema") != "cyd-perf-figures/1" or manifest.get("capture_status") != result["status"]:
+        raise ValueError("Figure manifest must preserve the exact source capture status")
     for field, expected in (("input_sha256", input_hash), ("source_sha", result["source_sha"]),
                             ("firmware_sha256", result["firmware_sha256"]), ("profile", result["profile"])):
         if manifest.get(field) != expected:
@@ -200,13 +206,14 @@ def archive_links(markdown: str, archive_href: str, prefix: str, raw_names: set[
     return re.sub(r"\[([^\]\n]+)\]\(([^)\n]+)\)", replace, markdown)
 
 
-def publish(capture: pathlib.Path, output: pathlib.Path, archive: pathlib.Path, prefix: str, label: str) -> pathlib.Path:
+def publish(capture: pathlib.Path, output: pathlib.Path, archive: pathlib.Path, prefix: str, label: str,
+            allow_partial: bool = False) -> pathlib.Path:
     capture, output, archive = capture.resolve(), output.resolve(), archive.resolve()
     if output.exists():
         raise ValueError("Output directory already exists; choose a new publication directory")
     if output.is_relative_to(capture):
         raise ValueError("Publication output must not be inside the raw capture folder")
-    result, payload = load_complete(capture)
+    result, payload = load_complete(capture, allow_partial=allow_partial)
     input_hash = hashlib.sha256(payload).hexdigest()
     raw_receipts = verified_raw(capture)
     if raw_receipts["results.json"]["sha256"] != input_hash:
@@ -234,19 +241,25 @@ def publish(capture: pathlib.Path, output: pathlib.Path, archive: pathlib.Path, 
         plot_paths = sorted("figures/" + name for name in figures["receipts"] if name.endswith(".png"))
         rendered = generate(result, label, input_hash, plot_paths)
         rendered = archive_links(rendered, href, prefix, set(raw_receipts))
+        is_partial = result["status"] != "CAPTURE COMPLETE"
+        scope = "terminal partial" if is_partial else "completed"
         rendered += ("\n## Publication bundle\n\n"
-                     f"This compact folder derives from the completed `{label}` capture. "
+                     f"This compact folder derives from the **{scope}** `{label}` capture and preserves status **{result['status']}**. "
+                     + ("Only independently completed MEASURED windows are summarized; this is not a completed campaign. " if is_partial else "") +
                      f"The [raw capture archive]({href}) has SHA256 `{archive_receipt['sha256']}`; "
                      f"its `{prefix}/` members preserve the full JSON, samples, target telemetry, serial RX, PCM and event logs. "
                      "Extract the archive into `evidence/` while retaining its `physical/` prefix before replaying the commands above. "
                      f"[stress-samples.csv](stress-samples.csv) contains {len(samples)} stress-only rows with source/firmware/profile identity, target timestamps, raw ticks, CPU percentages, sensor readings, heap and stack. "
-                     "An empty table means that no stress workload was present in this completed capture. "
+                     "An empty table means that no stress workload was present in this source capture. "
                      "[manifest.json](manifest.json) records input/output hashes and archive-member verification.\n")
         (stage / "REPORT.md").write_text(rendered, encoding="utf-8")
         input_receipts = {**{name: receipt for name, receipt in raw_receipts.items()},
                           **compact["receipts"], **{"figures/" + name: receipt for name, receipt in figures["receipts"].items()}}
         outputs = {path.relative_to(stage).as_posix(): file_receipt(path) for path in sorted(stage.rglob("*")) if path.is_file()}
         manifest = {"schema": "cyd-perf-publication/1", "label": label, "capture_status": result["status"],
+                    "publication_scope": "terminal_partial_capture" if is_partial else "complete_capture",
+                    "allow_partial_requested": allow_partial,
+                    "measured_run_count": sum(run.get("status") == "MEASURED" for run in result["runs"]),
                     "evidence_class": result["evidence_class"], "source_sha": result["source_sha"],
                     "firmware_sha256": result["firmware_sha256"], "profile": result["profile"],
                     "source_tree_state": result.get("source_tree_state"), "input_results_sha256": input_hash,
@@ -279,8 +292,9 @@ def main() -> None:
     parser.add_argument("--archive", type=pathlib.Path, required=True, help="Existing final ZIP, never created by this helper")
     parser.add_argument("--archive-prefix", required=True, help="Exact member directory, e.g. physical/full-01")
     parser.add_argument("--label", required=True, help="Explicit campaign/preflight label")
+    parser.add_argument("--allow-partial", action="store_true", help="Publish terminal FAILED/INTERRUPTED evidence with its original status; never accepts IN PROGRESS")
     args = parser.parse_args()
-    print(publish(args.capture, args.output, args.archive, args.archive_prefix.rstrip("/"), args.label))
+    print(publish(args.capture, args.output, args.archive, args.archive_prefix.rstrip("/"), args.label, args.allow_partial))
 
 
 if __name__ == "__main__":

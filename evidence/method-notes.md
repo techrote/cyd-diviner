@@ -8,6 +8,25 @@ that code is not a physical measurement.
 
 ## Profiler memory footprint and portable output fingerprints
 
+The later native-USB peer image uses bounded complete-record formatting and a
+checked chunk writer, following an observed truncated S3 capture. Its requested
+HWCDC TX ring is 8,192 bytes with a 2,000 ms driver timeout. The conservative
+kernel JSON format bound is 5,605 bytes, checked by
+`tools/perf/check_output_bounds.py`, below the 6,144-byte record capacity.
+This static bound is not a physical USB reliability measurement. Writer
+progress, short writes and failures are inspected/counted, and native-USB
+connection waiting has a finite timeout. Incomplete JSON remains a failed
+capture with raw bytes retained.
+
+The formatter allocates its buffer in internal heap outside benchmark timing:
+kernel records use 6,144 bytes allocated after the timed loop and its heap
+snapshots; standalone info/state records use 2,048 bytes allocated before
+their reported free/largest heap queries. Thus info/state heap values include
+that transient formatter allocation. Link info/summary formatter allocations
+are outside their measured window and their precise placement remains visible
+in source. Do not compare these observations as if formatter storage were
+absent or attribute that transient allocation to kernel working storage.
+
 The approved primary profiling ELF allocates 21,120 bytes for the fixed
 480-entry CPU/heap/temperature sample array and 2,888 bytes for the 19 bounded
 timing/counter histograms: **24,008 bytes in these two static arrays alone**.
