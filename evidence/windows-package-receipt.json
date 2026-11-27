@@ -1,0 +1,9 @@
+{
+  "schema": "cyd-perf-portable-package-receipt/1",
+  "archive": "WINDOWS-CAPTURE-PACKAGE.zip",
+  "bytes": 135329,
+  "sha256": "d69aa3ae1fba87c8c45bb02293e0a21e25b5caf603f46bca13ff942e8a2acf99",
+  "host_tools_source_sha": "da1c2fce1802aaa9ca3956e4518c459149374ed1",
+  "file_count": 44,
+  "source_manifest_member": "PACKAGE-MANIFEST.json"
+}
