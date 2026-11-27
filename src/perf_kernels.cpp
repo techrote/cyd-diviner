@@ -371,7 +371,9 @@ FftComparison validateFft(Workspace &w, bool large, uint32_t seed) {
 
 #if defined(GRIM_PERF) || defined(GRIM_PERF_KERNEL_STANDALONE)
 #include <Arduino.h>
+#include <esp_heap_caps.h>
 #include <esp_timer.h>
+#include <soc/soc_memory_types.h>
 #include <cstdio>
 #include <memory>
 namespace perf_kernels {
@@ -382,14 +384,30 @@ bool command(const char *line) {
         for (unsigned i = 0; i < static_cast<unsigned>(Id::Count); ++i) Serial.printf("%s\"%s\"", i ? "," : "", descriptor(static_cast<Id>(i)).name);
         Serial.println("]}"); return true;
     }
-    char name[32], extra; unsigned long seed, iterations; unsigned large;
-    if (std::sscanf(line, "perf kernel %31s %lu %lu %u %c", name, &seed, &iterations, &large, &extra) != 4 ||
-        iterations < 1 || iterations > 256 || large > 1 || !find(name)) {
-        Serial.println("PERF {\"schema\":1,\"type\":\"kernel_error\",\"error\":\"usage: perf kernel NAME SEED ITERATIONS(1..256) LARGE(0|1)\"}"); return true;
+    char name[32], memory[16] = "internal", extra; unsigned long seed, iterations; unsigned large;
+    const int arguments = std::sscanf(line, "perf kernel %31s %lu %lu %u %15s %c", name, &seed, &iterations, &large, memory, &extra);
+    if ((arguments != 4 && arguments != 5) || iterations < 1 || iterations > 256 || large > 1 || !find(name) ||
+        (std::strcmp(memory, "internal") && std::strcmp(memory, "psram"))) {
+        Serial.println("PERF {\"schema\":1,\"type\":\"kernel_error\",\"error\":\"usage: perf kernel NAME SEED ITERATIONS(1..256) LARGE(0|1) [internal|psram]\"}"); return true;
     }
+    const bool external = std::strcmp(memory, "psram") == 0;
+    const uint32_t caps = MALLOC_CAP_8BIT | (external ? MALLOC_CAP_SPIRAM : MALLOC_CAP_INTERNAL);
     const uint32_t heap_before = ESP.getFreeHeap();
-    std::unique_ptr<Workspace> workspace(new(std::nothrow) Workspace);
-    if (!workspace) { Serial.println("PERF {\"schema\":1,\"type\":\"kernel_error\",\"error\":\"workspace allocation failed\"}"); return true; }
+    const uint32_t region_before = heap_caps_get_free_size(caps);
+    const uint32_t region_largest_before = heap_caps_get_largest_free_block(caps);
+    if (external && !ESP.getPsramSize()) {
+        Serial.println("PERF {\"schema\":1,\"type\":\"kernel_error\",\"memory_requested\":\"psram\",\"error\":\"PSRAM unavailable; no internal fallback\"}"); return true;
+    }
+    void *allocation = heap_caps_aligned_alloc(alignof(Workspace), sizeof(Workspace), caps);
+    if (!allocation) {
+        Serial.printf("PERF {\"schema\":1,\"type\":\"kernel_error\",\"memory_requested\":\"%s\",\"region_largest_before\":%u,\"error\":\"workspace allocation failed; no region fallback\"}\n", memory, unsigned(region_largest_before)); return true;
+    }
+    const auto freeWorkspace = [](Workspace *pointer) { pointer->~Workspace(); heap_caps_free(pointer); };
+    std::unique_ptr<Workspace, decltype(freeWorkspace)> workspace(new(allocation) Workspace, freeWorkspace);
+    const bool actualExternal = esp_ptr_external_ram(workspace.get());
+    if (actualExternal != external || (!external && !esp_ptr_internal(workspace.get()))) {
+        Serial.println("PERF {\"schema\":1,\"type\":\"kernel_error\",\"error\":\"workspace memory-region verification failed\"}"); return true;
+    }
     const Descriptor &d = *find(name);
     prepare(*workspace, d.id, large != 0, static_cast<uint32_t>(seed));
     for (unsigned i = 0; i < 3; ++i) { step(*workspace); delay(1); }
@@ -399,22 +417,25 @@ bool command(const char *line) {
     uint32_t samples[256]; uint64_t sum = 0;
     const int64_t run_start = esp_timer_get_time();
     uint32_t heap_min = ESP.getFreeHeap();
+    uint32_t region_min = heap_caps_get_free_size(caps);
     for (unsigned i = 0; i < iterations; ++i) {
         const int64_t start = esp_timer_get_time(); step(*workspace);
         samples[i] = static_cast<uint32_t>(esp_timer_get_time() - start); sum += samples[i];
-        heap_min = std::min(heap_min, ESP.getFreeHeap()); delay(1);
+        heap_min = std::min(heap_min, ESP.getFreeHeap());
+        region_min = std::min<uint32_t>(region_min, heap_caps_get_free_size(caps)); delay(1);
     }
     const uint64_t elapsed = esp_timer_get_time() - run_start;
     const Result output = inspect(*workspace);
     uint32_t ordered[256]; std::memcpy(ordered, samples, iterations * sizeof(samples[0]));
     std::sort(ordered, ordered + iterations);
     const auto percentile = [&](unsigned percent) { return ordered[(iterations * percent + 99) / 100 - 1]; };
-    Serial.printf("PERF {\"schema\":1,\"type\":\"kernel\",\"kernel\":\"%s\",\"algorithm\":\"%s\",\"precision\":\"%s\",\"work_unit\":\"%s\",\"seed\":%lu,\"large\":%u,\"warmup\":3,\"samples\":%lu,\"elapsed_us\":%llu,\"sum_us\":%llu,\"min_us\":%u,\"median_us\":%u,\"p95_us\":%u,\"p99_us\":%u,\"max_us\":%u,\"percentile_method\":\"exact nearest rank\",\"timing_scope\":\"step only; output inspection excluded; RTOS preemption included\",\"workspace_allocated_bytes\":%u,\"working_bytes\":%u,\"output_bytes\":%u,\"work_units_per_step\":%u,\"checksum_fnv1a\":%u,\"output_min\":%.9g,\"output_max\":%.9g,\"output_sum\":%.12g,\"finite\":%s,\"heap_before\":%u,\"heap_min\":%u,\"cpu_mhz\":%u,\"samples_us\":[",
+    Serial.printf("PERF {\"schema\":1,\"type\":\"kernel\",\"kernel\":\"%s\",\"algorithm\":\"%s\",\"precision\":\"%s\",\"work_unit\":\"%s\",\"seed\":%lu,\"large\":%u,\"warmup\":3,\"samples\":%lu,\"elapsed_us\":%llu,\"sum_us\":%llu,\"min_us\":%u,\"median_us\":%u,\"p95_us\":%u,\"p99_us\":%u,\"max_us\":%u,\"percentile_method\":\"exact nearest rank\",\"timing_scope\":\"step only; output inspection excluded; RTOS preemption included\",\"workspace_allocated_bytes\":%u,\"working_bytes\":%u,\"output_bytes\":%u,\"work_units_per_step\":%u,\"checksum_fnv1a\":%u,\"output_min\":%.9g,\"output_max\":%.9g,\"output_sum\":%.12g,\"finite\":%s,\"heap_before\":%u,\"heap_min\":%u,\"cpu_mhz\":%u,\"memory_requested\":\"%s\",\"memory_region\":\"%s\",\"memory_caps\":\"%s|MALLOC_CAP_8BIT\",\"allocation_alignment_bytes\":%u,\"region_free_before\":%u,\"region_largest_before\":%u,\"region_free_min\":%u,\"samples_us\":[",
         d.name, d.algorithm, d.precision, d.work_unit, seed, large, iterations,
         static_cast<unsigned long long>(elapsed), static_cast<unsigned long long>(sum), ordered[0], percentile(50), percentile(95), percentile(99), ordered[iterations - 1],
         static_cast<unsigned>(sizeof(Workspace)), output.working_bytes, output.output_bytes, output.work_units, output.checksum,
-        output.output_min, output.output_max, output.output_sum, output.finite ? "true" : "false", heap_before, heap_min, ESP.getCpuFreqMHz());
-    for (unsigned i = 0; i < iterations; ++i) Serial.printf(i ? ",%u" : "%u", samples[i]);
+        output.output_min, output.output_max, output.output_sum, output.finite ? "true" : "false", unsigned(heap_before), unsigned(heap_min), unsigned(ESP.getCpuFreqMHz()),
+        memory, actualExternal ? "psram" : "internal", external ? "MALLOC_CAP_SPIRAM" : "MALLOC_CAP_INTERNAL", unsigned(alignof(Workspace)), unsigned(region_before), unsigned(region_largest_before), unsigned(region_min));
+    for (unsigned i = 0; i < iterations; ++i) Serial.printf(i ? ",%u" : "%u", unsigned(samples[i]));
     Serial.println("]}");
     return true;
 }

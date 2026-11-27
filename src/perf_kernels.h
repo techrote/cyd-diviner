@@ -55,7 +55,8 @@ FftComparison validateFft(Workspace &workspace, bool large, uint32_t seed);
 
 #if defined(GRIM_PERF) || defined(GRIM_PERF_KERNEL_STANDALONE)
 // UART is caller-owned. Invoke only after stopping PCM and finishing writes.
-// perf kernel list | perf kernel NAME SEED ITERATIONS LARGE(0|1)
+// perf kernel list | perf kernel NAME SEED ITERATIONS LARGE(0|1) [internal|psram]
+// Default workspace allocation is explicitly internal RAM; no silent fallback.
 // Emits one PERF JSON receipt; 3 warmups then 1..256 exact timed samples.
 bool command(const char *line);
 #endif
