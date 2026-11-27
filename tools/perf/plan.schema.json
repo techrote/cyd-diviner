@@ -22,6 +22,10 @@
           "kind": {"enum": ["kernel", "spi"]},
           "commands": {"type": "array", "items": {"type": "string", "pattern": "^perf "}},
           "pcm": {"type": "boolean"},
+          "expected_color": {"type": "object", "required": ["format", "effect_layers"], "properties": {
+            "format": {"enum": ["off", "rgb111", "rgb444", "rgba5551"]},
+            "effect_layers": {"type": "integer", "minimum": 1, "maximum": 2}
+          }},
           "stress_seconds": {"type": "number", "minimum": 360},
           "repetitions": {"type": "integer", "minimum": 1, "maximum": 100},
           "duration_ms": {"type": "integer", "minimum": 1, "maximum": 600000},

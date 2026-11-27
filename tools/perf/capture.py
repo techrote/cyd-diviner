@@ -270,6 +270,73 @@ class Capture:
             stream.close()
 
 
+COLOR_SCOPE_FIELDS = (
+    "format", "enabled", "effect_layers", "base_effect", "overlay_effect",
+    "source_raster_format", "source_raster_bits_per_pixel", "output_spi_format", "output_spi_bits_per_pixel",
+    "output_width_px", "output_height_px", "packed_colour_bits_per_pixel", "packed_alpha_bits_per_pixel", "packed_storage_bits_per_pixel",
+    "external_coverage_bits_per_pixel", "surface_band_rows", "packed_stride_bytes", "packed_base_payload_bytes",
+    "packed_overlay_payload_bytes", "coverage_payload_bytes", "packed_total_payload_bytes",
+    "rgb565_dma_strip_count", "rgb565_dma_reserved_bytes", "scratch_required_bytes", "canvas_backing_reserved_bytes",
+    "backing_reservation_changed", "layout_fits", "temporal_pixel_history", "storage_scope", "coverage_scope",
+    "fullscreen_trails_method", "link_info_formatter_capacity_bytes", "link_summary_formatter_capacity_bytes")
+
+
+def validate_color_expectation(expected: dict[str, Any]) -> None:
+    if (not isinstance(expected, dict) or expected.get("format") not in ("off", "rgb111", "rgb444", "rgba5551")
+        or type(expected.get("effect_layers")) is not int or expected["effect_layers"] not in (1, 2)
+        or any(key not in COLOR_SCOPE_FIELDS for key in expected)):
+        raise ValueError("expected_color requires a supported lowercase format, effect_layers 1|2, and only stable layout fields")
+
+
+def validate_color_run(records: list[dict[str, Any]], run_id: str, expected: dict[str, Any] | None,
+                       duration_ms: int) -> dict[str, Any] | None:
+    """Require observed-window proof only when the plan explicitly requests it."""
+    if expected is None:
+        return None
+    validate_color_expectation(expected)
+    colors = [record for record in records if record.get("type") == "color_run"]
+    if len(colors) != 1 or colors[0].get("run_id") != run_id:
+        raise RuntimeError("Missing, duplicate, or uncorrelated color_run evidence: " + run_id)
+    color = colors[0]
+    if any(color.get(key) != value for key, value in expected.items()):
+        raise RuntimeError("Observed color format/layers/layout differ from expected_color: " + run_id)
+    enabled = expected["format"] != "off"
+    if (color.get("enabled") is not enabled or color.get("backing_reservation_changed") is not False
+        or color.get("layout_fits") is not True):
+        raise RuntimeError("Color enabled/backing reservation proof is inconsistent: " + run_id)
+    if color.get("source_raster_bits_per_pixel") != 16 or color.get("output_spi_bits_per_pixel") != 16:
+        raise RuntimeError("Color raster/SPI format proof is inconsistent: " + run_id)
+    sizes = ("packed_colour_bits_per_pixel", "packed_alpha_bits_per_pixel", "external_coverage_bits_per_pixel",
+             "packed_base_payload_bytes", "packed_overlay_payload_bytes", "coverage_payload_bytes",
+             "packed_total_payload_bytes", "rgb565_dma_reserved_bytes", "scratch_required_bytes", "canvas_backing_reserved_bytes")
+    counters = ("successful_applied_frames", "native_frames", "bands_applied", "rejected_frames")
+    if any(type(color.get(key)) is not int or color[key] < 0 for key in sizes + counters):
+        raise RuntimeError("Missing or invalid color layout/frame counters: " + run_id)
+    if (color.get("packed_storage_bits_per_pixel") != color["packed_colour_bits_per_pixel"] + color["packed_alpha_bits_per_pixel"]
+        or color.get("window_assignment") != "renderer_DMA_completion_time"
+        or color.get("receipt_scope") != "postwindow_actual_renderer_layout"
+        or type(color.get("steady_begin_us")) is not int or type(color.get("end_us")) is not int
+        or color["end_us"] - color["steady_begin_us"] != duration_ms * 1000):
+        raise RuntimeError("Color storage or observed-window assignment proof is inconsistent: " + run_id)
+    if (color["packed_total_payload_bytes"] != sum(color[key] for key in
+            ("packed_base_payload_bytes", "packed_overlay_payload_bytes", "coverage_payload_bytes"))
+        or color["scratch_required_bytes"] != color["rgb565_dma_reserved_bytes"] + color["packed_total_payload_bytes"]
+        or color["scratch_required_bytes"] > color["canvas_backing_reserved_bytes"]
+        or color["canvas_backing_reserved_bytes"] == 0 or color["rejected_frames"] != 0):
+        raise RuntimeError("Color scratch layout does not fit or a frame was rejected: " + run_id)
+    if enabled:
+        bits = {"rgb111": (3, 0), "rgb444": (12, 0), "rgba5551": (15, 1)}[expected["format"]]
+        if (tuple(color[key] for key in sizes[:2]) != bits or not color["successful_applied_frames"]
+            or not color["bands_applied"] or color["bands_applied"] < color["successful_applied_frames"]):
+            raise RuntimeError("Packed color was not successfully applied in the measured window: " + run_id)
+        first, last = color.get("first_applied_offset_us"), color.get("last_applied_offset_us")
+        if (type(first) is not int or type(last) is not int or not 0 <= first <= last <= duration_ms * 1000):
+            raise RuntimeError("Applied color frame offsets are outside the measured window: " + run_id)
+    elif not color["native_frames"] or color["successful_applied_frames"] or color["bands_applied"]:
+        raise RuntimeError("Native color control did not render an observed native frame: " + run_id)
+    return color
+
+
 def validate_plan(plan: dict[str, Any]) -> None:
     if plan.get("schema") != "cyd-perf-plan/1" or not isinstance(plan.get("workloads"), list):
         raise ValueError("Expected cyd-perf-plan/1 workloads array")
@@ -278,6 +345,10 @@ def validate_plan(plan: dict[str, Any]) -> None:
             raise ValueError("Every workload needs a name")
         if case.get("status") == "NOT RUN":
             continue
+        if "expected_color" in case:
+            validate_color_expectation(case["expected_color"])
+            if case.get("kind") in ("kernel", "spi"):
+                raise ValueError("expected_color requires an observed scene window")
         if case.get("kind") == "kernel":
             if not isinstance(case.get("kernel"), str) or case.get("kernel_samples") != 256:
                 raise ValueError("Kernel workload requires kernel name and exactly 256 timing samples")
@@ -316,7 +387,7 @@ def flatten_results(result: dict[str, Any], output: pathlib.Path) -> None:
                 sample_rows.append({**base, **record})
             elif record.get("type") == "state":
                 sample_rows.append({**base, **record, "sample_context": "outside_kernel_or_SPI_timing_window"})
-            elif record.get("type") in ("kernel", "spi"):
+            elif record.get("type") in ("kernel", "spi", "color_run"):
                 metric_rows.append({**base, **record})
         if run["status"] == "NOT RUN":
             metric_rows.append({**base, "reason": run.get("reason")})
@@ -549,6 +620,7 @@ def capture_command(args: argparse.Namespace) -> int:
                 target = capture.until("end", after=cursor, run_id=run_id,
                                        timeout=max(30, duration / 1000 * 0.2))
                 end = validate_end(target, run_id, duration)
+                validate_color_run(target, run_id, case.get("expected_color"), duration)
                 run["target"] = interpreted_records(target, info)
                 run["frames_per_second"] = end["frames"] * 1e6 / end["elapsed_us"]
                 run["status"] = "MEASURED"

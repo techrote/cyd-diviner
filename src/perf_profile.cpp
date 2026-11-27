@@ -7,6 +7,9 @@
 #ifdef GRIM_PERF_LINK
 #include "perf_link.h"
 #endif
+#ifdef GRIM_PERF_COLOR
+#include "perf_color.h"
+#endif
 #include "theme.h"
 #include <Arduino.h>
 #include <esp_freertos_hooks.h>
@@ -191,6 +194,9 @@ void exportResults() {
         delay(1);
     }
     exportI2sEvents();
+#ifdef GRIM_PERF_COLOR
+    perf_color::exportRun();
+#endif
     Serial.printf("PERF {\"schema\":1,\"type\":\"end\",\"run_id\":\"%s\",\"complete\":%s,\"warmup_ms\":%u,\"duration_ms\":%u,\"elapsed_us\":%llu,\"frames\":%u,\"audio_completed_blocks\":%u,\"interleaved_frames\":%u,\"samples\":%u,\"samples_dropped\":%u,\"instrumentation\":%s,\"histograms_enabled\":%s,\"instrumentation_ab_scope\":\"histogram_insertion_only_timestamps_hooks_counts_retained\",\"dma_underruns\":null,\"physical_touch_latency_us\":null,\"cpu_method\":\"tick_sample_current_task_vs_idle\",\"temperature_method\":\"%s\",\"stress_iterations_core0\":%u,\"stress_iterations_core1\":%u}\n",
         runId, completed ? "true" : "false", warmupMs, durationMs,
         static_cast<unsigned long long>(finishedAt > warmUntil ? finishedAt - warmUntil : 0),
@@ -299,6 +305,9 @@ bool command(const char *line) {
         finishedAt = 0; scheduled = true; completed = false; steadyStarted = false; collecting.store(true);
 #ifdef GRIM_PERF_LINK
         perf_link::onRun(runId, warmUntil, endAt);
+#endif
+#ifdef GRIM_PERF_COLOR
+        perf_color::onRun(runId, warmUntil, endAt);
 #endif
         Serial.printf("PERF {\"schema\":1,\"type\":\"run\",\"run_id\":\"%s\",\"warmup_ms\":%u,\"duration_ms\":%u,\"target_start_us\":%llu}\n", runId, warm, duration, static_cast<unsigned long long>(startedAt)); return true;
     }

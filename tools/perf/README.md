@@ -191,6 +191,20 @@ Its touch table reports measured XPT polling-call count per target second and
 control-dispatch invocation durations, including no-contact samples. These do
 not establish physical touch latency or count distinct contacts.
 
+An opt-in color plan can set `expected_color` on a scene workload, for example
+`{"format":"rgb111","effect_layers":2}`. The capture requires one matching
+`color_run` export for that run ID, successful packed frames/bands within the
+marked window (or native frames for `off`), zero rejected frames, and consistent
+bit packing/scratch capacity. An ACK or pre-frame configuration receipt alone is
+insufficient. Existing plans without `expected_color` retain their behavior.
+Color metadata is retained in target JSON and metrics CSV. Pooling uses stable
+observed format/layers/packing/capacity fields; observed frame counts, offsets and
+host timestamps do not divide otherwise identical repetitions. The actual
+`color_run` layout supersedes the earlier color configuration receipt, which may
+precede the final layer command. These packed intermediates still use the native
+RGB565 rasterizer and 16-bit display wire; they do not reduce the reserved canvas
+backing or create full resident layer surfaces.
+
 After all campaigns are complete, raw files can be archived separately and the
 compact derived evidence prepared for Git review. `publish_evidence.py` never
 creates or updates an archive. It requires an existing final ZIP and a genuinely

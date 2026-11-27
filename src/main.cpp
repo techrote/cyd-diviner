@@ -5,6 +5,9 @@
 #include "uisfx.h"
 #include "theme.h"
 #include "perf_profile.h"
+#ifdef GRIM_PERF_COLOR
+#include "perf_color.h"
+#endif
 #include <algorithm>
 #include <math.h>
 #include <stdio.h>
@@ -344,8 +347,19 @@ bool volumeKey(const hal::Key &k) {
 #ifdef GRIM_PERF
 uint32_t perf_profile::seed() { return perfSeed; }
 bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_t seed);
+#ifdef GRIM_PERF_COLOR
+bool perfConfigureColor(const char *format);
+#endif
 bool grimPerfCommand(const char *line) {
     char scene[24]; unsigned value, effect, layered, fullscreen, format;
+#ifdef GRIM_PERF_COLOR
+    char colour[20];
+    if (sscanf(line, "perf color %19s", colour) == 1) {
+        if (perf_profile::running()) return false;
+        if (!strcmp(colour, "info")) { perf_color::report(); return true; }
+        return active == &RITE_VISIONS && perfConfigureColor(colour);
+    }
+#endif
     if (sscanf(line, "perf scene %23s", scene) == 1) {
         const Rite *rite = nullptr;
         if (!strcmp(scene, "visions")) rite = &RITE_VISIONS;

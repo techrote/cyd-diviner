@@ -11,6 +11,9 @@
 #include "../rite.h"
 #include "../theme.h"
 #include "../perf_profile.h"
+#ifdef GRIM_PERF_COLOR
+#include "../perf_color.h"
+#endif
 #include <algorithm>
 #include <array>
 #include <math.h>
@@ -1003,18 +1006,40 @@ void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
     const int bandBytes = width * BandHeight * sizeof(lgfx::swap565_t);
     bands[0].setBuffer(pixels, width, BandHeight, 16);
     bands[1].setBuffer(pixels + bandBytes, width, BandHeight, 16);
+#ifdef GRIM_PERF_COLOR
+    // Borrow only the unused tail of the already allocated canvas. Geometry
+    // remains RGB565; the opt-in experiment stores genuine packed intermediates.
+    const size_t backingBytes = size_t(hal::W) * hal::H *
+                                (hal::canvas().getColorDepth() == lgfx::rgb565_2Byte ? 2 : 1);
+    const char *overlayName = hasTrails ? "trails" : hasRain ? "rain" : hasKaleido ? "kaleido" : "none";
+    const bool packedColour = perf_color::beginFrame(pixels, backingBytes, width, height,
+                                                    s.layered, NAMES[base], overlayName);
+#endif
     display.setAddrWindow(0, 0, width, height);
     for (int y = 0; y < height; y += BandHeight) {
         Canvas &band = bands[(y / BandHeight) % 2];
         const int rows = std::min(BandHeight, height - y);
         field.draw(band, y, rows);
+#ifdef GRIM_PERF_COLOR
+        auto *colourPixels = static_cast<lgfx::swap565_t *>(band.getBuffer());
+        if (packedColour && s.layered) perf_color::baseRoundtrip(colourPixels, rows);
+#endif
         if (hasRain) drawNativeRain(band, y, height, s);
         if (hasKaleido) kaleido.draw(band, y);
         if (hasTrails) drawNativeTrails(band, y, s);
+#ifdef GRIM_PERF_COLOR
+        if (packedColour) {
+            if (s.layered) perf_color::compositeRoundtrip(colourPixels, rows);
+            else perf_color::baseRoundtrip(colourPixels, rows);
+        }
+#endif
         display.waitDMA();
         display.writePixelsDMA(static_cast<const lgfx::swap565_t *>(band.getBuffer()), width * rows);
     }
     display.waitDMA();
+#ifdef GRIM_PERF_COLOR
+    perf_color::endFrame();
+#endif
 }
 
 void releaseVisionsMenuBackdrop() {
@@ -1171,4 +1196,15 @@ bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_
     hal::setAudio(render);
     return true;
 }
+#ifdef GRIM_PERF_COLOR
+bool perfConfigureColor(const char *format) {
+    if (!S) return false;
+    const Vision base = S->base();
+    const char *overlay = base == Gate ? "trails" : base == Plasma ? "kaleido" : base == Ashfire ? "rain" : "none";
+    const size_t backingBytes = size_t(hal::W) * hal::H *
+                                (hal::canvas().getColorDepth() == lgfx::rgb565_2Byte ? 2 : 1);
+    return perf_color::configure(format, cyd_controls::displayWidth(), cyd_controls::displayHeight(),
+                                 backingBytes, S->layered, NAMES[base], overlay);
+}
+#endif
 #endif

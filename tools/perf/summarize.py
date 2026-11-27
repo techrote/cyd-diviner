@@ -9,7 +9,7 @@ import hashlib
 import json
 import pathlib
 
-from capture import distribution
+from capture import COLOR_SCOPE_FIELDS, distribution, validate_color_run
 
 
 def write_csv(path: pathlib.Path, rows: list[dict]) -> None:
@@ -35,18 +35,25 @@ def histogram_bound(bins: list[int], percent: int) -> int | None:
 
 def settings_scope(run: dict) -> str:
     """Pool only identical requested scopes and actual allocation/settings receipts."""
+    colors = [{key: record[key] for key in COLOR_SCOPE_FIELDS if key in record}
+              for record in run.get("target", []) if record.get("type") == "color_run"]
     actual = [{key: value for key, value in record.items() if key not in ("host_received_elapsed_s", "run_id")}
-              for record in run.get("setup_target", []) if record.get("type") == "scene_settings"]
+              for record in run.get("setup_target", []) if record.get("type") == "scene_settings"
+              and not (colors and record.get("scene") == "color")]
     ends = [record for record in run.get("target", []) if record.get("type") == "end"]
     end = ends[0] if ends else {}
     scope = {"settings": run.get("settings", {}), "duration_ms": run.get("duration_ms_requested"),
              "warmup_ms": run.get("warmup_ms_requested"), "actual_settings": actual,
              "histograms_enabled": end.get("histograms_enabled", end.get("instrumentation"))}
+    if colors:
+        scope["actual_color_settings"] = colors
     return hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:12]
 
 
 def validate_measured_run(run: dict) -> None:
     records = run.get("target", [])
+    validate_color_run(records, run.get("run_id"), run.get("settings", {}).get("expected_color"),
+                       run.get("duration_ms_requested", 0))
     ends = [record for record in records if record.get("type") == "end"]
     if ends:
         if len(ends) != 1 or ends[0].get("complete") is not True or ends[0].get("elapsed_us", 0) <= 0:
