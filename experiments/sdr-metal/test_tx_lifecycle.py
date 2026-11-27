@@ -27,14 +27,16 @@ typedef struct { int nvs_enable; } wifi_init_config_t;
 #define WIFI_PS_NONE 0
 #define WIFI_INIT_CONFIG_DEFAULT() ((wifi_init_config_t){99})
 enum { CpuHz=240000000 };
-static bool minimal_phy,radio_ready,wifi_driver_initialized,event_loop_owned;
+static bool minimal_phy,radio_ready,wifi_driver_initialized,event_loop_owned,direct_power_domain_owned;
 static int wifi_stop_status,wifi_deinit_status,event_loop_create_status,event_loop_delete_status,teardown_status;
 static int create_code,init_code,storage_code,stop_code,deinit_code,delete_code;
-static unsigned created,deleted,phy_on,phy_off;
+static unsigned created,deleted,phy_on,phy_off,power_on,power_off;
 static int esp_clk_cpu_freq(void) { return CpuHz; }
 static int xPortGetCoreID(void) { return 0; }
-static void esp_phy_enable(int m) { assert(m==1);++phy_on; }
-static void esp_phy_disable(int m) { assert(m==1);++phy_off; }
+static void esp_wifi_power_domain_on(void) { assert(!direct_power_domain_owned);++power_on; }
+static void esp_wifi_power_domain_off(void) { assert(direct_power_domain_owned&&phy_off==power_on);++power_off; }
+static void esp_phy_enable(int m) { assert(m==1&&direct_power_domain_owned&&power_on>power_off);++phy_on; }
+static void esp_phy_disable(int m) { assert(m==1&&direct_power_domain_owned&&phy_on>phy_off);++phy_off; }
 static int esp_event_loop_create_default(void) { if(!create_code)++created;return create_code; }
 static int esp_event_loop_delete_default(void) { ++deleted;return delete_code; }
 static int esp_wifi_init(wifi_init_config_t *cfg) { assert(cfg->nvs_enable==0);return init_code; }
@@ -47,14 +49,15 @@ static int esp_wifi_deinit(void) { return deinit_code; }
 '''
 TEST=r'''
 static void reset(void) {
-    minimal_phy=radio_ready=wifi_driver_initialized=event_loop_owned=false;
+    minimal_phy=radio_ready=wifi_driver_initialized=event_loop_owned=direct_power_domain_owned=false;
     create_code=init_code=storage_code=stop_code=deinit_code=delete_code=0;
-    created=deleted=phy_on=phy_off=0;
+    created=deleted=phy_on=phy_off=power_on=power_off=0;
 }
 int main(void) {
     reset();assert(start_radio()==0);assert(event_loop_owned&&wifi_driver_initialized);stop_radio();
     assert(deleted==1&&!event_loop_owned&&!wifi_driver_initialized&&!radio_ready&&teardown_status==0);
-    minimal_phy=true;assert(start_radio()==0);stop_radio();assert(phy_on==1&&phy_off==1&&deleted==1);
+    minimal_phy=true;assert(start_radio()==0);stop_radio();assert(phy_on==1&&phy_off==1&&power_on==1&&power_off==1&&!direct_power_domain_owned&&deleted==1);
+    assert(start_radio()==0);stop_radio();assert(power_on==2&&power_off==2&&phy_on==2&&phy_off==2);
     reset();init_code=-10;assert(start_radio()==-10);assert(deleted==1&&!event_loop_owned&&!wifi_driver_initialized);
     reset();storage_code=-11;assert(start_radio()==-11);assert(deleted==1&&!event_loop_owned&&!wifi_driver_initialized);
     reset();storage_code=-11;stop_code=-12;assert(start_radio()==-11);assert(teardown_status==-12&&wifi_driver_initialized&&event_loop_owned&&deleted==0);

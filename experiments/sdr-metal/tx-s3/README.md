@@ -31,6 +31,12 @@ the Wi-Fi NULL comparison. Neither default boot nor informational/configuration
 commands initialize RF. Both use calibration storage disabled and no NVS
 initialization, scans, association or packet traffic. The retained application
 capacity is checked by the owner before any separately authorized app-only flash.
+The direct sequence powers the MAC/BB domain with
+`esp_wifi_power_domain_on()` before `esp_phy_enable()`, then disables PHY before
+the matching owned `esp_wifi_power_domain_off()`. This follows the pinned SDK's
+own direct-PHY test and Wi-Fi initializer. Clock enables alone do not satisfy
+that prerequisite. Both power functions are void; reported ownership is the
+invocation/reference scope, not a measured physical-power or RF-off assertion.
 
 The LF-only upload, private one-use permit and command schema match the classic
 variant:

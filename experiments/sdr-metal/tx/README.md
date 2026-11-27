@@ -97,6 +97,11 @@ The direct `esp_phy_enable(PHY_MODEM_WIFI)` path is experimental: the SDK header
 normally delegates it to Wi-Fi/Bluetooth drivers. It performs calibration with
 persistent storage compiled off; its void enable/disable functions expose no
 return-status proof. The expected tone-register state is the pre-MMIO check.
+Its prerequisite is balanced `esp_wifi_power_domain_on()` before PHY enable,
+then PHY disable before `esp_wifi_power_domain_off()`. The pinned SDK's
+`esp_phy/test/test_phy_rtc.c` uses this same power-before-enable order; enabling
+clocks alone does not power/de-isolate MAC/BB. Ownership fields record our
+void-API invocation references, not physical power or RF attestation.
 The alternative Wi-Fi NULL path records stop/deinit return codes. Neither path
 scans, associates, sends Wi-Fi packets or changes credentials. Sensor readings
 are outside the symbol loop and are undocumented/uncalibrated indications.

@@ -1,0 +1,122 @@
+{
+  "schema": "sdr-metal-rx-power-init-validation/1",
+  "evidence_class": "SDK_SOURCE_AND_HOST_LIFECYCLE_TEST",
+  "generated_utc": "2026-11-27T22:48:58.189613+00:00",
+  "parent_source_sha": "a036c04caca2bcc295e0bd5439579c82fcdc61d3",
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "primary_sdk_files_sha256": {
+    "C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_phy/test/test_phy_rtc.c": "f3956d7335fc7731cf0c2a415b5a44a7bb89b2535200cb75eba6b3d9383c324f",
+    "C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_phy/src/phy_init.c": "17d39bb3058a2d3f9a0bb1340a8296c31543bda73d4cfb853558b4aa405aceb1",
+    "C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_wifi/src/wifi_init.c": "eb9dcaca080dd88756aa59731513ec7ca6cdffd71531529d1bf25556152bcffc",
+    "C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_wifi/esp32s3/esp_adapter.c": "790560ec0dab48728fda3d91be6241d235366d333f87aa31042ff5b3d8df4e4e"
+  },
+  "source_files_sha256": {
+    "main/main.c": "a294383e3076cc002fe37ed5929a6248c6fa25a2e668191692e1a5367a9d7107",
+    "main/snapshot.c": "12ba1cdb64ce3ff4278a8e72af457d5d9b1992fb4b9d50ab92d751a4cb00377c",
+    "README.md": "685b086baaf71172dd844544084ec059098cfcaf6df88bc9efcdeb5edc840c48",
+    "test_init_host.py": "557f2e385d9a4fd223578ea76b97fda7ff8156c709f3f2de49f2c897deed83d8"
+  },
+  "direct_sequence": [
+    "esp_wifi_bt_power_domain_on (owned reference)",
+    "esp_phy_enable(PHY_MODEM_WIFI)"
+  ],
+  "direct_leave_sequence": [
+    "esp_phy_disable(PHY_MODEM_WIFI)",
+    "esp_wifi_bt_power_domain_off (release owned reference)"
+  ],
+  "idle_boot_has_no_RF_initialization": true,
+  "snapshot_body_identical_to_parent_commit": true,
+  "unchanged_snapshot_body_sha256": "12ba1cdb64ce3ff4278a8e72af457d5d9b1992fb4b9d50ab92d751a4cb00377c",
+  "host_lifecycle_test": {
+    "schema": "sdr-metal-init-host-test/1",
+    "evidence_class": "HOST_LIFECYCLE_SHIM",
+    "checks": 96,
+    "valid": true,
+    "RF_measurement": false,
+    "source_function_sha256": "0ea352575f2dacfa6c0ae51e17f35c0c83ab86ecc2183ffd1e667aed68192df3",
+    "idle_boot_has_no_RF_initialization": true
+  },
+  "host_temperature_test": {
+    "schema": "sdr-metal-temperature-host-test/1",
+    "evidence_class": "HOST_SENSOR_SHIM",
+    "cases": 9,
+    "source_function_sha256": "05da8ee057352c552d1297fe621e8132358fbb23f9694ac116bee677863ccc0d",
+    "tested": [
+      "success",
+      "install_failure",
+      "enable_failure",
+      "read_failure",
+      "disable_failure",
+      "uninstall_failure",
+      "NaN",
+      "finite_formatter_overflow",
+      "infinity"
+    ],
+    "valid": true,
+    "temperature_accuracy_measured": false,
+    "RF_measurement": false
+  },
+  "host_snapshot_test": {
+    "schema": "sdr-metal-snapshot-host-test/1",
+    "evidence_class": "HOST_MMIO_SHIM",
+    "checks": 110,
+    "valid": true,
+    "RF_measurement": false
+  },
+  "output_bounds": {
+    "schema": "sdr-metal-output-bounds/1",
+    "evidence_class": "STATIC_BOUND",
+    "max_dynamic_string_bytes_assumed": 64,
+    "records": [
+      {
+        "type": "error",
+        "upper_bound_including_NUL": 111,
+        "capacity": 2048
+      },
+      {
+        "type": "temperature",
+        "upper_bound_including_NUL": 515,
+        "capacity": 2048
+      },
+      {
+        "type": "info",
+        "upper_bound_including_NUL": 1816,
+        "capacity": 2048
+      },
+      {
+        "type": "snapshot",
+        "upper_bound_including_NUL": 1158,
+        "capacity": 2048
+      },
+      {
+        "type": "armed",
+        "upper_bound_including_NUL": 352,
+        "capacity": 2048
+      },
+      {
+        "type": "run_end",
+        "upper_bound_including_NUL": 1373,
+        "capacity": 2048
+      },
+      {
+        "type": "init",
+        "upper_bound_including_NUL": 458,
+        "capacity": 2048
+      },
+      {
+        "type": "tune",
+        "upper_bound_including_NUL": 187,
+        "capacity": 2048
+      }
+    ],
+    "valid": true
+  },
+  "original_fault_logs_sha256": {
+    "metal-rx-com22-runtime.bin": "6d264046f5a723e1d7a43e1b10a9e54fa19bdf08ec38491881963bcb0b3671f2",
+    "metal-rx-com22-symbolicated.log": "01347a171c7b555a9d26630db2bc33cd56871c61e02a61b6ae89512ffe4d8d91"
+  },
+  "target_build": "PENDING_ROOT_REBUILD",
+  "physical_correction_confirmation": "NOT_RUN",
+  "watchdog_or_calibration_suppressed": false,
+  "serial_or_flash_access": false
+}

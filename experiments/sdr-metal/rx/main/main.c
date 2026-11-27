@@ -32,7 +32,8 @@
 
 static bool initialized, last_available;
 static esp_err_t initialization_error;
-static bool direct_phy_enabled, wifi_driver_initialized, default_event_loop_created;
+static bool direct_phy_enabled, direct_power_domain_owned, initialization_attempted;
+static bool wifi_driver_initialized, default_event_loop_created;
 static esp_err_t wifi_stop_status = INT_MIN, wifi_deinit_status = INT_MIN, event_loop_delete_status = INT_MIN;
 static metal_snapshot_t last_snapshot;
 static uint32_t last_crc, transfer_failures;
@@ -90,7 +91,7 @@ static const char *init_mode(void) {
 static bool initialize(bool wifi) {
     if (initialized && (wifi ? wifi_driver_initialized : direct_phy_enabled)) return true;
     initialized = false; last_available = false; last_crc = 0; metal_rx_config.ready = false;
-    initialization_error = ESP_OK;
+    initialization_attempted = true; initialization_error = ESP_OK;
     if (wifi_driver_initialized) {
         wifi_stop_status = esp_wifi_stop();
         if (wifi_stop_status != ESP_OK && wifi_stop_status != ESP_ERR_WIFI_NOT_STARTED) { initialization_error = wifi_stop_status; return false; }
@@ -104,9 +105,15 @@ static bool initialize(bool wifi) {
         default_event_loop_created = false;
     }
     if (direct_phy_enabled) { esp_phy_disable(PHY_MODEM_WIFI); direct_phy_enabled = false; }
+    if (direct_power_domain_owned) { esp_wifi_bt_power_domain_off(); direct_power_domain_owned = false; }
     if (!wifi) {
         /* This SDK API is void. Gain verification establishes receiver-ready
          * state later; this flag records the actual initialization path. */
+        /* SDK test_phy_rtc_cache_task powers MAC/BB before direct PHY init.
+         * esp_phy_enable only enables PHY/common clocks; it does not remove
+         * MAC/BB power-down/isolation needed by startup IQ/DC calibration.
+         * This public function is the SDK alias target of esp_wifi_power_domain_on. */
+        esp_wifi_bt_power_domain_on(); direct_power_domain_owned = true;
         esp_phy_enable(PHY_MODEM_WIFI); direct_phy_enabled = true; initialized = true;
         return true;
     }
@@ -160,7 +167,8 @@ static void info(void) {
         "\"source_sha\":\"%s\",\"source_digest\":\"%s\",\"sdk_sha\":\"%s\",\"sdk\":\"%s\","
         "\"backend_commit\":\"3ab3b65bb62f2d9427ee33c2c3b627427e729294\","
         "\"mac\":\"%02x%02x%02x%02x%02x%02x\",\"chip_revision\":%u,\"cpu_mhz\":%u,"
-        "\"init_mode\":\"%s\",\"direct_enable_api_returns_status\":false,"
+        "\"init_mode\":\"%s\",\"initialization_attempted\":%s,\"direct_power_domain_owned\":%s,"
+        "\"direct_enable_api_returns_status\":false,"
         "\"wifi_driver_initialized\":%s,\"default_event_loop_created\":%s,"
         "\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"event_loop_delete_status\":%d,"
         "\"nvs_enabled\":false,\"psram_required\":false,\"initialized\":%s,\"initialization_error_code\":%d,"
@@ -172,7 +180,8 @@ static void info(void) {
         "\"transfer_failures\":%" PRIu32 ",\"continuous_capture\":false,\"one_way_latency_measured\":false}\n",
         METAL_SOURCE_SHA, METAL_SOURCE_DIGEST, METAL_SDK_SHA, esp_get_idf_version(),
         mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], chip.revision, (unsigned)(esp_clk_cpu_freq() / 1000000),
-        init_mode(), wifi_driver_initialized ? "true" : "false", default_event_loop_created ? "true" : "false",
+        init_mode(), initialization_attempted ? "true" : "false", direct_power_domain_owned ? "true" : "false",
+        wifi_driver_initialized ? "true" : "false", default_event_loop_created ? "true" : "false",
         wifi_stop_status, wifi_deinit_status, event_loop_delete_status,
         initialized ? "true" : "false", initialization_error, metal_rx_config.mhz, metal_rx_config.offset_khz, metal_rx_config.gain,
         metal_rx_config.ready ? "true" : "false", (unsigned)h.free, (unsigned)h.largest, (unsigned)h.minimum, transfer_failures);
@@ -289,7 +298,7 @@ static void command(const char *text) {
     if (count == 2 && !strcmp(part[1], "temperature")) { temperature(); return; }
     if (count == 3 && !strcmp(part[1], "init") && (!strcmp(part[2], "phy") || !strcmp(part[2], "wifi"))) {
         bool ok = initialize(!strcmp(part[2], "wifi"));
-        (void)line("METAL {\"schema\":1,\"type\":\"init\",\"ok\":%s,\"requested\":\"%s\",\"actual_mode\":\"%s\",\"error_code\":%d,\"rx_ready\":%s}\n", ok ? "true" : "false", part[2], init_mode(), initialization_error, metal_rx_config.ready ? "true" : "false");
+        (void)line("METAL {\"schema\":1,\"type\":\"init\",\"ok\":%s,\"requested\":\"%s\",\"actual_mode\":\"%s\",\"error_code\":%d,\"rx_ready\":%s,\"direct_power_domain_owned\":%s}\n", ok ? "true" : "false", part[2], init_mode(), initialization_error, metal_rx_config.ready ? "true" : "false", direct_power_domain_owned ? "true" : "false");
         return;
     }
     if (count == 5 && !strcmp(part[1], "tune")) {
@@ -317,7 +326,8 @@ void app_main(void) {
     esp_log_level_set("*", ESP_LOG_NONE);
     usb_serial_jtag_driver_config_t usb = {.tx_buffer_size = 8192, .rx_buffer_size = 512};
     ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&usb));
-    (void)initialize(false); /* Default direct PHY; Wi-Fi is an explicit fallback. */
+    /* Idle boot deliberately performs no PHY/Wi-Fi initialization. The owner
+     * selects an explicit path after the command interface is available. */
     /* No NVS initialization/erase, no GUI/DSP/PSRAM initialization, no automatic
      * capture. Suppress PHY setup logging before exposing the protocol. */
     esp_log_level_set("*", ESP_LOG_NONE);

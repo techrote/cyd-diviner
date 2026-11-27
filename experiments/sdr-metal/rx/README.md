@@ -3,9 +3,10 @@
 This separate ESP-IDF application captures the native RF dump into its actual
 64 KiB SRAM aperture, then transfers raw words. It has no Diviner, display,
 FFT, FIR, software decimator, PSRAM, network sockets or live-audio dependency.
-The default radio initialization calls the pinned SDK's direct
-`esp_phy_enable(PHY_MODEM_WIFI)` without creating a Wi-Fi driver or default
-event-loop task. Wi-Fi mode NULL remains an explicitly selectable fallback.
+Idle boot initializes only the command interface, with no PHY or Wi-Fi startup.
+The explicit `metal init phy` path first powers the owned Wi-Fi/BT MAC-BB domain,
+then calls the pinned SDK's direct `esp_phy_enable(PHY_MODEM_WIFI)` without
+creating a Wi-Fi driver or default event-loop task. Wi-Fi mode NULL remains an explicitly selectable fallback.
 The SDK's own PHY calibration/PLL support remains part of that direct API;
 this does not claim that no SDK support code runs. NVS is not
 initialized, erased or written; Wi-Fi NVS and PHY calibration persistence are
@@ -54,6 +55,31 @@ outside the acquisition interval. No promise of gap-free capture is made.
 | 40 MS/s | 409.5 µs |
 | 80 MS/s | 204.75 µs |
 
+## Direct-PHY power prerequisite and failed prior image
+
+The first owner-approved direct-PHY RX image failed before reaching the CLI:
+the watchdog backtrace was in startup RX DC calibration, waiting for IQ-estimator
+completion. Its immutable runtime/symbolication logs remain in
+`evidence/hardware-access/metal-rx-com22-*`. The pinned SDK's
+`components/esp_phy/test/test_phy_rtc.c` explicitly calls
+`esp_wifi_power_domain_on()` before direct PHY initialization, with a comment
+that it powers the Wi-Fi/BT MAC-BB domain. `components/esp_wifi/src/wifi_init.c`
+also powers that domain before internal initialization. In `phy_init.c`, the
+alias target `esp_wifi_bt_power_domain_on()` clears power-down/isolation and
+resets the modem block. `esp_phy_enable()` enables PHY/common clocks but does
+not perform that MAC-BB power-up.
+
+The corrected direct path therefore owns one domain reference, enables PHY,
+and on leaving disables PHY before releasing that reference. It does not
+claim ownership of a domain reference created by the Wi-Fi fallback. Info/init
+records expose `direct_power_domain_owned`; info separately records whether
+initialization was attempted. Same-mode initialized requests do not double
+acquire. Idle boot invokes no initialization, so the explicit fallback remains
+reachable after reset. No calibration bypass, watchdog suppression or ad hoc
+BB/IQ/SRAM register change hides the original failure. This source correction
+is evidence-based; physical confirmation requires the separately approved
+new image. The correction does not change the timed snapshot body.
+
 ## Build only
 
 ```powershell
@@ -85,7 +111,7 @@ metal bench ID RATE_HZ SAMPLES REPEATS ARM_DELAY_US GAP_US TIMEOUT_US
 metal read ID
 ```
 
-`init phy` selects the default experimental direct PHY path; `init wifi`
+`init phy` selects the experimental direct PHY path; `init wifi`
 selects the explicit Wi-Fi-NULL fallback. Type `init` reports `ok`, requested
 path, actual mode, error code and receiver readiness. Switching tears down the
 prior mode, invalidates the retained raw buffer and requires fresh RX/gain

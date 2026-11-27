@@ -97,6 +97,13 @@ sampling. Spectral/phase estimates use the configured clock and receiver codes;
 they are not calibrated RF frequency/power. Field-limit observations are not
 independent analog-clipping detection.
 
+TX acquisition requires successful teardown plus explicit false residual
+ownership for the Wi-Fi driver, default event loop and direct PHY power domain.
+Missing ownership fields fail verification. The pinned SDK's direct domain
+on/off and PHY disable APIs return void, so these flags prove firmware ownership
+release bookkeeping and invocation, not an independent electrical or RF-off
+measurement.
+
 TX achieved writes/s and cycle counts include the IRAM loop, selected observers,
 and permitted interrupt activity. They are not isolated instruction latency or
 the RF hardware's ultimate modulation bandwidth. Raw late_cycles/maximum refer

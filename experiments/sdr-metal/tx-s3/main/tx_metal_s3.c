@@ -20,6 +20,7 @@
 #include "esp_mac.h"
 #include "esp_phy_cert_test.h"
 #include "esp_phy_init.h"
+#include "esp_private/wifi.h"
 #include "esp_private/esp_clk.h"
 #include "esp_rom_crc.h"
 #include "esp_system.h"
@@ -70,7 +71,7 @@ static uint8_t *packed;
 static uint32_t *words,capacity,loaded_bits,permit,trace_capacity,trace_stride;
 static Trace *traces;
 static Segment *segments;
-static bool minimal_phy=true,radio_ready,wifi_driver_initialized,event_loop_owned;
+static bool minimal_phy=true,radio_ready,wifi_driver_initialized,event_loop_owned,direct_power_domain_owned;
 static uint32_t saved_word,observed_word1;
 static int wifi_stop_status=INT_MIN,wifi_deinit_status=INT_MIN,event_loop_create_status=INT_MIN,event_loop_delete_status=INT_MIN,teardown_status=INT_MIN;
 static const char *backend_name(Backend b) { return b==Api?"api":b==Ram?"ram":b==Gate?"gate":"ask"; }
@@ -104,7 +105,7 @@ static void info(void) {
         "\"source_sha\":\"%s\",\"source_dirty\":%s,\"tx_source_digest\":\"%s\",\"word_helpers_digest\":\"%s\",\"sdk\":\"%s\","
         "\"mac\":\"%02x%02x%02x%02x%02x%02x\",\"chip_revision\":%u,\"cpu_mhz\":%u,\"main_core\":%u,"
         "\"init_path\":\"%s\",\"radio_ready\":%s,\"nvs_initialized\":false,\"phy_calibration_storage\":false,"
-        "\"wifi_driver_owned\":%s,\"default_event_loop_owned\":%s,"
+        "\"wifi_driver_owned\":%s,\"default_event_loop_owned\":%s,\"direct_power_domain_owned\":%s,\"direct_power_domain_api_scope\":\"owned_invocation_reference; void_API_not_physical_power_attestation\","
         "\"capacity_symbols\":%u,\"loaded_bits\":%u,\"trace_capacity\":%u,\"trace_stride\":%u,\"segment_capacity\":%u,"
         "\"waveform_memory\":\"internal_8bit_DRAM\",\"finite_duration_limit_us\":%u,\"mask_segment_limit_us\":%u,"
         "\"baud_limit_scope\":\"paced_rate_at_most_CPU_cycle_clock; zero_is_unpaced; achieved_rate_and_missed_slots_measured\","
@@ -113,7 +114,7 @@ static void info(void) {
         "\"temperature_raw\":null,\"temperature_method\":\"not_collected_use_explicit_temperature_command\",\"physical_rf_verified\":false}\n",
         SDR_SOURCE_SHA,SDR_SOURCE_DIRTY?"true":"false",SDR_SOURCE_DIGEST,SDR_WORDS_DIGEST,esp_get_idf_version(),
         mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],(unsigned)chip.revision,(unsigned)(esp_clk_cpu_freq()/1000000),(unsigned)xPortGetCoreID(),
-        minimal_phy?"experimental_direct_PHY":"WiFi_NULL",radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",(unsigned)capacity,(unsigned)loaded_bits,(unsigned)trace_capacity,(unsigned)trace_stride,(unsigned)trace_capacity,
+        minimal_phy?"experimental_direct_PHY":"WiFi_NULL",radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",(unsigned)capacity,(unsigned)loaded_bits,(unsigned)trace_capacity,(unsigned)trace_stride,(unsigned)trace_capacity,
         (unsigned)DurationLimitUs,(unsigned)MaskLimitUs,(unsigned)METAL_ENABLE_MASK,(unsigned)METAL_AMPLITUDE_MASK,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_32BIT) );
@@ -134,9 +135,14 @@ static esp_err_t cleanup_wifi(void) {
     return ESP_OK;
 }
 static esp_err_t start_radio(void) {
-    if(esp_clk_cpu_freq()!=CpuHz||xPortGetCoreID()!=0||radio_ready||wifi_driver_initialized||event_loop_owned)return ESP_ERR_INVALID_STATE;
+    if(esp_clk_cpu_freq()!=CpuHz||xPortGetCoreID()!=0||radio_ready||wifi_driver_initialized||event_loop_owned||direct_power_domain_owned)return ESP_ERR_INVALID_STATE;
     wifi_stop_status=wifi_deinit_status=event_loop_create_status=event_loop_delete_status=teardown_status=INT_MIN;
-    if(minimal_phy) { esp_phy_enable(PHY_MODEM_WIFI);radio_ready=true;return ESP_OK; }
+    if(minimal_phy) {
+        /* Match pinned SDK test_phy_rtc.c and wifi_init.c prerequisites:
+         * clocks alone do not power/de-isolate the MAC/BB domain. */
+        esp_wifi_power_domain_on();direct_power_domain_owned=true;
+        esp_phy_enable(PHY_MODEM_WIFI);radio_ready=true;return ESP_OK;
+    }
     esp_err_t e=esp_event_loop_create_default();event_loop_create_status=e;
     if(e==ESP_OK)event_loop_owned=true;else if(e!=ESP_ERR_INVALID_STATE)return e;
     wifi_init_config_t cfg=WIFI_INIT_CONFIG_DEFAULT();cfg.nvs_enable=0;
@@ -152,9 +158,13 @@ failed:
     return e; /* Preserve the original setup error separately from cleanup. */
 }
 static void stop_radio(void) {
-    if(minimal_phy) { esp_phy_disable(PHY_MODEM_WIFI);teardown_status=ESP_OK; }
+    if(minimal_phy) {
+        esp_phy_disable(PHY_MODEM_WIFI);
+        if(direct_power_domain_owned) { esp_wifi_power_domain_off();direct_power_domain_owned=false; }
+        teardown_status=ESP_OK;
+    }
     else teardown_status=cleanup_wifi();
-    radio_ready=wifi_driver_initialized||event_loop_owned;
+    radio_ready=wifi_driver_initialized||event_loop_owned||direct_power_domain_owned;
 }
 /* Separate maximum-store-loop context. No per-symbol arithmetic, trace or PHY
  * dispatch is charged to this variant; one cycle read bounds each iteration.
@@ -257,7 +267,7 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         "\"finite_bound_scope\":\"requested_payload_duration; SDK_setup_teardown_or_interrupt_can_overrun; not_hard_RF_bound\","
         "\"mask_scope\":\"local_CPU_RTOS_level3; higher_priority_interrupts_possible\",\"radio_stop_api\":\"%s\","
         "\"mask_time_scope\":\"cycle_brackets_include_entry_exit_and_possible_IRQ_immediately_after_restore; upper_bound_on_local_mask_time\","
-        "\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"event_loop_create_status\":%d,\"event_loop_delete_status\":%d,\"teardown_status\":%d,\"wifi_driver_owned_after\":%s,\"default_event_loop_owned_after\":%s,\"status_not_called\":-2147483648,\"phy_disable_status\":null,\"phy_disable_status_scope\":\"void_API_no_return_status\","
+        "\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"event_loop_create_status\":%d,\"event_loop_delete_status\":%d,\"teardown_status\":%d,\"wifi_driver_owned_after\":%s,\"default_event_loop_owned_after\":%s,\"direct_power_domain_owned_after\":%s,\"power_domain_status_scope\":\"void_on_off_API_no_return_status\",\"status_not_called\":-2147483648,\"phy_disable_status\":null,\"phy_disable_status_scope\":\"void_API_no_return_status\","
         "\"heap_8bit_before_radio_bytes\":%u,\"heap_8bit_largest_before_radio_bytes\":%u,\"heap_8bit_after_radio_bytes\":%u,\"heap_8bit_largest_after_radio_bytes\":%u,"
         "\"heap_8bit_free_bytes\":%u,\"heap_8bit_largest_bytes\":%u,\"temperature_raw_before\":null,\"temperature_raw_after\":null,"
         "\"temperature_method\":\"not_collected_use_explicit_temperature_command\",\"physical_rf_verified\":false}\n",
@@ -268,7 +278,7 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         (unsigned long long)r.mask_cycles,(unsigned)r.mask_max_cycles,(unsigned long long)r.gap_cycles,(unsigned)r.gap_max_cycles,
         (unsigned)saved_word,(unsigned)observed_word1,(unsigned)saved_word,(unsigned)restored_word,(unsigned)r.trace_count,(unsigned)trace_stride,(unsigned)r.segment_records,(unsigned)(r.masked_segments-r.segment_records),
         !baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask)?"minimal_unpaced_MMIO":"observed_paced_masked_or_library",
-        minimal_phy?"esp_phy_disable_void":"WiFi_stop_deinit",wifi_stop_status,wifi_deinit_status,event_loop_create_status,event_loop_delete_status,teardown_status,wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",heap_before,largest_before,heap_radio,largest_radio,
+        minimal_phy?"esp_phy_disable_void":"WiFi_stop_deinit",wifi_stop_status,wifi_deinit_status,event_loop_create_status,event_loop_delete_status,teardown_status,wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",heap_before,largest_before,heap_radio,largest_radio,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT));
     for(uint32_t i=0;i<r.trace_count;++i)printf("SDR {\"type\":\"tx_trace\",\"symbol\":%u,\"completion_cycle\":%u,\"late_cycles\":%u,\"word\":%u}\n",(unsigned)traces[i].symbol,(unsigned)traces[i].completion_cycle,(unsigned)traces[i].late_cycles,(unsigned)traces[i].word);

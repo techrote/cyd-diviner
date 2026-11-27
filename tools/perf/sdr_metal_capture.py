@@ -200,8 +200,9 @@ def validate_snapshot(receipt, run_id, case, bench=False):
 
 def validate_tx_cleanup(result):
     if (result.get("teardown_status") != 0 or result.get("wifi_driver_owned_after") is not False
-        or result.get("default_event_loop_owned_after") is not False):
-        raise RuntimeError("Metal TX teardown failed or driver/default-event-loop ownership remains")
+        or result.get("default_event_loop_owned_after") is not False
+        or result.get("direct_power_domain_owned_after") is not False):
+        raise RuntimeError("Metal TX teardown failed or driver/event-loop/direct-power-domain ownership remains or lacks proof")
     if result.get("radio_stop_api") == "WiFi_stop_deinit":
         # Pinned SDK ESP_ERR_WIFI_NOT_STARTED is0x3002. The firmware explicitly
         # accepts that already-stopped condition before successful deinit.
