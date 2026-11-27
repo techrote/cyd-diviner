@@ -210,10 +210,107 @@ def validate_tx_cleanup(result):
             raise RuntimeError("Metal Wi-Fi stop/deinit reported failure")
 
 
+TX_OUTPUT_TRANSPORT = "explicit_USB_Serial_JTAG_write_all"
+TX_OUTPUT_U32 = ("output_lines_attempted", "output_lines_accepted", "output_lines_failed", "output_format_failures",
+                 "output_write_calls", "output_short_writes", "output_zero_writes", "output_write_errors", "output_flush_failures")
+TX_OUTPUT_U64 = ("output_bytes_requested", "output_bytes_accepted")
+TX_OUTPUT_FAILURES = ("output_lines_failed", "output_format_failures", "output_write_errors", "output_flush_failures")
+
+
+def tx_output_transport_info(records):
+    """Latest runtime info; a declared capability cannot disappear silently."""
+    infos = [r for r in records if r.get("type") == "info"]
+    if not infos:
+        return None
+    if any(r.get("output_transport") is not None for r in infos) and infos[-1].get("output_transport") is None:
+        raise RuntimeError("Metal TX output transport capability disappeared from runtime info")
+    return infos[-1]
+
+
+def validate_tx_transport(records, before_info=None, after_info=None):
+    """New write-all transport proof; legacy captures retain their old scope.
+
+    Driver counters are cumulative snapshots before the reporting line itself.
+    A fresh post-terminal info is required to observe the final flush result.
+    Retry observations are permitted; incomplete/failed accepted output is not.
+    This does not turn SDK acceptance or register state into RF cessation proof.
+    """
+    ends = [r for r in records if r.get("type") == "tx_end"]
+    advertised = (before_info or {}).get("output_transport")
+    new_fields = any("tx_result_driver_accepted" in r or "output_lines_attempted" in r for r in ends)
+    if advertised is None and not new_fields:
+        return {"status": "NOT_APPLICABLE", "scope": "legacy_TX_without_write_all_receipts"}
+    if advertised != TX_OUTPUT_TRANSPORT:
+        raise RuntimeError("Metal TX new output receipts lack the supported runtime transport capability")
+    if before_info.get("output_line_capacity_bytes") != 4096 or before_info.get("output_line_timeout_us") != 5000000:
+        raise RuntimeError("Metal TX output capacity/timeout differs from reviewed transport")
+    if after_info is None:
+        raise RuntimeError("Metal TX post-terminal info required to observe final output flush")
+    identity = ("profile", "source_sha", "tx_source_digest", "word_helpers_digest", "mac", "output_transport",
+                "output_line_capacity_bytes", "output_line_timeout_us")
+    if after_info.get("type") != "info" or any(after_info.get(k) != before_info.get(k) for k in identity):
+        raise RuntimeError("Metal TX post-terminal runtime identity/transport changed")
+    results = [r for r in records if r.get("type") == "tx_result"]
+    traces = [r for r in records if r.get("type") == "tx_trace"]
+    segments = [r for r in records if r.get("type") == "tx_segment"]
+    if len(results) != 1 or len(ends) != 1:
+        raise RuntimeError("Metal TX output result/terminal record missing or ambiguous")
+    result, end = results[0], ends[0]
+    if (records.index(result) >= records.index(end)
+        or any(records.index(r) <= records.index(result) or records.index(r) >= records.index(end) for r in traces + segments)):
+        raise RuntimeError("Metal TX output records are outside the result/terminal batch")
+    expected_counts = {"trace_records": len(traces), "segment_records": len(segments),
+                       "trace_records_driver_accepted": len(traces), "segment_records_driver_accepted": len(segments)}
+    if any(type(end.get(k)) is not int or end[k] != value for k, value in expected_counts.items()):
+        raise RuntimeError("Metal TX driver-accepted trace/segment counts differ from parsed output")
+    if (type(result.get("trace_count")) is not int or result["trace_count"] != len(traces)
+        or type(result.get("segment_records")) is not int or result["segment_records"] != len(segments)
+        or any(end.get(k) is not True for k in ("tx_result_driver_accepted", "all_prior_records_driver_accepted",
+                                               "prior_output_drained", "backend_available", "restored_word_matches",
+                                               "tone_disable_requested", "continuous_tone_disable_requested"))
+        or end.get("radio_ready_after_teardown") is not False or end.get("tone_enable_bit_after_stop_request") is not False):
+        raise RuntimeError("Metal TX output batch acceptance/drain or stop receipt failed")
+    validate_tx_cleanup(result)
+    validate_tx_cleanup(end)
+    for key in ("restored_word_requested", "restored_word_readback", "tone_disable_word_readback"):
+        if type(end.get(key)) is not int or not 0 <= end[key] <= 0xffffffff:
+            raise RuntimeError("Metal TX stop/register readback lacks unsigned word proof")
+    if (end["restored_word_requested"] != end["restored_word_readback"]
+        or end["restored_word_requested"] != result.get("restored_word_requested")
+        or end["restored_word_readback"] != result.get("restored_word_readback")):
+        raise RuntimeError("Metal TX terminal restoration differs from result")
+    gate_mask = before_info.get("gate_mask")
+    if (type(gate_mask) is not int or not 0 < gate_mask <= 0xffffffff
+        or end["tone_disable_word_readback"] & gate_mask):
+        raise RuntimeError("Metal TX tone-disable register contradicts the stop receipt")
+    for label, record in (("before", before_info), ("terminal", end), ("after", after_info)):
+        for key in TX_OUTPUT_U32 + TX_OUTPUT_U64:
+            maximum = 0xffffffff if key in TX_OUTPUT_U32 else 0xffffffffffffffff
+            if type(record.get(key)) is not int or not 0 <= record[key] <= maximum:
+                raise RuntimeError("Metal TX missing/invalid output counter " + label + ":" + key)
+        if (any(record[k] != 0 for k in TX_OUTPUT_FAILURES) or record.get("output_resync_pending") is not False
+            or record["output_lines_attempted"] != record["output_lines_accepted"]
+            or record["output_bytes_requested"] != record["output_bytes_accepted"]
+            or not record["output_zero_writes"] <= record["output_short_writes"] <= record["output_write_calls"]):
+            raise RuntimeError("Metal TX output failure/drop/pending or inconsistent acceptance counters: " + label)
+    for first, last in ((before_info, end), (end, after_info)):
+        if any(last[k] < first[k] for k in TX_OUTPUT_U32 + TX_OUTPUT_U64):
+            raise RuntimeError("Metal TX output counters regressed/reset during the batch")
+    if (end["output_lines_accepted"] - before_info["output_lines_accepted"] < 1 + len(traces) + len(segments)
+        or after_info["output_lines_accepted"] <= end["output_lines_accepted"]
+        or after_info["output_bytes_accepted"] <= end["output_bytes_accepted"]):
+        raise RuntimeError("Metal TX output counters lack complete batch/terminal progress")
+    return {"status": "VALIDATED", "transport": TX_OUTPUT_TRANSPORT,
+            "trace_records": len(traces), "segment_records": len(segments),
+            "scope": "host_parsed_batch_plus_driver_acceptance_and_post_terminal_flush_counters; not_RF_cessation_proof",
+            "retry_scope": "short_and_zero_writes_allowed_when_full_output_succeeds; cumulative_failure_counters_must_be_zero"}
+
+
 def execute_run(run, tx, rx, plan, plan_path, folder, guard):
     folder.mkdir()
     case, run_id = run["settings"], run["run_id"]
     rx_cursor, tx_cursor, snapshot_cursor = len(rx.records), len(tx.records), len(rx.decoder.snapshots)
+    output_before = tx_output_transport_info(tx.records)
     def save_snapshot(receipt, payload):
         filename = f"snapshot-{len(rx.decoder.snapshots) - snapshot_cursor:04}.native32le"
         path = folder / filename
@@ -328,6 +425,15 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
         if ended_tx[-1].get("trace_records") != len(traces) or ended_tx[-1].get("segment_records") != len(segments):
             raise RuntimeError("Metal TX terminal record differs from observed trace/segment counts")
         run["transmitter_result"] = result
+        output_after = None
+        if (output_before or {}).get("output_transport") is not None:
+            # Teardown was proven above. Query outside RF and after the terminal
+            # line; its final flush status is absent from tx_end's own snapshot.
+            output_after = tx.request("info", lambda r: r.get("type") == "info", records=True)
+            run["transmitter_output_before"] = output_before
+            run["transmitter_output_after"] = output_after
+            run["tx_target"] = tx.records[tx_cursor:]
+        run["transmitter_output_validation"] = validate_tx_transport(run["tx_target"], output_before, output_after)
     run["physical_rf_verified"] = None
     run["temperature_after"] = {"tx": temperature(tx), "rx": temperature(rx, True)}
     run["status"] = "ACQUIRED"

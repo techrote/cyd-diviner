@@ -57,12 +57,45 @@ does not clock native USB. Only control/upload and deferred result output use
 USB; the IRAM/DRAM timing loop performs no USB operation or allocation. GPIO
 UART0 is not the input path. The profile is `s3-sdr-metal-tx`, protocol2.
 
+S3 control/result records use one static **4096-byte** formatter followed by
+explicit `usb_serial_jtag_write_bytes()` calls, without per-character stdout
+VFS output. The write-all helper checks a five-second deadline between bounded
+100 ms driver waits; a final driver call can extend beyond that deadline by
+its wait. A separate drain waits at most five seconds. Short/zero/error return
+counts, formatting failures, flush failures and requested/accepted byte totals
+are exposed by `info` and `tx_end`. The32-bit event counters saturate; byte
+totals are64-bit. Snapshots exclude the line currently being formatted. These
+are driver-API observations, not independent host delivery/JSON attestations.
+The helper retries only unwritten bytes; it never retransmits RF payloads.
+
+A partial output failure marks a pending LF resynchronization before the next
+record. Deferred trace/segment emission stops after its first failed record,
+then makes one bounded terminal attempt. `tx_end` preserves expected and
+driver-accepted record counts, prior-drain status, saved/restored-word equality,
+the enable bit read after the SDK tone-stop request but before PHY teardown,
+and lifecycle ownership/status. Register/API evidence does not prove physical
+RF cessation. The final terminal flush's failure is visible in the next
+`info`, since it cannot report its own later result. The one-use RF permit is
+consumed before `tx_starting`; RF initialization proceeds only if that start
+record was accepted and drained. Both IRAM timed-loop bodies are unchanged.
+
+This serializer addresses an observed suffix-only `tx_result` after a masked
+run in the previous image. It does not convert that old failed receipt into a
+valid run or establish that every output timeout had the same cause. In the
+earlier smoke attempt, two temperature records arrived and the third request
+had no received bytes; that alone cannot distinguish a sensor/API stall from
+control or output transport failure. The pinned VFS's per-character writer can
+drop characters after a failed bounded attempt while the outer VFS write
+returns the requested size. Explicit checked driver writes make such failures
+observable, but physical validation of this new image remains separate.
+
 `temperature` is an explicit outside-RF-window command: install sensor driver,
 enable/read/disable/uninstall, emitting each return code. No temperature handle,
 task or sensor polling remains in the timing loop; ordinary info/run metadata
 has raw-temperature null. Driver Celsius is not independently calibrated and
 is not interchangeable with the classic undocumented RTC-library raw code.
 Read failures remain null. Byte-capable heap diagnostics are retained.
+Non-finite successful driver values also serialize as null, preserving JSON.
 
 Trace and segment limits, requested≤20ms local RTOS-masked segments, two-second
 finite payload limit, no inherited baud cap, skipped-slot policy, raw unpaced
@@ -77,3 +110,16 @@ Build without opening a port:
   -IdfToolsRoot C:/Users/_/.codex/idf-tools-v5.5.5 `
   -OutputRoot C:/cyd-diviner/sdr-metal-build/tx-s3
 ```
+
+Host-only validation, without opening a port:
+
+```powershell
+python test_output.py
+python test_output_bounds.py
+python ../test_tx_lifecycle.py
+```
+
+The actual-body fake tests cover short/zero/error writes, the exact formatter
+boundary, partial-line recovery, counter saturation and the pre-RF drain
+gate. Static bounds cover every complete SDR record; target compilation also
+checks printf argument types. These tests do not establish USB or RF behavior.

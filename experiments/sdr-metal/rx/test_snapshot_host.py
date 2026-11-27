@@ -55,6 +55,7 @@ void rx_recalibrate(unsigned a) {(void)a;}
 bool rx_recalibration_stale(void) {return false;}
 bool rx_gain_verified_apply(bool a,unsigned b) {(void)a;(void)b;return true;}
 bool rx_gain_verified_check(unsigned a) {(void)a;return true;}
+void metal_gain_diagnostic(unsigned a,metal_gain_diagnostic_t *out) {(void)a;*out=(metal_gain_diagnostic_t){0};}
 static uint32_t read_reg(uint32_t address) {
     if(address==0x600c101c)return fake_owner;
     if(address==0x60033d90)return fake_lanes;

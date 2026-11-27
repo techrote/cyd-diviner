@@ -31,6 +31,6 @@ for match in re.finditer(r'line\(\s*((?:"(?:\\.|[^"\\])*"\s*|PRI[a-zA-Z0-9]+\s*)
     record_type = re.search(r'"type":"([^"%]+)"', fmt)
     assert record_type and size <= 2048, (fmt, size)
     records.append({"type": record_type[1], "upper_bound_including_NUL": size, "capacity": 2048})
-assert {r["type"] for r in records} == {"info", "temperature", "error", "init", "tune", "armed", "snapshot", "run_end"}
+assert {r["type"] for r in records} == {"info", "temperature", "error", "init", "tune", "rx_diagnostics", "armed", "snapshot", "run_end"}
 print(json.dumps({"schema": "sdr-metal-output-bounds/1", "evidence_class": "STATIC_BOUND",
                   "max_dynamic_string_bytes_assumed": 64, "records": records, "valid": True}))

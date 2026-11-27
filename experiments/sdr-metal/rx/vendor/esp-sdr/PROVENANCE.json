@@ -3,11 +3,18 @@
   "upstream": "https://github.com/ESPARGOS/esp-sdr",
   "commit": "3ab3b65bb62f2d9427ee33c2c3b627427e729294",
   "license": "GPL-3.0; exact upstream LICENSE retained",
-  "scope": "Exact unmodified gain/DC calibration helpers only. Own snapshot adapter follows register facts in pinned main/targets/esp32s3/receiver.c; no continuous ring/FIR/FFT implementation imported.",
+  "scope": "Pinned GPL gain/DC helpers. rx_gain_verify.c has one explicitly recorded local read-only diagnostic getter; upstream apply/check bodies remain byte-identical. Own snapshot adapter follows pinned register facts; no continuous ring/FIR/FFT imported.",
   "files": {
     "main/common/rx_gain_verify.c": {
       "vendored_file": "rx_gain_verify.c",
-      "sha256": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde"
+      "sha256": "85e8522c8fbcc680dc770a53fbe82162891166af56ad9d52db343a9c65fcb230",
+      "upstream_sha256": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde",
+      "local_modification": {
+        "description": "Append metal_gain_diagnostic getter only; no upstream apply/check edits",
+        "getter_sha256": "c52d267f95787b6b1febee16ada939150102d137713a2e1bd22abb9f8f31e4d2",
+        "header": "../../main/gain_diagnostics.h",
+        "header_sha256": "56cfcb431783e32b8fe1122c8f5af54d497a306f157a904746a7a9a7a9e7f700"
+      }
     },
     "main/common/rx_gain_force.h": {
       "vendored_file": "rx_gain_force.h",

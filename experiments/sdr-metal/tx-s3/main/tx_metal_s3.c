@@ -3,13 +3,14 @@
  * or third-party TX code.
  * Idle boot does not initialize the radio. No approved probe is modified. */
 #include <inttypes.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
 #include "driver/usb_serial_jtag.h"
-#include "driver/usb_serial_jtag_vfs.h"
 #include "driver/temperature_sensor.h"
 #include "esp_attr.h"
 #include "esp_chip_info.h"
@@ -37,6 +38,59 @@
 #error Requires 240MHz and no persistent PHY calibration storage.
 #endif
 extern void start_tx_tone(unsigned, int, unsigned, unsigned, int, unsigned);
+
+/* Deferred control/result output only. The main task is the sole caller;
+ * no formatter, USB write, counter update or allocation enters either loop.
+ * Counts describe driver API acceptance, not independent host parsing. */
+#define OUTPUT_CAPACITY 4096
+#define OUTPUT_TIMEOUT_US INT64_C(5000000)
+typedef struct {
+    uint32_t lines_attempted,lines_accepted,lines_failed,format_failures;
+    uint32_t write_calls,short_writes,zero_writes,write_errors,flush_failures;
+    uint64_t bytes_requested,bytes_accepted;
+} OutputStats;
+static OutputStats output_stats;
+static char output_buffer[OUTPUT_CAPACITY];
+static bool output_resync_pending;
+static void output_increment(uint32_t *value) { if(*value<UINT32_MAX)++*value; }
+static bool output_write_all(const char *data,size_t length,int64_t deadline) {
+    output_stats.bytes_requested+=length;
+    while(length&&esp_timer_get_time()<deadline) {
+        size_t chunk=length>1024?1024:length;
+        output_increment(&output_stats.write_calls);
+        int n=usb_serial_jtag_write_bytes(data,chunk,pdMS_TO_TICKS(100));
+        if(n<0||(size_t)n>chunk) { output_increment(&output_stats.write_errors);return false; }
+        if((size_t)n<chunk)output_increment(&output_stats.short_writes);
+        if(!n) { output_increment(&output_stats.zero_writes);vTaskDelay(1);continue; }
+        data+=n;length-=(size_t)n;output_stats.bytes_accepted+=(unsigned)n;
+    }
+    return length==0;
+}
+static int output_printf(const char *format,...) __attribute__((format(printf,1,2)));
+static int output_printf(const char *format,...) {
+    output_increment(&output_stats.lines_attempted);
+    va_list args;va_start(args,format);
+    int n=vsnprintf(output_buffer,sizeof(output_buffer),format,args);
+    va_end(args);
+    if(n<0||(size_t)n>=sizeof(output_buffer)) {
+        output_increment(&output_stats.format_failures);output_increment(&output_stats.lines_failed);return -1;
+    }
+    const int64_t deadline=esp_timer_get_time()+OUTPUT_TIMEOUT_US;
+    /* A previous partial line must not glue the next complete JSON to it. */
+    if(output_resync_pending&&!output_write_all("\n",1,deadline)) {
+        output_increment(&output_stats.lines_failed);return -1;
+    }
+    output_resync_pending=false;
+    if(!output_write_all(output_buffer,(size_t)n,deadline)) {
+        output_resync_pending=true;output_increment(&output_stats.lines_failed);return -1;
+    }
+    output_increment(&output_stats.lines_accepted);return n;
+}
+static int output_puts(const char *text) { return output_printf("%s\n",text); }
+static bool output_flush(void) {
+    if(usb_serial_jtag_wait_tx_done(pdMS_TO_TICKS(5000))==ESP_OK)return true;
+    output_increment(&output_stats.flush_failures);return false;
+}
 /* Temperature is an explicit outside-window command, absent from the hot path. */
 static void temperature(void) {
     temperature_sensor_handle_t sensor=NULL;
@@ -48,8 +102,8 @@ static void temperature(void) {
         if(enable==ESP_OK) { read=temperature_sensor_get_celsius(sensor,&value);disable=temperature_sensor_disable(sensor); }
         uninstall=temperature_sensor_uninstall(sensor);
     }
-    char number[32]="null";if(read==ESP_OK)snprintf(number,sizeof(number),"%.4f",(double)value);
-    printf("SDR {\"type\":\"temperature\",\"temperature_c_driver\":%s,\"install_status\":%d,\"enable_status\":%d,\"read_status\":%d,\"disable_status\":%d,\"uninstall_status\":%d,\"status_not_called\":-2147483648,\"scope\":\"explicit_outside_RF_window; SDK_driver_not_independently_calibrated\"}\n",number,install,enable,read,disable,uninstall);
+    char number[32]="null";if(read==ESP_OK&&isfinite(value))snprintf(number,sizeof(number),"%.4f",(double)value);
+    output_printf("SDR {\"type\":\"temperature\",\"temperature_c_driver\":%s,\"install_status\":%d,\"enable_status\":%d,\"read_status\":%d,\"disable_status\":%d,\"uninstall_status\":%d,\"status_not_called\":-2147483648,\"scope\":\"explicit_outside_RF_window; SDK_driver_not_independently_calibrated\"}\n",number,install,enable,read,disable,uninstall);
 }
 int cmd_parse(char *a,char *b,int *c,char **d) { (void)a;(void)b;(void)c;(void)d;return -1; }
 
@@ -75,7 +129,7 @@ static bool minimal_phy=true,radio_ready,wifi_driver_initialized,event_loop_owne
 static uint32_t saved_word,observed_word1;
 static int wifi_stop_status=INT_MIN,wifi_deinit_status=INT_MIN,event_loop_create_status=INT_MIN,event_loop_delete_status=INT_MIN,teardown_status=INT_MIN;
 static const char *backend_name(Backend b) { return b==Api?"api":b==Ram?"ram":b==Gate?"gate":"ask"; }
-static void error(const char *s) { printf("SDR {\"type\":\"error\",\"message\":\"%s\"}\n",s); }
+static void error(const char *s) { output_printf("SDR {\"type\":\"error\",\"message\":\"%s\"}\n",s); }
 static unsigned level_at(uint32_t n) { return (packed[n>>3]>>(7-(n&7)))&1u; }
 static inline uint32_t IRAM_ATTR cycles(void) { return esp_cpu_get_cycle_count(); }
 static inline void IRAM_ATTR store_word(uint32_t word) {
@@ -101,7 +155,7 @@ static bool reserve(uint32_t n,uint32_t t) {
 }
 static void info(void) {
     uint8_t mac[6];esp_chip_info_t chip;esp_chip_info(&chip);esp_read_mac(mac,ESP_MAC_WIFI_STA);
-    printf("SDR {\"type\":\"info\",\"protocol\":2,\"profile\":\"s3-sdr-metal-tx\","
+    output_printf("SDR {\"type\":\"info\",\"protocol\":2,\"profile\":\"s3-sdr-metal-tx\","
         "\"source_sha\":\"%s\",\"source_dirty\":%s,\"tx_source_digest\":\"%s\",\"word_helpers_digest\":\"%s\",\"sdk\":\"%s\","
         "\"mac\":\"%02x%02x%02x%02x%02x%02x\",\"chip_revision\":%u,\"cpu_mhz\":%u,\"main_core\":%u,"
         "\"init_path\":\"%s\",\"radio_ready\":%s,\"nvs_initialized\":false,\"phy_calibration_storage\":false,"
@@ -111,13 +165,23 @@ static void info(void) {
         "\"baud_limit_scope\":\"paced_rate_at_most_CPU_cycle_clock; zero_is_unpaced; achieved_rate_and_missed_slots_measured\","
         "\"register_address\":\"0x60006040\",\"gate_mask\":%u,\"amplitude_mask\":%u,\"mmio_semantics\":\"pinned_S3_vendor_object_inference_RF_unverified\","
         "\"heap_internal_free_bytes\":%u,\"heap_8bit_free_bytes\":%u,\"heap_8bit_largest_bytes\":%u,\"heap_32bit_free_bytes\":%u,"
-        "\"temperature_raw\":null,\"temperature_method\":\"not_collected_use_explicit_temperature_command\",\"physical_rf_verified\":false}\n",
+        "\"temperature_raw\":null,\"temperature_method\":\"not_collected_use_explicit_temperature_command\",\"physical_rf_verified\":false,"
+        "\"output_transport\":\"explicit_USB_Serial_JTAG_write_all\",\"output_line_capacity_bytes\":%u,\"output_line_timeout_us\":%u,"
+        "\"output_deadline_scope\":\"checked_between_driver_calls; final_wait_up_to_100ms; flush_separate_5s\","
+        "\"output_lines_attempted\":%u,\"output_lines_accepted\":%u,\"output_lines_failed\":%u,\"output_format_failures\":%u,"
+        "\"output_write_calls\":%u,\"output_short_writes\":%u,\"output_zero_writes\":%u,\"output_write_errors\":%u,\"output_flush_failures\":%u,"
+        "\"output_bytes_requested\":%llu,\"output_bytes_accepted\":%llu,\"output_resync_pending\":%s,"
+        "\"output_counter_scope\":\"cumulative_u32_saturating_and_u64_bytes; snapshot_before_current_line; driver_acceptance_not_host_parse_proof\"}\n",
         SDR_SOURCE_SHA,SDR_SOURCE_DIRTY?"true":"false",SDR_SOURCE_DIGEST,SDR_WORDS_DIGEST,esp_get_idf_version(),
         mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],(unsigned)chip.revision,(unsigned)(esp_clk_cpu_freq()/1000000),(unsigned)xPortGetCoreID(),
         minimal_phy?"experimental_direct_PHY":"WiFi_NULL",radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",(unsigned)capacity,(unsigned)loaded_bits,(unsigned)trace_capacity,(unsigned)trace_stride,(unsigned)trace_capacity,
         (unsigned)DurationLimitUs,(unsigned)MaskLimitUs,(unsigned)METAL_ENABLE_MASK,(unsigned)METAL_AMPLITUDE_MASK,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
-        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_32BIT) );
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_32BIT),
+        (unsigned)OUTPUT_CAPACITY,(unsigned)OUTPUT_TIMEOUT_US,(unsigned)output_stats.lines_attempted,(unsigned)output_stats.lines_accepted,
+        (unsigned)output_stats.lines_failed,(unsigned)output_stats.format_failures,(unsigned)output_stats.write_calls,(unsigned)output_stats.short_writes,
+        (unsigned)output_stats.zero_writes,(unsigned)output_stats.write_errors,(unsigned)output_stats.flush_failures,
+        (unsigned long long)output_stats.bytes_requested,(unsigned long long)output_stats.bytes_accepted,output_resync_pending?"true":"false");
 }
 static esp_err_t cleanup_wifi(void) {
     if(wifi_driver_initialized) {
@@ -231,7 +295,7 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
     const unsigned largest_before=(unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     uint64_t request=esp_timer_get_time();
     esp_err_t e=start_radio();if(e!=ESP_OK) {
-        printf("SDR {\"type\":\"radio_error\",\"code\":%d,\"cleanup_status\":%d,\"event_loop_create_status\":%d,\"event_loop_delete_status\":%d,\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"wifi_driver_owned\":%s,\"default_event_loop_owned\":%s,\"status_not_called\":-2147483648}\n",
+        output_printf("SDR {\"type\":\"radio_error\",\"code\":%d,\"cleanup_status\":%d,\"event_loop_create_status\":%d,\"event_loop_delete_status\":%d,\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"wifi_driver_owned\":%s,\"default_event_loop_owned\":%s,\"status_not_called\":-2147483648}\n",
             e,teardown_status,event_loop_create_status,event_loop_delete_status,wifi_stop_status,wifi_deinit_status,wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false");return;
     }
     const unsigned heap_radio=(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
@@ -255,8 +319,10 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         store_word(saved_word); /* Restore all saved bits before PHY teardown. */
         restored_word=*(volatile uint32_t *)UINT32_C(0x60006040);
     }
-    esp_phy_wifi_tx_tone(0,Channel,b0);esp_phy_tx_contin_en(false);stop_radio();
-    printf("SDR {\"type\":\"tx_result\",\"mode\":\"%s\",\"init_path\":\"%s\",\"backend_available\":%s,\"backend_state\":\"%s\","
+    esp_phy_wifi_tx_tone(0,Channel,b0);esp_phy_tx_contin_en(false);
+    const uint32_t tone_disabled_word=*(volatile uint32_t *)UINT32_C(0x60006040);
+    stop_radio();
+    bool result_accepted=output_printf("SDR {\"type\":\"tx_result\",\"mode\":\"%s\",\"init_path\":\"%s\",\"backend_available\":%s,\"backend_state\":\"%s\","
         "\"requested_baud\":%u,\"unpaced\":%s,\"backoff0_quarter_db\":%u,\"backoff1_quarter_db\":%u,\"requested_duration_us\":%u,"
         "\"pattern_bits\":%u,\"processed_bits\":%u,\"skipped_paced_slots\":%u,\"late_writes\":%u,\"late_cycles_max\":%u,"
         "\"elapsed_cycles\":%u,\"start_us\":%llu,\"end_us\":%llu,\"rf_request_us\":%llu,\"teardown_complete_us\":%llu,"
@@ -280,31 +346,62 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         !baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask)?"minimal_unpaced_MMIO":"observed_paced_masked_or_library",
         minimal_phy?"esp_phy_disable_void":"WiFi_stop_deinit",wifi_stop_status,wifi_deinit_status,event_loop_create_status,event_loop_delete_status,teardown_status,wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",heap_before,largest_before,heap_radio,largest_radio,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
-        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT));
-    for(uint32_t i=0;i<r.trace_count;++i)printf("SDR {\"type\":\"tx_trace\",\"symbol\":%u,\"completion_cycle\":%u,\"late_cycles\":%u,\"word\":%u}\n",(unsigned)traces[i].symbol,(unsigned)traces[i].completion_cycle,(unsigned)traces[i].late_cycles,(unsigned)traces[i].word);
-    for(uint32_t i=0;i<r.segment_records;++i)printf("SDR {\"type\":\"tx_segment\",\"index\":%u,\"start_cycle\":%u,\"end_cycle\":%u,\"gap_before_cycles\":%u}\n",(unsigned)i,(unsigned)segments[i].start_cycle,(unsigned)segments[i].end_cycle,(unsigned)segments[i].gap_before_cycles);
-    printf("SDR {\"type\":\"tx_end\",\"trace_records\":%u,\"segment_records\":%u}\n",(unsigned)r.trace_count,(unsigned)r.segment_records);
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT))>=0;
+    uint32_t traces_accepted=0,segments_accepted=0;
+    if(result_accepted)for(uint32_t i=0;i<r.trace_count;++i) {
+        if(output_printf("SDR {\"type\":\"tx_trace\",\"symbol\":%u,\"completion_cycle\":%u,\"late_cycles\":%u,\"word\":%u}\n",(unsigned)traces[i].symbol,(unsigned)traces[i].completion_cycle,(unsigned)traces[i].late_cycles,(unsigned)traces[i].word)<0)break;
+        ++traces_accepted;
+    }
+    if(result_accepted&&traces_accepted==r.trace_count)for(uint32_t i=0;i<r.segment_records;++i) {
+        if(output_printf("SDR {\"type\":\"tx_segment\",\"index\":%u,\"start_cycle\":%u,\"end_cycle\":%u,\"gap_before_cycles\":%u}\n",(unsigned)i,(unsigned)segments[i].start_cycle,(unsigned)segments[i].end_cycle,(unsigned)segments[i].gap_before_cycles)<0)break;
+        ++segments_accepted;
+    }
+    /* Stop a failed deferred batch rather than waiting once per remaining
+     * trace/segment. Preserve one bounded terminal/recovery attempt. */
+    bool prior_drained=output_flush();
+    output_printf("SDR {\"type\":\"tx_end\",\"trace_records\":%u,\"segment_records\":%u,"
+        "\"tx_result_driver_accepted\":%s,\"trace_records_driver_accepted\":%u,\"segment_records_driver_accepted\":%u,"
+        "\"all_prior_records_driver_accepted\":%s,\"prior_output_drained\":%s,\"backend_available\":%s,"
+        "\"restored_word_requested\":%u,\"restored_word_readback\":%u,\"restored_word_matches\":%s,"
+        "\"tone_disable_requested\":true,\"continuous_tone_disable_requested\":true,\"tone_disable_word_readback\":%u,\"tone_enable_bit_after_stop_request\":%s,"
+        "\"teardown_status\":%d,\"radio_ready_after_teardown\":%s,\"wifi_driver_owned_after\":%s,\"default_event_loop_owned_after\":%s,\"direct_power_domain_owned_after\":%s,"
+        "\"output_lines_attempted\":%u,\"output_lines_accepted\":%u,\"output_lines_failed\":%u,\"output_format_failures\":%u,"
+        "\"output_write_calls\":%u,\"output_short_writes\":%u,\"output_zero_writes\":%u,\"output_write_errors\":%u,\"output_flush_failures\":%u,"
+        "\"output_bytes_requested\":%llu,\"output_bytes_accepted\":%llu,\"output_resync_pending\":%s,"
+        "\"output_counter_scope\":\"before_tx_end_format; driver_acceptance_and_prior_drain_not_host_parse_proof; final_flush_failure_visible_next_info\","
+        "\"stop_proof_scope\":\"SDK_requests_and_register_readback_before_PHY_teardown_not_physical_RF_cessation\"}\n",
+        (unsigned)r.trace_count,(unsigned)r.segment_records,result_accepted?"true":"false",(unsigned)traces_accepted,(unsigned)segments_accepted,
+        result_accepted&&traces_accepted==r.trace_count&&segments_accepted==r.segment_records?"true":"false",prior_drained?"true":"false",available?"true":"false",
+        (unsigned)saved_word,(unsigned)restored_word,available?(saved_word==restored_word?"true":"false"):"null",(unsigned)tone_disabled_word,
+        tone_disabled_word&METAL_ENABLE_MASK?"true":"false",teardown_status,radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",
+        (unsigned)output_stats.lines_attempted,(unsigned)output_stats.lines_accepted,(unsigned)output_stats.lines_failed,(unsigned)output_stats.format_failures,
+        (unsigned)output_stats.write_calls,(unsigned)output_stats.short_writes,(unsigned)output_stats.zero_writes,(unsigned)output_stats.write_errors,(unsigned)output_stats.flush_failures,
+        (unsigned long long)output_stats.bytes_requested,(unsigned long long)output_stats.bytes_accepted,output_resync_pending?"true":"false");
+    (void)output_flush();
 }
 static void command(char *line) {
     uint32_t a,b,c,d,e,token;char mode[16],extra;
     if(!strcmp(line,"info")) { info();return; }
     if(!strcmp(line,"temperature")) { temperature();return; }
     if(sscanf(line,"reserve %" SCNu32 " %" SCNu32 " %c",&a,&b,&extra)==2) {
-        if(!reserve(a,b))error("reserve allocation failed; probe remains unloaded and idle");else puts("SDR {\"type\":\"reserved\",\"ok\":true}");return;
+        if(!reserve(a,b))error("reserve allocation failed; probe remains unloaded and idle");else output_puts("SDR {\"type\":\"reserved\",\"ok\":true}");return;
     }
-    if(sscanf(line,"observe %" SCNu32 " %c",&a,&extra)==1) { trace_stride=a;puts("SDR {\"type\":\"observe\",\"ok\":true}");return; }
-    if(sscanf(line,"init %15s %c",mode,&extra)==1&&(!strcmp(mode,"phy")||!strcmp(mode,"wifi"))) { minimal_phy=!strcmp(mode,"phy");puts("SDR {\"type\":\"init_path\",\"ok\":true}");return; }
-    if(sscanf(line,"permit %" SCNx32 " %c",&token,&extra)==1&&token) { permit=token;puts("SDR {\"type\":\"permit\",\"ok\":true}");return; }
+    if(sscanf(line,"observe %" SCNu32 " %c",&a,&extra)==1) { trace_stride=a;output_puts("SDR {\"type\":\"observe\",\"ok\":true}");return; }
+    if(sscanf(line,"init %15s %c",mode,&extra)==1&&(!strcmp(mode,"phy")||!strcmp(mode,"wifi"))) { minimal_phy=!strcmp(mode,"phy");output_puts("SDR {\"type\":\"init_path\",\"ok\":true}");return; }
+    if(sscanf(line,"permit %" SCNx32 " %c",&token,&extra)==1&&token) { permit=token;output_puts("SDR {\"type\":\"permit\",\"ok\":true}");return; }
     if(sscanf(line,"load %" SCNu32 " %" SCNx32 " %c",&a,&b,&extra)==2&&a&&a<=capacity) {
-        loaded_bits=0;uint32_t n=(a+7)/8,got=0;puts("SDR {\"type\":\"ready\"}");fflush(stdout);int64_t deadline=esp_timer_get_time()+5000000;
+        loaded_bits=0;uint32_t n=(a+7)/8,got=0;if(output_puts("SDR {\"type\":\"ready\"}")<0||!output_flush())return;int64_t deadline=esp_timer_get_time()+5000000;
         while(got<n&&esp_timer_get_time()<deadline) { int count=usb_serial_jtag_read_bytes(packed+got,n-got,pdMS_TO_TICKS(50));if(count>0)got+=count; }
-        if(got!=n||esp_rom_crc32_le(0,packed,n)!=b)error("upload length or CRC mismatch");else { loaded_bits=a;printf("SDR {\"type\":\"loaded\",\"bits\":%u}\n",(unsigned)a); }return;
+        if(got!=n||esp_rom_crc32_le(0,packed,n)!=b)error("upload length or CRC mismatch");else { loaded_bits=a;output_printf("SDR {\"type\":\"loaded\",\"bits\":%u}\n",(unsigned)a); }return;
     }
     if(sscanf(line,"tx %15s %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNx32 " %c",mode,&a,&b,&c,&d,&e,&token,&extra)==7&&
         (!strcmp(mode,"api")||!strcmp(mode,"ram")||!strcmp(mode,"gate")||!strcmp(mode,"ask"))&&a<=CpuHz&&b>=32&&b<=120&&c>=32&&c<=120&&
         d&&d<=DurationLimitUs&&e<=MaskLimitUs&&(!e||(!strcmp(mode,"gate")||!strcmp(mode,"ask")))&&
         (!e||((uint64_t)d+e-1)/e+1<=trace_capacity)&&token&&token==permit&&loaded_bits) {
-        permit=0;puts("SDR {\"type\":\"tx_starting\"}");fflush(stdout);
+        permit=0;
+        bool starting_accepted=output_puts("SDR {\"type\":\"tx_starting\"}")>=0;
+        bool starting_drained=output_flush();
+        if(!starting_accepted||!starting_drained)return; /* No RF without a drained start boundary. */
         transmit(!strcmp(mode,"api")?Api:!strcmp(mode,"ram")?Ram:!strcmp(mode,"gate")?Gate:Ask,a,b,c,d,e);return;
     }
     error("invalid command, permission, configuration or finite bound");
@@ -312,7 +409,7 @@ static void command(char *line) {
 void app_main(void) {
     esp_log_level_set("*",ESP_LOG_NONE);
     usb_serial_jtag_driver_config_t cfg={.tx_buffer_size=8192,.rx_buffer_size=4096};
-    ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&cfg));usb_serial_jtag_vfs_use_driver();setvbuf(stdout,NULL,_IONBF,0);
+    ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&cfg));
     if(!reserve(16384,512))error("default preallocation failed");
     info();
     char line[160];unsigned used=0;bool overflow=false;

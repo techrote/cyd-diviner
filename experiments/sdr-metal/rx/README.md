@@ -5,7 +5,8 @@ This separate ESP-IDF application captures the native RF dump into its actual
 FFT, FIR, software decimator, PSRAM, network sockets or live-audio dependency.
 Idle boot initializes only the command interface, with no PHY or Wi-Fi startup.
 The explicit `metal init phy` path first powers the owned Wi-Fi/BT MAC-BB domain,
-then calls the pinned SDK's direct `esp_phy_enable(PHY_MODEM_WIFI)` without
+then calls the pinned SDK's direct `esp_phy_enable(PHY_MODEM_WIFI)` and
+`phy_wifi_enable_set(1)` receive-mode API without
 creating a Wi-Fi driver or default event-loop task. Wi-Fi mode NULL remains an explicitly selectable fallback.
 The SDK's own PHY calibration/PLL support remains part of that direct API;
 this does not claim that no SDK support code runs. NVS is not
@@ -18,10 +19,12 @@ Building does not open a port, flash or capture RF.
 SDK: ESP-IDF 5.5.5 commit
 `b774170ff46c393eeb5e495ea37936038d3f4f4f`, checked by build and CMake.
 The private PHY ABI and MMIO layout are explicitly scoped to ESP32-S3.
-Exact unmodified GPL-3.0 ESPARGOS/esp-sdr gain/DC helpers from commit
+GPL-3.0 ESPARGOS/esp-sdr gain/DC helpers from commit
 `3ab3b65bb62f2d9427ee33c2c3b627427e729294` are retained in
 [`vendor/esp-sdr`](vendor/esp-sdr/PROVENANCE.json), with upstream license and
-source hashes. The original small snapshot adapter follows register facts in
+source hashes. Helpers remain byte-identical upstream except the explicitly
+recorded read-only diagnostic getter appended to `rx_gain_verify.c`; original
+apply/check behavior is unchanged. The original small snapshot adapter follows register facts in
 that commit's `main/targets/esp32s3/receiver.c`:
 
 * Dump control `0x60033d5c`: start pulse bit 19, completion bit 18, count low bits.
@@ -70,15 +73,24 @@ resets the modem block. `esp_phy_enable()` enables PHY/common clocks but does
 not perform that MAC-BB power-up.
 
 The corrected direct path therefore owns one domain reference, enables PHY,
-and on leaving disables PHY before releasing that reference. It does not
+enables the SDK receive mode, and on leaving disables that receive mode,
+disables PHY, then releases the domain reference. It does not
 claim ownership of a domain reference created by the Wi-Fi fallback. Info/init
 records expose `direct_power_domain_owned`; info separately records whether
 initialization was attempted. Same-mode initialized requests do not double
 acquire. Idle boot invokes no initialization, so the explicit fallback remains
 reachable after reset. No calibration bypass, watchdog suppression or ad hoc
 BB/IQ/SRAM register change hides the original failure. This source correction
-is evidence-based; physical confirmation requires the separately approved
-new image. The correction does not change the timed snapshot body.
+is evidence-based. The power-only correction subsequently booted and initialized
+on both owned S3 boards, but manual-gain tuning failed for every tested index
+in direct mode while the Wi-Fi-NULL fallback succeeded. The further explicit
+receive-mode call mirrors `esp_adapter.c` in the pinned SDK, whose public PHY
+header documents this API as Wi-Fi RX enable. Its physical effect is pending
+separate image approval and measurement. `direct_rx_enabled` records the void
+API's owned invocation state; it is not independent proof of RF readiness.
+Init/diagnostic records expose enable/disable invocation counters (uint32,
+modulo wrap), and same-mode initialization does not repeat the calls.
+The timed snapshot body remains byte-identical.
 
 ## Build only
 
@@ -104,6 +116,7 @@ terminal `error`; this is a single command loop, not a multiplexed transport.
 ```text
 metal info
 metal temperature
+metal diagnostics
 metal init phy|wifi
 metal tune MHZ FOFS_KHZ GAIN_INDEX
 metal capture ID RATE_HZ SAMPLES REPEATS ARM_DELAY_US GAP_US TIMEOUT_US
@@ -130,10 +143,27 @@ failure count. It does not start RF capture.
 `tune` invalidates retained SRAM data (calibration may reuse the aperture),
 then applies the selected receive LO, signed offset in kHz and calibrated
 manual gain index, then emits type `tune` with `ok` and requested settings.
+It next emits `rx_diagnostics`; `metal diagnostics` can explicitly query the
+same record outside any capture. The `failure_stage` is the last tune decision:
+`not_attempted`, `invalid_arguments`, `maximum_gain_out_of_range`,
+`requested_gain_above_maximum`, `gain_table_code_unavailable`,
+`analog_gain_not_latched` or `ready`; idle/partial initialization reports
+`phy_not_enabled`. No failure is silently converted to a successful capture.
+Read-only fields include the raw AGC maximum/forced register, SYSCON BB config,
+clock/reset, gain-table hook/code availability, expected RF/BB analog words
+and actual PBUS words. These sequential readbacks are not an atomic hardware
+snapshot. They are read only while a known PHY path is enabled; when
+`registers_valid` is false their zero fields are placeholders, not readings.
+No arbitrary register writes were added to repair a failed gain check.
 The default is 2433 MHz, −80 kHz, gain index 40, matching the earlier centering
 experiment. Indices are PHY calibration-table indices, not calibrated dB.
 The numeric tuning API accepts 1–65535 MHz; acceptance is not a supported RF
 band or sensitivity claim. Gain must exist in the actual calibrated table.
+
+A faster repeated-capture mode is a possible later experiment: prepare/verify
+gain once before a finite batch, retain current ownership/canary/timeout checks
+for every snapshot, and report the verification scope explicitly. It is not
+implemented here, and no higher duty cycle is claimed from this proposal.
 
 `capture` and `bench` take nominal `RATE_HZ` exactly 16000000, 40000000 or
 80000000; `SAMPLES` is 1–16380. Other numeric arguments are unsigned 32-bit

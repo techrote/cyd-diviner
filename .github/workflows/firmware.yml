@@ -87,6 +87,9 @@ jobs:
           python experiments/sdr-metal/rx/test_snapshot_host.py --output /tmp/cyd-metal-rx-tests
           python experiments/sdr-metal/rx/test_temperature_host.py --output /tmp/cyd-metal-temperature-tests
           python experiments/sdr-metal/rx/test_init_host.py --output /tmp/cyd-metal-init-tests
+          python experiments/sdr-metal/rx/test_gain_diagnostics_host.py --output /tmp/cyd-metal-gain-tests
+          python experiments/sdr-metal/tx-s3/test_output.py
+          python experiments/sdr-metal/tx-s3/test_output_bounds.py
           python experiments/sdr-metal/rx/test_output_bounds.py
           gcc -std=c11 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr-metal/tx/test_words.c -o /tmp/cyd-metal-tx-words
           /tmp/cyd-metal-tx-words

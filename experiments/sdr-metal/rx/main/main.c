@@ -32,7 +32,8 @@
 
 static bool initialized, last_available;
 static esp_err_t initialization_error;
-static bool direct_phy_enabled, direct_power_domain_owned, initialization_attempted;
+static bool direct_phy_enabled, direct_power_domain_owned, direct_rx_enabled, initialization_attempted;
+static uint32_t direct_rx_enable_invocations, direct_rx_disable_invocations;
 static bool wifi_driver_initialized, default_event_loop_created;
 static esp_err_t wifi_stop_status = INT_MIN, wifi_deinit_status = INT_MIN, event_loop_delete_status = INT_MIN;
 static metal_snapshot_t last_snapshot;
@@ -104,6 +105,9 @@ static bool initialize(bool wifi) {
         if (event_loop_delete_status != ESP_OK) { initialization_error = event_loop_delete_status; return false; }
         default_event_loop_created = false;
     }
+    if (direct_rx_enabled) {
+        phy_wifi_enable_set(0); ++direct_rx_disable_invocations; direct_rx_enabled = false;
+    }
     if (direct_phy_enabled) { esp_phy_disable(PHY_MODEM_WIFI); direct_phy_enabled = false; }
     if (direct_power_domain_owned) { esp_wifi_bt_power_domain_off(); direct_power_domain_owned = false; }
     if (!wifi) {
@@ -114,7 +118,11 @@ static bool initialize(bool wifi) {
          * MAC/BB power-down/isolation needed by startup IQ/DC calibration.
          * This public function is the SDK alias target of esp_wifi_power_domain_on. */
         esp_wifi_bt_power_domain_on(); direct_power_domain_owned = true;
-        esp_phy_enable(PHY_MODEM_WIFI); direct_phy_enabled = true; initialized = true;
+        esp_phy_enable(PHY_MODEM_WIFI); direct_phy_enabled = true;
+        /* Mirror the pinned SDK Wi-Fi adapter's receive-mode lifecycle. This
+         * void API records invocation; analog gain still must verify in tune. */
+        phy_wifi_enable_set(1); ++direct_rx_enable_invocations; direct_rx_enabled = true;
+        initialized = true;
         return true;
     }
     esp_err_t result = esp_event_loop_create_default();
@@ -168,7 +176,7 @@ static void info(void) {
         "\"backend_commit\":\"3ab3b65bb62f2d9427ee33c2c3b627427e729294\","
         "\"mac\":\"%02x%02x%02x%02x%02x%02x\",\"chip_revision\":%u,\"cpu_mhz\":%u,"
         "\"init_mode\":\"%s\",\"initialization_attempted\":%s,\"direct_power_domain_owned\":%s,"
-        "\"direct_enable_api_returns_status\":false,"
+        "\"direct_enable_api_returns_status\":false,\"direct_rx_enabled\":%s,"
         "\"wifi_driver_initialized\":%s,\"default_event_loop_created\":%s,"
         "\"wifi_stop_status\":%d,\"wifi_deinit_status\":%d,\"event_loop_delete_status\":%d,"
         "\"nvs_enabled\":false,\"psram_required\":false,\"initialized\":%s,\"initialization_error_code\":%d,"
@@ -181,10 +189,27 @@ static void info(void) {
         METAL_SOURCE_SHA, METAL_SOURCE_DIGEST, METAL_SDK_SHA, esp_get_idf_version(),
         mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], chip.revision, (unsigned)(esp_clk_cpu_freq() / 1000000),
         init_mode(), initialization_attempted ? "true" : "false", direct_power_domain_owned ? "true" : "false",
+        direct_rx_enabled ? "true" : "false",
         wifi_driver_initialized ? "true" : "false", default_event_loop_created ? "true" : "false",
         wifi_stop_status, wifi_deinit_status, event_loop_delete_status,
         initialized ? "true" : "false", initialization_error, metal_rx_config.mhz, metal_rx_config.offset_khz, metal_rx_config.gain,
         metal_rx_config.ready ? "true" : "false", (unsigned)h.free, (unsigned)h.largest, (unsigned)h.minimum, transfer_failures);
+}
+static void diagnostics(void) {
+    metal_rx_diagnostic_t d;
+    metal_rx_diagnostic(direct_phy_enabled || (initialized && wifi_driver_initialized), &d);
+    (void)line("METAL {\"schema\":1,\"type\":\"rx_diagnostics\",\"registers_valid\":%s,\"failure_stage\":\"%s\","
+        "\"requested_gain\":%u,\"maximum_gain\":%u,\"syscon_bb_cfg\":\"%08" PRIx32 "\","
+        "\"syscon_wifi_clock\":\"%08" PRIx32 "\",\"syscon_wifi_reset\":\"%08" PRIx32 "\",\"agc_raw\":\"%08" PRIx32 "\","
+        "\"gain_hook_ready\":%s,\"gain_code_valid\":%s,\"gain_code\":%u,\"expected_pbus_rf\":%u,\"expected_pbus_bb\":%u,"
+        "\"pbus_rf_raw\":\"%08" PRIx32 "\",\"pbus_bb_raw\":\"%08" PRIx32 "\",\"analog_gain_matches\":%s,"
+        "\"direct_rx_enable_invocations\":%" PRIu32 ",\"direct_rx_disable_invocations\":%" PRIu32 ","
+        "\"scope\":\"outside_capture; sequential_readback_not_atomic; zero_fields_invalid_when_registers_valid_false\"}\n",
+        d.registers_valid ? "true" : "false", d.stage, d.requested_gain, d.maximum_gain, d.syscon_bb_cfg,
+        d.syscon_wifi_clock, d.syscon_wifi_reset, d.agc_raw, d.gain.hook_ready ? "true" : "false",
+        d.gain.code_valid ? "true" : "false", (unsigned)d.gain.code, (unsigned)d.gain.expected_rf,
+        (unsigned)d.gain.expected_bb, d.gain.pbus_rf_raw, d.gain.pbus_bb_raw,
+        d.gain.analog_matches ? "true" : "false", direct_rx_enable_invocations, direct_rx_disable_invocations);
 }
 static bool export_snapshot(const char *id, uint32_t repetition, heap_t before, heap_t after) {
     const metal_snapshot_t *r = &last_snapshot;
@@ -296,9 +321,10 @@ static void command(const char *text) {
     if (count < 2 || strcmp(part[0], "metal")) { error("command"); return; }
     if (count == 2 && !strcmp(part[1], "info")) { info(); return; }
     if (count == 2 && !strcmp(part[1], "temperature")) { temperature(); return; }
+    if (count == 2 && !strcmp(part[1], "diagnostics")) { diagnostics(); return; }
     if (count == 3 && !strcmp(part[1], "init") && (!strcmp(part[2], "phy") || !strcmp(part[2], "wifi"))) {
         bool ok = initialize(!strcmp(part[2], "wifi"));
-        (void)line("METAL {\"schema\":1,\"type\":\"init\",\"ok\":%s,\"requested\":\"%s\",\"actual_mode\":\"%s\",\"error_code\":%d,\"rx_ready\":%s,\"direct_power_domain_owned\":%s}\n", ok ? "true" : "false", part[2], init_mode(), initialization_error, metal_rx_config.ready ? "true" : "false", direct_power_domain_owned ? "true" : "false");
+        (void)line("METAL {\"schema\":1,\"type\":\"init\",\"ok\":%s,\"requested\":\"%s\",\"actual_mode\":\"%s\",\"error_code\":%d,\"rx_ready\":%s,\"direct_power_domain_owned\":%s,\"direct_rx_enabled\":%s,\"direct_rx_enable_invocations\":%" PRIu32 ",\"direct_rx_disable_invocations\":%" PRIu32 "}\n", ok ? "true" : "false", part[2], init_mode(), initialization_error, metal_rx_config.ready ? "true" : "false", direct_power_domain_owned ? "true" : "false", direct_rx_enabled ? "true" : "false", direct_rx_enable_invocations, direct_rx_disable_invocations);
         return;
     }
     if (count == 5 && !strcmp(part[1], "tune")) {
@@ -307,6 +333,7 @@ static void command(const char *text) {
         last_available = false; last_crc = 0;
         bool ok = initialized && metal_rx_tune(mhz, offset, gain);
         (void)line("METAL {\"schema\":1,\"type\":\"tune\",\"ok\":%s,\"frequency_mhz\":%" PRIu32 ",\"offset_khz\":%d,\"manual_gain_index\":%" PRIu32 "}\n", ok ? "true" : "false", mhz, offset, gain);
+        diagnostics();
         return;
     }
     if (count == 9 && (!strcmp(part[1], "capture") || !strcmp(part[1], "bench"))) {

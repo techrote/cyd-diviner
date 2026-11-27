@@ -89,3 +89,26 @@ bool rx_gain_verified_check(unsigned index) {
     _lock_release(&lock);
     return ok || rx_gain_verified_apply(true, index);
 }
+
+/* Local diagnostic addition; original apply/check paths above are unchanged.
+ * Read only, under the same PHY lock, and never called in the capture window. */
+#include "gain_diagnostics.h"
+void metal_gain_diagnostic(unsigned index, metal_gain_diagnostic_t *out) {
+    _lock_t lock = phy_get_lock();
+    _lock_acquire(&lock);
+    *out = (metal_gain_diagnostic_t){0};
+    out->hook_ready = gain_write != 0;
+    out->code_valid = index < WIFI_GAINS && valid[index];
+    out->pbus_rf_raw = REG_READ(0x60006118u);
+    out->pbus_bb_raw = REG_READ(0x6000611cu);
+    if (out->code_valid) {
+        uint16_t code = codes[index];
+        out->code = code;
+        out->expected_rf = 0x180u | (code >> 8);
+        out->expected_bb = ((code & 7u) << 6) | ((code & 8u) << 2) | (code & 0x10u) |
+            ((code & 0x20u) >> 2) | ((code & 0x40u) >> 4) | ((code & 0x80u) >> 6) | ((code >> 8) & 1u);
+        out->analog_matches = ((out->pbus_rf_raw >> 9) & 0x1ffu) == out->expected_rf &&
+            ((out->pbus_bb_raw >> 18) & 0x1ffu) == out->expected_bb;
+    }
+    _lock_release(&lock);
+}

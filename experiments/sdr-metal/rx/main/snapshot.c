@@ -48,7 +48,23 @@ int cmd_parse(char *cmd, char *name, int *argc, char **argv) {
     (void)cmd; (void)name; (void)argc; (void)argv; return -1;
 }
 
+static const char *tune_stage = "not_attempted";
+static unsigned tune_gain;
+void metal_rx_diagnostic(bool phy_enabled, metal_rx_diagnostic_t *out) {
+    *out = (metal_rx_diagnostic_t){.registers_valid = phy_enabled,
+        .stage = phy_enabled ? tune_stage : "phy_not_enabled", .requested_gain = tune_gain};
+    if (!phy_enabled) return;
+    /* Explicit setup observation only; no capture, allocation or serial I/O. */
+    out->syscon_bb_cfg = REG_READ(0x6002600cu);
+    out->syscon_wifi_clock = REG_READ(0x60026014u);
+    out->syscon_wifi_reset = REG_READ(0x60026018u);
+    out->agc_raw = REG_READ(GAIN_REG);
+    out->maximum_gain = (out->agc_raw >> 8) & 127u;
+    metal_gain_diagnostic(tune_gain, &out->gain);
+}
+
 bool metal_rx_tune(unsigned mhz, int offset_khz, unsigned gain) {
+    tune_gain = gain; tune_stage = "invalid_arguments";
     if (!mhz || mhz > UINT16_MAX || gain > 82) return false;
     rx_lo_plan_t plan = rx_lo_plan(mhz);
     int64_t offset = (int64_t)plan.offset_khz + offset_khz;
@@ -67,7 +83,17 @@ bool metal_rx_tune(unsigned mhz, int offset_khz, unsigned gain) {
     rx_lo_select(plan.alternate);
     esp_rom_delay_us(3000);
     unsigned maximum = (REG_READ(GAIN_REG) >> 8) & 127u;
-    if (maximum > 82 || gain > maximum || !rx_gain_verified_apply(true, gain)) return false;
+    tune_stage = "maximum_gain_out_of_range";
+    if (maximum > 82) return false;
+    tune_stage = "requested_gain_above_maximum";
+    if (gain > maximum) return false;
+    if (!rx_gain_verified_apply(true, gain)) {
+        metal_gain_diagnostic_t diagnostic;
+        metal_gain_diagnostic(gain, &diagnostic);
+        tune_stage = !diagnostic.hook_ready || !diagnostic.code_valid ? "gain_table_code_unavailable" : "analog_gain_not_latched";
+        return false;
+    }
+    tune_stage = "ready";
     metal_rx_config = (metal_rx_config_t){.mhz = mhz, .offset_khz = offset_khz, .gain = gain, .ready = true};
     return true;
 }
