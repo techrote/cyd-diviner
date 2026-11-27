@@ -20,10 +20,13 @@ measurements remain **NOT RUN**. Host correctness tests and target compilation
 are different evidence classes. Neither establishes CYD throughput, frame rate,
 temperature rise, audio reliability or wireless performance.
 
-The Windows host sees COM21 as CH340, VID:PID `1A86:7523`. Read-only connection
-attempts observed classic ESP32 ROM output and boot mode `0x13` (application
-boot), rather than download mode. Longer reset timing and a Windows combined
-DTR/RTS change did not enter download mode. See `evidence/hardware-access/`.
+The Windows host sees COM21 as CH340, VID:PID `1A86:7523`. Initial read-only
+connection attempts observed boot mode `0x13` (application boot). Longer reset
+timing and a Windows combined DTR/RTS change did not enter download mode. Owner
+BOOT/reconnect intervention subsequently identified an ESP32-D0WD-V3 revision
+3.1, 4 MB JEDEC flash and disabled flash encryption/secure boot. A full backup
+was verified before the separately authorized app-only profiling flash. See
+`evidence/hardware-access/` and `evidence/flash-plan.json`.
 The ROM boot log reports DIO and clock divisor 2; this does not identify PCB
 revision, flash capacity, PSRAM or the configured running application.
 
@@ -122,7 +125,7 @@ each other's build output. Host replay is a functionality/correctness check.
 | USB PCM | Target queue occupancy/drop counters and write timing; host CRC/sequence validation, raw bytes and arrival timing. Host buffering is not target scheduling. Stream-edge loss is unknown. |
 | CPU | Per-core 1 kHz tick samples classify interrupted task versus IDLE, with coherent snapshots and hook-validity flags. Interrupt execution is not separately attributed; sampling/aliasing limits apply. Invalid hooks produce null utilization. |
 | Memory | Free heap, boot-global minimum, largest allocatable block and audio/main stack high-water bytes. The minimum is not reset at run start. Kernel workspace and active context bytes are recorded separately. |
-| Temperature | Raw classic ESP32 ROM sensor value and `(raw-32)/1.8`, explicitly uncalibrated. Not an external/ambient measurement or calibrated die-temperature claim. |
+| Temperature | Raw undocumented SDK RTC-library indication and `(raw-32)/1.8`, explicitly uncalibrated. The primary image retains a legacy ROM method tag; the map resolves the linked RTC-library function. No calibrated die/ambient temperature claim. |
 | Radio | Isolated Wi-Fi station, BLE controller or ESP-NOW initialization without association, scanning, peers or traffic. Measures local resource/workload costs only. |
 
 The fixed 480-entry sample ring retains 1 Hz CPU/memory/temperature readings;
@@ -189,3 +192,9 @@ Keep missing bounds explicit when reporting to VIBEWARE #8/#9.
 
 No merge or production promotion is part of this mission. The PR remains
 **Draft/HOLD** pending owner review and physical evidence.
+
+The separately identified `cyd-profile-events` supplement adds bounded legacy
+I2S driver-event collection. It reports free-TX-buffer-queue-full indications,
+DMA descriptor faults and queue/drain observations, while retaining unknown
+analog gap and exact notification-loss counts. Its observer overhead and
+drain-time window assignment are explicit. See [method notes](../evidence/method-notes.md).

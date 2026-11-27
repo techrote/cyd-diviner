@@ -3,3 +3,6 @@
 *.wav
 compile_commands.json
 __pycache__/
+# Raw physical runs are delivered as checksummed capture archives, with compact
+# published summaries and figures kept in separate evidence directories.
+evidence/physical/

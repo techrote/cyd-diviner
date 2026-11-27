@@ -126,8 +126,11 @@ requires a completed >=360-second target window, >=360 seconds of retained sampl
 coverage, successful CPU hooks, and >=95% weighted tick-sampled busy time on both
 cores before setting `near_100_percent_confirmed`. Inspect the measured busy
 distribution and raw tick counts as well. Temperature is recorded once per second
-using the firmware-reported method. Classic ESP32 ROM readings are uncalibrated
-sensor indications; do not present them as accurate die or ambient temperature.
+using the firmware-reported method. The primary image's `ESP32_ROM` method tag is
+legacy wording: its linked implementation is in SDK `librtc.a` / `rtc_analog.o`,
+not established as mask ROM. This undocumented API gives uncalibrated sensor
+indications with unsupported temperature accuracy; do not present them as accurate
+die or ambient temperature.
 
 Every output directory contains:
 
@@ -160,6 +163,7 @@ Offline CSV regeneration and a compact receipt check:
 python tools/perf/capture.py analyze evidence/full-01/results.json
 python tools/perf/capture.py decode-pcm evidence/full-01/rNNN_R-pcm.bin
 python tools/perf/summarize.py evidence/full-01/results.json
+python tools/perf/report.py evidence/full-01/results.json --label full-01
 ```
 
 The summary pools actual kernel/SPI samples and frame/audio histogram bins across
@@ -169,6 +173,23 @@ offload candidates only. The input/state transfer size, remote computation and
 actual wireless goodput/RTT must also be measured before claiming a benefit. The
 summary records the corresponding break-even formula without supplying invented
 link performance.
+
+`report.py` produces editable Markdown beside the results, or at `--output PATH`.
+It links the capture artifacts, includes exact observation counts/repetitions,
+scene/heap/CPU summaries, scheduling tails, PCM integrity, stress sensor span,
+actual scene-allocation receipts and explicit missing measurements. It labels
+preflight captures and incomplete plans, and embeds existing `figures/*.png` or
+`plots/*.png` without generating performance data. Summary pooling splits any
+differing requested settings, duration, warmup, histogram mode or actual scene
+allocation/settings receipts into separate scope IDs. Host receive timestamps
+do not split otherwise matching repetitions.
+
+The human report tightens histogram percentile bounds to the lesser of the raw
+bucket upper bound and the exact observed maximum. This remains a bound, not an
+exact percentile; raw target records and summary CSVs keep their bucket values.
+Its touch table reports measured XPT polling-call count per target second and
+control-dispatch invocation durations, including no-contact samples. These do
+not establish physical touch latency or count distinct contacts.
 
 Read back the physical display outside all measurement and PCM windows:
 
