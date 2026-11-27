@@ -19,12 +19,13 @@
 
 namespace perf_ble {
 namespace {
-constexpr uint16_t AppId = 0xD17E;
+constexpr uint16_t AppId = 0x517E;
+static_assert(AppId <= ESP_APP_ID_MAX, "GATT application ID must fit the pinned SDK range");
 constexpr uint64_t SetupTimeoutUs = 20000000;
 enum class Kind : uint8_t {
     ServerRegistered, AttributesCreated, ServiceStarted, Connected, Disconnected,
     Mtu, AdvDataReady, WhitelistReady, AdvStarted, ClientRegistered, ClientOpened,
-    SearchResult, SearchDone, NotifyRegistered, DescriptorWritten, WriteFailed,
+    ServiceCacheReady, SearchResult, SearchDone, NotifyRegistered, DescriptorWritten, WriteFailed,
     Congestion
 };
 struct Event {
@@ -51,6 +52,7 @@ uint16_t connection = 0, handles[4]{}, serviceStart = 0, serviceEnd = 0;
 uint16_t valueHandle = 0, descriptorHandle = 0;
 bool ownController = false, ownBluedroid = false, serviceReady = false;
 bool advDataReady = false, whitelistReady = false, advertisingRequested = false;
+bool mtuExchanged = false, serviceCacheReady = false, serviceSearchRequested = false;
 uint64_t setupStarted = 0;
 uint8_t serviceBytes[16] = {0x01,0x8d,0xe7,0xa8,0x25,0xb7,0x4b,0x8e,0x0e,0x4c,0x68,0x4f,0xe1,0x72,0xe8,0xc1};
 uint8_t characteristicBytes[16] = {0x02,0x8d,0xe7,0xa8,0x25,0xb7,0x4b,0x8e,0x0e,0x4c,0x68,0x4f,0xe1,0x72,0xe8,0xc1};
@@ -132,6 +134,8 @@ void clientCallback(esp_gattc_cb_event_t kind, esp_gatt_if_t interface, esp_ble_
         event.kind = Kind::Disconnected; event.conn = p->disconnect.conn_id; event.status = p->disconnect.reason; break;
     case ESP_GATTC_CFG_MTU_EVT:
         event.kind = Kind::Mtu; event.conn = p->cfg_mtu.conn_id; event.status = p->cfg_mtu.status; event.a = p->cfg_mtu.mtu; break;
+    case ESP_GATTC_DIS_SRVC_CMPL_EVT:
+        event.kind = Kind::ServiceCacheReady; event.conn = p->dis_srvc_cmpl.conn_id; event.status = p->dis_srvc_cmpl.status; break;
     case ESP_GATTC_SEARCH_RES_EVT:
         event.kind = Kind::SearchResult; event.conn = p->search_res.conn_id;
         event.a = p->search_res.start_handle; event.b = p->search_res.end_handle; break;
@@ -208,6 +212,14 @@ void discoverCharacteristic() {
     descriptorHandle = descriptor.handle; serviceReady = true;
     checked(esp_ble_gattc_register_for_notify(gattIf, expectedPeer, valueHandle), "notification_registration_request");
 }
+void maybeSearchService() {
+    // The pinned IDF performs automatic cache discovery on connection. Its
+    // example searches only after DIS_SRVC_CMPL; also finish MTU exchange
+    // before submitting another GATT procedure. Call exactly once per setup.
+    if (state.server || !state.connected || !mtuExchanged || !serviceCacheReady || serviceSearchRequested) return;
+    auto requested = uuid(serviceBytes);
+    serviceSearchRequested = checked(esp_ble_gattc_search_service(gattIf, connection, &requested), "known_service_discovery_request");
+}
 void process(const Event &event) {
     if (event.kind == Kind::WriteFailed) { ++state.tx_failures; state.last_error = event.status; return; }
     if (event.status && event.kind != Kind::Disconnected) { failure(event.status, "asynchronous_GATT_or_GAP_status"); return; }
@@ -238,14 +250,17 @@ void process(const Event &event) {
         requestConnectionParameters();
         if (!state.server) {
             checked(esp_ble_gattc_send_mtu_req(gattIf, connection), "MTU_exchange_request");
-            auto requested = uuid(serviceBytes);
-            checked(esp_ble_gattc_search_service(gattIf, connection, &requested), "known_service_discovery_request");
         }
         break;
     case Kind::Disconnected:
         if (event.conn == connection) { state.connected = false; state.ready = false; state.notifications_enabled = false; state.mtu = 23; state.stage = "disconnected"; state.last_error = event.status; }
         break;
-    case Kind::Mtu: if (event.conn == connection) state.mtu = event.a; break;
+    case Kind::Mtu:
+        if (event.conn == connection) { state.mtu = event.a; mtuExchanged = true; maybeSearchService(); }
+        break;
+    case Kind::ServiceCacheReady:
+        if (event.conn == connection) { serviceCacheReady = true; maybeSearchService(); }
+        break;
     case Kind::SearchResult: if (event.conn == connection) { serviceStart = event.a; serviceEnd = event.b; } break;
     case Kind::SearchDone: if (event.conn == connection) discoverCharacteristic(); break;
     case Kind::NotifyRegistered:
@@ -275,6 +290,7 @@ bool begin(bool server, const uint8_t peerMac[6], RxFn receive) {
     xQueueReset(events); xQueueReset(received); rxDrops.store(0); eventDrops.store(0);
     gattIf = ESP_GATT_IF_NONE; connection = valueHandle = descriptorHandle = serviceStart = serviceEnd = 0;
     serviceReady = advDataReady = whitelistReady = advertisingRequested = false;
+    mtuExchanged = serviceCacheReady = serviceSearchRequested = false;
     esp_bt_controller_config_t configuration = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
 #if CONFIG_IDF_TARGET_ESP32
     configuration.mode = ESP_BT_MODE_BLE;
