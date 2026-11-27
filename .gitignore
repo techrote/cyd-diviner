@@ -6,3 +6,6 @@ __pycache__/
 # Raw physical runs are delivered as checksummed capture archives, with compact
 # published summaries and figures kept in separate evidence directories.
 evidence/physical/
+# Local SDK configuration generated for the isolated SDR transmitter.
+/experiments/sdr/tx/sdkconfig
+/experiments/sdr/tx/sdkconfig.old
