@@ -357,6 +357,10 @@ def ready(endpoint: Endpoint, timeout=35) -> dict:
 def configure(topology: str, endpoints: dict[str, Endpoint], private: dict, plan: dict) -> dict:
     for endpoint in endpoints.values():
         endpoint.request("perf link stop")
+    # Radio metadata uses a bounded formatter allocation. Release the previous
+    # workload before topology setup, never during an observed profile window.
+    endpoints["cyd"].request("perf scene menu")
+    for endpoint in endpoints.values():
         endpoint.request("perf link mode off 0")
     cyd, peer = endpoints["cyd"], endpoints["peer"]
     channel = plan.get("direct_channel", 6)
@@ -468,11 +472,14 @@ def execute_run(run: dict, endpoints: dict[str, Endpoint], infos: dict, plan: di
                 guard: SecretGuard, endpoint_metadata: dict) -> None:
     case, run_id = run["settings"], run["run_id"]
     cyd, peer = endpoints["cyd"], endpoints["peer"]
-    for endpoint in endpoints.values():
-        endpoint.request("perf link stop")
+    run["prewarm_setup_scope"] = "outside profile window; temporary menu releases DSP before connection metadata"
+    run["prewarm_setup_target"] = {name: endpoint.request("perf link stop") for name, endpoint in endpoints.items()}
+    run["prewarm_setup_target"]["cyd"] += scene(cyd, "menu", plan.get("seed", 23063))
+    # The approved firmware retains complete=true after stop/arm. Idle clears
+    # that flag without starting traffic, allowing TCP connection polling before
+    # the canonical profiler run. Serve/arm below establish the actual session.
+    run["prewarm_setup_target"]["cyd"] += cyd.request("perf link idle")
     authorize_pair(endpoints, infos, plan.get("port", 41832), guard, case["topology"])
-    run["setup_target"] = scene(cyd, case["local_workload"], plan.get("seed", 23063))
-    cyd.wait(0.25)
     cursors = {name: len(endpoint.records) for name, endpoint in endpoints.items()}
     run["target_record_start_indices"] = cursors
     if case["pattern"] != "none" or case["transport"] == "ble":
@@ -484,6 +491,11 @@ def execute_run(run: dict, endpoints: dict[str, Endpoint], infos: dict, plan: di
                                                  minimum_ble_mtu=case["payload_bytes"] + 43 if case["transport"] == "ble" else 0)
         if case["pattern"] == "none":
             cyd.request("perf link idle")
+    # Keep requested-scene receipts separate from temporary menu setup. Heavy
+    # scene allocations happen only after readiness metadata has been captured.
+    run["setup_target"] = scene(cyd, case["local_workload"], plan.get("seed", 23063))
+    cyd.wait(0.25)
+    run["profile_record_start_index"] = len(cyd.records)
     warmup, duration = plan.get("warmup_ms", 2000), plan.get("duration_ms", 10000)
     cyd.request(f"perf run {run_id} {warmup} {duration}", {"run"}, run_id=run_id)
     deadline = time.perf_counter() + (warmup + duration + plan.get("reply_drain_ms", 700)) / 1000
@@ -491,15 +503,17 @@ def execute_run(run: dict, endpoints: dict[str, Endpoint], infos: dict, plan: di
         for endpoint in endpoints.values():
             endpoint.read()
     cyd.send("perf export")
-    profile = cyd.until({"end"}, cursors["cyd"], timeout=30, run_id=run_id)
+    profile = cyd.until({"end"}, run["profile_record_start_index"], timeout=30, run_id=run_id)
     end = validate_end(profile, run_id, duration)
     info = next(record for record in endpoint_metadata["cyd"]["target_info"] if record["type"] == "info")
     run["cyd_profile"] = interpreted_records(profile, info)
     run["profile_status"] = "MEASURED"
     run["frames_per_second"] = end["frames"] * 1e6 / end["elapsed_us"]
+    run["post_window_cleanup_scope"] = "after profile export and reply drain; link counters stopped before DSP release"
+    run["post_window_cleanup_target"] = {name: endpoint.request("perf link stop") for name, endpoint in endpoints.items()}
+    run["post_window_cleanup_target"]["cyd"] += cyd.request("perf scene menu")
+    run["post_info_scope"] = "postwindow stopped services and released DSP; not workload heap/headroom"
     if case["pattern"] != "none":
-        for endpoint in endpoints.values():
-            endpoint.request("perf link stop")
         for name, endpoint in endpoints.items():
             endpoint.send("perf link export")
             exported = endpoint.until({"link_summary"}, cursors[name], timeout=20, run_id=run_id)
@@ -606,6 +620,14 @@ def capture(args) -> int:
                                     endpoint.request("perf stop", timeout=2)
                             except Exception:
                                 pass
+                        # Failed heavy workloads can also exhaust the metadata
+                        # formatter. Preserve the failure and release DSP before
+                        # diagnostics or the next independent case.
+                        try:
+                            run["failure_cleanup_scope"] = "outside failed/finished profile window; stopped links then DSP release"
+                            run["failure_cleanup_target"] = endpoints["cyd"].request("perf scene menu", timeout=2)
+                        except Exception:
+                            pass
                         run["failure_info"] = {}
                         for name, endpoint in endpoints.items():
                             try:

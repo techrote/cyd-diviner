@@ -15,6 +15,8 @@ from link_capture import capture, default_plan, derive_link
 class LinkFirmware:
     fail_first_arm = False
     failed = False
+    strict_control_phases = False
+    commands = []
 
     def __init__(self, **_):
         self.chunks = []
@@ -25,6 +27,8 @@ class LinkFirmware:
         self.run_id = "none"
         self.duration = 1
         self.warmup = 0
+        self.complete = True
+        self.heavy = False
 
     def open(self):
         pass
@@ -48,16 +52,21 @@ class LinkFirmware:
 
     def write(self, data):
         command = data.decode().strip().split()
+        LinkFirmware.commands.append((self.port, " ".join(command)))
         if command[:2] == ["perf", "info"]:
             cyd = self.port == "COM21"
             self.emit({"type": "info", "source_sha": ("a" if cyd else "b") * 40,
                        "source_digest": ("c" if cyd else "d") * 64, "profile": "cyd-link" if cyd else "s3-peer"})
         elif command[:3] == ["perf", "link", "info"]:
+            if self.strict_control_phases and self.heavy:
+                self.emit({"type": "error", "message": "fixture: bounded telemetry allocation exhausted under DSP"})
+                return len(data)
             self.emit({"type": "link_info", "mode": self.mode, "mode_ready": self.mode != "off",
                        "sta_mac": "020000000001" if self.port == "COM21" else "020000000002",
                        "bt_mac": "020000000003" if self.port == "COM21" else "020000000004",
                        "ip": "192.168.4.2" if self.port == "COM21" else "192.168.4.1", "actual_channel": 6,
-                       "tcp_connected": True, "ble_connected": True, "ble_ready": True, "ble_compiled": True,
+                       "tcp_connected": (self.reported_role == "responder" or not self.complete) if self.strict_control_phases else True,
+                       "ble_connected": True, "ble_ready": True, "ble_compiled": True,
                        "ble_mtu": 247, "ble_actual_payload_limit": 200})
         elif command[:3] == ["perf", "link", "mode"]:
             self.mode = command[3]
@@ -78,6 +87,7 @@ class LinkFirmware:
             self.run_id, self.warmup, self.duration = command[2], int(command[3]), int(command[4])
             self.emit({"type": "run", "run_id": self.run_id})
         elif command == ["perf", "export"]:
+            self.complete = True
             bins = [0] * 32
             bins[4] = 1
             for name in METRIC_NAMES:
@@ -87,6 +97,9 @@ class LinkFirmware:
             self.emit({"type": "end", "run_id": self.run_id, "complete": True, "elapsed_us": self.duration * 1000,
                        "frames": 1, "samples": 0, "samples_dropped": 0})
         elif command[:3] == ["perf", "link", "export"]:
+            if self.strict_control_phases and self.heavy:
+                self.emit({"type": "error", "message": "fixture: bounded telemetry allocation exhausted under DSP"})
+                return len(data)
             initiator = self.reported_role == "initiator"
             bins = [0] * 32
             bins[4] = 8 if initiator and self.pattern == "rtt" else 0
@@ -97,7 +110,18 @@ class LinkFirmware:
                        "rtt_min_us": 10, "rtt_max_us": 10, "rtt_sum_us": 80, "rtt_histogram_counts": bins,
                        "wrong_token": 0})
         elif command[:2] == ["perf", "link"]:
+            if command[2] == "idle":
+                self.complete = False
             self.ack(command[2])
+        elif command[:2] == ["perf", "scene"]:
+            if command[2] == "menu":
+                self.heavy = False
+            self.emit({"type": "scene_settings", "scene": command[2]})
+            self.emit({"type": "ack", "action": "fixture_control", "ok": True})
+        elif command[:2] == ["perf", "combined"]:
+            self.heavy = True
+            self.emit({"type": "scene_settings", "scene": command[2], "delay_allocated": True})
+            self.emit({"type": "ack", "action": "fixture_control", "ok": True})
         else:
             self.emit({"type": "ack", "action": "fixture_control", "ok": True})
         return len(data)
@@ -139,6 +163,47 @@ def arguments(root, fail_first=False):
 
 
 class LinkMissionTests(unittest.TestCase):
+    def test_tcp_readiness_and_metadata_do_not_require_heavy_dsp_heap(self):
+        """Model retained complete=true and a formatter that fails under DSP.
+
+        A repeated completed TCP case must clear completion before readiness,
+        establish its connection in menu, then release DSP only after profiling.
+        These fixtures check control/correlation, not target performance.
+        """
+        with tempfile.TemporaryDirectory() as temporary:
+            args = arguments(pathlib.Path(temporary))
+            plan = json.loads(args.plan.read_text())
+            case = next(case for case in default_plan()["workloads"] if case["topology"] == "direct_softap"
+                        and case["mode"] == "tcp_goodput" and case["local_workload"] == "full_gate_drone")
+            plan.update(workloads=[case], repetitions=2)
+            args.plan.write_text(json.dumps(plan))
+            LinkFirmware.fail_first_arm = False
+            LinkFirmware.strict_control_phases, LinkFirmware.commands = True, []
+            try:
+                with mock.patch.dict("sys.modules", {"serial": mock.Mock(Serial=LinkFirmware)}), mock.patch("link_capture.time.perf_counter", Clock()):
+                    self.assertEqual(capture(args), 0)
+            finally:
+                LinkFirmware.strict_control_phases = False
+            result = json.loads((args.output / "results.json").read_text())
+            self.assertEqual(len(result["runs"]), 2)
+            for run in result["runs"]:
+                self.assertEqual(run["status"], "MEASURED")
+                self.assertEqual(run["peer_link"][-1]["run_id"], run["run_id"])
+                self.assertEqual(run["peer_link"][-1]["rx_unique_packets"], 8)
+                self.assertTrue(run["connection_info"]["cyd"]["tcp_connected"])
+                self.assertTrue(any(record.get("delay_allocated") for record in run["setup_target"]))
+                self.assertFalse(any(record.get("delay_allocated") for record in run["prewarm_setup_target"]["cyd"]))
+                self.assertEqual([record["scene"] for record in run["post_window_cleanup_target"]["cyd"]
+                                  if record["type"] == "scene_settings"], ["menu"])
+                self.assertIn("not workload heap", run["post_info_scope"])
+                self.assertFalse(any(record["type"] == "scene_settings" for record in run["cyd_profile"]))
+            commands = [command for endpoint, command in LinkFirmware.commands if endpoint == "COM21"]
+            for index, command in enumerate(commands):
+                if command.startswith("perf link arm "):
+                    self.assertLess(commands[:index].index("perf link idle"), index)
+                if command == "perf link export":
+                    self.assertEqual(commands[index - 1], "perf scene menu")
+
     def test_dual_board_protocol_and_failed_case_continuation(self):
         for fail_first in (False, True):
             with tempfile.TemporaryDirectory() as temporary:
