@@ -183,7 +183,9 @@ struct Reader {
         int pl = pendLen.load(std::memory_order_acquire);
         if (pl >= 0) {
             start(pend, pl);
-            pendLen.store(-1, std::memory_order_relaxed);
+            // clear only the post we took: if the UI published a newer line
+            // during the copy, leave it for the next sample instead of losing it
+            pendLen.compare_exchange_strong(pl, -1, std::memory_order_acq_rel);
         }
         if (wait > 0) { --wait; return; }
         if (!len) return;
