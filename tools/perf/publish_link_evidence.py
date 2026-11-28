@@ -50,6 +50,7 @@ def publish(capture, output, archive):
     href = pathlib.Path(os.path.relpath(archive, output)).as_posix()
     text = report(analysis, hashlib.sha256(payload).hexdigest(), href)
     text = text.replace("[Raw structured source](" + href + ")", "[Raw capture archive](" + href + ") (member `" + prefix + "/results.json`)")
+    text = text.replace("[analysis manifest](link-analysis-manifest.json)", "[publication manifest](manifest.json)")
     text += ("\n## Publication provenance\n\nExtract the raw archive into `evidence/`, preserving its `physical/` prefix. "
              "The publication verifies every capture-manifest member against the ZIP and preserves failed statuses. "
              "`manifest.json` pins archive, source and derived-output hashes.\n")
