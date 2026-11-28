@@ -1,0 +1,134 @@
+{
+  "schema": "cyd-sdr-metal-stimuli/1",
+  "evidence_class": "GENERATED_STIMULUS_NOT_RF_MEASUREMENT",
+  "utc": "2026-11-28T00:06:36.043966+00:00",
+  "emitter_sha256": "09c500232d4046ac6021dfcb8e83c998ff96846296abcc583ef62ace176b8f28",
+  "emitter_source_commit": "a036c04caca2bcc295e0bd5439579c82fcdc61d3",
+  "repeat_scope": "32frame deterministic finite ring, repeated seq0..31; reference/boxcarPCM digital only; no ADC/DAC or live source proof",
+  "records": [
+    {
+      "prefix": "48000-4ch-osr16",
+      "metadata": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 48000,
+        "effective_audio_rate_hz_at_requested_baud": 48000,
+        "channels": 4,
+        "oversample": 16,
+        "payload_bits": 256,
+        "baud_requested": 4416000,
+        "baud_required_for_source_rate": 4416000,
+        "frame_count": 32,
+        "frame_symbols": 368,
+        "symbols_total": 11776,
+        "packed_bytes": 1472,
+        "pcm_frames": 128,
+        "pcm_bytes": 1024,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "command": [
+        "wsl",
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/sdr-model-test-metal",
+        "--emit",
+        "/mnt/c/cyd-diviner/perf-characterisation/evidence/sdr-metal-fast-stimuli/48000-4ch-osr16",
+        "48000",
+        "4",
+        "16",
+        "256",
+        "4416000",
+        "32",
+        "23063",
+        "1"
+      ],
+      "files": {
+        "48000-4ch-osr16-boxcar.pcm": {
+          "bytes": 1024,
+          "sha256": "fd44386e1ae616b0c6a6f96d23200709c6ecfe6cca613b7d8881cc9fec63d5a2"
+        },
+        "48000-4ch-osr16-emitter-stderr.log": {
+          "bytes": 162,
+          "sha256": "9003d8318131da1694829d861910294369cc644f2f4c6329092ab9d17a7593d8"
+        },
+        "48000-4ch-osr16-reference.pcm": {
+          "bytes": 1024,
+          "sha256": "eca2f35bbaf1de5ff5d55912bdaa768cd07320107890ba7a6fb157935ab66e65"
+        },
+        "48000-4ch-osr16-symbols.bits": {
+          "bytes": 1472,
+          "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+        },
+        "48000-4ch-osr16.json": {
+          "bytes": 626,
+          "sha256": "653abeb48093d7ef8cef37c97f9758ed6a7a9cecf657590f7b2367eebcd3663a"
+        }
+      }
+    },
+    {
+      "prefix": "48000-4ch-osr32",
+      "metadata": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 48000,
+        "effective_audio_rate_hz_at_requested_baud": 48000,
+        "channels": 4,
+        "oversample": 32,
+        "payload_bits": 256,
+        "baud_requested": 8832000,
+        "baud_required_for_source_rate": 8832000,
+        "frame_count": 32,
+        "frame_symbols": 368,
+        "symbols_total": 11776,
+        "packed_bytes": 1472,
+        "pcm_frames": 64,
+        "pcm_bytes": 512,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false
+      },
+      "command": [
+        "wsl",
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/sdr-model-test-metal",
+        "--emit",
+        "/mnt/c/cyd-diviner/perf-characterisation/evidence/sdr-metal-fast-stimuli/48000-4ch-osr32",
+        "48000",
+        "4",
+        "32",
+        "256",
+        "8832000",
+        "32",
+        "23063",
+        "1"
+      ],
+      "files": {
+        "48000-4ch-osr32-boxcar.pcm": {
+          "bytes": 512,
+          "sha256": "26ef337fdc05c188f5e22c33469f4b68042b6746f32ae3c12e024126e3975561"
+        },
+        "48000-4ch-osr32-emitter-stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "48000-4ch-osr32-reference.pcm": {
+          "bytes": 512,
+          "sha256": "645c3bb62fcfadef4defe18993e731eff74a83485b7b0139df4e4e56cbe684cd"
+        },
+        "48000-4ch-osr32-symbols.bits": {
+          "bytes": 1472,
+          "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+        },
+        "48000-4ch-osr32.json": {
+          "bytes": 624,
+          "sha256": "866edff103e937fa1a477ff313eb0fd4d732bb188d7d7a5ccea7c31b609dea84"
+        }
+      }
+    }
+  ]
+}

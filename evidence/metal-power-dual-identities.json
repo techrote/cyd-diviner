@@ -1,0 +1,42 @@
+{
+  "schema": "cyd-sdr-metal-dual-identities/1",
+  "tx": {
+    "board": "Owner new S3 TX, former COM14",
+    "port": "COM13",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\power\\tx\\firmware.bin",
+    "firmware_sha256": "d04e2792b42f53412b1d7e98eb2a1f52c5bc1fa5c22a9d3092498e8ddf5cdd45",
+    "expected_info": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+      "mac": "1c2904becc48",
+      "tx_source_digest": "0e97bf864ba948d101489b0666bf14ea7a14b6493cc105ff45c188ab7ae0787e"
+    }
+  },
+  "rx": {
+    "board": "Owner first S3, different brand",
+    "port": "COM22",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\power\\rx\\firmware.bin",
+    "firmware_sha256": "468c2187cc447510561038212539fdbeab3a95298024d412c13db2e6b2d85e7e",
+    "expected_info": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+      "mac": "1c2904bec3a0",
+      "source_digest": "d4405afd6fe2fea726fe40a7180df46758f87ad3b59b5c13d2e29c7ea0c4a72e"
+    }
+  },
+  "rx2": {
+    "board": "Owner second S3, same brand as TX",
+    "port": "COM23",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\power\\rx\\firmware.bin",
+    "firmware_sha256": "468c2187cc447510561038212539fdbeab3a95298024d412c13db2e6b2d85e7e",
+    "expected_info": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+      "mac": "1c2904bec3d8",
+      "source_digest": "d4405afd6fe2fea726fe40a7180df46758f87ad3b59b5c13d2e29c7ea0c4a72e"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "cyd-perf-metal-owner-amendment/1",
+  "utc": "2026-11-27T22:42:36.462567+00:00",
+  "original_review_sha256": "151766134d23dd184a37a7adcdc87535143f1ee3730128f9326a09838123e47a",
+  "authorization": "1 authorize. But I have just connected another ESP32S3 identical to the previous one. Use this new ESP32S3 on COM14 as the TX. The earliest ESP32S3 on COM22 is from a different brand. Make both earlier ESP32S3s RX and see if there is a difference.",
+  "targets": {
+    "tx": {
+      "owner_application_port": "COM14",
+      "identified_download_port": "COM13",
+      "mac": "1c:29:04:be:cc:48",
+      "profile": "s3-sdr-metal-tx",
+      "image_sha256": "4b4f85d35ef5e7baec46827efcf66b00a21668752163afd25ec25faafb12ec41",
+      "backup_status": "In progress; must verify before flash"
+    },
+    "rx": {
+      "port": "COM22",
+      "mac": "1c:29:04:be:c3:a0",
+      "owner_brand_context": "Earlier S3, different brand from COM23 and new TX",
+      "profile": "s3-metal-snapshot",
+      "image_sha256": "0ca029ca409ad1d09ab06a44fb8eba3df5863c867ec4ef74b73fc979f894f7e9"
+    },
+    "rx2": {
+      "port": "COM23",
+      "mac": "1c:29:04:be:c3:d8",
+      "owner_brand_context": "Same brand/model as new TX, exact commercial model not independently established",
+      "profile": "s3-metal-snapshot",
+      "image_sha256": "0ca029ca409ad1d09ab06a44fb8eba3df5863c867ec4ef74b73fc979f894f7e9"
+    }
+  },
+  "comparison": "Both receivers observe the same finite TX exposure; independent clocks and unspecified placement/antenna/power remain limitations.",
+  "restoration": "COM22 and COM23 return to already approved kernel/audio image after SDR tests. New TX retains the requested TX role; its original full-flash backup will be retained privately."
+}

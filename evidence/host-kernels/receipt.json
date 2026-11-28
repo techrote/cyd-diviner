@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "evidence_class": "host_replay",
+  "utc": "2026-11-27T17:33:40.776545+00:00",
+  "source_sha": "bb9072c867d5b606a3f6e80aabffabf7e1aa1ed7",
+  "source_digest": "01e1208cdc17f748d3b25b47c6f8ed48b24abdbaab3adb43d55e339617a63d84",
+  "source_dirty": true,
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "commands": [
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wconversion",
+        "-Werror",
+        "-I",
+        "src",
+        "src/perf_kernels.cpp",
+        "tools/perf/kernels_host.cpp",
+        "-O2",
+        "-o",
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_host"
+      ],
+      "returncode": 0,
+      "log_prefix": "compile"
+    },
+    {
+      "argv": [
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_host",
+        "--selftest"
+      ],
+      "returncode": 0,
+      "log_prefix": "repetition-1"
+    },
+    {
+      "argv": [
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_host",
+        "--selftest"
+      ],
+      "returncode": 0,
+      "log_prefix": "repetition-2"
+    },
+    {
+      "argv": [
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_host",
+        "--selftest"
+      ],
+      "returncode": 0,
+      "log_prefix": "repetition-3"
+    },
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wconversion",
+        "-Werror",
+        "-I",
+        "src",
+        "src/perf_kernels.cpp",
+        "tools/perf/kernels_host.cpp",
+        "-O1",
+        "-g",
+        "-fsanitize=undefined,address",
+        "-fno-sanitize-recover=all",
+        "-o",
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_sanitized"
+      ],
+      "returncode": 0,
+      "log_prefix": "compile-sanitized"
+    },
+    {
+      "argv": [
+        "/mnt/c/cyd-diviner/perf-characterisation/.pio/perf-host/kernels_sanitized",
+        "--selftest"
+      ],
+      "returncode": 0,
+      "log_prefix": "sanitized"
+    }
+  ],
+  "limitations": [
+    "Host timings are not target timings and imply no ESP32/S3/C3 throughput.",
+    "Float checksum equality across architectures is not required; numeric error is checked separately.",
+    "DSP equivalence is checked over one fresh 128/512 sample block; long-term model divergence remains measurable.",
+    "Working bytes describe selected context; allocated common workspace is larger."
+  ],
+  "valid": true
+}

@@ -1,0 +1,4 @@
+{"event": "open", "host_elapsed_s": 0.015639099990949035, "utc": "2026-11-28T00:42:32.060785+00:00", "port": "COM13", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.015772400016430765, "utc": "2026-11-28T00:42:32.060785+00:00", "command": "info"}
+{"event": "rx", "host_elapsed_s": 0.01898649998474866, "utc": "2026-11-28T00:42:32.063796+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.01912900002207607, "utc": "2026-11-28T00:42:32.063796+00:00", "offset": 1, "bytes": 2422}

@@ -1,0 +1,27 @@
+{
+  "schema": "cyd-sdr-metal-identities/1",
+  "tx": {
+    "port": "COM22",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\tx\\firmware.bin",
+    "firmware_sha256": "4b4f85d35ef5e7baec46827efcf66b00a21668752163afd25ec25faafb12ec41",
+    "expected_info": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "9d002bf916e3c8c8a4b685ff1c0079754d6f1dba",
+      "mac": "1c2904bec3a0",
+      "tx_source_digest": "86c60cda1484239ece3a659666eb77bc7ec3ee906f0d18369a04cd030f6a31ad"
+    }
+  },
+  "rx": {
+    "port": "COM23",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\rx\\firmware.bin",
+    "firmware_sha256": "0ca029ca409ad1d09ab06a44fb8eba3df5863c867ec4ef74b73fc979f894f7e9",
+    "expected_info": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "37fc53e81fa318833c3638933e4001891f6793f6",
+      "mac": "1c2904bec3d8",
+      "source_digest": "70297e31833be7b827f183e7ea76ba55c3e20e4d1236c4268878633f3930daeb"
+    }
+  }
+}

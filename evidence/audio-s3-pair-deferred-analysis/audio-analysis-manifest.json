@@ -1,0 +1,14 @@
+{
+  "schema": "cyd-audio-mvp-analysis-manifest/1",
+  "capture_status": "FAILED",
+  "inputs": {
+    "evidence\\physical\\audio-s3-pair-deferred-01\\results.json": "2f9b69490f7e008b50c52a464d94c10bd9159290ee0a2cdd1eca847c4be29f35"
+  },
+  "tool_sha256": "64d7f2c96efe0bd710df293ad807c74c8fe56e13158adc38358ab02b0f029d1a",
+  "capture_validator_sha256": "641af817b4a0928f565313f6e1e7dfa6c67f4f6a1a3bd97f3cc1e3ae9beada7c",
+  "outputs": {
+    "audio-summary.json": "465d890bf93dd39080c489f903ad8f2ea27e687a847a852f5501633c25dbfacd",
+    "audio-summary.csv": "624f43c4979010a1fdd32682ebfc6e60ffe9b59a6add5d8818442726588f3efd",
+    "AUDIO-REPORT.md": "c461f3542a6569762783cbc7d0301d1c9bca8274c86f477d40460745145893e2"
+  }
+}

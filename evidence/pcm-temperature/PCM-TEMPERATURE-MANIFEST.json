@@ -1,0 +1,56 @@
+{
+  "schema": "cyd-pcm-temperature-publication/1",
+  "scope": "outside-window endpoint readings in terminal validated PCM runs only",
+  "captures": [
+    {
+      "capture": "audio-bidirectional-deferred-01",
+      "capture_status": "FAILED",
+      "analysis_status_counts": {
+        "MEASURED": 2,
+        "FAILED": 46
+      },
+      "retained_sensor_records": 4,
+      "input_results_sha256": "9178f60e650c50ebbdfe53cfa285e1810c7161ca19f3e6e7296443a7311781fb"
+    },
+    {
+      "capture": "audio-deferred-fresh-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "analysis_status_counts": {
+        "MEASURED": 1
+      },
+      "retained_sensor_records": 2,
+      "input_results_sha256": "819ec4dee0e661ea2039c2f26d580bf580a7ec3825927b55a5193bbb9f7f7497"
+    },
+    {
+      "capture": "audio-s3-pair-02",
+      "capture_status": "FAILED",
+      "analysis_status_counts": {
+        "FAILED": 26,
+        "MEASURED": 22
+      },
+      "retained_sensor_records": 44,
+      "input_results_sha256": "a42e9881c8b3197170309d5095f4a9dce48969b7ace2494313d3acabbe5f127d"
+    },
+    {
+      "capture": "audio-s3-pair-deferred-01",
+      "capture_status": "FAILED",
+      "analysis_status_counts": {
+        "MEASURED": 25,
+        "FAILED": 23
+      },
+      "retained_sensor_records": 50,
+      "input_results_sha256": "2f9b69490f7e008b50c52a464d94c10bd9159290ee0a2cdd1eca847c4be29f35"
+    }
+  ],
+  "tool_sha256": "b50cd5fce0bca2870cbb436923b1fc963d22fa81f085faf4f3c02af339735572",
+  "outputs": {
+    "PCM-TEMPERATURE-SAMPLES.csv": "830d5bc5954c2556c7081f03a94f18ca0f2f9c7e0ef909b68f759be45feb0a77",
+    "PCM-TEMPERATURE-SUMMARY.csv": "8f0f6364b40a05b99920fd6dbadecea5c63d31e0fda72b7bcc1212275bd8ca07"
+  },
+  "limitations": [
+    "Not steady-window or stress sensor sampling",
+    "Driver Celsius and classic raw conversion remain distinct methods",
+    "No external accuracy calibration",
+    "Missing/unavailable readings are not synthesized as zero"
+  ]
+}

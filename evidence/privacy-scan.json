@@ -1,0 +1,11 @@
+{
+  "schema": "cyd-perf-privacy-scan/1",
+  "utc": "2026-11-28T00:52:05.512330+00:00",
+  "scope": "Tracked and nonignored candidate files, ZIP members and gzip payloads, recursive depth4; owner AP/direct-AP literal,UTF16,hex,JSON escaped credentials",
+  "top_level_paths": 1257,
+  "expanded_files": 7127,
+  "expanded_bytes": 1177029645,
+  "credential_variant_count": 16,
+  "matches": [],
+  "status": "PASS"
+}

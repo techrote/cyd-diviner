@@ -1,0 +1,106 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "created_utc": "2026-11-27T23:37:38.156962+00:00",
+  "archive": "PHYSICAL-CAPTURES-METAL-INITIAL.zip",
+  "bytes": 15629993,
+  "sha256": "82501b22b566c4e1f2c519bd932c951a093cf24da8856164c242689042917fa6",
+  "capture_directories": [
+    "metal-dual-framed-wifi-01",
+    "metal-dual-framed-wifi-swapped-01",
+    "metal-dual-framed-wifi-swapped-02",
+    "metal-dual-position-swap-01",
+    "metal-dual-rate-wifi-01",
+    "metal-dual-rx-smoke-01",
+    "metal-dual-rx-smoke-wifi-01",
+    "metal-dual-rx-smoke-wifi-02",
+    "metal-gain-diagnostic-01",
+    "metal-readback-recovery-01"
+  ],
+  "scope": "Initial3b4161S3metalimages: all10closedmetal-* directories, directgainsetupfailure/diagnostic,WiFiNULLreference/rate/framed/positioncohorts, exactUSB-onlyreadbackrecovery and failures. Nesteddualchildrecords/logs preserved; excludesfuturechecked/fastsourcephases andofflineanalysis.",
+  "captures": [
+    {
+      "directory": "metal-dual-framed-wifi-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 30
+      }
+    },
+    {
+      "directory": "metal-dual-framed-wifi-swapped-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "FAILED",
+      "run_statuses": {
+        "ACQUIRED": 2,
+        "FAILED": 1
+      }
+    },
+    {
+      "directory": "metal-dual-framed-wifi-swapped-02",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 30
+      }
+    },
+    {
+      "directory": "metal-dual-position-swap-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 9
+      }
+    },
+    {
+      "directory": "metal-dual-rate-wifi-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "FAILED",
+      "run_statuses": {
+        "ACQUIRED": 39,
+        "FAILED": 1
+      }
+    },
+    {
+      "directory": "metal-dual-rx-smoke-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "FAILED",
+      "run_statuses": {}
+    },
+    {
+      "directory": "metal-dual-rx-smoke-wifi-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "FAILED",
+      "run_statuses": {
+        "ACQUIRED": 1,
+        "FAILED": 1
+      }
+    },
+    {
+      "directory": "metal-dual-rx-smoke-wifi-02",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 18
+      }
+    },
+    {
+      "directory": "metal-gain-diagnostic-01",
+      "schema": "cyd-metal-gain-setup-diagnostic/1",
+      "status": "COMPLETE",
+      "run_statuses": {}
+    },
+    {
+      "directory": "metal-readback-recovery-01",
+      "schema": "cyd-metal-readback-recovery/1",
+      "status": "RECOVERED EXACT ORIGINAL CRC",
+      "run_statuses": {}
+    }
+  ],
+  "verification": {
+    "hash_comparisons_including_nested_manifests": 1195,
+    "archived_files_verified": 639,
+    "zip_crc": "PASS",
+    "zip_membership": "exact_snapshot",
+    "raw_after_archive": "unchanged"
+  }
+}

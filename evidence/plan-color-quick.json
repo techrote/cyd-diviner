@@ -1,0 +1,286 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "warmup_ms": 1000,
+  "duration_ms": 3000,
+  "purpose": "Owner-requested quick RGB111/RGB444/RGBA5551 and maximum current visual-layer comparison; native control included; unsupported percentile tails stay unavailable",
+  "workloads": [
+    {
+      "name": "color/fullscreen/gate/off/layers1",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color off",
+        "perf vision 1 0 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate",
+      "requested_color_format": "off",
+      "requested_visual_layers": 1,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "off",
+        "effect_layers": 1
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/off/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color off",
+        "perf vision 1 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "requested_color_format": "off",
+      "requested_visual_layers": 2,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "off",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgb111/layers1",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb111",
+        "perf vision 1 0 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate",
+      "requested_color_format": "rgb111",
+      "requested_visual_layers": 1,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgb111",
+        "effect_layers": 1
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgb111/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb111",
+        "perf vision 1 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "requested_color_format": "rgb111",
+      "requested_visual_layers": 2,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgb111",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgb444/layers1",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb444",
+        "perf vision 1 0 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate",
+      "requested_color_format": "rgb444",
+      "requested_visual_layers": 1,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgb444",
+        "effect_layers": 1
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgb444/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb444",
+        "perf vision 1 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "requested_color_format": "rgb444",
+      "requested_visual_layers": 2,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgb444",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgba5551/layers1",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgba5551",
+        "perf vision 1 0 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate",
+      "requested_color_format": "rgba5551",
+      "requested_visual_layers": 1,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgba5551",
+        "effect_layers": 1
+      }
+    },
+    {
+      "name": "color/fullscreen/gate/rgba5551/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgba5551",
+        "perf vision 1 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "gate-trails",
+      "requested_color_format": "rgba5551",
+      "requested_visual_layers": 2,
+      "color_scope": "Profiling-only packed stripe intermediates; RGB565 geometry raster and16-bit display wire; borrowed backing canvas unchanged; maximum native Visions effects2",
+      "expected_color": {
+        "format": "rgba5551",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/plasma-kaleido/rgb111/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb111",
+        "perf vision 0 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "plasma-kaleido",
+      "requested_color_format": "rgb111",
+      "requested_visual_layers": 2,
+      "color_scope": "Maximum2 native Visions effects; packed stripe intermediate, not full resident layer surfaces",
+      "expected_color": {
+        "format": "rgb111",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/ashfire-rain/rgb111/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb111",
+        "perf vision 2 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "ashfire-rain",
+      "requested_color_format": "rgb111",
+      "requested_visual_layers": 2,
+      "color_scope": "Maximum2 native Visions effects; packed stripe intermediate, not full resident layer surfaces",
+      "expected_color": {
+        "format": "rgb111",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/plasma-kaleido/rgb444/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb444",
+        "perf vision 0 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "plasma-kaleido",
+      "requested_color_format": "rgb444",
+      "requested_visual_layers": 2,
+      "color_scope": "Maximum2 native Visions effects; packed stripe intermediate, not full resident layer surfaces",
+      "expected_color": {
+        "format": "rgb444",
+        "effect_layers": 2
+      }
+    },
+    {
+      "name": "color/fullscreen/ashfire-rain/rgb444/layers2",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf color rgb444",
+        "perf vision 2 1 1 0"
+      ],
+      "scene": "visions",
+      "orientation": "landscape",
+      "fullscreen": true,
+      "effect": "ashfire-rain",
+      "requested_color_format": "rgb444",
+      "requested_visual_layers": 2,
+      "color_scope": "Maximum2 native Visions effects; packed stripe intermediate, not full resident layer surfaces",
+      "expected_color": {
+        "format": "rgb444",
+        "effect_layers": 2
+      }
+    }
+  ]
+}

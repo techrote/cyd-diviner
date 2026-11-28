@@ -1,0 +1,31 @@
+{
+  "schema": "cyd-sdr-identities/1",
+  "tx": {
+    "board": "Owner classic CYD",
+    "port": "COM21",
+    "baud": 533333,
+    "mac": "a4f00f5fff54",
+    "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_tx\\firmware.bin",
+    "firmware_sha256": "0623e6cccefd6717da560c5913f344b818ce43adf38c47b9e698785f560d2bc0",
+    "expected_info": {
+      "profile": "classic-sdr-tx-probe",
+      "source_sha": "bb34b3c27c4c8388956bb05a8a5280d7a2c687a2",
+      "tx_source_digest": "b9585839a9ee69d79f18799a640a6bd23679a2878966f3379304b0b1030b05ee",
+      "mac": "a4f00f5fff54"
+    }
+  },
+  "rx": {
+    "board": "Owner S3 N4R2",
+    "port": "COM22",
+    "baud": 115200,
+    "mac": "1c2904bec3a0",
+    "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_rx\\firmware.bin",
+    "firmware_sha256": "b81bee95f5bd0e0393538c0183a9898856474fc9b6ddb16daaf889d3e3acd949",
+    "expected_version": {
+      "revision": "3ab3b65bb62f2d9427ee33c2c3b627427e729294-cyd-iq-fdf42772e506",
+      "build_date": "2026-11-27",
+      "build_timestamp": "2026-11-27T21:17:17Z",
+      "profile": "esp32s3"
+    }
+  }
+}

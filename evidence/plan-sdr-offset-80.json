@@ -1,0 +1,29 @@
+{
+  "schema": "cyd-sdr-plan/1",
+  "repetitions": 1,
+  "receiver": {
+    "duration_ms": 2000,
+    "decimation": 128,
+    "bits": 8,
+    "rate_code": 6,
+    "shift": 7,
+    "mode": 2,
+    "baseline_ms": 100,
+    "commands": [
+      "FOFS 80",
+      "FREQ 2433",
+      "GAIN MANUAL 40"
+    ]
+  },
+  "workloads": [
+    {
+      "name": "calibration/alternating/api/1000",
+      "mode": "api",
+      "baud": 1000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 500
+    }
+  ],
+  "cohort_note": "ControlledLOoffset sign/centering check from observed+82.63kHz wirecarrier;125koutputIQ; onlyAPI1kcalibration."
+}

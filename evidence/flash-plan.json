@@ -1,0 +1,93 @@
+{
+  "schema": "cyd-perf-flash-plan/1",
+  "authorization": {
+    "utc": "2026-11-27T17:51:45.734486+00:00",
+    "owner_response": "Flash and test; leave profiler installed",
+    "scope": "exact approved image on COM21 app0; full test matrix; no restoration requested"
+  },
+  "port": "COM21",
+  "chip": "ESP32-D0WD-V3 (revision v3.1)",
+  "flash_bytes": 4194304,
+  "backup_verified": true,
+  "backup_sha256": "e370bb16271073a284722328ed6adb39ef305d9bc66686176cef5c8dc702aa06",
+  "partitions": [
+    {
+      "type": 1,
+      "subtype": 2,
+      "offset": 36864,
+      "size": 20480,
+      "label": "nvs",
+      "flags": 0
+    },
+    {
+      "type": 1,
+      "subtype": 0,
+      "offset": 57344,
+      "size": 8192,
+      "label": "otadata",
+      "flags": 0
+    },
+    {
+      "type": 0,
+      "subtype": 16,
+      "offset": 65536,
+      "size": 3145728,
+      "label": "app0",
+      "flags": 0
+    },
+    {
+      "type": 1,
+      "subtype": 130,
+      "offset": 3211264,
+      "size": 917504,
+      "label": "spiffs",
+      "flags": 0
+    },
+    {
+      "type": 1,
+      "subtype": 3,
+      "offset": 4128768,
+      "size": 65536,
+      "label": "coredump",
+      "flags": 0
+    }
+  ],
+  "source_sha": "a4549f87cef05d19d9acf96d59ae95a2435ebb67",
+  "source_tree_sha256": "eff036bcc084e7691e5dbdc5d386664a32b498c2a6cfcab4717e046c5912534d",
+  "firmware": {
+    "bytes": 2036064,
+    "sha256": "fb35d75725b15ecd8b6aceb368492cf76ebaee85bbb4aeb50bd61311e229f15c"
+  },
+  "write_offset": 65536,
+  "write_scope": "application sectors within app0 only; bootloader/partitions/NVS/SPIFFS excluded",
+  "restore": {
+    "bytes": 3145728,
+    "sha256": "1d11f6bcd953854b63150085f6c0d9073f7ddfb268d7a440b1f5c353ef844760",
+    "offset": 65536,
+    "source": "verified private original full-flash backup"
+  },
+  "flash_argv": [
+    "python",
+    "-m",
+    "esptool",
+    "--chip",
+    "esp32",
+    "--port",
+    "COM21",
+    "--baud",
+    "460800",
+    "--before",
+    "no_reset",
+    "--after",
+    "hard_reset",
+    "write_flash",
+    "--flash_mode",
+    "keep",
+    "--flash_freq",
+    "keep",
+    "--flash_size",
+    "keep",
+    "0x10000",
+    ".pio/build/cyd-profile/firmware.bin"
+  ]
+}

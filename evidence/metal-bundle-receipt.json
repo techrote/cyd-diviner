@@ -1,0 +1,13 @@
+{
+  "schema": "cyd-perf-image-bundle/1",
+  "archive": "UNAPPROVED-SDR-METAL-IMAGES.zip",
+  "bytes": 1937837,
+  "sha256": "4d8fb6d3a64238edf9ecae26653b49c4d85d7dc70c235bbd2fa87626bb4ff4e6",
+  "review_sha256": "151766134d23dd184a37a7adcdc87535143f1ee3730128f9326a09838123e47a",
+  "source_archive": {
+    "bytes": 82064,
+    "sha256": "f59e35f120c1711b137381d368dd2700a969dcce00620563fa38869936e8e898"
+  },
+  "source_files": 49,
+  "scope": "Unapproved evidence: exacttwoS3apps/maps/buildreceipts+completecorrespondingexperimentalsource/licenses; nobootloader/table/NVS/privateconfig orflashautomation"
+}

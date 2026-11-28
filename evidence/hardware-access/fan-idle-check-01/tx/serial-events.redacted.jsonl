@@ -1,0 +1,13 @@
+{"event": "open", "host_elapsed_s": 0.016050699981860816, "utc": "2026-11-28T00:35:51.301330+00:00", "port": "COM13", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.06025590002536774, "utc": "2026-11-28T00:35:51.345248+00:00", "command": "info"}
+{"event": "rx", "host_elapsed_s": 0.06355860002804548, "utc": "2026-11-28T00:35:51.348246+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.06373649998567998, "utc": "2026-11-28T00:35:51.348246+00:00", "offset": 1, "bytes": 2422}
+{"event": "tx", "host_elapsed_s": 0.0640325000276789, "utc": "2026-11-28T00:35:51.349751+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 0.06690320000052452, "utc": "2026-11-28T00:35:51.352266+00:00", "offset": 2423, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.06699660001322627, "utc": "2026-11-28T00:35:51.352266+00:00", "offset": 2424, "bytes": 260}
+{"event": "tx", "host_elapsed_s": 2.076191900006961, "utc": "2026-11-28T00:35:53.362099+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 2.0788154000183567, "utc": "2026-11-28T00:35:53.364103+00:00", "offset": 2684, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 2.0789211000083014, "utc": "2026-11-28T00:35:53.364103+00:00", "offset": 2685, "bytes": 260}
+{"event": "tx", "host_elapsed_s": 4.090979099972174, "utc": "2026-11-28T00:35:55.376861+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 4.0936788999824785, "utc": "2026-11-28T00:35:55.379377+00:00", "offset": 2945, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 4.09380059997784, "utc": "2026-11-28T00:35:55.379377+00:00", "offset": 2946, "bytes": 260}

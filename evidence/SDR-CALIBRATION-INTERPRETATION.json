@@ -1,0 +1,1591 @@
+{
+  "schema": "cyd-sdr-independent-calibration-review/1",
+  "evidence_class": "OFFLINE_ANALYSIS_OF_PHYSICAL_IQ",
+  "tool_sha256": "bd47118db4eb2844053769b952941785bf83efb65a498123bfb89299c4f10cf7",
+  "captures": [
+    {
+      "capture": "evidence/physical/sdr-calibration-01",
+      "status": "FAILED",
+      "results_sha256": "0e2255d9623ec2f3c9880d117890953bbb3c1bcb255b9ca60fefa9f6b4a163b5",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 64,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FREQ 2433",
+          "FOFS 0",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/api/1000",
+            "mode": "api",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "6d9ea8da38d3d0fe1b498bc47f2adfae23d8a3e979783d2c9120ddd71f19c2d5",
+            "iq-frames.csv": "f48e2f1f9b5215daac4598ab47e4e4793b121dc63c3e79d5f8abc3f94ea43e08",
+            "iq-erasures.json": "8d0e55115a70f8a820d7988f99ade4bccc8c09af16068cf8a0d787bb8da5a9b6",
+            "iq-integrity.json": "d42910622314bb0d9d2966ddcd40faa7cc2cd1da59a23d0bdae63f69b053eab3"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500257,
+          "valid_samples": 255009,
+          "excluded_placeholder_samples": 245248,
+          "target_queue_drops": 479,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37360,
+          "baseline_valid_samples": 61952,
+          "steady_mean_power_code_squared": 1232.7541488222698,
+          "baseline_mean_power_code_squared": 0.11155410640495868,
+          "steady_to_baseline_power_ratio": 11050.728552718458,
+          "steady_zero_fraction": 0.5795770877944325,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 1230.3757573346802,
+              "power_harmonic_amplitude": 1910.7256904769315,
+              "r2": 0.7454379353759107
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 1232.7427087559506,
+              "power_harmonic_amplitude": 691.9062108947436,
+              "r2": 0.0977469779652147
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 1232.75292355378,
+              "power_harmonic_amplitude": 507.6148417094817,
+              "r2": 0.05264812996403301
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 323,
+            "selection_power_threshold_code_squared": 3329.0,
+            "wire_complex_offset_hz": 81714.91801755274,
+            "weighted_phase_coherence": 0.9989884800620662,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 14259,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": 82630.28871016458,
+            "weighted_phase_coherence": 0.9967970064862451
+          },
+          "complete_high_runs": 46,
+          "complete_high_run_median_us": 764.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s002_1",
+          "settings": {
+            "name": "calibration/alternating/api/5000",
+            "mode": "api",
+            "baud": 5000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 2500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "52a39d1fe47402b1ca0037c327ffca39ec942d5de9699231c1e42cfbc7db006d",
+            "iq-frames.csv": "773c6f9d2aa60b0d80fe1d534928d0e5fe9da038939ceabfb9e26c34047f2ebb",
+            "iq-erasures.json": "29b47008431d5d4f9290be0d024c0f295c94b37d4aca7eeb52dcbeae1262e1a6",
+            "iq-integrity.json": "53308495f94e4ab88f1e1174f5be16bae53a21ed02517a521daaa151caa9ba5c"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500255,
+          "valid_samples": 254495,
+          "excluded_placeholder_samples": 245760,
+          "target_queue_drops": 480,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37360,
+          "baseline_valid_samples": 61656,
+          "steady_mean_power_code_squared": 53.65968950749465,
+          "baseline_mean_power_code_squared": 0.08151680290644868,
+          "steady_to_baseline_power_ratio": 658.2653832618564,
+          "steady_zero_fraction": 0.8532119914346895,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 2500.0,
+              "power_intercept": 53.70379231229871,
+              "power_harmonic_amplitude": 106.5621820608719,
+              "r2": 0.041908892752199445
+            },
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 53.56750739360773,
+              "power_harmonic_amplitude": 105.46400297515326,
+              "r2": 0.04097432691997849
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 53.7566508649291,
+              "power_harmonic_amplitude": 101.03745112940918,
+              "r2": 0.03764069355391575
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 1361,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 45200.49530699536,
+            "weighted_phase_coherence": 0.8565922548024397,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 472,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": 43848.38320197851,
+            "weighted_phase_coherence": 0.9287906822556462
+          },
+          "complete_high_runs": 858,
+          "complete_high_run_median_us": 16.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s003_1",
+          "settings": {
+            "name": "calibration/alternating/api/10000",
+            "mode": "api",
+            "baud": 10000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 5000
+          },
+          "acquisition_status": "FAILED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "127a01b9c4ca71923369aa3896bc761e887014b88136462cb156ba24a97dd8ec",
+            "iq-frames.csv": "ccad5ef6d022c12a0105ead2e328d8301f05891692f82fab7e92635df9e5a693",
+            "iq-erasures.json": "bec8b028fae405e8b6e3e05a72dc3f84ad307fba660c3cea2968819f6d32304c",
+            "iq-integrity.json": "80817eab57c4b8382e2885511e48b43c22be7b2e6263ea7b78d4f52ec114e8ed"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500256,
+          "valid_samples": 254496,
+          "excluded_placeholder_samples": 245760,
+          "target_queue_drops": 480,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 36864,
+          "baseline_valid_samples": 62024,
+          "steady_mean_power_code_squared": 0.07017686631944445,
+          "baseline_mean_power_code_squared": 0.1052818263897846,
+          "steady_to_baseline_power_ratio": 0.6665620147928365,
+          "steady_zero_fraction": 0.9825846354166666,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 0.07017825572498199,
+              "power_harmonic_amplitude": 0.0028762834263461627,
+              "r2": 8.366659685177247e-06
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 0.07017723926492055,
+              "power_harmonic_amplitude": 0.0038793591616627207,
+              "r2": 1.5214797335350028e-05
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 0.07017687744011213,
+              "power_harmonic_amplitude": 0.0031614438316571107,
+              "r2": 1.010461751049796e-05
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 3,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 64837.81990515958,
+            "weighted_phase_coherence": 0.40076289754805716,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 143,
+          "complete_high_run_median_us": 8.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    },
+    {
+      "capture": "evidence/physical/sdr-ram-125k-01",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "1146a5dc692b27a5637c36ad6794eb859478d5bc5246029bba67ca6dd225380b",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 128,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FREQ 2433",
+          "FOFS 0",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/ram/1000",
+            "mode": "ram",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "ff834523abdc3fe7c1cd68cc4aaabf255ec3273a64718c8fb0a0b5a977b306b9",
+            "iq-frames.csv": "4963bc1557f0c7bc7c324123a558d96f259d98e6aec60e3fdda9aab005186b85",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "f7b0f2d1f8cc21180f86b2d6ff1f850ce29846fda5173bb64a806dc44f5935f2"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250128,
+          "valid_samples": 250128,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 0.3986133333333333,
+          "baseline_mean_power_code_squared": 0.044048,
+          "steady_to_baseline_power_ratio": 9.049521733866086,
+          "steady_zero_fraction": 0.83168,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 0.3986133333333338,
+              "power_harmonic_amplitude": 0.13847644378742635,
+              "r2": 0.0026586960972339035
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 0.3986133333333338,
+              "power_harmonic_amplitude": 0.48772843835919916,
+              "r2": 0.032981701166767574
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 0.3986133333333338,
+              "power_harmonic_amplitude": 0.48271475422083093,
+              "r2": 0.03230710482438559
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 5,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 33906.47602616646,
+            "weighted_phase_coherence": 0.9727874104282286,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 753,
+          "complete_high_run_median_us": 16.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s002_1",
+          "settings": {
+            "name": "calibration/alternating/ram/5000",
+            "mode": "ram",
+            "baud": 5000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 2500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "24121a8f3e387506ba92fa2db1cac092075ed1f53b49b3c44697bffebaa2cd8c",
+            "iq-frames.csv": "f97750fbe9a4f04f68c4e26a3bc8508e06c71b96258d8007766d5270551d2aa6",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "f27404eb55d2a4157a2eef168ae2ff247575e047114082bdadd0d827c86d4dc8"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250128,
+          "valid_samples": 250128,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 1.3747466666666666,
+          "baseline_mean_power_code_squared": 0.05168,
+          "steady_to_baseline_power_ratio": 26.601135190918473,
+          "steady_zero_fraction": 0.6364266666666667,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 2500.0,
+              "power_intercept": 1.3747466666666694,
+              "power_harmonic_amplitude": 0.24597840241669608,
+              "r2": 0.0021693825864339544
+            },
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 1.3747466666666694,
+              "power_harmonic_amplitude": 2.2724057269719555,
+              "r2": 0.18514583511621296
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 1.3747466666666694,
+              "power_harmonic_amplitude": 2.0505474267373476,
+              "r2": 0.15075850900225374
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 22,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 33698.00356210873,
+            "weighted_phase_coherence": 0.8909880187323367,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 1654,
+          "complete_high_run_median_us": 16.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s003_1",
+          "settings": {
+            "name": "calibration/alternating/ram/10000",
+            "mode": "ram",
+            "baud": 10000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 5000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "b0ec94e664bcbcd7170e5ae1325de18454b0ded1dd82fb4bbcd81d35ab7ecb23",
+            "iq-frames.csv": "61a9e48c84f071fc38e01ed44fa243a0290081c80b108d3970816ae84264c8be",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "c948d830224904477a19875b2171b083a462cff245095fc00d3bae66d2e8869e"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250125,
+          "valid_samples": 250125,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 2.6910133333333333,
+          "baseline_mean_power_code_squared": 0.053104,
+          "steady_to_baseline_power_ratio": 50.67439991965451,
+          "steady_zero_fraction": 0.39872,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 2.6910133333333413,
+              "power_harmonic_amplitude": 0.4978005080520224,
+              "r2": 0.004629781304712366
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 2.6910133333333413,
+              "power_harmonic_amplitude": 4.255697004434191,
+              "r2": 0.33836949652070714
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 2.6910133333333413,
+              "power_harmonic_amplitude": 3.0416006292703655,
+              "r2": 0.17284395077076942
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 48,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 34239.58331282426,
+            "weighted_phase_coherence": 0.9300443117060181,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 3104,
+          "complete_high_run_median_us": 16.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s004_1",
+          "settings": {
+            "name": "calibration/alternating/ram/20000",
+            "mode": "ram",
+            "baud": 20000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 10000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "9bfb797de5221c2e3f470b371a585e253f285ad49670d1aedcb908363e459fa7",
+            "iq-frames.csv": "54aeb0d785a9b1b729c7d798f34bbff9408bb78b41da98fbe2383bfc3d9bd18d",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "ecdbb4854fed847482c0fca1c37907cb4e2659b5c90b10107e4b9d47ee5df48e"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250126,
+          "valid_samples": 250126,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 5.295866666666667,
+          "baseline_mean_power_code_squared": 0.220912,
+          "steady_to_baseline_power_ratio": 23.972743294464163,
+          "steady_zero_fraction": 0.0015466666666666667,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 5.295866666666687,
+              "power_harmonic_amplitude": 0.8274105618616016,
+              "r2": 0.008809155096144994
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 5.295866666666687,
+              "power_harmonic_amplitude": 5.9220002403025,
+              "r2": 0.4512622214707278
+            },
+            {
+              "frequency_hz": 40000.0,
+              "power_intercept": 5.29586666666673,
+              "power_harmonic_amplitude": 3.230681884767172,
+              "r2": 0.1343013965132217
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 2,
+            "selection_power_threshold_code_squared": 17.0,
+            "wire_complex_offset_hz": 42552.08454590049,
+            "weighted_phase_coherence": 0.999787937028719,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 5909,
+          "complete_high_run_median_us": 8.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    },
+    {
+      "capture": "evidence/physical/sdr-ram-250k-v2-01",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "74e2360c659adce9c22bdbea9c4842ad579e25e7953a0fd14d285fc0eed21cd1",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 64,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FREQ 2433",
+          "FOFS 0",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/ram/1000",
+            "mode": "ram",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "42ccb784c8325b9358157366161109e3c6880b1825beb98be87cfb2341ec3c26",
+            "iq-frames.csv": "28230880a85cf7399e21d4f10b5fe09400d5e3e07aa9b1e671213feaa9e65601",
+            "iq-erasures.json": "85efdfd337b77cca64f30378f4311dbf1e023a8dbcf42d467c40ab639e72f5e6",
+            "iq-integrity.json": "e45a6957daa1b93d5030a134559472df388d441f15e33aff870bcc4919b0270b"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500224,
+          "valid_samples": 254976,
+          "excluded_placeholder_samples": 245248,
+          "target_queue_drops": 480,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37360,
+          "baseline_valid_samples": 61512,
+          "steady_mean_power_code_squared": 66.71362419700215,
+          "baseline_mean_power_code_squared": 0.066247236311614,
+          "steady_to_baseline_power_ratio": 1007.0401108235573,
+          "steady_zero_fraction": 0.4498929336188437,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 66.53596853134935,
+              "power_harmonic_amplitude": 84.59547042188292,
+              "r2": 0.8003538436079557
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 66.71351920080123,
+              "power_harmonic_amplitude": 0.23860847656119896,
+              "r2": 6.360614375200413e-06
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 66.71350719854698,
+              "power_harmonic_amplitude": 0.18596722167408528,
+              "r2": 3.865827632565377e-06
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 343,
+            "selection_power_threshold_code_squared": 145.0,
+            "wire_complex_offset_hz": 67983.75166208071,
+            "weighted_phase_coherence": 0.9960509281764249,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 49,
+          "complete_high_run_median_us": 996.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s002_1",
+          "settings": {
+            "name": "calibration/alternating/ram/5000",
+            "mode": "ram",
+            "baud": 5000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 2500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "fd99cc06bde5368bfefb4ddfc71a5a9c6bbf87e8d1e6bb170ea68c62d851a44a",
+            "iq-frames.csv": "fa22a752f3035acfa3b45690f96f4f85f3665d07238212c03eefd6da0b975033",
+            "iq-erasures.json": "801b37e6d05a5592ce26e37a16e3f56d4d71c9215a61eb7ca6b4b043d54ebdad",
+            "iq-integrity.json": "48d453f6664da4c6f635fa661cfc9ee56dcf6ed820c12b1dd43fd5593160e21a"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500256,
+          "valid_samples": 255008,
+          "excluded_placeholder_samples": 245248,
+          "target_queue_drops": 479,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 36864,
+          "baseline_valid_samples": 61952,
+          "steady_mean_power_code_squared": 71.552490234375,
+          "baseline_mean_power_code_squared": 0.09447636880165289,
+          "steady_to_baseline_power_ratio": 757.3585981547925,
+          "steady_zero_fraction": 0.4354654947916667,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 2500.0,
+              "power_intercept": 71.53632053993468,
+              "power_harmonic_amplitude": 91.45678967821831,
+              "r2": 0.8008648618490515
+            },
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 71.55274522391176,
+              "power_harmonic_amplitude": 0.872073529337535,
+              "r2": 7.27103373189264e-05
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 71.55151866662834,
+              "power_harmonic_amplitude": 0.8312238502707685,
+              "r2": 6.617122994623248e-05
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 1192,
+            "selection_power_threshold_code_squared": 157.0,
+            "wire_complex_offset_hz": 67620.88255150261,
+            "weighted_phase_coherence": 0.9974480988521849,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 335,
+          "complete_high_run_median_us": 200.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s003_1",
+          "settings": {
+            "name": "calibration/alternating/ram/10000",
+            "mode": "ram",
+            "baud": 10000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 5000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "c90ffb50ae382c184bb007876ff6181a038e26947735b6f51f98a1b1a88d4c1f",
+            "iq-frames.csv": "e535950010b1084bbddc7cb11281f65a6a90f50f2af758148b977ee5ecc5bfce",
+            "iq-erasures.json": "e8d0bf5ec980fb2451dc827e213e17796f27b326e96449850d1c0e965fe3aa82",
+            "iq-integrity.json": "6030661d59f1fc845119ada791c8d44b352774a8bc17f01511201d86a1103ff5"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500257,
+          "valid_samples": 254497,
+          "excluded_placeholder_samples": 245760,
+          "target_queue_drops": 480,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 36864,
+          "baseline_valid_samples": 62024,
+          "steady_mean_power_code_squared": 69.06382921006944,
+          "baseline_mean_power_code_squared": 0.04875532052108861,
+          "steady_to_baseline_power_ratio": 1416.5393329779588,
+          "steady_zero_fraction": 0.3724500868055556,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 69.05543712842262,
+              "power_harmonic_amplitude": 88.15481554146945,
+              "r2": 0.8160758844016571
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 69.06124307264662,
+              "power_harmonic_amplitude": 1.3023204694441104,
+              "r2": 0.0001777453246694094
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 69.06385471442988,
+              "power_harmonic_amplitude": 1.4850464362622222,
+              "r2": 0.00023111915546225603
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 634,
+            "selection_power_threshold_code_squared": 148.0,
+            "wire_complex_offset_hz": 67746.65959630453,
+            "weighted_phase_coherence": 0.9964113317761755,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 708,
+          "complete_high_run_median_us": 100.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s004_1",
+          "settings": {
+            "name": "calibration/alternating/ram/20000",
+            "mode": "ram",
+            "baud": 20000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 10000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "5743a9b673938581748f9f0766dc548269937e39187a9e96e27dce623e9d21ed",
+            "iq-frames.csv": "d202ff2084d7f8239417d22d34341adf365b7f8b015c7033e60befca886dfda9",
+            "iq-erasures.json": "1a45b14fb9d590dc69554d11c61e8c73f0ce3498ad7b6b301af1db8e6e43c573",
+            "iq-integrity.json": "151b1641f2a8712f724a6a7d1d3b15aa7d2b2f26577787d38d46ef81d6e6178b"
+          },
+          "sample_rate_hz": 250000.0,
+          "indexed_samples": 500257,
+          "valid_samples": 254497,
+          "excluded_placeholder_samples": 245760,
+          "target_queue_drops": 480,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37360,
+          "baseline_valid_samples": 61656,
+          "steady_mean_power_code_squared": 90.97754282655247,
+          "baseline_mean_power_code_squared": 0.1117328402750746,
+          "steady_to_baseline_power_ratio": 814.2417448851676,
+          "steady_zero_fraction": 0.20730728051391864,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 91.2572652146412,
+              "power_harmonic_amplitude": 116.96079985153237,
+              "r2": 0.8273305662780763
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 90.97761819727354,
+              "power_harmonic_amplitude": 4.700230377929838,
+              "r2": 0.001336170491680666
+            },
+            {
+              "frequency_hz": 40000.0,
+              "power_intercept": 90.97773774405846,
+              "power_harmonic_amplitude": 6.016708497585472,
+              "r2": 0.0021894047297830177
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 397,
+            "selection_power_threshold_code_squared": 200.0,
+            "wire_complex_offset_hz": 68984.2456115473,
+            "weighted_phase_coherence": 0.9965215292696564,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 1464,
+          "complete_high_run_median_us": 48.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    },
+    {
+      "capture": "evidence/physical/sdr-offset-plus80-01",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "42843a8708108082b091400be186f74d0d57afd7e9ee84d41c8247d23940d9cf",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 128,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FOFS 80",
+          "FREQ 2433",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/api/1000",
+            "mode": "api",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "8338aa0ec1b5822968850073b541c5244b4da1824d73cd37183a22f82734ce80",
+            "iq-frames.csv": "e7ed1be45ea4aec75df1c56a9282f89cd9dab700844e013d2bd3503053bea97f",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "89c71257f82dd022eafa425551e4c0a7b0c4d4accc290e5b742fdfad8d26d9b5"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250126,
+          "valid_samples": 250126,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 2.1666133333333333,
+          "baseline_mean_power_code_squared": 0.093104,
+          "steady_to_baseline_power_ratio": 23.270894197170186,
+          "steady_zero_fraction": 0.6512266666666666,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 2.1666133333333377,
+              "power_harmonic_amplitude": 2.5937069870432956,
+              "r2": 0.01572360609129808
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 2.1666133333333377,
+              "power_harmonic_amplitude": 2.1441616437103583,
+              "r2": 0.010745469033733301
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 2.1666133333333377,
+              "power_harmonic_amplitude": 1.7064168652904823,
+              "r2": 0.00680582222951831
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 323,
+            "selection_power_threshold_code_squared": 10.0,
+            "wire_complex_offset_hz": 29625.510755430925,
+            "weighted_phase_coherence": 0.6279524461726307,
+            "coherence_at_least_0_9_and_at_least_50_pairs": false
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 2388,
+          "complete_high_run_median_us": 8.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    },
+    {
+      "capture": "evidence/physical/sdr-offset-minus80-01",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "cea22c38c4dad37ade4c5f3711ae6b6b2184e8a4702c6f25fb55f4ec0fb4351f",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 128,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FOFS -80",
+          "FREQ 2433",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/api/1000",
+            "mode": "api",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "35ec104984bdedc6bcbff453bbe885a58a31a680266b2f0da1afb0f090950dca",
+            "iq-frames.csv": "ae938193713dd648bf230911d90a34963353a8254b0de410c48e63f69091c1e8",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "b59c3f9586917a720d989e8fa3aadbd0f4312b7adbe49b49a95a1d1c5092d737"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250127,
+          "valid_samples": 250127,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 1119.12312,
+          "baseline_mean_power_code_squared": 0.075184,
+          "steady_to_baseline_power_ratio": 14885.123430517131,
+          "steady_zero_fraction": 0.56288,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 1119.1231200000004,
+              "power_harmonic_amplitude": 1741.516909588194,
+              "r2": 0.7455676798053288
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 1119.1231200000004,
+              "power_harmonic_amplitude": 638.1605731995397,
+              "r2": 0.10011326380267771
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 1119.1231200000004,
+              "power_harmonic_amplitude": 465.58033113140954,
+              "r2": 0.05328695839593067
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 1343,
+            "selection_power_threshold_code_squared": 3005.0,
+            "wire_complex_offset_hz": -11575.5157748094,
+            "weighted_phase_coherence": 0.9986851033144575,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 14204,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": -11668.726858638538,
+            "weighted_phase_coherence": 0.9979768339152782
+          },
+          "complete_high_runs": 149,
+          "complete_high_run_median_us": 760.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    },
+    {
+      "capture": "evidence/physical/sdr-ram-centered-01",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "35acdd4a84bfcb3bec49af08bb4bf072239b3b6290583a44f84d48a12e3c5a56",
+      "receiver": {
+        "duration_ms": 2000,
+        "decimation": 128,
+        "bits": 8,
+        "rate_code": 6,
+        "shift": 7,
+        "mode": 2,
+        "baseline_ms": 100,
+        "commands": [
+          "FOFS -80",
+          "FREQ 2433",
+          "GAIN MANUAL 40"
+        ]
+      },
+      "runs": [
+        {
+          "run_id": "s001_1",
+          "settings": {
+            "name": "calibration/alternating/ram/1000",
+            "mode": "ram",
+            "baud": 1000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "d95e0c602064ca77a840c026686c1b414c5cef8f221a4490c7e0a57c5b80e97e",
+            "iq-frames.csv": "8d6efca281910803a5201af1e8c4eca721ba3453db1718a4ef828843a3ea6f2a",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "0aa266b1c2481ab78e67330b3a7bf69a1af50b8263b5d02489f751c43af9d378"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250127,
+          "valid_samples": 250127,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 71.83976,
+          "baseline_mean_power_code_squared": 0.046416,
+          "steady_to_baseline_power_ratio": 1547.7369872457773,
+          "steady_zero_fraction": 0.4618933333333333,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 500.0,
+              "power_intercept": 71.83975999999994,
+              "power_harmonic_amplitude": 91.54665623314912,
+              "r2": 0.8085527330729213
+            },
+            {
+              "frequency_hz": 1000.0,
+              "power_intercept": 71.83975999999994,
+              "power_harmonic_amplitude": 0.2768938883296639,
+              "r2": 7.396906295142891e-06
+            },
+            {
+              "frequency_hz": 2000.0,
+              "power_intercept": 71.83975999999994,
+              "power_harmonic_amplitude": 0.2681708379595569,
+              "r2": 6.938194576644463e-06
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 144,
+            "selection_power_threshold_code_squared": 149.0,
+            "wire_complex_offset_hz": -12566.485270791974,
+            "weighted_phase_coherence": 0.9946096990357902,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 150,
+          "complete_high_run_median_us": 1000.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s002_1",
+          "settings": {
+            "name": "calibration/alternating/ram/5000",
+            "mode": "ram",
+            "baud": 5000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 2500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "ee69703e5c91b4258579c22b552c480160c480c7359531e70ea752b16a0fba54",
+            "iq-frames.csv": "95c5331d7147aa56dea6cdd2a5d2404242423ccde3faec9c839642756363c697",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "b2bac18e1df8678f43a2b2a33ce9fd00b33223393dfde7a0027576c3e284eb4b"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250127,
+          "valid_samples": 250127,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 62.89050666666667,
+          "baseline_mean_power_code_squared": 0.01648,
+          "steady_to_baseline_power_ratio": 3816.1715210355983,
+          "steady_zero_fraction": 0.4236,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 2500.0,
+              "power_intercept": 62.89050666666667,
+              "power_harmonic_amplitude": 80.62538106149071,
+              "r2": 0.8038815104475426
+            },
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 62.89050666666667,
+              "power_harmonic_amplitude": 1.072866878376176,
+              "r2": 0.00014234432429716115
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 62.89050666666667,
+              "power_harmonic_amplitude": 1.131588369810255,
+              "r2": 0.00015835268434594152
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 1544,
+            "selection_power_threshold_code_squared": 137.0,
+            "wire_complex_offset_hz": -12919.510448468853,
+            "weighted_phase_coherence": 0.9984903151333018,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 751,
+          "complete_high_run_median_us": 192.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s003_1",
+          "settings": {
+            "name": "calibration/alternating/ram/10000",
+            "mode": "ram",
+            "baud": 10000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 5000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "bd9a9f41983c58e3857d4bdde8f80e8a2b0803966a327890bbade12699443fde",
+            "iq-frames.csv": "93cf282157ba75213a088fefa8d49d7fb0366090cd78de963a7d887c5c5e7d21",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "e2e19a440f1655c184c45797ef8e27e4755858f6c2ec57176952a783679ebee6"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250128,
+          "valid_samples": 250128,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 74.34232,
+          "baseline_mean_power_code_squared": 0.022704,
+          "steady_to_baseline_power_ratio": 3274.4150810429883,
+          "steady_zero_fraction": 0.24938666666666667,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 5000.0,
+              "power_intercept": 74.34232000000003,
+              "power_harmonic_amplitude": 95.46482470226381,
+              "r2": 0.8255556315337065
+            },
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 74.34232000000003,
+              "power_harmonic_amplitude": 2.5588645585998098,
+              "r2": 0.0005931358630721917
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 74.34232000000003,
+              "power_harmonic_amplitude": 3.001220583014689,
+              "r2": 0.0008159347278792195
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 257,
+            "selection_power_threshold_code_squared": 160.0,
+            "wire_complex_offset_hz": -14288.622561340484,
+            "weighted_phase_coherence": 0.9973292061173601,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 1499,
+          "complete_high_run_median_us": 96.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s004_1",
+          "settings": {
+            "name": "calibration/alternating/ram/20000",
+            "mode": "ram",
+            "baud": 20000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 10000
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "cc06f308844fbaf5dd1c698a4193295bea276cf8b30cb43564498c3b19b7c392",
+            "iq-frames.csv": "5f372c908722d218ab77c8d7ba5ee82674d5f456f96b1613cdd9d0773bd97e3c",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "0c59747a1c896167d7e2300916635206eb2190b754ec1e9575e225dd59a9a29c"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250126,
+          "valid_samples": 250126,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 73.04301333333333,
+          "baseline_mean_power_code_squared": 0.01984,
+          "steady_to_baseline_power_ratio": 3681.603494623656,
+          "steady_zero_fraction": 0.22749333333333333,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 10000.0,
+              "power_intercept": 73.04301333333339,
+              "power_harmonic_amplitude": 94.8911346991238,
+              "r2": 0.8380989261953689
+            },
+            {
+              "frequency_hz": 20000.0,
+              "power_intercept": 73.04301333333339,
+              "power_harmonic_amplitude": 5.891913886291851,
+              "r2": 0.003231147515855959
+            },
+            {
+              "frequency_hz": 40000.0,
+              "power_intercept": 73.04301333333328,
+              "power_harmonic_amplitude": 8.137875702455,
+              "r2": 0.006164049373645786
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 344,
+            "selection_power_threshold_code_squared": 162.0,
+            "wire_complex_offset_hz": -14702.481358444242,
+            "weighted_phase_coherence": 0.9984758009051659,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 2999,
+          "complete_high_run_median_us": 48.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        },
+        {
+          "run_id": "s005_1",
+          "settings": {
+            "name": "calibration/alternating/ram/23000",
+            "mode": "ram",
+            "baud": 23000,
+            "backoff_quarter_db": 96,
+            "pattern": "alternating",
+            "bit_count": 11500
+          },
+          "acquisition_status": "ACQUIRED",
+          "source_files_sha256": {
+            "iq-indexed.i8": "b17c21b1647225c06c92614953970021c4696b03deca09c92908cfa01dc1efe8",
+            "iq-frames.csv": "f5da968958c42eecf1e2171b3a4965d644604050672b64bec8e72706b41839fb",
+            "iq-erasures.json": "07f97aec50318b6431c73d02f5f69dabdeb57dee23197b1b8255f2dbfc30cfb9",
+            "iq-integrity.json": "ddf92d60538fb42ef19f07dacafa999ef0d1a9c6928905dd60cf685405d0d6e4"
+          },
+          "sample_rate_hz": 125000.0,
+          "indexed_samples": 250127,
+          "valid_samples": 250127,
+          "excluded_placeholder_samples": 0,
+          "target_queue_drops": 0,
+          "crc_errors": 0,
+          "fixed_steady_window_s": [
+            0.3,
+            0.6
+          ],
+          "fixed_baseline_window_s": [
+            1.0,
+            1.5
+          ],
+          "steady_valid_samples": 37500,
+          "baseline_valid_samples": 62500,
+          "steady_mean_power_code_squared": 62.20936,
+          "baseline_mean_power_code_squared": 0.054896,
+          "steady_to_baseline_power_ratio": 1133.2220926843486,
+          "steady_zero_fraction": 0.14725333333333335,
+          "clipped_valid_pair_fraction": 0.0,
+          "power_harmonics": [
+            {
+              "frequency_hz": 11500.0,
+              "power_intercept": 62.20935999999999,
+              "power_harmonic_amplitude": 80.6362794454148,
+              "r2": 0.8343596595816819
+            },
+            {
+              "frequency_hz": 23000.0,
+              "power_intercept": 62.20935999999999,
+              "power_harmonic_amplitude": 6.091959049314531,
+              "r2": 0.0047621852592686365
+            },
+            {
+              "frequency_hz": 46000.0,
+              "power_intercept": 62.20935999999999,
+              "power_harmonic_amplitude": 9.010152060674816,
+              "r2": 0.010417333711354337
+            }
+          ],
+          "high_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 102,
+            "selection_power_threshold_code_squared": 145.0,
+            "wire_complex_offset_hz": -14777.332512315726,
+            "weighted_phase_coherence": 0.9974795142661995,
+            "coherence_at_least_0_9_and_at_least_50_pairs": true
+          },
+          "fixed_500_power_adjacent_pair_phase": {
+            "adjacent_valid_high_power_pairs": 0,
+            "selection_power_threshold_code_squared": 500,
+            "wire_complex_offset_hz": null,
+            "weighted_phase_coherence": null
+          },
+          "complete_high_runs": 3450,
+          "complete_high_run_median_us": 40.0,
+          "limitations": [
+            "Uncalibrated signed8 power codes, not dBm or transmitter EIRP.",
+            "Wire is I,-Q; complex-offset sign is not an absolute RF-frequency calibration.",
+            "Fixed windows are declared analysis choices, not synchronized transmitter timestamps.",
+            "An alternating calibration contains no framed sync/header; framed no_frames is expected.",
+            "No absolute one-way or audio-output latency is inferred."
+          ]
+        }
+      ]
+    }
+  ]
+}

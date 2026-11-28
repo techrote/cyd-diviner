@@ -1,0 +1,10 @@
+{"event": "open", "host_elapsed_s": 0.02509830001508817, "utc": "2026-11-28T00:35:51.328605+00:00", "port": "COM22", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.04916400002548471, "utc": "2026-11-28T00:35:51.352266+00:00", "command": "perf info"}
+{"event": "rx", "host_elapsed_s": 0.05486360000213608, "utc": "2026-11-28T00:35:51.357777+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.05504000000655651, "utc": "2026-11-28T00:35:51.357777+00:00", "offset": 1, "bytes": 1085}
+{"event": "tx", "host_elapsed_s": 2.06109989999095, "utc": "2026-11-28T00:35:53.364103+00:00", "command": "perf info"}
+{"event": "rx", "host_elapsed_s": 2.069765100022778, "utc": "2026-11-28T00:35:53.373158+00:00", "offset": 1086, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 2.0698714000172913, "utc": "2026-11-28T00:35:53.373158+00:00", "offset": 1087, "bytes": 1085}
+{"event": "tx", "host_elapsed_s": 4.075982499984093, "utc": "2026-11-28T00:35:55.379377+00:00", "command": "perf info"}
+{"event": "rx", "host_elapsed_s": 4.07979200000409, "utc": "2026-11-28T00:35:55.383413+00:00", "offset": 2172, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 4.0799139000009745, "utc": "2026-11-28T00:35:55.383413+00:00", "offset": 2173, "bytes": 701}

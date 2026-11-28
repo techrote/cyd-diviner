@@ -1,0 +1,8 @@
+WARNING: Pre-connection option "no_reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting...
+Stub is already running. No upload is necessary.
+Changing baud rate to 460800
+Changed.
+Verified backup SHA256: 1601271b57264dc712c04b7d654ef5ded5ce100749978d2099d1e2f6ddf7f2fb
+Changing baud rate to 115200
+Changed.

@@ -2,6 +2,7 @@
 
 #include "cyd_pcm_serial.h"
 #include "cyd_pcm_protocol.h"
+#include "perf_profile.h"
 
 #include <Arduino.h>
 #include <atomic>
@@ -49,7 +50,13 @@ void writeBlocks(void *) {
         const uint16_t crc = cyd_pcm_crc16(frame + CYD_PCM_SEQUENCE_OFFSET,
                                           CYD_PCM_CRC_OFFSET - CYD_PCM_SEQUENCE_OFFSET);
         cyd_pcm_write_u16(frame + CYD_PCM_CRC_OFFSET, crc);
+#ifdef GRIM_PERF
+        const uint32_t at = micros();
+#endif
         Serial.write(frame, sizeof(frame));
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::PcmWrite, micros() - at);
+#endif
     }
 }
 } // namespace
@@ -110,7 +117,13 @@ void submit(uint32_t token, const int16_t *samples) {
     // A full queue drops the whole block, and the receiver can detect the gap.
     block.sequence = nextSequence++;
     memcpy(block.samples, samples, sizeof(block.samples));
-    xQueueSend(pending, &block, 0);
+    const bool queued = xQueueSend(pending, &block, 0) == pdTRUE;
+#ifdef GRIM_PERF
+    if (!queued) perf_profile::observe(perf_profile::PcmDrop, 1);
+    perf_profile::observe(perf_profile::PcmQueue, uxQueueMessagesWaiting(pending));
+#else
+    (void)queued;
+#endif
 }
 
 } // namespace cyd_pcm_serial

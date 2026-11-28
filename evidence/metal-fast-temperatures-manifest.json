@@ -1,0 +1,20 @@
+{
+  "schema": "cyd-perf-metal-temperature-manifest/1",
+  "input_results_sha256": {
+    "metal-dual-fast-smoke-01/results.json": "030b3567ab69ee0416cb7c0a9c780d15e29caccff2d393a2e3c5a7e60b5085ec",
+    "metal-dual-fast-rate-01/results.json": "151b8cb0a034b1d788f6110b766cdf55f90c8c54d0ec0859eb9f37d6c3188098",
+    "metal-dual-fast-framed-01/results.json": "5984862c3dbf8efcea5a040a25b5d60f07122253fd144f7b237b3296e65998ec",
+    "metal-dual-fast-compat-01/results.json": "d803df907023f6bf1a740cab9e53fcaf2a520f600a69ccb485fbbe0e11fd6ce5",
+    "metal-dual-fast-rx-reference-01/results.json": "a86c992b52d5f05ee64feaa78a0941e089efc5a83089956ee129ccb314b51d4b"
+  },
+  "outputs": {
+    "metal-fast-temperatures.csv": {
+      "bytes": 201162,
+      "sha256": "8f231abd7a0de13d6ce2c445f2ec80ae326e47b5431efb49eb446d7fe43eae22"
+    },
+    "metal-fast-temperatures.json": {
+      "bytes": 4427,
+      "sha256": "e3054fc174e1d5b95cc89df6c2fa5fc2632c4eddaeeb05fadf7dab2f4cf4aa16"
+    }
+  }
+}

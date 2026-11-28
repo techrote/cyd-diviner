@@ -1,0 +1,179 @@
+{
+  "schema": "cyd-perf-metal-fast-review/1",
+  "utc": "2026-11-28T00:07:18.149382+00:00",
+  "status": "AWAITING OWNER AUTHORIZATION FOR THESE EXACT IMAGES",
+  "supersedes_review_sha256": "13707a4dd571239a0210ce39e0b478b366a14e0720c612c3c816a9c680b5685d",
+  "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "changes": [
+    "Bare S3 RX now invokes the pinned SDK receive-enable flag after direct PHY enable and clears it before PHY disable. Idle boot and balanced power-domain ownership remain.",
+    "S3 TX adds an IRQ-enabled fast paced loop using precomputed rational DRAM deadlines. It retains source-word order when late and reports achieved rate, backlog and unsent tail; existing raw/generic loop bodies are unchanged.",
+    "S3 TX uses checked whole-line USB output and source CRC checks around startup, tone setup, timed loops and teardown. Word/delta buffers are populated after all SDK startup/tone setup. A source-memory change is distinct from receiver BER."
+  ],
+  "apps": {
+    "tx": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\tx\\firmware.bin",
+      "bytes": 613824,
+      "sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+      "elf": {
+        "bytes": 7902820,
+        "sha256": "eb9a3526d714049a9826787b522c3d79724648dfa3422a268b6dfe01a6c3c3e0"
+      },
+      "map": {
+        "bytes": 7900049,
+        "sha256": "d15cbaf132de0e8eea9fb8a884f0aa3908e4f74a18ac81deea2267dcf305d068"
+      },
+      "compiled_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+      "resolved_sdkconfig": {
+        "bytes": 49584,
+        "sha256": "11924885c46bb62b5aaf99761fbaf51e609f856360a1f8354be20e2abd17f3db"
+      },
+      "word_helpers_digest": "7670a89f1f1f6a807dc6420d49fdf53abbb7e52536b0c20217113c6dfa230d4e",
+      "fast_schedule_helpers_digest": "4105bfc13af1768922ba9c58ca626257a1bc207ff599059e48b6e70dd4c0b7c7",
+      "source_dirty": false
+    },
+    "rx": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+      "bytes": 584560,
+      "sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+      "elf": {
+        "bytes": 7693824,
+        "sha256": "a1497d4538bb91963a1a47730254853263397a81f71111a24bd430a827be531d"
+      },
+      "map": {
+        "bytes": 7440054,
+        "sha256": "35739451ffb389934cc4bd17f50a07da5606c01609705b8765e11404fb08f03f"
+      },
+      "compiled_source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+      "resolved_sdkconfig": {
+        "bytes": 45527,
+        "sha256": "b755d5709c789fff566b810e355df06ce0a10d8fbac525c2b2ce71ff3aa6e78e"
+      }
+    }
+  },
+  "targets": [
+    {
+      "role": "tx",
+      "port": "COM13",
+      "owner_application_port": "COM14",
+      "mac": "1c:29:04:be:cc:48",
+      "partition_label": "factory",
+      "application_offset": 65536,
+      "capacity_bytes": 1048576,
+      "retained_partition_region_sha256": "b9118aa3840f7c042a4dea8dae339d07a6e69f3716102174cc87b18046276295",
+      "verified_backup_sha256": "1601271b57264dc712c04b7d654ef5ded5ce100749978d2099d1e2f6ddf7f2fb"
+    },
+    {
+      "role": "rx",
+      "port": "COM22",
+      "mac": "1c:29:04:be:c3:a0",
+      "partition_label": "app0",
+      "application_offset": 65536,
+      "capacity_bytes": 1310720,
+      "retained_partition_region_sha256": "f3134b747fef242287f33aa0be8a5008958132e0c7611f5bc5bb917c02c9e397",
+      "verified_backup_sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc"
+    },
+    {
+      "role": "rx",
+      "port": "COM23",
+      "mac": "1c:29:04:be:c3:d8",
+      "partition_label": "app0",
+      "application_offset": 65536,
+      "capacity_bytes": 3145728,
+      "retained_partition_region_sha256": "c798c1173b1d0175c33f06340268885c4385ff5129206d90bda416ad99ea8ddd",
+      "verified_backup_sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc"
+    }
+  ],
+  "independent_build_review": {
+    "fast_loop": {
+      "section": ".iram0.text",
+      "address": "0x40376c3c",
+      "bytes": 105,
+      "call_instructions": 0,
+      "division_instructions_or_calls": false,
+      "MMIO_literal": "0x60006040",
+      "scope": "ELF software loop placement/call audit, not physical RF throughput"
+    },
+    "rx_snapshot_symbols": []
+  },
+  "validation": {
+    "source_checkout_clean": true,
+    "exact_compiled_source_digests_verified_in_bins": true,
+    "sdk_tracked_tree_clean": true,
+    "host_tests": 163,
+    "focused_integrity_and_fast_host_tests": 32,
+    "TX_complete_record_bounds": 17,
+    "largest_TX_record_upper_bound_including_NUL": 3215,
+    "fast_math_oracle_checks": 18325941,
+    "actual_fast_loop_fake_cases": 105,
+    "source_integrity_policy_fake_checks": 982,
+    "scope": "Host/ELF/build evidence, not new physical throughput or RF verification"
+  },
+  "write_scope": "Application-only at 0x10000, after rechecking each owned MAC, retained table, capacity and image hash. No bootloader, partition table, NVS or eFuse write. Retained table capacities above are independent of build-default partition CSVs.",
+  "test_scope": {
+    "plans": {
+      "plan-metal-dual-fast-smoke.json": {
+        "bytes": 2120,
+        "sha256": "6eaa5387008a89a53abe9e3a209b353e03d707a6f315d9fd8321a2ead11cfe86"
+      },
+      "plan-metal-dual-fast-rate.json": {
+        "bytes": 7703,
+        "sha256": "4a8aa52d4fffb67fc4b7d15486195960754b4bf9d486c5d090c4014a72f9ffcf"
+      },
+      "plan-metal-dual-fast-framed.json": {
+        "bytes": 4983,
+        "sha256": "35726be07963d5dda9492e65ec97f9b4b835d3ef9c2837e58fe813e124c126ed"
+      },
+      "plan-metal-dual-fast-compat.json": {
+        "bytes": 2630,
+        "sha256": "816b6b8076439cdd4fe7440fa30d3bc722630dd087c8b388269706f65e4c2557"
+      }
+    },
+    "planned_windows": {
+      "smoke": 3,
+      "rate": 42,
+      "framed": 21,
+      "compatibility": 12
+    },
+    "normal_burst_us": 1000000,
+    "finite_payload_limit_us": 2000000,
+    "channel_requested": 6,
+    "SDK_backoffs_quarter_dB_requested": [
+      96,
+      112
+    ],
+    "fast_positive_baud_requests": [
+      1000000,
+      2208000,
+      4416000,
+      8000000,
+      12000000,
+      16000000,
+      24000000,
+      32000000,
+      64000000,
+      120000000,
+      240000000
+    ],
+    "rate_scope": "Requests through the nominal CPU-cycle clock, not a claimed attainable store or RF rate. Fast rejects masking/traces and preserves words instead of skipping individual source bits; overload remains failure to attain the requested rate.",
+    "references": "Generic gate at1M/2.208M and unpaced references; finite framed multichannel PDM cases include requested2.208Msymbol/s (4ch48kHz OSR8 and24kHz stereo OSR32),4.416Msymbol/s (4ch48kHz OSR16) and8.832Msymbol/s (4ch48kHz OSR32). These are requested test clocks, not attained-rate claims.",
+    "receiver_scope": "Two finite native IQ snapshots at nominal16/40/80MS/s with deferred USB, not continuous capture. Bare PHY first; explicitly selected WiFi NULL fallback if bare tuning still fails, preserving failed setup.",
+    "temperature_scope": "Explicit driver readings outside timed windows; not independently calibrated or continuous thermal stress data.",
+    "compatibility_scope": "Four settings with three repetitions and finite1s bursts: ASK100k,ASK1M,Gate1M with requested2000us masks,andASK1M with requested2000us masks. Trace capacity2048,stride0. Re-test prior masked TX prefix loss and checked output/cleanup; actual mask intervals are reported. Requested masks remain below20ms."
+  },
+  "end_state": "Restore the approved kernel/audio profilers on COM22 and COM23 after the finite campaign; leave the requested metal TX role on COM13 (original application COM14). The disconnected classic CYD remains untouched.",
+  "limitations": [
+    "New images have no physical performance result before authorization and execution.",
+    "CPU/IQ clocks are nominal; register/software timing is not RF edge timing, synchronized one-way latency or ultimate PHY bandwidth.",
+    "Finite snapshots have explicit deadtime; no continuous on-board audio ADC/DAC or end-to-end audio latency proof.",
+    "SDK setup/teardown and integrity observers can exceed requested payload duration; no independent hard RF-cessation measurement.",
+    "CRC checkpoints do not exclude transient changes/collisions. Teardown-only changes are not assigned to earlier RF BER.",
+    "Board brand, antennas, placement and single-unit variation are not causally isolated."
+  ],
+  "bundle_receipt": "metal-fast-bundle-receipt.json",
+  "corresponding_source_archive": "UNAPPROVED-SDR-METAL-FAST-IMAGES.zip/corresponding-source.zip"
+}

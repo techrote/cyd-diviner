@@ -1,0 +1,315 @@
+Processing kernel-s3-n4r2-peer (board: esp32-s3-devkitc-1; platform: espressif32 @ 7.1.3; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32-s3-devkitc-1.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+HARDWARE: ESP32S3 240MHz, 320KB RAM, 8MB Flash
+DEBUG: Current (esp-builtin) On-board (esp-builtin) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5 
+ - toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 33 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- WiFi @ 2.0.0
+Building in release mode
+Compiling .pio\build\kernel-s3-n4r2-peer\src\perf_ble.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\src\perf_kernel_main.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\src\perf_kernels.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\src\perf_link.cpp.o
+Building .pio\build\kernel-s3-n4r2-peer\bootloader.bin
+Generating partitions .pio\build\kernel-s3-n4r2-peer\partitions.bin
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFi.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiAP.cpp.o
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 1 ELF section
+Successfully created esp32s3 image.
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\lib5c0\WiFi\WiFiUdp.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\StreamString.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\Tone.cpp.o
+Archiving .pio\build\kernel-s3-n4r2-peer\lib5c0\libWiFi.a
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\main.cpp.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\kernel-s3-n4r2-peer\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\kernel-s3-n4r2-peer\libFrameworkArduino.a
+Linking .pio\build\kernel-s3-n4r2-peer\firmware.elf
+Retrieving maximum program size .pio\build\kernel-s3-n4r2-peer\firmware.elf
+Checking size .pio\build\kernel-s3-n4r2-peer\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [==        ]  20.8% (used 68032 bytes from 327680 bytes)
+Flash: [====      ]  40.7% (used 1281697 bytes from 3145728 bytes)
+Building .pio\build\kernel-s3-n4r2-peer\firmware.bin
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+========================= [SUCCESS] Took 49.21 seconds =========================
+
+Processing cyd-profile-link (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Library Manager: Installing lovyan03/LovyanGFX @ 1.2.32
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Library Manager: LovyanGFX@1.2.32 has been installed!
+Library Manager: Installing git+https://github.com/PaulStoffregen/XPT2046_Touchscreen.git#v1.4
+git version 2.55.0.windows.5
+Cloning into 'C:\Users\_\.platformio\.cache\tmp\pkg-installing-j39x434p'...
+Note: switching to 'd57f64c8b5f2bc5b8d10d121550806eeff7b06d9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Library Manager: XPT2046_Touchscreen@0.0.0+sha.d57f64c has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build\cyd-profile-link\libb59\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\beat.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\drone.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\gemini.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\kin.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\link.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\listen.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\netscan.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\oracle.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\palette.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\pulse.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\scry.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\sentinel.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\seq.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\visions.cpp.o
+Compiling .pio\build\cyd-profile-link\src\apps\wired.cpp.o
+Compiling .pio\build\cyd-profile-link\src\cyd_controls.cpp.o
+Compiling .pio\build\cyd-profile-link\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build\cyd-profile-link\src\hal_cyd.cpp.o
+Compiling .pio\build\cyd-profile-link\src\main.cpp.o
+Compiling .pio\build\cyd-profile-link\src\net_device.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_ble.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_kernel_main.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_kernels.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_link.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_profile.cpp.o
+Compiling .pio\build\cyd-profile-link\src\perf_radio.cpp.o
+Compiling .pio\build\cyd-profile-link\src\theme.cpp.o
+Building .pio\build\cyd-profile-link\bootloader.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Generating partitions .pio\build\cyd-profile-link\partitions.bin
+Compiling .pio\build\cyd-profile-link\lib700\SPI\SPI.cpp.o
+Compiling .pio\build\cyd-profile-link\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build\cyd-profile-link\libd94\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build\cyd-profile-link\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEAddress.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEAdvertisedDevice.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEAdvertising.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEBeacon.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLECharacteristic.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLECharacteristicMap.cpp.o
+Archiving .pio\build\cyd-profile-link\lib700\libSPI.a
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEClient.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEDescriptor.cpp.o
+Archiving .pio\build\cyd-profile-link\libcfa\libWire.a
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEDescriptorMap.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEDevice.cpp.o
+Archiving .pio\build\cyd-profile-link\libd94\libXPT2046_Touchscreen.a
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEEddystoneTLM.cpp.o
+Archiving .pio\build\cyd-profile-link\lib66a\libPreferences.a
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEEddystoneURL.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEExceptions.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEHIDDevice.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLERemoteCharacteristic.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLERemoteDescriptor.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLERemoteService.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEScan.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLESecurity.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEServer.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEService.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEServiceMap.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEUUID.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEUtils.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\BLEValue.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\FreeRTOS.cpp.o
+Compiling .pio\build\cyd-profile-link\liba76\BLE\GeneralUtils.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFi.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiAP.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build\cyd-profile-link\lib5c0\WiFi\WiFiUdp.cpp.o
+Compiling .pio\build\cyd-profile-link\lib418\WiFiClientSecure\WiFiClientSecure.cpp.o
+Compiling .pio\build\cyd-profile-link\lib418\WiFiClientSecure\esp_crt_bundle.c.o
+Archiving .pio\build\cyd-profile-link\liba76\libBLE.a
+Compiling .pio\build\cyd-profile-link\lib418\WiFiClientSecure\ssl_client.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\StreamString.cpp.o
+Archiving .pio\build\cyd-profile-link\lib5c0\libWiFi.a
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\WMath.cpp.o
+Archiving .pio\build\cyd-profile-link\lib418\libWiFiClientSecure.a
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\main.cpp.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\cyd-profile-link\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\cyd-profile-link\libFrameworkArduino.a
+Linking .pio\build\cyd-profile-link\firmware.elf
+Retrieving maximum program size .pio\build\cyd-profile-link\firmware.elf
+Checking size .pio\build\cyd-profile-link\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [===       ]  30.9% (used 101360 bytes from 327680 bytes)
+Flash: [=======   ]  65.8% (used 2071005 bytes from 3145728 bytes)
+Building .pio\build\cyd-profile-link\firmware.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 27 ELF sections
+Successfully created esp32 image.
+======================== [SUCCESS] Took 106.22 seconds ========================
+
+Environment          Status    Duration
+-------------------  --------  ------------
+kernel-s3-n4r2-peer  SUCCESS   00:00:49.206
+cyd-profile-link     SUCCESS   00:01:46.216
+========================= 2 succeeded in 00:02:35.422 =========================

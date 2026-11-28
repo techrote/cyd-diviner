@@ -1,0 +1,622 @@
+Processing cyd (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Tool Manager: Installing platformio/framework-arduinoespressif32 @ ~4.20017.0
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Tool Manager: framework-arduinoespressif32@4.20017.260907+sha.dcc1105b has been installed!
+Tool Manager: Installing platformio/tool-esptoolpy @ ~2.41100.0
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Tool Manager: tool-esptoolpy@2.41100.260830 has been installed!
+Library Manager: Installing lovyan03/LovyanGFX @ 1.2.32
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Library Manager: LovyanGFX@1.2.32 has been installed!
+Library Manager: Installing git+https://github.com/PaulStoffregen/XPT2046_Touchscreen.git#v1.4
+git version 2.55.0.windows.5
+Cloning into 'C:\Users\_\.platformio\.cache\tmp\pkg-installing-kvcmihvc'...
+Note: switching to 'd57f64c8b5f2bc5b8d10d121550806eeff7b06d9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Library Manager: XPT2046_Touchscreen@0.0.0+sha.d57f64c has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build\cyd\lib3aa\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build\cyd\src\apps\beat.cpp.o
+Compiling .pio\build\cyd\src\apps\drone.cpp.o
+Compiling .pio\build\cyd\src\apps\gemini.cpp.o
+Compiling .pio\build\cyd\src\apps\kin.cpp.o
+Compiling .pio\build\cyd\src\apps\link.cpp.o
+Compiling .pio\build\cyd\src\apps\listen.cpp.o
+Compiling .pio\build\cyd\src\apps\netscan.cpp.o
+Compiling .pio\build\cyd\src\apps\oracle.cpp.o
+Compiling .pio\build\cyd\src\apps\palette.cpp.o
+Compiling .pio\build\cyd\src\apps\pulse.cpp.o
+Compiling .pio\build\cyd\src\apps\scry.cpp.o
+Compiling .pio\build\cyd\src\apps\sentinel.cpp.o
+Compiling .pio\build\cyd\src\apps\seq.cpp.o
+Compiling .pio\build\cyd\src\apps\visions.cpp.o
+Compiling .pio\build\cyd\src\apps\wired.cpp.o
+Compiling .pio\build\cyd\src\cyd_controls.cpp.o
+Compiling .pio\build\cyd\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build\cyd\src\hal_cyd.cpp.o
+Compiling .pio\build\cyd\src\main.cpp.o
+Compiling .pio\build\cyd\src\net_device.cpp.o
+Compiling .pio\build\cyd\src\perf_radio.cpp.o
+Compiling .pio\build\cyd\src\theme.cpp.o
+Building .pio\build\cyd\bootloader.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Generating partitions .pio\build\cyd\partitions.bin
+Compiling .pio\build\cyd\lib700\SPI\SPI.cpp.o
+Compiling .pio\build\cyd\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build\cyd\lib4be\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build\cyd\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEAddress.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEAdvertisedDevice.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEAdvertising.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEBeacon.cpp.o
+Archiving .pio\build\cyd\lib700\libSPI.a
+Compiling .pio\build\cyd\liba76\BLE\BLECharacteristic.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLECharacteristicMap.cpp.o
+Archiving .pio\build\cyd\libcfa\libWire.a
+Compiling .pio\build\cyd\liba76\BLE\BLEClient.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEDescriptor.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEDescriptorMap.cpp.o
+Archiving .pio\build\cyd\lib4be\libXPT2046_Touchscreen.a
+Compiling .pio\build\cyd\liba76\BLE\BLEDevice.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEEddystoneTLM.cpp.o
+Archiving .pio\build\cyd\lib66a\libPreferences.a
+Compiling .pio\build\cyd\liba76\BLE\BLEEddystoneURL.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEExceptions.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEHIDDevice.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLERemoteCharacteristic.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLERemoteDescriptor.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLERemoteService.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEScan.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLESecurity.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEServer.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEService.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEServiceMap.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEUUID.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEUtils.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\BLEValue.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\FreeRTOS.cpp.o
+Compiling .pio\build\cyd\liba76\BLE\GeneralUtils.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFi.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiAP.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build\cyd\lib5c0\WiFi\WiFiUdp.cpp.o
+Compiling .pio\build\cyd\lib418\WiFiClientSecure\WiFiClientSecure.cpp.o
+Compiling .pio\build\cyd\lib418\WiFiClientSecure\esp_crt_bundle.c.o
+Archiving .pio\build\cyd\liba76\libBLE.a
+Compiling .pio\build\cyd\lib418\WiFiClientSecure\ssl_client.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\StreamString.cpp.o
+Archiving .pio\build\cyd\lib5c0\libWiFi.a
+Compiling .pio\build\cyd\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\base64.cpp.o
+Archiving .pio\build\cyd\lib418\libWiFiClientSecure.a
+Compiling .pio\build\cyd\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\cyd\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\cyd\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\cyd\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\cyd\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\cyd\FrameworkArduino\main.cpp.o
+Compiling .pio\build\cyd\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\cyd\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\cyd\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\cyd\libFrameworkArduino.a
+Linking .pio\build\cyd\firmware.elf
+Retrieving maximum program size .pio\build\cyd\firmware.elf
+Checking size .pio\build\cyd\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [==        ]  22.4% (used 73256 bytes from 327680 bytes)
+Flash: [======    ]  63.5% (used 1997493 bytes from 3145728 bytes)
+Building .pio\build\cyd\firmware.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 27 ELF sections
+Successfully created esp32 image.
+======================== [SUCCESS] Took 129.07 seconds ========================
+
+Processing cyd-diagnostics (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Library Manager: Installing lovyan03/LovyanGFX @ 1.2.32
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Library Manager: LovyanGFX@1.2.32 has been installed!
+Library Manager: Installing git+https://github.com/PaulStoffregen/XPT2046_Touchscreen.git#v1.4
+git version 2.55.0.windows.5
+Cloning into 'C:\Users\_\.platformio\.cache\tmp\pkg-installing-grlg1v8x'...
+Note: switching to 'd57f64c8b5f2bc5b8d10d121550806eeff7b06d9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Library Manager: XPT2046_Touchscreen@0.0.0+sha.d57f64c has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib28c\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\beat.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\drone.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\gemini.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\kin.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\link.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\listen.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\netscan.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\oracle.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\palette.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\pulse.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\scry.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\sentinel.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\seq.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\visions.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\apps\wired.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\cyd_controls.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\hal_cyd.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\main.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\net_device.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\perf_kernel_main.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\perf_kernels.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\perf_profile.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\perf_radio.cpp.o
+Compiling .pio\build\cyd-diagnostics\src\theme.cpp.o
+Building .pio\build\cyd-diagnostics\bootloader.bin
+Generating partitions .pio\build\cyd-diagnostics\partitions.bin
+Compiling .pio\build\cyd-diagnostics\lib700\SPI\SPI.cpp.o
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Compiling .pio\build\cyd-diagnostics\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib8a4\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build\cyd-diagnostics\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLEAddress.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLEAdvertisedDevice.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLEAdvertising.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLEBeacon.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLECharacteristic.cpp.o
+Compiling .pio\build\cyd-diagnostics\liba76\BLE\BLECharacteristicMap.cpp.o
+Archiving .pio\build\cyd-diagnostics\lib700\libSPI.a
+c:\users\_\.platformio\packages\toolchain-xtensa-esp32\bin\../lib/gcc/xtensa-esp32-elf/8.4.0/../../../../xtensa-esp32-elf/bin/ar.exe: .pio\build\cyd-diagnostics\lib700\libSPI.a: No such file or directory
+*** [.pio\build\cyd-diagnostics\lib700\libSPI.a] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.cpp:698:27: fatal error: opening dependency file .pio/build/cyd-diagnostics/libcfa/Wire/Wire.cpp.d: No such file or directory
+ TwoWire Wire1 = TwoWire(1);
+                           ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\libcfa\Wire\Wire.cpp.o] Error 1
+.pio/libdeps/cyd-diagnostics/XPT2046_Touchscreen/XPT2046_Touchscreen.cpp:216:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/lib8a4/XPT2046_Touchscreen/XPT2046_Touchscreen.cpp.d: No such file or directory
+ }
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\lib8a4\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLE2904.cpp:72:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLE2904.cpp.d: No such file or directory
+ } // setUnit
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLE2904.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLE2902.cpp:62:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLE2902.cpp.d: No such file or directory
+ } // setNotifications
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLE2902.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLEBeacon.cpp:80:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLEBeacon.cpp.d: No such file or directory
+ } // setSignalPower
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLEBeacon.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLEAddress.cpp:116:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLEAddress.cpp.d: No such file or directory
+ } // toString
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLEAddress.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/Preferences/src/Preferences.cpp:534:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/lib66a/Preferences/Preferences.cpp.d: No such file or directory
+ }
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\lib66a\Preferences\Preferences.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLEAdvertising.cpp:529:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLEAdvertising.cpp.d: No such file or directory
+ }
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLEAdvertising.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLEAdvertisedDevice.cpp:591:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLEAdvertisedDevice.cpp.d: No such file or directory
+ }
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLEAdvertisedDevice.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLECharacteristicMap.cpp:131:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLECharacteristicMap.cpp.d: No such file or directory
+ } // toString
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLECharacteristicMap.cpp.o] Error 1
+C:/Users/_/.platformio/packages/framework-arduinoespressif32/libraries/BLE/src/BLECharacteristic.cpp:798:1: fatal error: opening dependency file .pio/build/cyd-diagnostics/liba76/BLE/BLECharacteristic.cpp.d: No such file or directory
+ } // onStatus
+ ^
+compilation terminated.
+*** [.pio\build\cyd-diagnostics\liba76\BLE\BLECharacteristic.cpp.o] Error 1
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\cyd-diviner\\perf-characterisation\\.pio\\build\\cyd-diagnostics\\.sconsign312.tmp':
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Script\Main.py", line 1524:
+    _exec_main(parser, values)
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Script\Main.py", line 1478:
+    _main(parser)
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Script\Main.py", line 1223:
+    nodes = _build_targets(fs, options, targets, target_top)
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Script\Main.py", line 1412:
+    jobs.run(postfunc = jobs_postfunc)
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Taskmaster\Job.py", line 117:
+    postfunc()
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\Script\Main.py", line 1409:
+    SCons.SConsign.write()
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\SConsign.py", line 131:
+    syncmethod()
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 195:
+    with self._open(self._tmp_name, "wb", opener=self.opener) as f:
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 177:
+    return os.open(path, flags, mode=self._mode)
+Exception ignored in: <function _Dblite.__del__ at 0x00000193DD053600>
+Traceback (most recent call last):
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 184, in __del__
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 181, in close
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 195, in sync
+  File "C:\Users\_\.platformio\packages\tool-scons\scons-local-4.11.1\SCons\dblite.py", line 177, in opener
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\cyd-diviner\\perf-characterisation\\.pio\\build\\cyd-diagnostics\\.sconsign312.tmp'
+========================= [FAILED] Took 39.90 seconds =========================
+
+Processing cyd-pcm (platform: espressif32 @ 7.1.3; board: esp32dev; framework: arduino)
+--------------------------------------------------------------------------------
+Library Manager: Installing lovyan03/LovyanGFX @ 1.2.32
+Unpacking 0% 10% 20% 30% 40% 50% 60% 70% 80% 90% 100%
+Library Manager: LovyanGFX@1.2.32 has been installed!
+Library Manager: Installing git+https://github.com/PaulStoffregen/XPT2046_Touchscreen.git#v1.4
+git version 2.55.0.windows.5
+Cloning into 'C:\Users\_\.platformio\.cache\tmp\pkg-installing-p5jz_x2c'...
+Note: switching to 'd57f64c8b5f2bc5b8d10d121550806eeff7b06d9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+Library Manager: XPT2046_Touchscreen@0.0.0+sha.d57f64c has been installed!
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32dev.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32 Dev Module
+HARDWARE: ESP32 240MHz, 320KB RAM, 4MB Flash
+DEBUG: Current (cmsis-dap) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-xtensa-esp32 @ 8.4.0+2021r2-patch5
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 35 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+|-- XPT2046_Touchscreen @ 0.0.0+sha.d57f64c
+|-- Preferences @ 2.0.0
+|-- SPI @ 2.0.0
+|-- ESP32 BLE Arduino @ 2.0.0
+|-- WiFi @ 2.0.0
+|-- WiFiClientSecure @ 2.0.0
+Building in release mode
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\Fonts\IPA\lgfx_font_japan.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_cn.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_ja.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_kr.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\Fonts\efont\lgfx_efont_tw.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\utility\lgfx_miniz.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\utility\lgfx_pngle.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\utility\lgfx_qoi.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\utility\lgfx_qrcode.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\utility\lgfx_tjpgd.c.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\LGFXBase.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\lgfx_fonts.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\lgfx_v1.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\lgfx_v1_panel.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\lgfx_v1_platforms.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\lgfx_v1_touch.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\panel\Panel_M5HDMI.cpp.o
+Compiling .pio\build\cyd-pcm\libb54\LovyanGFX\lgfx\v1\touch\Touch_GSLx680.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\beat.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\drone.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\gemini.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\kin.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\link.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\listen.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\netscan.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\oracle.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\palette.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\pulse.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\scry.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\sentinel.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\seq.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\visions.cpp.o
+Compiling .pio\build\cyd-pcm\src\apps\wired.cpp.o
+Compiling .pio\build\cyd-pcm\src\cyd_controls.cpp.o
+Compiling .pio\build\cyd-pcm\src\cyd_pcm_serial.cpp.o
+Compiling .pio\build\cyd-pcm\src\hal_cyd.cpp.o
+Compiling .pio\build\cyd-pcm\src\main.cpp.o
+Compiling .pio\build\cyd-pcm\src\net_device.cpp.o
+Compiling .pio\build\cyd-pcm\src\perf_kernel_main.cpp.o
+Compiling .pio\build\cyd-pcm\src\perf_kernels.cpp.o
+Compiling .pio\build\cyd-pcm\src\perf_profile.cpp.o
+Compiling .pio\build\cyd-pcm\src\perf_radio.cpp.o
+Compiling .pio\build\cyd-pcm\src\theme.cpp.o
+Building .pio\build\cyd-pcm\bootloader.bin
+Generating partitions .pio\build\cyd-pcm\partitions.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 1 ELF section
+Successfully created esp32 image.
+Compiling .pio\build\cyd-pcm\lib700\SPI\SPI.cpp.o
+Compiling .pio\build\cyd-pcm\libcfa\Wire\Wire.cpp.o
+Compiling .pio\build\cyd-pcm\lib8bc\XPT2046_Touchscreen\XPT2046_Touchscreen.cpp.o
+Compiling .pio\build\cyd-pcm\lib66a\Preferences\Preferences.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLE2902.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLE2904.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEAddress.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEAdvertisedDevice.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEAdvertising.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEBeacon.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLECharacteristic.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLECharacteristicMap.cpp.o
+Archiving .pio\build\cyd-pcm\lib700\libSPI.a
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEClient.cpp.o
+Archiving .pio\build\cyd-pcm\libcfa\libWire.a
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEDescriptor.cpp.o
+Archiving .pio\build\cyd-pcm\lib8bc\libXPT2046_Touchscreen.a
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEDescriptorMap.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEDevice.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEEddystoneTLM.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEEddystoneURL.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEExceptions.cpp.o
+Archiving .pio\build\cyd-pcm\lib66a\libPreferences.a
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEHIDDevice.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLERemoteCharacteristic.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLERemoteDescriptor.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLERemoteService.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEScan.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLESecurity.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEServer.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEService.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEServiceMap.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEUUID.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEUtils.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\BLEValue.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\FreeRTOS.cpp.o
+Compiling .pio\build\cyd-pcm\liba76\BLE\GeneralUtils.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFi.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiAP.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiClient.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiGeneric.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiMulti.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiSTA.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiScan.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiServer.cpp.o
+Compiling .pio\build\cyd-pcm\lib5c0\WiFi\WiFiUdp.cpp.o
+Compiling .pio\build\cyd-pcm\lib418\WiFiClientSecure\WiFiClientSecure.cpp.o
+Compiling .pio\build\cyd-pcm\lib418\WiFiClientSecure\esp_crt_bundle.c.o
+Archiving .pio\build\cyd-pcm\liba76\libBLE.a
+Compiling .pio\build\cyd-pcm\lib418\WiFiClientSecure\ssl_client.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\HWCDC.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\IPAddress.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\Print.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\StreamString.cpp.o
+Archiving .pio\build\cyd-pcm\lib5c0\libWiFi.a
+Compiling .pio\build\cyd-pcm\FrameworkArduino\Tone.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-adc.c.o
+Archiving .pio\build\cyd-pcm\lib418\libWiFiClientSecure.a
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\libb64\cdecode.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\main.cpp.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\cyd-pcm\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\cyd-pcm\libFrameworkArduino.a
+Linking .pio\build\cyd-pcm\firmware.elf
+Retrieving maximum program size .pio\build\cyd-pcm\firmware.elf
+Checking size .pio\build\cyd-pcm\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [==        ]  22.4% (used 73424 bytes from 327680 bytes)
+Flash: [======    ]  63.5% (used 1998773 bytes from 3145728 bytes)
+Building .pio\build\cyd-pcm\firmware.bin
+esptool.py v4.11.0
+Creating esp32 image...
+Merged 27 ELF sections
+Successfully created esp32 image.
+========================= [SUCCESS] Took 82.22 seconds =========================
+
+Environment      Status    Duration
+---------------  --------  ------------
+cyd              SUCCESS   00:02:09.068
+cyd-diagnostics  FAILED    00:00:39.901
+cyd-pcm          SUCCESS   00:01:22.224
+==================== 1 failed, 2 succeeded in 00:04:11.193 ====================

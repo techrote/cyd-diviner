@@ -1,0 +1,351 @@
+{
+  "schema": "cyd-perf-figures/1",
+  "generated_utc": "2026-11-27T22:05:28.032074+00:00",
+  "label": "Fullscreen packed-colour quick matrix",
+  "input": "C:\\cyd-diviner\\perf-characterisation\\evidence\\physical\\color-quick-01\\results.json",
+  "input_sha256": "f7910e7a3877c33ceee35e9d71d32665e4b5009f5e0a00fc6824e54b97a5614e",
+  "capture_status": "CAPTURE COMPLETE",
+  "evidence_class": "physical_measured",
+  "source_sha": "ad9cbfd670e456de5e08fca19810fb93f7f1db47",
+  "firmware_sha256": "407eb96f8fe2b74ed1cf45f4a163558eacde0ff287a4b878a9ed1faadfaccc93",
+  "profile": "cyd-profile-audio",
+  "measured_runs": 36,
+  "figures": [
+    {
+      "name": "fps-scenes",
+      "title": "Actual presentation rate",
+      "sample_note": "36 measured repetitions; 830 completed presentations; r per row.",
+      "observations": {
+        "color/fullscreen/gate/off/layers1": [
+          {
+            "run_id": "r001_1",
+            "scope": "5bedd516b564",
+            "frames": 75,
+            "elapsed_us": 3000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r002_2",
+            "scope": "5bedd516b564",
+            "frames": 75,
+            "elapsed_us": 3000000,
+            "fps": 25.0
+          },
+          {
+            "run_id": "r003_3",
+            "scope": "5bedd516b564",
+            "frames": 75,
+            "elapsed_us": 3000000,
+            "fps": 25.0
+          }
+        ],
+        "color/fullscreen/gate/off/layers2": [
+          {
+            "run_id": "r004_1",
+            "scope": "a1ca65014b6c",
+            "frames": 67,
+            "elapsed_us": 3000000,
+            "fps": 22.333333333333332
+          },
+          {
+            "run_id": "r005_2",
+            "scope": "a1ca65014b6c",
+            "frames": 67,
+            "elapsed_us": 3000000,
+            "fps": 22.333333333333332
+          },
+          {
+            "run_id": "r006_3",
+            "scope": "a1ca65014b6c",
+            "frames": 67,
+            "elapsed_us": 3000000,
+            "fps": 22.333333333333332
+          }
+        ],
+        "color/fullscreen/gate/rgb111/layers1": [
+          {
+            "run_id": "r007_1",
+            "scope": "20a1b46c9577",
+            "frames": 23,
+            "elapsed_us": 3000000,
+            "fps": 7.666666666666667
+          },
+          {
+            "run_id": "r008_2",
+            "scope": "20a1b46c9577",
+            "frames": 24,
+            "elapsed_us": 3000000,
+            "fps": 8.0
+          },
+          {
+            "run_id": "r009_3",
+            "scope": "20a1b46c9577",
+            "frames": 24,
+            "elapsed_us": 3000000,
+            "fps": 8.0
+          }
+        ],
+        "color/fullscreen/gate/rgb111/layers2": [
+          {
+            "run_id": "r010_1",
+            "scope": "13283be1c36d",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r011_2",
+            "scope": "13283be1c36d",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r012_3",
+            "scope": "13283be1c36d",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          }
+        ],
+        "color/fullscreen/gate/rgb444/layers1": [
+          {
+            "run_id": "r013_1",
+            "scope": "a189feb6aa11",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          },
+          {
+            "run_id": "r014_2",
+            "scope": "a189feb6aa11",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          },
+          {
+            "run_id": "r015_3",
+            "scope": "a189feb6aa11",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          }
+        ],
+        "color/fullscreen/gate/rgb444/layers2": [
+          {
+            "run_id": "r016_1",
+            "scope": "ee91ab632e81",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r017_2",
+            "scope": "ee91ab632e81",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r018_3",
+            "scope": "ee91ab632e81",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          }
+        ],
+        "color/fullscreen/gate/rgba5551/layers1": [
+          {
+            "run_id": "r019_1",
+            "scope": "e268b1ab011b",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          },
+          {
+            "run_id": "r020_2",
+            "scope": "e268b1ab011b",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          },
+          {
+            "run_id": "r021_3",
+            "scope": "e268b1ab011b",
+            "frames": 21,
+            "elapsed_us": 3000000,
+            "fps": 7.0
+          }
+        ],
+        "color/fullscreen/gate/rgba5551/layers2": [
+          {
+            "run_id": "r022_1",
+            "scope": "0ff1bb4d529d",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r023_2",
+            "scope": "0ff1bb4d529d",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r024_3",
+            "scope": "0ff1bb4d529d",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          }
+        ],
+        "color/fullscreen/plasma-kaleido/rgb111/layers2": [
+          {
+            "run_id": "r025_1",
+            "scope": "26499e1f40a9",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r026_2",
+            "scope": "26499e1f40a9",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r027_3",
+            "scope": "26499e1f40a9",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          }
+        ],
+        "color/fullscreen/ashfire-rain/rgb111/layers2": [
+          {
+            "run_id": "r028_1",
+            "scope": "314996995629",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r029_2",
+            "scope": "314996995629",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          },
+          {
+            "run_id": "r030_3",
+            "scope": "314996995629",
+            "frames": 11,
+            "elapsed_us": 3000000,
+            "fps": 3.6666666666666665
+          }
+        ],
+        "color/fullscreen/plasma-kaleido/rgb444/layers2": [
+          {
+            "run_id": "r031_1",
+            "scope": "b9f9c58be6bc",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r032_2",
+            "scope": "b9f9c58be6bc",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r033_3",
+            "scope": "b9f9c58be6bc",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          }
+        ],
+        "color/fullscreen/ashfire-rain/rgb444/layers2": [
+          {
+            "run_id": "r034_1",
+            "scope": "c2578aecebd0",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r035_2",
+            "scope": "c2578aecebd0",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          },
+          {
+            "run_id": "r036_3",
+            "scope": "c2578aecebd0",
+            "frames": 9,
+            "elapsed_us": 3000000,
+            "fps": 3.0
+          }
+        ]
+      },
+      "files": [
+        {
+          "file": "fps-scenes.png",
+          "sha256": "8a4e77b2096615e0578fa21ec424ce24007960ba0c042ac7f4339f90005c3459"
+        },
+        {
+          "file": "fps-scenes.svg",
+          "sha256": "7ecea476a3c812fad1943e67df1aca8c10e511264937598420adb0c435ad5be6"
+        }
+      ]
+    }
+  ],
+  "omitted": [
+    {
+      "figure": "audio-tails",
+      "reason": "No observed callback/mix/enqueue timings"
+    },
+    {
+      "figure": "kernel-dsp",
+      "reason": "No exact target kernel timing samples"
+    },
+    {
+      "figure": "stress-temperature",
+      "reason": "No completed retained stress samples"
+    }
+  ],
+  "tool_sha256": "6b4ed5ab761b52b2f0afd4e403450e807557c307686ca3e566c53094ad98fd1c",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "analysis_packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "contourpy": "1.4.0",
+    "fonttools": "4.69.1",
+    "kiwisolver": "1.5.1",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "4.0.0"
+  },
+  "limitations": [
+    "Only completed MEASURED runs are plotted; missing data are not synthesized.",
+    "Repetition ranges use matching requested settings, windows, instrumentation and actual scene/allocation receipts; differing scopes are labelled separately.",
+    "Histogram p99 values are power-of-two upper bounds, distinct from exact observed maxima.",
+    "Per-run FPS uses completed physical presentations divided by the target measurement window.",
+    "CPU utilization is target tick sampling, not cycle-exact utilization.",
+    "Temperature codes come from an undocumented RTC-library function; they are uncalibrated sensor indications, not calibrated die temperatures.",
+    "Primary capture's ESP32_ROM_raw_uncalibrated tag is retained verbatim in raw evidence; its ROM attribution is a legacy inaccurate label."
+  ],
+  "command_argv": [
+    "tools/perf/plot_results.py",
+    "evidence/physical/color-quick-01/results.json",
+    "--output",
+    "evidence/physical/color-quick-01/figures",
+    "--label",
+    "Fullscreen packed-colour quick matrix"
+  ]
+}

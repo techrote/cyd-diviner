@@ -1,0 +1,380 @@
+{
+  "schema": "cyd-perf-derived-publication-layout/1",
+  "archive": "DERIVED-ANALYSES.zip",
+  "archive_sha256": "166c58d13a6168ccf4653c9f852d8be6234912d7cf9e9087c4a053086ec79850",
+  "original_manifest_member": "DERIVED-ANALYSES-MANIFEST.json",
+  "manifest_sha256": "40c728a0a5b1045e3f4fdedbda76d43eb299069c9ff917b4bb40b57e762f6109",
+  "no_changes_applied": false,
+  "policy": "All root-level original JSON/CSV/report/manifests/figures retained byte-exact. Detailed nested trials/spectra/PCM/IQ/WAV archived; live originals are not deleted by this tool.",
+  "directories": [
+    {
+      "directory": "evidence/audio-bidirectional-deferred-analysis",
+      "files": 4,
+      "bytes": 337674,
+      "live_kept": 4,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/audio-deferred-fresh-analysis",
+      "files": 4,
+      "bytes": 46676,
+      "live_kept": 4,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/audio-offline-osr16",
+      "files": 38,
+      "bytes": 5800399,
+      "live_kept": 3,
+      "WAVs": 15,
+      "actual_archived_paths_remaining_in_index": 23
+    },
+    {
+      "directory": "evidence/audio-offline-osr32",
+      "files": 38,
+      "bytes": 5800331,
+      "live_kept": 3,
+      "WAVs": 15,
+      "actual_archived_paths_remaining_in_index": 23
+    },
+    {
+      "directory": "evidence/audio-s3-pair-02-analysis",
+      "files": 4,
+      "bytes": 771167,
+      "live_kept": 4,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/audio-s3-pair-deferred-analysis",
+      "files": 4,
+      "bytes": 807252,
+      "live_kept": 4,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/host-kernels",
+      "files": 16,
+      "bytes": 51115,
+      "live_kept": 16,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 16
+    },
+    {
+      "directory": "evidence/metal-framed-wifi-rx-demod",
+      "files": 324,
+      "bytes": 1696457,
+      "live_kept": 6,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 6
+    },
+    {
+      "directory": "evidence/metal-framed-wifi-rx2-demod",
+      "files": 311,
+      "bytes": 1461783,
+      "live_kept": 6,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 6
+    },
+    {
+      "directory": "evidence/metal-framed-wifi-swapped-rx-demod",
+      "files": 319,
+      "bytes": 1573852,
+      "live_kept": 6,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 6
+    },
+    {
+      "directory": "evidence/metal-framed-wifi-swapped-rx2-demod",
+      "files": 322,
+      "bytes": 1633027,
+      "live_kept": 6,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 6
+    },
+    {
+      "directory": "evidence/metal-position-swap-rx-analysis",
+      "files": 5,
+      "bytes": 122356,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/metal-position-swap-rx-envelope",
+      "files": 3,
+      "bytes": 76206,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/metal-position-swap-rx2-analysis",
+      "files": 5,
+      "bytes": 122381,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/metal-position-swap-rx2-envelope",
+      "files": 3,
+      "bytes": 93343,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/metal-rate-wifi-rx-analysis",
+      "files": 5,
+      "bytes": 505838,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/metal-rate-wifi-rx-envelope",
+      "files": 81,
+      "bytes": 13466662,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/metal-rate-wifi-rx2-analysis",
+      "files": 5,
+      "bytes": 505253,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/metal-rate-wifi-rx2-envelope",
+      "files": 81,
+      "bytes": 13628911,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/metal-smoke-wifi-rx-analysis",
+      "files": 5,
+      "bytes": 145315,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/metal-smoke-wifi-rx2-analysis",
+      "files": 5,
+      "bytes": 145198,
+      "live_kept": 5,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 5
+    },
+    {
+      "directory": "evidence/native-replay",
+      "files": 11,
+      "bytes": 550545,
+      "live_kept": 10,
+      "WAVs": 1,
+      "actual_archived_paths_remaining_in_index": 7
+    },
+    {
+      "directory": "evidence/sdr-framed-23k-analysis",
+      "files": 25,
+      "bytes": 151029,
+      "live_kept": 4,
+      "WAVs": 6,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/sdr-framed-four-analysis",
+      "files": 25,
+      "bytes": 159506,
+      "live_kept": 4,
+      "WAVs": 6,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/sdr-framed-low-analysis",
+      "files": 53,
+      "bytes": 356592,
+      "live_kept": 4,
+      "WAVs": 14,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/sdr-framed-low-analysis-v2",
+      "files": 53,
+      "bytes": 354994,
+      "live_kept": 4,
+      "WAVs": 14,
+      "actual_archived_paths_remaining_in_index": 4
+    },
+    {
+      "directory": "evidence/sdr-framed-stimuli",
+      "files": 34,
+      "bytes": 51250,
+      "live_kept": 26,
+      "WAVs": 8,
+      "actual_archived_paths_remaining_in_index": 26
+    },
+    {
+      "directory": "evidence/sdr-metal-stimuli",
+      "files": 25,
+      "bytes": 49302,
+      "live_kept": 25,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 25
+    },
+    {
+      "directory": "evidence/sdr-signals-calibration-01",
+      "files": 12,
+      "bytes": 58852,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/sdr-signals-offset-minus80",
+      "files": 6,
+      "bytes": 20666,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/sdr-signals-offset-plus80",
+      "files": 6,
+      "bytes": 20778,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/sdr-signals-ram-125k-01",
+      "files": 15,
+      "bytes": 75033,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/sdr-signals-ram-250k-v2-01",
+      "files": 15,
+      "bytes": 77233,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    },
+    {
+      "directory": "evidence/sdr-signals-ram-centered-01",
+      "files": 18,
+      "bytes": 92582,
+      "live_kept": 3,
+      "WAVs": 0,
+      "actual_archived_paths_remaining_in_index": 3
+    }
+  ],
+  "proposed_index_removal_count": 1602,
+  "previous_HEAD_paths_among_candidates": [
+    "evidence/audio-offline-osr16/01-clean-0/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/01-clean-0/reference.pcm16le",
+    "evidence/audio-offline-osr16/01-clean-0/stderr.log",
+    "evidence/audio-offline-osr16/01-clean-0/stdout.json",
+    "evidence/audio-offline-osr16/02-flip-1000/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/02-flip-1000/reference.pcm16le",
+    "evidence/audio-offline-osr16/02-flip-1000/stderr.log",
+    "evidence/audio-offline-osr16/02-flip-1000/stdout.json",
+    "evidence/audio-offline-osr16/03-burst-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/03-burst-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/03-burst-128/stderr.log",
+    "evidence/audio-offline-osr16/03-burst-128/stdout.json",
+    "evidence/audio-offline-osr16/04-stuck-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/04-stuck-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/04-stuck-128/stderr.log",
+    "evidence/audio-offline-osr16/04-stuck-128/stdout.json",
+    "evidence/audio-offline-osr16/05-erase-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/05-erase-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/05-erase-128/stderr.log",
+    "evidence/audio-offline-osr16/05-erase-128/stdout.json",
+    "evidence/audio-offline-osr32/01-clean-0/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/01-clean-0/reference.pcm16le",
+    "evidence/audio-offline-osr32/01-clean-0/stderr.log",
+    "evidence/audio-offline-osr32/01-clean-0/stdout.json",
+    "evidence/audio-offline-osr32/02-flip-1000/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/02-flip-1000/reference.pcm16le",
+    "evidence/audio-offline-osr32/02-flip-1000/stderr.log",
+    "evidence/audio-offline-osr32/02-flip-1000/stdout.json",
+    "evidence/audio-offline-osr32/03-burst-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/03-burst-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/03-burst-128/stderr.log",
+    "evidence/audio-offline-osr32/03-burst-128/stdout.json",
+    "evidence/audio-offline-osr32/04-stuck-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/04-stuck-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/04-stuck-128/stderr.log",
+    "evidence/audio-offline-osr32/04-stuck-128/stdout.json",
+    "evidence/audio-offline-osr32/05-erase-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/05-erase-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/05-erase-128/stderr.log",
+    "evidence/audio-offline-osr32/05-erase-128/stdout.json"
+  ],
+  "archive_member_to_reconstruct_exact_paths": "DERIVED-ANALYSES-MANIFEST.json.files; select live_disposition=ARCHIVE_ONLY_PROPOSED",
+  "preexisting_missing_local_links": [],
+  "link_rewrites": [],
+  "applied_operation": "unstage_NEW_added_archived_details_only; no_on_disk_deletions",
+  "actual_new_added_paths_unstaged": 1562,
+  "retained_HEAD_detail_paths": [
+    "evidence/audio-offline-osr16/01-clean-0/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/01-clean-0/reference.pcm16le",
+    "evidence/audio-offline-osr16/01-clean-0/stderr.log",
+    "evidence/audio-offline-osr16/01-clean-0/stdout.json",
+    "evidence/audio-offline-osr16/02-flip-1000/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/02-flip-1000/reference.pcm16le",
+    "evidence/audio-offline-osr16/02-flip-1000/stderr.log",
+    "evidence/audio-offline-osr16/02-flip-1000/stdout.json",
+    "evidence/audio-offline-osr16/03-burst-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/03-burst-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/03-burst-128/stderr.log",
+    "evidence/audio-offline-osr16/03-burst-128/stdout.json",
+    "evidence/audio-offline-osr16/04-stuck-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/04-stuck-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/04-stuck-128/stderr.log",
+    "evidence/audio-offline-osr16/04-stuck-128/stdout.json",
+    "evidence/audio-offline-osr16/05-erase-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr16/05-erase-128/reference.pcm16le",
+    "evidence/audio-offline-osr16/05-erase-128/stderr.log",
+    "evidence/audio-offline-osr16/05-erase-128/stdout.json",
+    "evidence/audio-offline-osr32/01-clean-0/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/01-clean-0/reference.pcm16le",
+    "evidence/audio-offline-osr32/01-clean-0/stderr.log",
+    "evidence/audio-offline-osr32/01-clean-0/stdout.json",
+    "evidence/audio-offline-osr32/02-flip-1000/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/02-flip-1000/reference.pcm16le",
+    "evidence/audio-offline-osr32/02-flip-1000/stderr.log",
+    "evidence/audio-offline-osr32/02-flip-1000/stdout.json",
+    "evidence/audio-offline-osr32/03-burst-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/03-burst-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/03-burst-128/stderr.log",
+    "evidence/audio-offline-osr32/03-burst-128/stdout.json",
+    "evidence/audio-offline-osr32/04-stuck-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/04-stuck-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/04-stuck-128/stderr.log",
+    "evidence/audio-offline-osr32/04-stuck-128/stdout.json",
+    "evidence/audio-offline-osr32/05-erase-128/reconstructed.pcm16le",
+    "evidence/audio-offline-osr32/05-erase-128/reference.pcm16le",
+    "evidence/audio-offline-osr32/05-erase-128/stderr.log",
+    "evidence/audio-offline-osr32/05-erase-128/stdout.json"
+  ],
+  "retained_protected_input_index_paths": 51,
+  "archive_members_also_retained_in_index": 236,
+  "all_original_files_unchanged_on_disk": 1880,
+  "ignore_policy_verified": {
+    "all_approved_removed_details_match": 1562,
+    "root_results_summary_manifest_source_inputs_controls_remain_visible": true
+  }
+}

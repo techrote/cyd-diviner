@@ -1,0 +1,257 @@
+{
+  "schema": "cyd-link-publication-link-correction/1",
+  "created_utc": "2026-11-27T23:26:10.534936+00:00",
+  "evidence_class": "OFFLINE_LINK_CORRECTION_NOT_NEW_MEASUREMENT",
+  "source_snapshot": "9ce79786cd826c5eabf375ef301b3320a6b23d1f",
+  "reason": "Four published reports linked the standalone analyzer manifest name, but the publication artifact is manifest.json.",
+  "old_fragment": "[analysis manifest](link-analysis-manifest.json)",
+  "new_fragment": "[publication manifest](manifest.json)",
+  "historical_integrity_audit_unchanged": {
+    "INTEGRITY-AUDIT.json": {
+      "bytes": 124408,
+      "sha256": "79d1886046f32f7c477eba2679a14d496303c13d51e6c59fd146475a80f5ec8f"
+    },
+    "INTEGRITY-AUDIT.md": {
+      "bytes": 3041,
+      "sha256": "7465e508195701cae614a5064b7cf71bedc135098451820e1afa02bcefbda3e0"
+    }
+  },
+  "historical_audit_resolution": "Resolves its four absent campaign-link-*/link-analysis-manifest.json targets; historical audit files remain unchanged.",
+  "publisher": {
+    "path": "tools/perf/publish_link_evidence.py",
+    "before": {
+      "bytes": 3780,
+      "sha256": "4ee8117e11b9c1061486f22eff3fc6132925aa87ee0920d8c9c71a691dd89c43"
+    },
+    "after": {
+      "bytes": 3897,
+      "sha256": "58d4e117df6665b254c36edced95ac40a5aadd923f77e815dc82a4e442fff31c"
+    },
+    "standalone_analyzer_manifest_contract": "unchanged; only publication href/label rewrite added"
+  },
+  "regression_test": {
+    "path": "tools/perf/test_publish_link_evidence.py",
+    "bytes": 2427,
+    "sha256": "5942b494f86007cae400094503352b810922919c6263f0546101aeb88ea11c5b"
+  },
+  "raw_archive_unchanged": {
+    "path": "evidence/PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7"
+  },
+  "publications": [
+    {
+      "directory": "evidence/campaign-link-ble",
+      "report": {
+        "path": "evidence/campaign-link-ble/LINK-REPORT.md",
+        "before": {
+          "bytes": 15266,
+          "sha256": "8247812721edca5de0ae23dbec1fc01a7aebfdb733b51718dc8cfba546397aab"
+        },
+        "after": {
+          "bytes": 15255,
+          "sha256": "8e4e769f49629ccd1a6cf4925c1481cba2a0a7bd233b23f82fe52c851b7f1dc2"
+        },
+        "only_exact_link_fragment_replaced": true
+      },
+      "publication_manifest": {
+        "path": "evidence/campaign-link-ble/manifest.json",
+        "before": {
+          "bytes": 3339,
+          "sha256": "a5b2044de4c44eac1c38aabfb6a06e59f546ba5d883ba55fce08012dec916a24"
+        },
+        "after": {
+          "bytes": 3339,
+          "sha256": "9f66ce7307b03cbe2bf0eae2c63b5e4c815c69bab5e4881919ba8fef3dc48789"
+        },
+        "only_report_output_receipt_changed": true
+      },
+      "capture_status_unchanged": "FAILED",
+      "input_results_sha256_unchanged": "1d231d28c256d1e81fe796e2c683342457893c3df8b6e3a4427faf7e7038fedd",
+      "data_outputs_unchanged": {
+        "link-groups.csv": {
+          "bytes": 15823,
+          "sha256": "85ff1a7d0457fd8f4f50929d5cbb026182ce8a071686b20f0d71e4496b6adb21"
+        },
+        "link-runs.csv": {
+          "bytes": 55120,
+          "sha256": "8550ae398df04bf7aebaa91387605b88a75ef76f1cdb13647f245d47fb599990"
+        },
+        "link-summary.json": {
+          "bytes": 129875,
+          "sha256": "7f7295fc3b956b5b0f48dca5c73254fc2f187c04bbf1fa1434477219b08ec803"
+        }
+      },
+      "local_markdown_targets_verified": [
+        "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+        "link-summary.json",
+        "link-runs.csv",
+        "link-groups.csv",
+        "manifest.json"
+      ]
+    },
+    {
+      "directory": "evidence/campaign-link-fresh-ap",
+      "report": {
+        "path": "evidence/campaign-link-fresh-ap/LINK-REPORT.md",
+        "before": {
+          "bytes": 8382,
+          "sha256": "6d7f03f7b9386d77e45f89a9ed1c2aca7c89a3e1d85ae150a0e18999d224a262"
+        },
+        "after": {
+          "bytes": 8371,
+          "sha256": "2ff0302e9eec208c0e9752f59d8b78607438aabd462762fbb1e7de5b014ffe11"
+        },
+        "only_exact_link_fragment_replaced": true
+      },
+      "publication_manifest": {
+        "path": "evidence/campaign-link-fresh-ap/manifest.json",
+        "before": {
+          "bytes": 3356,
+          "sha256": "4d6963ca2d3c8dcbdd694a92fd030c1a27092d3e17bda6bf3f4930705bc6e300"
+        },
+        "after": {
+          "bytes": 3356,
+          "sha256": "a94d58878ccf7bf3b6da53dc69629bcb56c04a79b5a302986fa830f4079ace84"
+        },
+        "only_report_output_receipt_changed": true
+      },
+      "capture_status_unchanged": "FAILED",
+      "input_results_sha256_unchanged": "d2cb18d13e6cf48d94cea8674a3db68a250db619a17cd59f45d28cace9ccb69c",
+      "data_outputs_unchanged": {
+        "link-groups.csv": {
+          "bytes": 15215,
+          "sha256": "1182caed99184d4ee7da28539d22b988b2f7c89d55d8bad611be369126c7998a"
+        },
+        "link-runs.csv": {
+          "bytes": 146528,
+          "sha256": "5b37e2f9e927443dcd24b47a34ed347363ffd9959f198f4a6a75c5308e83b65d"
+        },
+        "link-summary.json": {
+          "bytes": 346331,
+          "sha256": "098d52f9169a10160ea6fa473f463de0631df19ac115918c52b831865190fb07"
+        }
+      },
+      "local_markdown_targets_verified": [
+        "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+        "link-summary.json",
+        "link-runs.csv",
+        "link-groups.csv",
+        "manifest.json"
+      ]
+    },
+    {
+      "directory": "evidence/campaign-link-wifi-02",
+      "report": {
+        "path": "evidence/campaign-link-wifi-02/LINK-REPORT.md",
+        "before": {
+          "bytes": 26908,
+          "sha256": "7b33e85081464d28c2b37506bbcc2eb8d7147fb3c8faba82474f6c4fb7e4c08c"
+        },
+        "after": {
+          "bytes": 26897,
+          "sha256": "ea772377c9850883977c9826bf44f7580d90eaf257a44b5204b7dec0d01230f3"
+        },
+        "only_exact_link_fragment_replaced": true
+      },
+      "publication_manifest": {
+        "path": "evidence/campaign-link-wifi-02/manifest.json",
+        "before": {
+          "bytes": 3364,
+          "sha256": "46585c34a59b811138eb7650053e77517d0b31d1834ce8230a484f2a53280099"
+        },
+        "after": {
+          "bytes": 3364,
+          "sha256": "9808add631a7b64d3a88e5cdcc16863d161c4cc2d6372d72b5ee73970f09f013"
+        },
+        "only_report_output_receipt_changed": true
+      },
+      "capture_status_unchanged": "FAILED",
+      "input_results_sha256_unchanged": "14563e4539e86e77d35a4f22c50af574f5278e22efc10113c19a0d93dafb471a",
+      "data_outputs_unchanged": {
+        "link-groups.csv": {
+          "bytes": 92741,
+          "sha256": "b1ac0a8fb29cbe0aa47c583c29693f2bace6462793b0f474d7d09fd60fc3ea7b"
+        },
+        "link-runs.csv": {
+          "bytes": 879922,
+          "sha256": "567d8277931ec88ff51a0578a91bea28e2fe304875e2a6fa294060fc088c0fe3"
+        },
+        "link-summary.json": {
+          "bytes": 2051441,
+          "sha256": "6c35f96e3984f71077546f307acf55a5d3131cedfe791e74469c45328fd7b1db"
+        }
+      },
+      "local_markdown_targets_verified": [
+        "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+        "link-summary.json",
+        "link-runs.csv",
+        "link-groups.csv",
+        "manifest.json"
+      ]
+    },
+    {
+      "directory": "evidence/campaign-link-wifi-retry",
+      "report": {
+        "path": "evidence/campaign-link-wifi-retry/LINK-REPORT.md",
+        "before": {
+          "bytes": 14447,
+          "sha256": "be28ea39920911b3652c0e355d9038b07c24f24405a974c097896090e0bed545"
+        },
+        "after": {
+          "bytes": 14436,
+          "sha256": "0f9264a83d3de0b4094d7db490dce18c42f50a26cde2f95596616c5a48fa1f2b"
+        },
+        "only_exact_link_fragment_replaced": true
+      },
+      "publication_manifest": {
+        "path": "evidence/campaign-link-wifi-retry/manifest.json",
+        "before": {
+          "bytes": 3366,
+          "sha256": "03efe9d4a5ac594564209182c9d1265e8c474b2e797024aed446827800ad33b2"
+        },
+        "after": {
+          "bytes": 3366,
+          "sha256": "bfdadd4c1e6a93571f19ebff5d0a90631103151116c7a04614dfd39582c54d5b"
+        },
+        "only_report_output_receipt_changed": true
+      },
+      "capture_status_unchanged": "FAILED",
+      "input_results_sha256_unchanged": "c1cbc539a4f5bc38f1f26b9b5878888ee765f51dd45cb3a2531b5a08f4272b35",
+      "data_outputs_unchanged": {
+        "link-groups.csv": {
+          "bytes": 53639,
+          "sha256": "2b3f0b60f42befdfff6c3dabd72a130cec2689d0650af4988650de43d3a502ae"
+        },
+        "link-runs.csv": {
+          "bytes": 477964,
+          "sha256": "5acb31ae61d1760c08f5d86b23997667c24745013c34ba10e6886e5a4d7c7add"
+        },
+        "link-summary.json": {
+          "bytes": 1115227,
+          "sha256": "84cc3d58c3a607914e7f5e8ae57c56235ae84c2abbd39e753e4eef3adc14c2b3"
+        }
+      },
+      "local_markdown_targets_verified": [
+        "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+        "link-summary.json",
+        "link-runs.csv",
+        "link-groups.csv",
+        "manifest.json"
+      ]
+    }
+  ],
+  "validation": {
+    "reports_corrected": 4,
+    "publication_outputs_verified": 16,
+    "data_outputs_byte_unchanged": 12,
+    "local_markdown_targets_verified": 20,
+    "bad_alias_files_created": 0,
+    "raw_or_measurement_outputs_modified": false,
+    "regression_test_status": "PASS: one synthetic terminal publication verifies target hrefs, all output receipts, FAILED status and unchanged raw bytes",
+    "published_evidence_markdown_files_checked": 46,
+    "published_evidence_local_markdown_targets_checked": 347,
+    "published_evidence_missing_markdown_targets": 0
+  },
+  "provenance_note": "Publication tools entries retain original generation hashes. This receipt records the subsequent focused link correction and corrected publisher; numeric outputs were not regenerated."
+}

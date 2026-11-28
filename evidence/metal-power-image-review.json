@@ -1,0 +1,87 @@
+{
+  "schema": "cyd-perf-metal-power-review/1",
+  "utc": "2026-11-27T22:52:38.454780+00:00",
+  "status": "AWAITING AUTHORIZATION FOR CORRECTED IMAGES",
+  "supersedes_review_sha256": "151766134d23dd184a37a7adcdc87535143f1ee3730128f9326a09838123e47a",
+  "reason": "FirstRX0ca029image failed in PHYstartup: omitted MAC/BB power-domain prerequisite. Newbothimages explicitly own power-domain on before PHYenable and release it after PHYdisable. RX boot is now idle for reachable fallback controls. Timed TXloops/RXsnapshot unchanged.",
+  "primary_source": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/esp_phy/test/test_phy_rtc.c#L64",
+  "apps": {
+    "tx": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\power\\tx\\firmware.bin",
+      "bytes": 604720,
+      "sha256": "d04e2792b42f53412b1d7e98eb2a1f52c5bc1fa5c22a9d3092498e8ddf5cdd45",
+      "elf": {
+        "bytes": 7874856,
+        "sha256": "285212528c1664631f24e8e349fd52d996ffba0c0405e84d231167215e3ce875"
+      },
+      "map": {
+        "bytes": 7898110,
+        "sha256": "b44844e73e268974e40b0fd5e03de35557f6fde64d29b7d02fc801bf8618f5bc"
+      },
+      "compiled_source_digest": "0e97bf864ba948d101489b0666bf14ea7a14b6493cc105ff45c188ab7ae0787e",
+      "word_helpers_digest": "7670a89f1f1f6a807dc6420d49fdf53abbb7e52536b0c20217113c6dfa230d4e"
+    },
+    "rx": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\power\\rx\\firmware.bin",
+      "bytes": 582880,
+      "sha256": "468c2187cc447510561038212539fdbeab3a95298024d412c13db2e6b2d85e7e",
+      "elf": {
+        "bytes": 7685272,
+        "sha256": "bd482b56ab2257c3aca07ebfdc3cc04277f33dea6d110d559e8fdbd61a57c271"
+      },
+      "map": {
+        "bytes": 7437248,
+        "sha256": "c48a0b3110a71aabf8b816f838016dfe70a726d7ea0df697549e72c1040b6a48"
+      },
+      "compiled_source_digest": "d4405afd6fe2fea726fe40a7180df46758f87ad3b59b5c13d2e29c7ea0c4a72e"
+    }
+  },
+  "targets": [
+    {
+      "role": "tx",
+      "port": "COM13",
+      "owner_application_port": "COM14",
+      "mac": "1c:29:04:be:cc:48",
+      "partition_label": "factory",
+      "application_offset": 65536,
+      "capacity_bytes": 1048576,
+      "retained_partition_region_sha256": "b9118aa3840f7c042a4dea8dae339d07a6e69f3716102174cc87b18046276295",
+      "verified_backup_sha256": "1601271b57264dc712c04b7d654ef5ded5ce100749978d2099d1e2f6ddf7f2fb"
+    },
+    {
+      "role": "rx",
+      "port": "COM22",
+      "mac": "1c:29:04:be:c3:a0",
+      "partition_label": "app0",
+      "application_offset": 65536,
+      "capacity_bytes": 1310720,
+      "retained_partition_region_sha256": "f3134b747fef242287f33aa0be8a5008958132e0c7611f5bc5bb917c02c9e397",
+      "verified_backup_sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc"
+    },
+    {
+      "role": "rx",
+      "port": "COM23",
+      "mac": "1c:29:04:be:c3:d8",
+      "partition_label": "app0",
+      "application_offset": 65536,
+      "capacity_bytes": 3145728,
+      "retained_partition_region_sha256": "c798c1173b1d0175c33f06340268885c4385ff5129206d90bda416ad99ea8ddd",
+      "verified_backup_sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc"
+    }
+  ],
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "validation": "CleanbothS3targetbuilds; TX20actual-bodylifecyclecases/RX96lifecyclechecks,110MMIOchecks,9temperaturecases;125hosttests. No calibration/WDTbypass; no timedloopchanges.",
+  "write_scope": "App-onlyat0x10000, verifiedMAC+retainedtable+capacity; retainbootloaders/partitions/NVS, no eFuse writes.",
+  "tests": "Sameauthorizedfiniteplan: twoRXsobserveoneTX, nominal16/40/80MSsnapshots/no-exportbench; channel6/requestedbackoffs96/112quarterdB, API/privateRAM/MMIOgate/ASK, paced1k..32M+unpaced, finite<=2sbursts, boundedIRQmaskedsegments, optionalframedone-bitmultichannelaudio replay; outside-looptemps.",
+  "end_state": "Restoreapprovedkernel/audio profilers onCOM22/23; leave requestedmetalTX role onnewCOM13(originalappCOM14); CYDunchanged.",
+  "limitations": [
+    "Nativeclocksnominal, not independentlycalibrated.",
+    "Snapshot/IRQ/softwarecadences are not end-to-end one-way latency or an ultimate RF hardware bandwidth claim.",
+    "SDKsetup/teardown may overrun requested duration; no independent radiated-power/spectral/cessation fixture.",
+    "Boardbrand, antenna, placement, gain and single-unitvariation cannot be causally isolated."
+  ]
+}

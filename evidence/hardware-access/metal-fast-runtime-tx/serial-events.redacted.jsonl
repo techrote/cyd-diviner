@@ -1,0 +1,16 @@
+{"event": "open", "host_elapsed_s": 0.01562970003578812, "utc": "2026-11-28T00:12:33.440280+00:00", "port": "COM13", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.01602229999843985, "utc": "2026-11-28T00:12:33.444458+00:00", "command": "info"}
+{"event": "rx", "host_elapsed_s": 0.01909359998535365, "utc": "2026-11-28T00:12:33.447566+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.019245700037572533, "utc": "2026-11-28T00:12:33.447566+00:00", "offset": 1, "bytes": 2395}
+{"event": "tx", "host_elapsed_s": 0.019494300009682775, "utc": "2026-11-28T00:12:33.448076+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 0.022995400009676814, "utc": "2026-11-28T00:12:33.448590+00:00", "offset": 2396, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.023070399998687208, "utc": "2026-11-28T00:12:33.448590+00:00", "offset": 2397, "bytes": 260}
+{"event": "tx", "host_elapsed_s": 0.023144899983890355, "utc": "2026-11-28T00:12:33.448590+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 0.02565680001862347, "utc": "2026-11-28T00:12:33.448590+00:00", "offset": 2657, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.02572969999164343, "utc": "2026-11-28T00:12:33.454421+00:00", "offset": 2658, "bytes": 260}
+{"event": "tx", "host_elapsed_s": 0.025797100039198995, "utc": "2026-11-28T00:12:33.454421+00:00", "command": "temperature"}
+{"event": "rx", "host_elapsed_s": 0.028283499996177852, "utc": "2026-11-28T00:12:33.456710+00:00", "offset": 2918, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.028351099987048656, "utc": "2026-11-28T00:12:33.456710+00:00", "offset": 2919, "bytes": 260}
+{"event": "tx", "host_elapsed_s": 0.02840519999153912, "utc": "2026-11-28T00:12:33.456710+00:00", "command": "info"}
+{"event": "rx", "host_elapsed_s": 0.031507200037594885, "utc": "2026-11-28T00:12:33.458218+00:00", "offset": 3179, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.03157749999081716, "utc": "2026-11-28T00:12:33.458218+00:00", "offset": 3180, "bytes": 2395}

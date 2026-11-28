@@ -1,0 +1,3236 @@
+{
+  "schema": "cyd-metal-fast-findings/1",
+  "evidence_class": "OFFLINE_INTERPRETATION_OF_CLOSED_PHYSICAL_CAPTURE",
+  "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "apps": {
+    "tx": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\tx\\firmware.bin",
+      "bytes": 613824,
+      "sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+      "elf": {
+        "bytes": 7902820,
+        "sha256": "eb9a3526d714049a9826787b522c3d79724648dfa3422a268b6dfe01a6c3c3e0"
+      },
+      "map": {
+        "bytes": 7900049,
+        "sha256": "d15cbaf132de0e8eea9fb8a884f0aa3908e4f74a18ac81deea2267dcf305d068"
+      },
+      "compiled_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+      "resolved_sdkconfig": {
+        "bytes": 49584,
+        "sha256": "11924885c46bb62b5aaf99761fbaf51e609f856360a1f8354be20e2abd17f3db"
+      },
+      "word_helpers_digest": "7670a89f1f1f6a807dc6420d49fdf53abbb7e52536b0c20217113c6dfa230d4e",
+      "fast_schedule_helpers_digest": "4105bfc13af1768922ba9c58ca626257a1bc207ff599059e48b6e70dd4c0b7c7",
+      "source_dirty": false
+    },
+    "rx": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+      "bytes": 584560,
+      "sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+      "elf": {
+        "bytes": 7693824,
+        "sha256": "a1497d4538bb91963a1a47730254853263397a81f71111a24bd430a827be531d"
+      },
+      "map": {
+        "bytes": 7440054,
+        "sha256": "35739451ffb389934cc4bd17f50a07da5606c01609705b8765e11404fb08f03f"
+      },
+      "compiled_source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+      "resolved_sdkconfig": {
+        "bytes": 45527,
+        "sha256": "b755d5709c789fff566b810e355df06ce0a10d8fbac525c2b2ce71ff3aa6e78e"
+      }
+    }
+  },
+  "cohorts": {
+    "smoke": {
+      "capture_folder": "evidence/physical/metal-dual-fast-smoke-01",
+      "status": "CAPTURE COMPLETE",
+      "shared_windows": 3,
+      "TX_windows": 3,
+      "source_CRC_pass_windows": 3,
+      "checked_output_pass_windows": 3,
+      "fast_clock_windows": 2,
+      "temperature_driver_C_outside_windows": {
+        "tx": {
+          "n": 6,
+          "min": 36.9,
+          "median": 49.9,
+          "max": 56.9
+        },
+        "rx": {
+          "n": 6,
+          "min": 44.1,
+          "median": 46.6,
+          "max": 47.1
+        },
+        "rx2": {
+          "n": 6,
+          "min": 37.0,
+          "median": 39.5,
+          "max": 41.0
+        }
+      },
+      "rx": {
+        "retained_snapshots": 3,
+        "reported_capture_completions": 3,
+        "heap_8bit_free_before": {
+          "n": 3,
+          "min": 257336,
+          "median": 257336,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 3,
+          "min": 188416,
+          "median": 188416,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": false,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      },
+      "rx2": {
+        "retained_snapshots": 3,
+        "reported_capture_completions": 3,
+        "heap_8bit_free_before": {
+          "n": 3,
+          "min": 257336,
+          "median": 257336,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 3,
+          "min": 188416,
+          "median": 188416,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": false,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      }
+    },
+    "rate": {
+      "capture_folder": "evidence/physical/metal-dual-fast-rate-01",
+      "status": "CAPTURE COMPLETE",
+      "shared_windows": 42,
+      "TX_windows": 42,
+      "source_CRC_pass_windows": 42,
+      "checked_output_pass_windows": 42,
+      "fast_clock_windows": 33,
+      "temperature_driver_C_outside_windows": {
+        "tx": {
+          "n": 84,
+          "min": 39.9,
+          "median": 84.4,
+          "max": 95.9
+        },
+        "rx": {
+          "n": 84,
+          "min": 55.1,
+          "median": 59.1,
+          "max": 61.1
+        },
+        "rx2": {
+          "n": 84,
+          "min": 48.0,
+          "median": 51.0,
+          "max": 53.0
+        }
+      },
+      "rx": {
+        "retained_snapshots": 42,
+        "reported_capture_completions": 42,
+        "heap_8bit_free_before": {
+          "n": 42,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 42,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      },
+      "rx2": {
+        "retained_snapshots": 42,
+        "reported_capture_completions": 42,
+        "heap_8bit_free_before": {
+          "n": 42,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 42,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      }
+    },
+    "framed": {
+      "capture_folder": "evidence/physical/metal-dual-fast-framed-01",
+      "status": "CAPTURE COMPLETE",
+      "shared_windows": 21,
+      "TX_windows": 21,
+      "source_CRC_pass_windows": 21,
+      "checked_output_pass_windows": 21,
+      "fast_clock_windows": 21,
+      "temperature_driver_C_outside_windows": {
+        "tx": {
+          "n": 42,
+          "min": 74.9,
+          "median": 97.9,
+          "max": 98.9
+        },
+        "rx": {
+          "n": 42,
+          "min": 61.1,
+          "median": 62.1,
+          "max": 62.1
+        },
+        "rx2": {
+          "n": 42,
+          "min": 53.0,
+          "median": 53.0,
+          "max": 54.0
+        }
+      },
+      "rx": {
+        "retained_snapshots": 21,
+        "reported_capture_completions": 21,
+        "heap_8bit_free_before": {
+          "n": 21,
+          "min": 257336,
+          "median": 257336,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 21,
+          "min": 188416,
+          "median": 188416,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      },
+      "rx2": {
+        "retained_snapshots": 21,
+        "reported_capture_completions": 21,
+        "heap_8bit_free_before": {
+          "n": 21,
+          "min": 257336,
+          "median": 257336,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 21,
+          "min": 188416,
+          "median": 188416,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      }
+    },
+    "compat": {
+      "capture_folder": "evidence/physical/metal-dual-fast-compat-01",
+      "status": "CAPTURE COMPLETE",
+      "shared_windows": 12,
+      "TX_windows": 12,
+      "source_CRC_pass_windows": 12,
+      "checked_output_pass_windows": 12,
+      "fast_clock_windows": 0,
+      "temperature_driver_C_outside_windows": {
+        "tx": {
+          "n": 24,
+          "min": 59.9,
+          "median": 88.4,
+          "max": 96.9
+        },
+        "rx": {
+          "n": 24,
+          "min": 63.1,
+          "median": 63.1,
+          "max": 64.1
+        },
+        "rx2": {
+          "n": 24,
+          "min": 53.0,
+          "median": 54.0,
+          "max": 54.0
+        }
+      },
+      "rx": {
+        "retained_snapshots": 12,
+        "reported_capture_completions": 12,
+        "heap_8bit_free_before": {
+          "n": 12,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 12,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      },
+      "rx2": {
+        "retained_snapshots": 12,
+        "reported_capture_completions": 12,
+        "heap_8bit_free_before": {
+          "n": 12,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 12,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      }
+    },
+    "reference": {
+      "capture_folder": "evidence/physical/metal-dual-fast-rx-reference-01",
+      "status": "CAPTURE COMPLETE",
+      "shared_windows": 18,
+      "TX_windows": 0,
+      "source_CRC_pass_windows": 0,
+      "checked_output_pass_windows": 0,
+      "fast_clock_windows": 0,
+      "temperature_driver_C_outside_windows": {
+        "tx": {
+          "n": 36,
+          "min": 47.9,
+          "median": 48.9,
+          "max": 50.9
+        },
+        "rx": {
+          "n": 36,
+          "min": 64.1,
+          "median": 64.1,
+          "max": 65.1
+        },
+        "rx2": {
+          "n": 36,
+          "min": 54.0,
+          "median": 54.0,
+          "max": 54.0
+        }
+      },
+      "rx": {
+        "retained_snapshots": 18,
+        "reported_capture_completions": 189,
+        "heap_8bit_free_before": {
+          "n": 18,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 18,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      },
+      "rx2": {
+        "retained_snapshots": 18,
+        "reported_capture_completions": 189,
+        "heap_8bit_free_before": {
+          "n": 18,
+          "min": 257336,
+          "median": 257336.0,
+          "max": 257336
+        },
+        "heap_8bit_largest_before": {
+          "n": 18,
+          "min": 188416,
+          "median": 188416.0,
+          "max": 188416
+        },
+        "init": {
+          "schema": 1,
+          "type": "init",
+          "ok": true,
+          "requested": "phy",
+          "actual_mode": "direct_PHY",
+          "error_code": 0,
+          "rx_ready": true,
+          "direct_power_domain_owned": true,
+          "direct_rx_enabled": true,
+          "direct_rx_enable_invocations": 1,
+          "direct_rx_disable_invocations": 0
+        },
+        "tune": {
+          "schema": 1,
+          "type": "tune",
+          "ok": true,
+          "frequency_mhz": 2433,
+          "offset_khz": -80,
+          "manual_gain_index": 40
+        }
+      }
+    }
+  },
+  "counts": {
+    "unique_shared_windows": 96,
+    "TX_windows": 78,
+    "retained_native_snapshots": 192,
+    "retained_native_words": 3144960,
+    "reported_native_capture_completions_both_RX": 534,
+    "TX_mode_windows": {
+      "gate": 13,
+      "fast": 56,
+      "ask": 9
+    },
+    "validated_fast_clock_receipts": 56
+  },
+  "rate_groups": [
+    {
+      "mode": "gate",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 994927.93,
+        "median": 994930.867,
+        "max": 994941.896
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 5058,
+        "median": 5069,
+        "max": 5072
+      },
+      "fast_target_tail_words": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    {
+      "mode": "gate",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 867107.617,
+        "median": 867116.689,
+        "max": 867119.44
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 1340879,
+        "median": 1340882,
+        "max": 1340891
+      },
+      "fast_target_tail_words": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    {
+      "mode": "gate",
+      "requested_baud": 0,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 11366413.911,
+        "median": 11366435.384,
+        "max": 11366483.721
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 999999.958,
+        "median": 999999.958,
+        "max": 999999.958
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 2207999.89,
+        "median": 2207999.926,
+        "max": 2207999.945
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 4416000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 4415999.779,
+        "median": 4415999.798,
+        "max": 4415999.89
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 8000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 7999999.5,
+        "median": 7999999.633,
+        "max": 7999999.667
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 12000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881336.847,
+        "median": 9881345.3,
+        "max": 9881347.053
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 2118652,
+        "median": 2118654,
+        "max": 2118662
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 16000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881312.671,
+        "median": 9881318.3,
+        "max": 9881371.547
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 6118628,
+        "median": 6118681,
+        "max": 6118687
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 24000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881338.588,
+        "median": 9881339.93,
+        "max": 9881348.382
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 14118651,
+        "median": 14118659,
+        "max": 14118661
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 32000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881301.053,
+        "median": 9881313.847,
+        "max": 9881330.053
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 22118669,
+        "median": 22118685,
+        "max": 22118698
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 64000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881321.588,
+        "median": 9881340.588,
+        "max": 9881358.382
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 54118641,
+        "median": 54118659,
+        "max": 54118678
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 120000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881337.712,
+        "median": 9881339.847,
+        "max": 9881349.629
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 110118650,
+        "median": 110118659,
+        "max": 110118662
+      }
+    },
+    {
+      "mode": "fast",
+      "requested_baud": 240000000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 9881341.465,
+        "median": 9881349.847,
+        "max": 9881358.629
+      },
+      "skipped_source_slots": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "fast_target_tail_words": {
+        "n": 3,
+        "min": 230118641,
+        "median": 230118649,
+        "max": 230118658
+      }
+    }
+  ],
+  "envelope_groups": [
+    {
+      "receiver": "rx",
+      "mode": "gate",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 500610.5006105006,
+        "median": 500610.5006105006,
+        "max": 500610.5006105006
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.283148400657852,
+        "median": 3.4099255062427867,
+        "max": 3.458485782010093
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "gate",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 500610.5006105006,
+        "median": 500610.5006105006,
+        "max": 500610.5006105006
+      },
+      "qualified_threshold_edge_windows": 3,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 7.712609348979832,
+        "median": 7.855781093295717,
+        "max": 8.019326602824016
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "gate",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 239316.2393162393,
+        "median": 239316.2393162393,
+        "max": 239316.2393162393
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.2230760884228067,
+        "median": 3.2633038404552286,
+        "max": 3.322633457194364
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "gate",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 239316.2393162393,
+        "median": 239316.2393162393,
+        "max": 239316.2393162393
+      },
+      "qualified_threshold_edge_windows": 3,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 6.831319720720491,
+        "median": 7.0653049834758335,
+        "max": 7.90445365588757
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "gate",
+      "requested_baud": 0,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 5714285.714285715,
+        "median": 5719169.719169719,
+        "max": 5719169.719169719
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.6691665574181638,
+        "median": 2.788679967569044,
+        "max": 2.808261328603743
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "gate",
+      "requested_baud": 0,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 5719169.719169719,
+        "median": 5719169.719169719,
+        "max": 5719169.719169719
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.8122162480655475,
+        "median": 3.8260456455565084,
+        "max": 3.942170589077019
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 500610.5006105006,
+        "median": 500610.5006105006,
+        "max": 500610.5006105006
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.4753611769382773,
+        "median": 3.5220887221744226,
+        "max": 3.632527711847825
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 1000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 500610.5006105006,
+        "median": 500610.5006105006,
+        "max": 500610.5006105006
+      },
+      "qualified_threshold_edge_windows": 3,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 6.589552784643303,
+        "median": 6.659899461856711,
+        "max": 7.32094783966056
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 1103785.1037851037,
+        "median": 1103785.1037851037,
+        "max": 1103785.1037851037
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.268685988232731,
+        "median": 3.315224278397083,
+        "max": 3.3667714826443356
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 2208000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 40000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 1103785.1037851037,
+        "median": 1103785.1037851037,
+        "max": 1103785.1037851037
+      },
+      "qualified_threshold_edge_windows": 3,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 4.389442979895973,
+        "median": 4.878052668462785,
+        "max": 5.122058183640852
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 4416000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 2207570.2075702073,
+        "median": 2207570.2075702073,
+        "max": 2207570.2075702073
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.2287325892871146,
+        "median": 2.2671751440800882,
+        "max": 2.277493733847454
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 4416000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 2207570.2075702073,
+        "median": 2207570.2075702073,
+        "max": 2207570.2075702073
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.5875892408006,
+        "median": 2.6333445929544053,
+        "max": 2.7158956240263166
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 8000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4000000.0,
+        "median": 4000000.0,
+        "max": 4000000.0
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.8105746944273857,
+        "median": 2.8387263268406264,
+        "max": 2.8689606952384756
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 8000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4000000.0,
+        "median": 4000000.0,
+        "max": 4000000.0
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.6947936462926236,
+        "median": 2.766847523757667,
+        "max": 2.9155861888733936
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 12000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.97191586738567,
+        "median": 3.0871649887528196,
+        "max": 3.177955947070467
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 12000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4967032.967032967,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 1,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.4360139345666565,
+        "median": 3.543341260864531,
+        "max": 4.006906803271009
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 16000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.085359778656518,
+        "median": 3.1494919396797245,
+        "max": 3.161143889224935
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 16000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4967032.967032967,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.281177993432461,
+        "median": 3.353292128079664,
+        "max": 3.5464742042755217
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 24000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4976800.976800976
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.9464260165393314,
+        "median": 3.1067057440364376,
+        "max": 3.268537039224381
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 24000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.7542732891183794,
+        "median": 3.8252595412026875,
+        "max": 3.965992229651474
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 32000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4967032.967032967,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.8475037143723236,
+        "median": 2.995129981212011,
+        "max": 3.1797421518182345
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 32000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4967032.967032967,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.3763264234719848,
+        "median": 3.703571188086481,
+        "max": 3.8130356473973794
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 64000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.902304639783682,
+        "median": 2.9384601955840086,
+        "max": 3.133321365269985
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 64000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.225809311341241,
+        "median": 3.418248897236231,
+        "max": 3.735865911980842
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 120000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.8043712493250803,
+        "median": 3.0524936224949513,
+        "max": 3.147623544224111
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 120000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.143301073001611,
+        "median": 3.172622196881848,
+        "max": 3.48680928817371
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx",
+      "mode": "fast",
+      "requested_baud": 240000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4967032.967032967,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 2.9306154171691823,
+        "median": 2.9348809390845396,
+        "max": 3.1128046997083576
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "receiver": "rx2",
+      "mode": "fast",
+      "requested_baud": 240000000,
+      "repetitions": 3,
+      "nominal_RX_rate_hz": 80000000,
+      "AC_power_peak_hz_nominal_clock": {
+        "n": 3,
+        "min": 4971916.971916972,
+        "median": 4971916.971916972,
+        "max": 4971916.971916972
+      },
+      "qualified_threshold_edge_windows": 0,
+      "robust_level_separation": {
+        "n": 3,
+        "min": 3.186161479546691,
+        "median": 3.293652288661057,
+        "max": 3.663759285468285
+      },
+      "code_field_limit_fraction": {
+        "n": 3,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      }
+    }
+  ],
+  "framed_groups": [
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/24000-2ch-osr4-p128/360000",
+      "requested_baud": 360000,
+      "source_rate_hz": 24000,
+      "channels": 2,
+      "oversample": 4,
+      "payload_bits": 128,
+      "frame_symbols": 240,
+      "repetitions": 3,
+      "matching_header_windows": 1,
+      "unique_known_frames_summed_across_snapshots": 1,
+      "conditional_payload_bits_compared": 128,
+      "conditional_payload_bit_errors": 0,
+      "conditional_payload_BER": 0.0,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 1,
+        "min": 24012.006003013514,
+        "median": 24012.006003013514,
+        "max": 24012.006003013514
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 16,
+          "pooled_error_RMS_PCM16": 7612.615664145931,
+          "pooled_source_over_error_dB": 3.652641821758465,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 16,
+          "pooled_error_RMS_PCM16": 5282.628435494967,
+          "pooled_source_over_error_dB": 8.488773746002243,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 16,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 16,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 666.6666666666666
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/48000-2ch-osr4/552000",
+      "requested_baud": 552000,
+      "source_rate_hz": 48000,
+      "channels": 2,
+      "oversample": 4,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 2,
+      "unique_known_frames_summed_across_snapshots": 2,
+      "conditional_payload_bits_compared": 512,
+      "conditional_payload_bit_errors": 0,
+      "conditional_payload_BER": 0.0,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 2,
+        "min": 47999.999999961605,
+        "median": 47999.999999961605,
+        "max": 47999.999999961605
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 7588.823300996671,
+          "pooled_source_over_error_dB": 8.880743348822454,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 8004.451316298951,
+          "pooled_source_over_error_dB": 1.9404925665835173,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 666.6666666666666
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/48000-2ch-osr8/1104000",
+      "requested_baud": 1104000,
+      "source_rate_hz": 48000,
+      "channels": 2,
+      "oversample": 8,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 6,
+      "conditional_payload_bits_compared": 1536,
+      "conditional_payload_bit_errors": 7,
+      "conditional_payload_BER": 0.004557291666666667,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 47976.01199400299,
+        "median": 48024.01200592613,
+        "max": 48024.01200592613
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 96,
+          "pooled_error_RMS_PCM16": 3473.885204877482,
+          "pooled_source_over_error_dB": 8.202633731386964,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 96,
+          "pooled_error_RMS_PCM16": 3544.943510069425,
+          "pooled_source_over_error_dB": 10.066194402765401,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 96,
+          "pooled_error_RMS_PCM16": 1869.559662950967,
+          "pooled_source_over_error_dB": 14.082399653118497,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 96,
+          "pooled_error_RMS_PCM16": 1672.184997739983,
+          "pooled_source_over_error_dB": 16.946051989335686,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 333.3333333333333
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/48000-4ch-osr8/2208000",
+      "requested_baud": 2208000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 8,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 4,
+      "conditional_payload_bits_compared": 1024,
+      "conditional_payload_bit_errors": 18,
+      "conditional_payload_BER": 0.017578125,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 47976.01199400299,
+        "median": 48000.04800000944,
+        "max": 48024.01200592613
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 4872.2075592076335,
+          "pooled_source_over_error_dB": 13.685715816484045,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 5243.805714841083,
+          "pooled_source_over_error_dB": 7.170014762519679,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 2800.3057199170235,
+          "pooled_source_over_error_dB": -12.033929816854725,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 4512.054126171361,
+          "pooled_source_over_error_dB": 7.92227191621759,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 3831.4571640565164,
+          "pooled_source_over_error_dB": 15.830367540145318,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 3547.2400539010614,
+          "pooled_source_over_error_dB": 10.910804693473324,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 2048.0,
+          "pooled_source_over_error_dB": 0.0,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 2508.2774966099746,
+          "pooled_source_over_error_dB": 13.553876579865738,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 166.66666666666666
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/24000-2ch-osr32/2208000",
+      "requested_baud": 2208000,
+      "source_rate_hz": 24000,
+      "channels": 2,
+      "oversample": 32,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 6,
+      "conditional_payload_bits_compared": 1536,
+      "conditional_payload_bit_errors": 15,
+      "conditional_payload_BER": 0.009765625,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 23994.00299849115,
+        "median": 24000.00599998228,
+        "max": 24006.003001471934
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 24,
+          "pooled_error_RMS_PCM16": 2059.1496323320785,
+          "pooled_source_over_error_dB": 18.87882790773004,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 24,
+          "pooled_error_RMS_PCM16": 2594.6852570848228,
+          "pooled_source_over_error_dB": 12.544378529252233,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 24,
+          "pooled_error_RMS_PCM16": 1672.1849977399831,
+          "pooled_source_over_error_dB": 20.739473482327377,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 24,
+          "pooled_error_RMS_PCM16": 2676.8020721251196,
+          "pooled_source_over_error_dB": 12.241728803398148,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 166.66666666666666
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/48000-4ch-osr16/4416000",
+      "requested_baud": 4416000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 16,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 12,
+      "conditional_payload_bits_compared": 3072,
+      "conditional_payload_bit_errors": 53,
+      "conditional_payload_BER": 0.017252604166666668,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 48000.00000001459,
+        "median": 48036.054081131675,
+        "max": 48048.04804803881
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 1841.5517912890748,
+          "pooled_source_over_error_dB": 21.95814721533887,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 5381.052205036979,
+          "pooled_source_over_error_dB": 6.385791810620791,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 2807.4918224873486,
+          "pooled_source_over_error_dB": -9.241529026275364,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 2275.844431194716,
+          "pooled_source_over_error_dB": 14.821304754758149,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 836.0924988699915,
+          "pooled_source_over_error_dB": 28.898617212581886,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 5320.860080851591,
+          "pooled_source_over_error_dB": 6.561810453734394,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 2364.826702600707,
+          "pooled_source_over_error_dB": -2.041199826559248,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 48,
+          "pooled_error_RMS_PCM16": 1869.5596629509669,
+          "pooled_source_over_error_dB": 16.483600109809316,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 83.33333333333333
+    },
+    {
+      "receiver": "rx",
+      "workload": "fast/framed/48000-4ch-osr32/8832000",
+      "requested_baud": 8832000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 32,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 0,
+      "unique_known_frames_summed_across_snapshots": 0,
+      "conditional_payload_bits_compared": 0,
+      "conditional_payload_bit_errors": 0,
+      "conditional_payload_BER": null,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 41.666666666666664
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/24000-2ch-osr4-p128/360000",
+      "requested_baud": 360000,
+      "source_rate_hz": 24000,
+      "channels": 2,
+      "oversample": 4,
+      "payload_bits": 128,
+      "frame_symbols": 240,
+      "repetitions": 3,
+      "matching_header_windows": 2,
+      "unique_known_frames_summed_across_snapshots": 2,
+      "conditional_payload_bits_compared": 256,
+      "conditional_payload_bit_errors": 0,
+      "conditional_payload_BER": 0.0,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 2,
+        "min": 24000.000000024,
+        "median": 24006.00300151876,
+        "max": 24012.006003013514
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 6147.628503638618,
+          "pooled_source_over_error_dB": 7.603694219670737,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 6717.5001209527345,
+          "pooled_source_over_error_dB": 9.041496077793234,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 32,
+          "pooled_error_RMS_PCM16": 0.0,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": "zero error, mathematically unbounded ratio",
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 666.6666666666666
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/48000-2ch-osr4/552000",
+      "requested_baud": 552000,
+      "source_rate_hz": 48000,
+      "channels": 2,
+      "oversample": 4,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 2,
+      "unique_known_frames_summed_across_snapshots": 2,
+      "conditional_payload_bits_compared": 512,
+      "conditional_payload_bit_errors": 4,
+      "conditional_payload_BER": 0.0078125,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 2,
+        "min": 47999.999999961605,
+        "median": 48012.00600294387,
+        "max": 48024.01200592613
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 6197.588844411592,
+          "pooled_source_over_error_dB": 9.811358572160847,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 8585.145650700983,
+          "pooled_source_over_error_dB": -1.7526460089412557,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 4095.875,
+          "pooled_source_over_error_dB": 13.710830902604052,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 64,
+          "pooled_error_RMS_PCM16": 2896.309375740099,
+          "pooled_source_over_error_dB": 11.46128035678238,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 666.6666666666666
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/48000-2ch-osr8/1104000",
+      "requested_baud": 1104000,
+      "source_rate_hz": 48000,
+      "channels": 2,
+      "oversample": 8,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 5,
+      "conditional_payload_bits_compared": 1280,
+      "conditional_payload_bit_errors": 6,
+      "conditional_payload_BER": 0.0046875,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 47988.0059969823,
+        "median": 47999.999999961605,
+        "max": 47999.999999961605
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 80,
+          "pooled_error_RMS_PCM16": 3789.3458868253238,
+          "pooled_source_over_error_dB": 9.665866547040663,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 80,
+          "pooled_error_RMS_PCM16": 3757.362401006855,
+          "pooled_source_over_error_dB": 5.75743708979444,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 80,
+          "pooled_error_RMS_PCM16": 915.893443583914,
+          "pooled_source_over_error_dB": 22.4551266781415,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 80,
+          "pooled_error_RMS_PCM16": 2048.0,
+          "pooled_source_over_error_dB": 11.931245983544617,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 333.3333333333333
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/48000-4ch-osr8/2208000",
+      "requested_baud": 2208000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 8,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 5,
+      "conditional_payload_bits_compared": 1280,
+      "conditional_payload_bit_errors": 21,
+      "conditional_payload_BER": 0.01640625,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 47952.04795208627,
+        "median": 47976.023976023935,
+        "max": 47976.023976023935
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 3697.539827371708,
+          "pooled_source_over_error_dB": 8.369087716575587,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 4520.633594973165,
+          "pooled_source_over_error_dB": 6.721002725751277,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 4891.025769202202,
+          "pooled_source_over_error_dB": 11.702138284880611,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 3635.511236401285,
+          "pooled_source_over_error_dB": -7.552703475853024,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 1831.786887167828,
+          "pooled_source_over_error_dB": 15.05149978319906,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 4096.0,
+          "pooled_source_over_error_dB": 8.061799739838872,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 2896.309375740099,
+          "pooled_source_over_error_dB": 16.434526764861875,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 40,
+          "pooled_error_RMS_PCM16": 2590.5378592099364,
+          "pooled_source_over_error_dB": 0.9691001300805634,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 166.66666666666666
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/24000-2ch-osr32/2208000",
+      "requested_baud": 2208000,
+      "source_rate_hz": 24000,
+      "channels": 2,
+      "oversample": 32,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 5,
+      "conditional_payload_bits_compared": 1280,
+      "conditional_payload_bit_errors": 110,
+      "conditional_payload_BER": 0.0859375,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 23964.0539191596,
+        "median": 23994.00299849115,
+        "max": 24006.075055790498
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 20,
+          "pooled_error_RMS_PCM16": 3194.6533145241287,
+          "pooled_source_over_error_dB": 10.769272215269032,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 20,
+          "pooled_error_RMS_PCM16": 2836.9666018478256,
+          "pooled_source_over_error_dB": 9.054772271952487,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 20,
+          "pooled_error_RMS_PCM16": 3426.9594686835735,
+          "pooled_source_over_error_dB": 10.1896783907598,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 20,
+          "pooled_error_RMS_PCM16": 2508.277496609974,
+          "pooled_source_over_error_dB": 10.170333392987803,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 166.66666666666666
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/48000-4ch-osr16/4416000",
+      "requested_baud": 4416000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 16,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 3,
+      "unique_known_frames_summed_across_snapshots": 11,
+      "conditional_payload_bits_compared": 2816,
+      "conditional_payload_bit_errors": 41,
+      "conditional_payload_BER": 0.01455965909090909,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 3,
+        "min": 48024.012005979166,
+        "median": 48048.04804803881,
+        "max": 48072.10816224876
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2363.7175313860616,
+          "pooled_source_over_error_dB": 19.55798596575639,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2977.155277350267,
+          "pooled_source_over_error_dB": 11.264331178216633,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2856.111326452614,
+          "pooled_source_over_error_dB": 6.884231612814231,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 3190.9199300515206,
+          "pooled_source_over_error_dB": 11.906914300556767,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 1952.6913827749731,
+          "pooled_source_over_error_dB": 21.222158782728265,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2896.309375740099,
+          "pooled_source_over_error_dB": 11.613680022349747,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2226.4107274428784,
+          "pooled_source_over_error_dB": 9.113625129579335,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 44,
+          "pooled_error_RMS_PCM16": 2761.5226366494394,
+          "pooled_source_over_error_dB": 13.222192947339193,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 83.33333333333333
+    },
+    {
+      "receiver": "rx2",
+      "workload": "fast/framed/48000-4ch-osr32/8832000",
+      "requested_baud": 8832000,
+      "source_rate_hz": 48000,
+      "channels": 4,
+      "oversample": 32,
+      "payload_bits": 256,
+      "frame_symbols": 368,
+      "repetitions": 3,
+      "matching_header_windows": 0,
+      "unique_known_frames_summed_across_snapshots": 0,
+      "conditional_payload_bits_compared": 0,
+      "conditional_payload_bit_errors": 0,
+      "conditional_payload_BER": null,
+      "effective_audio_rate_hz_from_nominal_RX_clock": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "quality_received_domain": [
+        {
+          "comparison": "vs_generated_source",
+          "channel": 0,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 1,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 2,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_source",
+          "channel": 3,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 0,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 1,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 2,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        },
+        {
+          "comparison": "vs_generated_ideal_boxcar",
+          "channel": 3,
+          "samples": 0,
+          "pooled_error_RMS_PCM16": null,
+          "pooled_source_over_error_dB": null,
+          "zero_error_reason": null,
+          "pooling": "sum squared error/reference energy and counts; no pooled correlation without cross moments"
+        }
+      ],
+      "framing_serialization_us_arithmetic": 41.666666666666664
+    }
+  ],
+  "reference_groups": [
+    {
+      "receiver": "rx",
+      "mode": "bench",
+      "nominal_rate_hz": 16000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.4627850733449359,
+        "median": 0.46286876907426244,
+        "max": 0.46286876907426244
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 7404561.173518974,
+        "median": 7405900.3051881995,
+        "max": 7405900.3051881995
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 44235,
+        "median": 44235,
+        "max": 44243
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx",
+      "mode": "bench",
+      "nominal_rate_hz": 40000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.2566352270234701,
+        "median": 0.25665131145999814,
+        "max": 0.25665131145999814
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 10265409.080938803,
+        "median": 10266052.458399925,
+        "max": 10266052.458399925
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 31911,
+        "median": 31911,
+        "max": 31913
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx",
+      "mode": "bench",
+      "nominal_rate_hz": 80000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.14736046637158587,
+        "median": 0.14736576939686197,
+        "max": 0.14736576939686197
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 11788837.30972687,
+        "median": 11789261.551748956,
+        "max": 11789261.551748956
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 27788,
+        "median": 27788,
+        "max": 27789
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx",
+      "mode": "capture",
+      "nominal_rate_hz": 16000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.0038672499178386464,
+        "median": 0.0038672937443336355,
+        "max": 0.003867352181205518
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 61875.998685418344,
+        "median": 61876.69990933817,
+        "max": 61877.63489928829
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 264716,
+        "median": 264720,
+        "max": 264723
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx",
+      "mode": "capture",
+      "nominal_rate_hz": 40000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.0015469817799923689,
+        "median": 0.001547174658828152,
+        "max": 0.0015472272704946215
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 61879.27119969476,
+        "median": 61886.986353126085,
+        "max": 61889.09081978486
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 264667,
+        "median": 264676,
+        "max": 264709
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx",
+      "mode": "capture",
+      "nominal_rate_hz": 80000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.0007753361683435639,
+        "median": 0.0007766007077591798,
+        "max": 0.0007766183816752199
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 62026.89346748511,
+        "median": 62128.05662073439,
+        "max": 62129.47053401759
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 263643,
+        "median": 263649,
+        "max": 264079
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "bench",
+      "nominal_rate_hz": 16000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.46281645569620256,
+        "median": 0.4628269174258008,
+        "max": 0.4628269174258008
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 7405063.29113924,
+        "median": 7405230.678812812,
+        "max": 7405230.678812812
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 44239,
+        "median": 44239,
+        "max": 44240
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "bench",
+      "nominal_rate_hz": 40000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.2566352270234701,
+        "median": 0.25665131145999814,
+        "max": 0.2566915313734094
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 10265409.080938803,
+        "median": 10266052.458399925,
+        "max": 10267661.254936375
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 31906,
+        "median": 31911,
+        "max": 31913
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "bench",
+      "nominal_rate_hz": 80000000,
+      "repetitions": 3,
+      "reported_captures": 60,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.1473551637279597,
+        "median": 0.1473551637279597,
+        "max": 0.14738168076300162
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 11788413.098236775,
+        "median": 11788413.098236775,
+        "max": 11790534.46104013
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 27785,
+        "median": 27790,
+        "max": 27790
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "capture",
+      "nominal_rate_hz": 16000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.012610864745011087,
+        "median": 0.012720709750369662,
+        "max": 0.012746684928095624
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 201773.83592017737,
+        "median": 203531.3560059146,
+        "max": 203946.95884952997
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 80315,
+        "median": 80479,
+        "max": 81180
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "capture",
+      "nominal_rate_hz": 40000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.005147058823529412,
+        "median": 0.005147964699670631,
+        "max": 0.005155093408530137
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 205882.35294117648,
+        "median": 205918.58798682524,
+        "max": 206203.7363412055
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 79436,
+        "median": 79546,
+        "max": 79560
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    },
+    {
+      "receiver": "rx2",
+      "mode": "capture",
+      "nominal_rate_hz": 80000000,
+      "repetitions": 3,
+      "reported_captures": 3,
+      "nominal_horizon_to_software_loop_ratio": {
+        "n": 3,
+        "min": 0.0025227012308564247,
+        "median": 0.0025762170187601445,
+        "max": 0.0025769303379271284
+      },
+      "native_words_over_software_loop_per_s": {
+        "n": 3,
+        "min": 201816.09846851398,
+        "median": 206097.36150081156,
+        "max": 206154.42703417028
+      },
+      "software_loop_us": {
+        "n": 3,
+        "min": 79455,
+        "median": 79477,
+        "max": 81163
+      },
+      "retention": "Only last buffer per bench run is retained; not continuous sampling."
+    }
+  ],
+  "compatibility_groups": [
+    {
+      "mode": "ask",
+      "requested_baud": 100000,
+      "requested_mask_us": 0,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 99993.991,
+        "median": 99994.99,
+        "max": 99994.992
+      },
+      "masked_segments_per_window": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "maximum_observed_mask_bracket_us": 0.0,
+      "maximum_intersegment_gap_us": 0.0,
+      "segment_records": 0,
+      "segment_records_dropped": 0
+    },
+    {
+      "mode": "ask",
+      "requested_baud": 1000000,
+      "requested_mask_us": 0,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 994929.867,
+        "median": 994932.942,
+        "max": 994937.867
+      },
+      "masked_segments_per_window": {
+        "n": 3,
+        "min": 0,
+        "median": 0,
+        "max": 0
+      },
+      "maximum_observed_mask_bracket_us": 0.0,
+      "maximum_intersegment_gap_us": 0.0,
+      "segment_records": 0,
+      "segment_records_dropped": 0
+    },
+    {
+      "mode": "gate",
+      "requested_baud": 1000000,
+      "requested_mask_us": 2000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 995929.571,
+        "median": 995935.762,
+        "max": 995936.757
+      },
+      "masked_segments_per_window": {
+        "n": 3,
+        "min": 498,
+        "median": 498,
+        "max": 498
+      },
+      "maximum_observed_mask_bracket_us": 2013.6375,
+      "maximum_intersegment_gap_us": 0.18333333333333332,
+      "segment_records": 1494,
+      "segment_records_dropped": 0
+    },
+    {
+      "mode": "ask",
+      "requested_baud": 1000000,
+      "requested_mask_us": 2000,
+      "repetitions": 3,
+      "achieved_software_writes_per_s": {
+        "n": 3,
+        "min": 995926.11,
+        "median": 995931.355,
+        "max": 995931.658
+      },
+      "masked_segments_per_window": {
+        "n": 3,
+        "min": 498,
+        "median": 498,
+        "max": 498
+      },
+      "maximum_observed_mask_bracket_us": 2012.3625,
+      "maximum_intersegment_gap_us": 0.20833333333333334,
+      "segment_records": 1494,
+      "segment_records_dropped": 0
+    }
+  ],
+  "input_manifests_sha256": {
+    "evidence/physical/metal-dual-fast-smoke-01/results.json": "030b3567ab69ee0416cb7c0a9c780d15e29caccff2d393a2e3c5a7e60b5085ec",
+    "evidence/physical/metal-dual-fast-smoke-01/artifact-hashes.json": "3eb3b59e540539727c1fa523d5a7e9b0a0af085dacb7e10c300b85178698fd6f",
+    "evidence/physical/metal-dual-fast-smoke-01/rx/results.json": "98b3018f6f9462aff397c62b1095c26caf4785c502a754f9b314b5cb879d54c8",
+    "evidence/physical/metal-dual-fast-smoke-01/rx/artifact-hashes.json": "1633ea2e8ab42a29a44ce9d1083909c9063f47524c68c817a9188590e8617293",
+    "evidence/physical/metal-dual-fast-smoke-01/rx2/results.json": "04818a05cb79b87187dc8cedd4b75db5e07db0258f75a39484ab52a04bc2bfce",
+    "evidence/physical/metal-dual-fast-smoke-01/rx2/artifact-hashes.json": "41bd23ff85929ebe22dbf7b51406c8d8907329a87631fe0bc306522884f995ce",
+    "evidence/metal-fast-smoke-rx-analysis/manifest.json": "6b30ddb46b0680d5eca1f296fa32c575fe7f2085b7558a8e091a40e6ea0d7754",
+    "evidence/metal-fast-smoke-rx-envelope/manifest.json": "0b601472cf8bc9ea15e76d1a23032965731cec597a0990893b6910c996184110",
+    "evidence/metal-fast-smoke-rx2-analysis/manifest.json": "650877a4c0d0941eabb10aafb1d9729d06c85b0de10b994696fce66516c1b1ad",
+    "evidence/metal-fast-smoke-rx2-envelope/manifest.json": "7ee97f46db5efa298d2afaa04de4550c148cb575b07c71f627e6b0b8d4c1c6b7",
+    "evidence/physical/metal-dual-fast-rate-01/results.json": "151b8cb0a034b1d788f6110b766cdf55f90c8c54d0ec0859eb9f37d6c3188098",
+    "evidence/physical/metal-dual-fast-rate-01/artifact-hashes.json": "e9e0c2f2cb3a0c86f9a19e9305f513e0cb19651b27615108fd7dbbe1bc6bb044",
+    "evidence/physical/metal-dual-fast-rate-01/rx/results.json": "3204b04b8810f550e38192ae4dd187843a223524601b0cf032dac5e582df4e1d",
+    "evidence/physical/metal-dual-fast-rate-01/rx/artifact-hashes.json": "52808e0e983702d34d55fcdff397271fc7f5aaed83c7219b627e1f459e99059e",
+    "evidence/physical/metal-dual-fast-rate-01/rx2/results.json": "3d8a792b4a15d39797e2ef89884c90bdfe87b56116c5ba262b9b8f7d8cfa6072",
+    "evidence/physical/metal-dual-fast-rate-01/rx2/artifact-hashes.json": "68c3b0476221ebc5669ba7c8ae32bac5364550d0d9a33ce0af2fa86deaf976e0",
+    "evidence/metal-fast-rate-rx-analysis/manifest.json": "d0e3821e9f78d669b33d170b4351cf3cba398e4e91c2183fc1560f69ebdeb21f",
+    "evidence/metal-fast-rate-rx-envelope/manifest.json": "b98f480c6b6981a5d468a3f593f2f2344558230fb80049780ec6b674981f9a13",
+    "evidence/metal-fast-rate-rx2-analysis/manifest.json": "fb3384e5a1d24c2e266b3e1823c34a52ce91dbd845a8bd3a58a6153c02d34674",
+    "evidence/metal-fast-rate-rx2-envelope/manifest.json": "f2db16055ddb5e4e128d9c34d20d07171f1b7bf97c36515d5c0253a08ba3446b",
+    "evidence/physical/metal-dual-fast-framed-01/results.json": "5984862c3dbf8efcea5a040a25b5d60f07122253fd144f7b237b3296e65998ec",
+    "evidence/physical/metal-dual-fast-framed-01/artifact-hashes.json": "4c22270692c8320d78ccc2c95a09265908bf9588e0994fc685560e32f210832a",
+    "evidence/physical/metal-dual-fast-framed-01/rx/results.json": "b4b8dbbb778d8e732e4539afa444b2589cbce78f5ab4a89cdd8a66c4770a2699",
+    "evidence/physical/metal-dual-fast-framed-01/rx/artifact-hashes.json": "24989a3c63d96fe4e036825e6f041d5b89c7fb20b6bb08fd7359668ec8f98654",
+    "evidence/physical/metal-dual-fast-framed-01/rx2/results.json": "c79bbde0e5f831f36df9098bf2100b73af9c7d4eb7141816089ad17c13707db6",
+    "evidence/physical/metal-dual-fast-framed-01/rx2/artifact-hashes.json": "d77f19461baa2bd706c0147c7f671d13dcf7665eb78e9bec66556146ba645bce",
+    "evidence/metal-fast-framed-rx-analysis/manifest.json": "ba97db3f0270e837c1ce99dc1288a2d88d44b4b7aa3c13ac72a8118a650f14fa",
+    "evidence/metal-fast-framed-rx-envelope/manifest.json": "a2a29a333d5c9030973718188487c86131c2e31af6ca7064776e17b77c1f9b04",
+    "evidence/metal-fast-framed-rx2-analysis/manifest.json": "3759b544589f3108c4a167d088e1e0591d4d578d4929e2793aca752d16ba2f45",
+    "evidence/metal-fast-framed-rx2-envelope/manifest.json": "4d8036581f6ad514114e3c09377b7b1b25a996b6e8ed62633e721d4a1bf9ef14",
+    "evidence/physical/metal-dual-fast-compat-01/results.json": "d803df907023f6bf1a740cab9e53fcaf2a520f600a69ccb485fbbe0e11fd6ce5",
+    "evidence/physical/metal-dual-fast-compat-01/artifact-hashes.json": "9b606b390280b39b593b35849ffb87e65b4b108b26c331093215760093829a1b",
+    "evidence/physical/metal-dual-fast-compat-01/rx/results.json": "1a7c29386b545cc084817f001e5c64c30accea2de08f6810af524ed5081d2194",
+    "evidence/physical/metal-dual-fast-compat-01/rx/artifact-hashes.json": "d1b7d21390375767d324c54f0ce1c3a51e6d6dd5d20c6b1472ce08c9c0e483b3",
+    "evidence/physical/metal-dual-fast-compat-01/rx2/results.json": "497da47c9d9f99098c5f625869d7165cecce3c64c50430885c9b80b8b01a0c12",
+    "evidence/physical/metal-dual-fast-compat-01/rx2/artifact-hashes.json": "afc303b48479df880b190791070d2d5eba3b9cb4fc730ad3e332d2eb51ce0e92",
+    "evidence/metal-fast-compat-rx-analysis/manifest.json": "3347a87fa98de66a79373609acab60f5663c23a292f41cdc37ca00c17af53229",
+    "evidence/metal-fast-compat-rx-envelope/manifest.json": "c67c2d8ebe7bb587feda9435c4d9f44d14fb87f7576ff4270eb99b49be2636e5",
+    "evidence/metal-fast-compat-rx2-analysis/manifest.json": "412392528178f4f8709c8ac7d8a8e6953cd62be3454d2dfa66c9e97293cdbba1",
+    "evidence/metal-fast-compat-rx2-envelope/manifest.json": "726d89c2cb510f2574819ed38976c25bac0713f0d55dfc7528a718f99064bb45",
+    "evidence/physical/metal-dual-fast-rx-reference-01/results.json": "a86c992b52d5f05ee64feaa78a0941e089efc5a83089956ee129ccb314b51d4b",
+    "evidence/physical/metal-dual-fast-rx-reference-01/artifact-hashes.json": "0643c3c8946e171097b725153f8d7fd634db2d534d4d507df17e63c7b99a373e",
+    "evidence/physical/metal-dual-fast-rx-reference-01/rx/results.json": "d197db013851c8fe7a013ed2c3680c97bf37cd0abad849de7a70dd3e24134ccd",
+    "evidence/physical/metal-dual-fast-rx-reference-01/rx/artifact-hashes.json": "f3fce1021eb8618c458538008c390a00d59733a4b22a15d9d0218ff15f206abd",
+    "evidence/physical/metal-dual-fast-rx-reference-01/rx2/results.json": "3bb66c4f9b0fb1d539d56559edafa235b7318ddc4322f61dfcccb2b0c6978f03",
+    "evidence/physical/metal-dual-fast-rx-reference-01/rx2/artifact-hashes.json": "74a25d52cc76ea5c9168d91844663fa35560df816e8b4930c180f67d8f11f949",
+    "evidence/metal-fast-reference-rx-analysis/manifest.json": "0cd06bf718a4bd5b59f6be945d39e828e4b389ef669a624f39da3ab33e154dc7",
+    "evidence/metal-fast-reference-rx-envelope/manifest.json": "00b666cba4c48141dd308d45bc3eb1fedaf95f708831d6bf5ffb3267ce7d5289",
+    "evidence/metal-fast-reference-rx2-analysis/manifest.json": "1066e61dd09ea64a2faacfff1e21da83a53e8d7c52649348aa1e91199fc70f63",
+    "evidence/metal-fast-reference-rx2-envelope/manifest.json": "ccccbe5cacc55ddfce3cbea517398909c86b320d831f8b0c1a29b4402995565a",
+    "evidence/metal-fast-framed-rx-demod/manifest.json": "403157ab42956d76e8eab63bdf6e0ab16d4281759747df27d5e97610149c3733",
+    "evidence/metal-fast-framed-rx2-demod/manifest.json": "f3229ab64b9901a877c8845de2c1bf78662837192ba99b5f2d9e2ff43ad97c06",
+    "evidence/metal-fast-archive-receipt.json": "5bb2c54c05e1ffdf0b49e3ea364ee07cc50775b3b54ae657bc0f382369ed7db7",
+    "evidence/derived-analyses-metal-fast-receipt.json": "7b25263b22be2bc9ec04f183ba83196581669a703180d46748a7d88ce09ab459",
+    "evidence/metal-fast-temperatures-manifest.json": "73dc35e958fe1390a132789a9ba3039a31eb99abe5c74c9adf17c7bd386fd3ce",
+    "evidence/metal-fast-flash-receipt.json": "036247e0689d1098b130ea77bcddbc7c64c6ce8823efd62cd4adbdfffc6868e9",
+    "evidence/metal-final-audio-restore-receipt.json": "1f6921acbc5bd8922100d1680a18dd9b015a7c55cc0fe42c9ceb0ce2e0c81139",
+    "evidence/metal-fast-bundle-receipt.json": "849670b7533d0af4adb75e48086f0327c1ca24576322ffe54044c0788de25b7e"
+  },
+  "source_and_output_checks": "All78TX source CRC checkpoints and driver-output checks passed;56fast clock receipts. Stage CRCs do not exclude transient changes/collisions; API acceptance is not host attestation by itself.",
+  "footprint_comparison": {
+    "new_direct_PHY": {
+      "free_8bit_bytes": 257336,
+      "largest_8bit_bytes": 188416
+    },
+    "old_WiFi_NULL": {
+      "free_8bit_bytes": 216016,
+      "largest_8bit_bytes": 172032
+    },
+    "old_capture": "physical/metal-dual-rate-wifi-01",
+    "difference_free_bytes": 41320,
+    "difference_largest_bytes": 16384,
+    "scope": "Configured snapshots from different image/init/temperature histories, not isolated causal driver cost."
+  },
+  "interpretation_limits": [
+    "Requested baud through240M is not attained RF throughput.",
+    "Power AC peaks are finite nominal-clock periodicity observations, not payload BER or qualified RF edge jitter.",
+    "Conditional BER counts only selected source-matched payload; missing headers and unsampled periods have no BER value.",
+    "Finite snapshots, deferred USB and host batch demodulation do not establish continuous audio, synchronized one-way latency, live ADC/DAC or ultimate PHY limits.",
+    "Driver temperatures are outside-window indications; TX10..80C requested range is exceeded by some readings, independent accuracy unknown."
+  ],
+  "decoder": {
+    "core_sha256": "09c500232d4046ac6021dfcb8e83c998ff96846296abcc583ef62ace176b8f28",
+    "native_adapter": "Signed arithmetic right shift2 from retained I10,-Q10 to frozen I8 interface; no Q flip, mean removal or resampling.",
+    "quality_scope": "First known sequence per snapshot, summed over separate repetitions; no whole-run delivery denominator or loss concealment."
+  },
+  "raw_archive": {
+    "file": "PHYSICAL-CAPTURES-METAL-FAST.zip",
+    "bytes": 13949797,
+    "sha256": "38ab510e0fd0fe1039f5fca01d9c7e7e9f5cc3ba90579f9161aecf8dc4c4b463"
+  },
+  "derived_archive": {
+    "file": "DERIVED-ANALYSES-METAL-FAST.zip",
+    "bytes": 26822910,
+    "sha256": "e65fedfac3532f7935a32daf89ee38118a1afcbbd4bb26833e6b6bf60ed05ef2"
+  },
+  "highest_framed_timing_observation": {
+    "requested_baud": 8832000,
+    "requested_duration_us": 1000000,
+    "windows": [
+      {
+        "run_id": "d019_1",
+        "completed_source_words": 8832000,
+        "achieved_writes_per_s_from_cycles": 8831999.485,
+        "target_source_words": 8832000,
+        "unsent_target_tail_words": 0
+      },
+      {
+        "run_id": "d020_2",
+        "completed_source_words": 8831950,
+        "achieved_writes_per_s_from_cycles": 8831949.632,
+        "target_source_words": 8832000,
+        "unsent_target_tail_words": 50
+      },
+      {
+        "run_id": "d021_3",
+        "completed_source_words": 8832000,
+        "achieved_writes_per_s_from_cycles": 8831999.558,
+        "target_source_words": 8832000,
+        "unsent_target_tail_words": 0
+      }
+    ],
+    "scope": "Approximately attained software rate; one finite window retains50unsent tail words. Source-word order and boundaryCRC pass do not imply perfect instantaneous clock or RF delivery."
+  }
+}

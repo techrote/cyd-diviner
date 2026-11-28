@@ -1,0 +1,64 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "created_utc": "2026-11-28T00:18:50.963642+00:00",
+  "archive": "PHYSICAL-CAPTURES-METAL-FAST.zip",
+  "bytes": 13949797,
+  "sha256": "38ab510e0fd0fe1039f5fca01d9c7e7e9f5cc3ba90579f9161aecf8dc4c4b463",
+  "capture_directories": [
+    "metal-dual-fast-smoke-01",
+    "metal-dual-fast-rate-01",
+    "metal-dual-fast-framed-01",
+    "metal-dual-fast-compat-01",
+    "metal-dual-fast-rx-reference-01"
+  ],
+  "scope": "New e8b4c8a exact approved images; all78 reviewed finite TX windows plus18 receiver-only reference windows, two independently retained RX bodies per shared exposure. Raw byte/JSON results preserve original source/image/plan/runtime provenance. Excludes old3b cohort, private backups and offline analyses.",
+  "captures": [
+    {
+      "directory": "metal-dual-fast-smoke-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 3
+      }
+    },
+    {
+      "directory": "metal-dual-fast-rate-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 42
+      }
+    },
+    {
+      "directory": "metal-dual-fast-framed-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 21
+      }
+    },
+    {
+      "directory": "metal-dual-fast-compat-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 12
+      }
+    },
+    {
+      "directory": "metal-dual-fast-rx-reference-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "ACQUIRED": 18
+      }
+    }
+  ],
+  "verification": {
+    "hash_comparisons_including_nested_manifests": 826,
+    "archived_files_verified": 433,
+    "zip_crc": "PASS",
+    "zip_membership": "exact_snapshot",
+    "raw_after_archive": "unchanged"
+  }
+}

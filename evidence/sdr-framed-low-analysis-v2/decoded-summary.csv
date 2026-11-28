@@ -1,0 +1,9 @@
+run_id,workload,acquisition_status,signal_verification,demodulation_status,rf_origin_verified,acquisition_error,iq_sha256,frames_without_host_IQ_erasure,known_payload_bits_compared,known_payload_bit_errors,known_payload_bits_compared_outside_iq_erasures,known_payload_bit_errors_outside_iq_erasures,known_frames_unique,generated_frames_source,iq_integrity,skip_reason
+s001_1,framed-pdm/ram/1000Hz-1ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,f3123f3caada4d7e34a10bda58a3d49ee56f90257aca0c7fffe3acd3fabe9bfd,16,4096,101,4096,101,16,16,,
+s002_2,framed-pdm/ram/1000Hz-1ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,948acbd12a8e2839f9945ef0050eeb1179e117ac37f387a01dd46943eabb213d,16,4096,101,4096,101,16,16,,
+s003_3,framed-pdm/ram/1000Hz-1ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,157ec99a3f007604396cd58b33fc5fe7502c15cedab62574e4c5ce31cbcefbb4,15,3840,0,3840,0,15,16,,
+s004_1,framed-pdm/ram/1000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,52cbd36a93c6dbec6b967c90fafc744bfb1c3947936c1ca8109dcade7862d55d,15,3840,0,3840,0,15,16,,
+s005_2,framed-pdm/ram/1000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,cdf8d0eecf652f1faba2ac2dc8209bc44a7c44e603d3a61f112d3a73cc3c0cd7,15,3840,0,3840,0,15,16,,
+s006_3,framed-pdm/ram/1000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,663cb6d6d0581a11b36629cd059c7ce06084843ae38da0e200c7bbcec10b88e2,15,3840,0,3840,0,15,16,,
+s007_1,framed-pdm/ram/500Hz-4ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,d18a11571c22a42349d77532dab14b48633b503bb25da5a74b3e750376290fa3,15,3840,0,3840,0,15,16,,
+s008_2,framed-pdm/ram/500Hz-4ch-osr4,FAILED,NOT ESTABLISHED,NOT RUN: INCOMPLETE ACQUISITION,,Unterminated string starting at: line 1 column 58 (char 57),,,,,,,,,,Original acquisition status is FAILED

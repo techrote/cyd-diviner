@@ -1,0 +1,13 @@
+esptool.py v4.14.0
+Serial port COM21
+WARNING: Pre-connection option "no_reset" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.
+Connecting.....
+Chip is ESP32-D0WD-V3 (revision v3.1)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: a4:f0:0f:5f:ff:54
+Uploading stub...
+Running stub...
+Stub running...
+MAC: a4:f0:0f:5f:ff:54
+Staying in flasher stub.

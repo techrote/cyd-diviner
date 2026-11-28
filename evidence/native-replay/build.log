@@ -1,0 +1,19 @@
+Processing native (platform: native)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 1 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- LovyanGFX @ 1.2.32
+Building in release mode
+Compiling /home/i/cyd-perf-native-build/native/src/apps/visions.o
+Compiling /home/i/cyd-perf-native-build/native/src/perf_profile.o
+`/home/i/cyd-perf-native-build/native/program' is up to date.
+========================= [SUCCESS] Took 20.54 seconds =========================
+
+Environment    Status    Duration
+-------------  --------  ------------
+native         SUCCESS   00:00:20.541
+========================= 1 succeeded in 00:00:20.541 =========================

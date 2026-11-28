@@ -710,6 +710,11 @@ void setTextMode(TextMode mode) {
 }
 
 bool visionsImmersive() { return immersive; }
+#ifdef GRIM_PERF
+void perfOrientation(uint8_t value) { if (value < 4) currentOrientation = static_cast<Orientation>(value); }
+void perfBackdrop(uint8_t value) { if (value < 4) currentBackdrop = static_cast<MenuBackdrop>(value); }
+void perfImmersive(bool value) { immersive = value && active == &RITE_VISIONS; }
+#endif
 
 int displayWidth() { return isPortrait() ? ShortEdge : LongEdge; }
 int displayHeight() { return isPortrait() ? LongEdge : ShortEdge; }

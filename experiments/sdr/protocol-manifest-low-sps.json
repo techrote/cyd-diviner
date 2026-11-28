@@ -1,0 +1,56 @@
+{
+  "schema": "greenfield-sdr-protocol-manifest/2",
+  "evidence_class": "SOURCE_AND_OFFLINE_MODEL",
+  "generated_utc": "2026-11-27T21:44:12.559969+00:00",
+  "files_sha256": {
+    "experiments/sdr/protocol.h": "ca813f500452dc92c86350cf3c7b6642a60b80e5ec2bcac492eaf720f5fe5974",
+    "experiments/sdr/protocol.cpp": "fd2087d483eaaec454cddb4fcd7c608a427ee517dc76e14e3fc46e71408fc1dd",
+    "experiments/sdr/test_protocol.cpp": "7856a9754d63cb90c1149ee0f58173cc8a11376cf06981114cf26751057cd35e",
+    "experiments/sdr/PROTOCOL.md": "2e95f720392e4682c92085433631f94307bed2fa659e54b8939f600264cf7d16",
+    "experiments/sdr/host-validation-low-sps.json": "427a26747637d900e0fad6b3e3dd08e455cc6e36eda35de94658a62fd1adb1b4",
+    "experiments/sdr/host-regression-low-sps.json": "721a8b140e4a3f8a3aecb4831a2a304173858e2bd33557a560a7b0dbb47e7e10"
+  },
+  "host_executable": ".pio/sdr-model-test-low-sps",
+  "host_executable_sha256": "d99ab63acddc7f578db97a263b32f15fc0141fd6ab10963104be6ab325e80312",
+  "retained_previous_executable_sha256": "2f048784a20a62ae363565f914779d1c589c4dc1d884452ec4f8546c41fd73c3",
+  "historical_evidence": [
+    "protocol-manifest.json",
+    "host-validation.json"
+  ],
+  "host_build": "g++ -std=c++17 -O2 -g -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer experiments/sdr/protocol.cpp experiments/sdr/test_protocol.cpp -o .pio/sdr-model-test-low-sps",
+  "additional_tests": "--low-sps-tests",
+  "validated_low_sps_checks": 1846,
+  "validated_regression_checks": 52896,
+  "transmit_only_compile_checked": true,
+  "no_rf_measurement": true,
+  "wire_and_pdm_source_unchanged": true,
+  "host_demod_limits": {
+    "iq_samples_max": 10000000,
+    "nominal_samples_per_symbol_min": 4,
+    "samples_per_symbol_max": 1024,
+    "clock_grid_points_max": 129
+  },
+  "stimulus_comparison": {
+    "source_rate_hz": 2000,
+    "channels": 2,
+    "oversample": 4,
+    "payload_bits": 256,
+    "baud": 23000,
+    "frame_count": 8,
+    "seed": 23063,
+    "stream_id": 1,
+    "all_three_outputs_equal_retained_executable": true,
+    "files_sha256": {
+      "symbols.bits": "866b0183fa87ac44bccd0991112e9ab07dcbd55d158cacdc192eae0f8847cc52",
+      "reference.pcm": "45bf0b00cffeaff2a933587fb63cdeb1d402a2e10cf10910ea8dcc6395ed236d",
+      "boxcar.pcm": "66a7f007327208e365f5671d833bec27047b662aedbc4ed2f901b7b409e856e3"
+    }
+  },
+  "important_limits": [
+    "Host batch decoder only; no firmware or physical RF measurements in validation.",
+    "Fractional integration and phase refinement affect receiver output; wire and source generation remain unchanged.",
+    "Header rejects count overlapping search candidates, not independent RF packets.",
+    "Payload inversions are accepted deliberately.",
+    "Ideal model passband does not validate hardware filtering or guarantee physical decoding at four samples per symbol."
+  ]
+}

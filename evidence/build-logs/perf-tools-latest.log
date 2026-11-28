@@ -1,0 +1,43 @@
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a002_1 peer-to-cyd/pcm16/24000/2ch/16f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a002_1 peer-to-cyd/pcm16/24000/2ch/16f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a002_1 peer-to-cyd/pcm16/24000/2ch/16f/1Mbps
+a001_1 peer-to-cyd/pcm16/24000/2ch/8f/1Mbps
+a002_1 peer-to-cyd/pcm16/24000/2ch/16f/1Mbps
+fake serial sync
+fake serial sync
+fake serial sync
+r001_1 color fixture (10s)
+r001_1 color fixture (10s)
+r001_1 pcm (10s)
+r001_1 scene (10s)
+r002_1 kernel (kernel)
+r003_1 spi (spi)
+r004_1 pcm (10s)
+C:\Users\_\AppData\Local\Temp\tmphhv6nk8r\analysis\LINK-REPORT.md
+l001_1 direct_espnow/menu/rtt
+l002_1 direct_espnow/menu/espnow_paced
+l003_1 direct_softap/menu/tcp_goodput
+l004_1 through_ap/menu/udp_paced
+l005_1 direct_ble/menu/idle_connected
+l006_1 direct_ble/menu/rtt
+l001_1 direct_espnow/menu/rtt
+l002_1 direct_espnow/menu/espnow_paced
+l003_1 direct_softap/menu/tcp_goodput
+l004_1 through_ap/menu/udp_paced
+l005_1 direct_ble/menu/idle_connected
+l006_1 direct_ble/menu/rtt
+l001_1 direct_softap/full_gate_drone/tcp_goodput
+l002_2 direct_softap/full_gate_drone/tcp_goodput
+...............................................................................................
+----------------------------------------------------------------------
+Ran 95 tests in 15.369s
+
+OK

@@ -1,0 +1,22 @@
+run_id,snapshot,trial,selected,index,symbol_rate,basis,multiplier,status,matching_header_config_frames,matching_training_fit_error_mean,exit_code
+d001_1,snapshot-0001.native32le,0,False,0,360000,requested paced baud,1.0,DEMODULATED,0,,3
+d002_2,snapshot-0001.native32le,0,True,0,360000,requested paced baud,1.0,DEMODULATED,1,0.0111830075732,0
+d003_3,snapshot-0001.native32le,0,False,0,360000,requested paced baud,1.0,DEMODULATED,0,,3
+d004_1,snapshot-0001.native32le,0,False,0,552000,requested paced baud,1.0,DEMODULATED,0,,3
+d005_2,snapshot-0001.native32le,0,True,0,552000,requested paced baud,1.0,DEMODULATED,1,0.00226670176332,0
+d006_3,snapshot-0001.native32le,0,True,0,552000,requested paced baud,1.0,DEMODULATED,1,0.0016960573669,0
+d007_1,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,2,0.00554039425396,0
+d008_2,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,3,0.006498456910223334,0
+d009_3,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,1,0.00477759462843,0
+d010_1,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,2,0.014036668477850001,0
+d011_2,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,1,0.0120771077657,0
+d012_3,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,1,0.0130803150074,0
+d013_1,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,2,0.01522735903495,0
+d014_2,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,2,0.0134727393866,0
+d015_3,snapshot-0001.native32le,0,True,0,2208000,requested paced baud,1.0,DEMODULATED,2,0.01606992955645,0
+d016_1,snapshot-0001.native32le,0,True,0,4416000,requested paced baud,1.0,DEMODULATED,4,0.031836621116475,0
+d017_2,snapshot-0001.native32le,0,True,0,4416000,requested paced baud,1.0,DEMODULATED,4,0.031902270665825,0
+d018_3,snapshot-0001.native32le,0,True,0,4416000,requested paced baud,1.0,DEMODULATED,4,0.031578748187875,0
+d019_1,snapshot-0001.native32le,0,False,0,8832000,requested paced baud,1.0,DEMODULATED,0,,3
+d020_2,snapshot-0001.native32le,0,False,0,8832000,requested paced baud,1.0,DEMODULATED,0,,3
+d021_3,snapshot-0001.native32le,0,False,0,8832000,requested paced baud,1.0,DEMODULATED,0,,3

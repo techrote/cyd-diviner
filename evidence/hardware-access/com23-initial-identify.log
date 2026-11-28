@@ -1,0 +1,4 @@
+esptool.py v4.14.0
+Serial port COM23
+
+A fatal error occurred: Failed to set baud rate 115200. The driver may not support this rate.

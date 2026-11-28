@@ -1,0 +1,14 @@
+{
+  "schema": "cyd-audio-mvp-analysis-manifest/1",
+  "capture_status": "CAPTURE COMPLETE",
+  "inputs": {
+    "evidence\\physical\\audio-deferred-fresh-01\\results.json": "819ec4dee0e661ea2039c2f26d580bf580a7ec3825927b55a5193bbb9f7f7497"
+  },
+  "tool_sha256": "64d7f2c96efe0bd710df293ad807c74c8fe56e13158adc38358ab02b0f029d1a",
+  "capture_validator_sha256": "641af817b4a0928f565313f6e1e7dfa6c67f4f6a1a3bd97f3cc1e3ae9beada7c",
+  "outputs": {
+    "audio-summary.json": "c5743a0d8d1ccb05ece90e06fb2d4e6354759e96b4307d3f591c2734c650aa56",
+    "audio-summary.csv": "8f40fd46ec19f77983a4636777460bd7212a9df3df5cc0476b57eb2141c0f77f",
+    "AUDIO-REPORT.md": "f288d1611c6502d353d32f95ef6a906323a95a49d30702293e256ae36be64b83"
+  }
+}

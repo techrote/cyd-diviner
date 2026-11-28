@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="864pt" height="288pt" viewBox="0 0 864 288" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-27T19:10:21.253868</dc:date>
+    <dc:description>continuation-01 physical terminal partial capture | FAILED | source a4549f87cef0 | firmware fb35d75725b1
+6 measured repetitions; 1,565 completed presentations; r per row.
+Direct rendering interleaves drawing and SPI. Loop iterations are not frame counts.</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 288 
+L 864 288 
+L 864 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 208.87 219.76 
+L 854.28 219.76 
+L 854.28 89.376 
+L 208.87 89.376 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 208.87 219.76 
+L 208.87 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mb3684c1db4" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb3684c1db4" x="208.87" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="208.87" y="233.598594" transform="rotate(-0 208.87 233.598594)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 317.396988 219.76 
+L 317.396988 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mb3684c1db4" x="317.396988" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="317.396988" y="233.598594" transform="rotate(-0 317.396988 233.598594)">5</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 425.923977 219.76 
+L 425.923977 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#mb3684c1db4" x="425.923977" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="425.923977" y="233.598594" transform="rotate(-0 425.923977 233.598594)">10</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 534.450965 219.76 
+L 534.450965 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#mb3684c1db4" x="534.450965" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="534.450965" y="233.598594" transform="rotate(-0 534.450965 233.598594)">15</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 642.977954 219.76 
+L 642.977954 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#mb3684c1db4" x="642.977954" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="642.977954" y="233.598594" transform="rotate(-0 642.977954 233.598594)">20</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 751.504942 219.76 
+L 751.504942 89.376 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mb3684c1db4" x="751.504942" y="219.76" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="751.504942" y="233.598594" transform="rotate(-0 751.504942 233.598594)">25</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: middle" x="531.575" y="246.308906" transform="rotate(-0 531.575 246.308906)">Completed physical presentations / target steady-state second</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_13">
+      <defs>
+       <path id="m8b0d3ea18e" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m8b0d3ea18e" x="208.87" y="95.302545" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: end" x="201.87" y="98.721842" transform="rotate(-0 201.87 98.721842)">radio-init/espnow/menu  (r=3)</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m8b0d3ea18e" x="208.87" y="213.833455" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: end" x="201.87" y="217.252751" transform="rotate(-0 201.87 217.252751)">radio-init/espnow/fullscreen-layered  (r=3)</text>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_15">
+    <path d="M 847.008692 95.302545 
+L 847.008692 95.302545 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #2166ac; stroke-width: 2.5; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_16">
+    <path d="M 701.582527 213.833455 
+L 703.753067 213.833455 
+" clip-path="url(#p6c755557db)" style="fill: none; stroke: #2166ac; stroke-width: 2.5; stroke-linecap: square"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 208.87 219.76 
+L 208.87 89.376 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 208.87 219.76 
+L 854.28 219.76 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="mb9182349ae" d="M 0 2.179449 
+C 0.577997 2.179449 1.132398 1.949809 1.541104 1.541104 
+C 1.949809 1.132398 2.179449 0.577997 2.179449 0 
+C 2.179449 -0.577997 1.949809 -1.132398 1.541104 -1.541104 
+C 1.132398 -1.949809 0.577997 -2.179449 0 -2.179449 
+C -0.577997 -2.179449 -1.132398 -1.949809 -1.541104 -1.541104 
+C -1.949809 -1.132398 -2.179449 -0.577997 -2.179449 0 
+C -2.179449 0.577997 -1.949809 1.132398 -1.541104 1.541104 
+C -1.132398 1.949809 -0.577997 2.179449 0 2.179449 
+z
+" style="stroke: #2166ac"/>
+    </defs>
+    <g clip-path="url(#p6c755557db)">
+     <use xlink:href="#mb9182349ae" x="847.008692" y="95.302545" style="fill: #2166ac; stroke: #2166ac"/>
+     <use xlink:href="#mb9182349ae" x="847.008692" y="95.302545" style="fill: #2166ac; stroke: #2166ac"/>
+     <use xlink:href="#mb9182349ae" x="847.008692" y="95.302545" style="fill: #2166ac; stroke: #2166ac"/>
+    </g>
+   </g>
+   <g id="PathCollection_2">
+    <g clip-path="url(#p6c755557db)">
+     <use xlink:href="#mb9182349ae" x="703.753067" y="213.833455" style="fill: #2166ac; stroke: #2166ac"/>
+     <use xlink:href="#mb9182349ae" x="701.582527" y="213.833455" style="fill: #2166ac; stroke: #2166ac"/>
+     <use xlink:href="#mb9182349ae" x="703.753067" y="213.833455" style="fill: #2166ac; stroke: #2166ac"/>
+    </g>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="208.87" y="83.376" transform="rotate(-0 208.87 83.376)">Dots: repetitions; line: observed repetition range; black tick: median</text>
+   </g>
+   <g id="PathCollection_3">
+    <defs>
+     <path id="m4066466dd9" d="M 0 5 
+L 0 -5 
+" style="stroke: #172338; stroke-width: 1.5"/>
+    </defs>
+    <g clip-path="url(#p6c755557db)">
+     <use xlink:href="#m4066466dd9" x="847.008692" y="95.302545" style="fill: #172338; stroke: #172338; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="PathCollection_4">
+    <g clip-path="url(#p6c755557db)">
+     <use xlink:href="#m4066466dd9" x="703.753067" y="213.833455" style="fill: #172338; stroke: #172338; stroke-width: 1.5"/>
+    </g>
+   </g>
+  </g>
+  <g id="text_11">
+   <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'" transform="translate(17.28 14.878125)">Actual presentation rate</text>
+   <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'" transform="translate(17.28 28.3155)">continuation-01 physical terminal partial capture</text>
+  </g>
+  <g id="text_12">
+   <text style="font-size: 7px; font-family: 'DejaVu Sans'; fill: #384355" transform="translate(17.28 267.216594)">continuation-01 physical terminal partial capture | FAILED | source a4549f87cef0 | firmware fb35d75725b1</text>
+   <text style="font-size: 7px; font-family: 'DejaVu Sans'; fill: #384355" transform="translate(17.28 275.24975)">6 measured repetitions; 1,565 completed presentations; r per row.</text>
+   <text style="font-size: 7px; font-family: 'DejaVu Sans'; fill: #384355" transform="translate(17.28 283.088219)">Direct rendering interleaves drawing and SPI. Loop iterations are not frame counts.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p6c755557db">
+   <rect x="208.87" y="89.376" width="645.41" height="130.384"/>
+  </clipPath>
+ </defs>
+</svg>

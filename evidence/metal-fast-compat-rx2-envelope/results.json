@@ -1,0 +1,2423 @@
+{
+  "schema": "cyd-sdr-metal-envelope/1",
+  "evidence_class": "OFFLINE_ANALYSIS_OF_PHYSICAL_NATIVE_IQ",
+  "capture_status": "CAPTURE COMPLETE",
+  "source_results_sha256": "497da47c9d9f99098c5f625869d7165cecce3c64c50430885c9b80b8b01a0c12",
+  "identities": {
+    "tx": {
+      "board": "Owner-identified S3 tx",
+      "port": "COM13",
+      "baud": 115200,
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\tx\\firmware.bin",
+      "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+      "expected_info": {
+        "profile": "s3-sdr-metal-tx",
+        "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+        "mac": "1c2904becc48",
+        "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+        "source_dirty": false,
+        "fast_paced_supported": true,
+        "source_integrity_supported": true,
+        "fast_schedule_helpers_digest": "4105bfc13af1768922ba9c58ca626257a1bc207ff599059e48b6e70dd4c0b7c7"
+      }
+    },
+    "rx": {
+      "board": "Owner-identified S3 rx2",
+      "port": "COM23",
+      "baud": 115200,
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+      "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+      "expected_info": {
+        "profile": "s3-metal-snapshot",
+        "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+        "mac": "1c2904bec3d8",
+        "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1"
+      }
+    }
+  },
+  "numpy_version": "2.5.5",
+  "qualification_options": {
+    "minimum_power_ratio": 4.0,
+    "minimum_level_separation": 4.0,
+    "minimum_ac_peak_fraction": 0.1,
+    "minimum_cycles": 3.0,
+    "minimum_state_fraction": 0.05,
+    "hysteresis_low_fraction": 0.35,
+    "hysteresis_high_fraction": 0.65
+  },
+  "runs": [
+    {
+      "run_id": "d001_1",
+      "workload": "compat/ask/100000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/100000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 16000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 100000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "181955595c5330bed6318251fcd3da494af19dbe76e185223b4047bd18f22b30",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d001_1",
+            "repetition": 1,
+            "source_id": "d001_1",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "b74cf322",
+            "nominal_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "trigger_before_us": 233478078,
+            "done_observed_us": 233479103,
+            "capture_cycles_mod32": 246114,
+            "control": "80013ffc",
+            "status": "80053ffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -11.072649572649572,
+            "mean_native_minus_q10": 3.8927960927960927,
+            "metadata12_unique_values": 10,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 20518.373015873014,
+            "power_variance_code4": 5906243.93216563,
+            "power_quantiles_code_squared": {
+              "q1": 16400.0,
+              "q5": 16936.0,
+              "q10": 17245.0,
+              "q25": 18217.0,
+              "q50": 20642.0,
+              "q75": 22765.0,
+              "q90": 23666.0,
+              "q95": 24041.0,
+              "q99": 24562.629999999997
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3723398086401855,
+            "q90_q10_normalized_contrast": 0.1569504534232847,
+            "level_medians_code_squared": {
+              "lower": 18125.0,
+              "upper": 22714.0
+            },
+            "level_robust_sigma_code_squared": 1304.6879999999999,
+            "robust_level_separation_sigma": 3.5173160173160176,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 20455.5,
+            "fraction_above_midpoint_descriptive": 0.5164835164835165,
+            "hysteresis_thresholds_code_squared": {
+              "low": 19492.35,
+              "high": 21418.65
+            },
+            "hysteretic_high_fraction_descriptive": 0.5015262515262515,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 976.8009768009769,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 1465.2909213016667,
+              "peak_bin": 4174,
+              "peak_frequency_hz_from_nominal_clock": 4077167.2771672774,
+              "peak_psd_code4_per_hz_from_nominal_clock": 3430.55487546075,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.5684473639096332,
+              "nonDC_windowed_AC_power_code4": 5894950.994710077,
+              "peak_cycles_in_snapshot_from_nominal_clock": 4174.000000000001
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 8348
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 50000.0,
+                "alias_hz_from_nominal_RX_clock": 50000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.1875,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.017984845142137905,
+                "observed_peak_minus_reference_alias_hz": 4027167.2771672774,
+                "observed_peak_minus_reference_alias_bins": 4122.812500000001,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 49997.495208573375,
+                "alias_hz_from_nominal_RX_clock": 49997.49520857353,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.18493571977715,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.017984845142137905,
+                "observed_peak_minus_reference_alias_hz": 4027169.781958704,
+                "observed_peak_minus_reference_alias_bins": 4122.815064280223,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d002_2",
+      "workload": "compat/ask/100000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/100000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 16000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 100000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "a81fa1f7584a13ed0784e0554f4072aa6223bf88f9de2e99d5d9c454804e798e",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d002_2",
+            "repetition": 1,
+            "source_id": "d002_2",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "08bf3fef",
+            "nominal_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "trigger_before_us": 234527133,
+            "done_observed_us": 234528158,
+            "capture_cycles_mod32": 246102,
+            "control": "80013ffc",
+            "status": "80053ffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -11.487118437118436,
+            "mean_native_minus_q10": 3.124847374847375,
+            "metadata12_unique_values": 10,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 20090.479365079365,
+            "power_variance_code4": 5990350.12906138,
+            "power_quantiles_code_squared": {
+              "q1": 15905.0,
+              "q5": 16405.0,
+              "q10": 16819.0,
+              "q25": 17770.0,
+              "q50": 20276.0,
+              "q75": 22345.0,
+              "q90": 23248.0,
+              "q95": 23588.0,
+              "q99": 24193.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.382246269100422,
+            "q90_q10_normalized_contrast": 0.16045623580502658,
+            "level_medians_code_squared": {
+              "lower": 17704.0,
+              "upper": 22265.0
+            },
+            "level_robust_sigma_code_squared": 1303.2053999999998,
+            "robust_level_separation_sigma": 3.499832029548067,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 20033.5,
+            "fraction_above_midpoint_descriptive": 0.5194139194139195,
+            "hysteresis_thresholds_code_squared": {
+              "low": 19069.15,
+              "high": 20997.85
+            },
+            "hysteretic_high_fraction_descriptive": 0.49932844932844933,
+            "hysteretic_unclassified_fraction": 6.105006105006105e-05,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 976.8009768009769,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 1465.2909213016667,
+              "peak_bin": 4174,
+              "peak_frequency_hz_from_nominal_clock": 4077167.2771672774,
+              "peak_psd_code4_per_hz_from_nominal_clock": 3968.8114966509347,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.6239726962263485,
+              "nonDC_windowed_AC_power_code4": 6212994.52702539,
+              "peak_cycles_in_snapshot_from_nominal_clock": 4174.000000000001
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 8347
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 50000.0,
+                "alias_hz_from_nominal_RX_clock": 50000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.1875,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.028617816767146097,
+                "observed_peak_minus_reference_alias_hz": 4027167.2771672774,
+                "observed_peak_minus_reference_alias_bins": 4122.812500000001,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 49996.99541694209,
+                "alias_hz_from_nominal_RX_clock": 49996.99541694205,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.18442405809443,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.028617816767146097,
+                "observed_peak_minus_reference_alias_hz": 4027170.2817503354,
+                "observed_peak_minus_reference_alias_bins": 4122.815575941906,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d003_3",
+      "workload": "compat/ask/100000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/100000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 16000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 100000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "f06eadcfa37a4213300bb3293190dd0ed59ad86c2b97f61929ee05d12a091184",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d003_3",
+            "repetition": 1,
+            "source_id": "d003_3",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "cb73c295",
+            "nominal_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "trigger_before_us": 235579196,
+            "done_observed_us": 235580222,
+            "capture_cycles_mod32": 246114,
+            "control": "80013ffc",
+            "status": "80053ffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 16000000,
+            "nominal_horizon_us": 1023.75,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -11.266422466422467,
+            "mean_native_minus_q10": 3.487973137973138,
+            "metadata12_unique_values": 10,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 19281.690415140416,
+            "power_variance_code4": 5619825.6249752855,
+            "power_quantiles_code_squared": {
+              "q1": 15273.0,
+              "q5": 15772.8,
+              "q10": 16057.0,
+              "q25": 17012.0,
+              "q50": 19363.5,
+              "q75": 21473.0,
+              "q90": 22313.800000000003,
+              "q95": 22664.0,
+              "q99": 23200.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3896618297315815,
+            "q90_q10_normalized_contrast": 0.163061494678245,
+            "level_medians_code_squared": {
+              "lower": 16993.0,
+              "upper": 21425.0
+            },
+            "level_robust_sigma_code_squared": 1316.5488,
+            "robust_level_separation_sigma": 3.3663773040543576,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 19185.4,
+            "fraction_above_midpoint_descriptive": 0.5173382173382174,
+            "hysteresis_thresholds_code_squared": {
+              "low": 18246.88,
+              "high": 20123.920000000002
+            },
+            "hysteretic_high_fraction_descriptive": 0.5071428571428571,
+            "hysteretic_unclassified_fraction": 6.105006105006105e-05,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 976.8009768009769,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 1465.2909213016667,
+              "peak_bin": 4174,
+              "peak_frequency_hz_from_nominal_clock": 4077167.2771672774,
+              "peak_psd_code4_per_hz_from_nominal_clock": 2984.538757838538,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.5105873207137838,
+              "nonDC_windowed_AC_power_code4": 5709699.8998752395,
+              "peak_cycles_in_snapshot_from_nominal_clock": 4174.000000000001
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 8344
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 50000.0,
+                "alias_hz_from_nominal_RX_clock": 50000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.1875,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.006577703074052016,
+                "observed_peak_minus_reference_alias_hz": 4027167.2771672774,
+                "observed_peak_minus_reference_alias_bins": 4122.812500000001,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 49997.4960418649,
+                "alias_hz_from_nominal_RX_clock": 49997.49604186509,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 51.184936572859385,
+                "nearest_bin": 51,
+                "nearest_bin_frequency_hz_from_nominal_clock": 49816.84981684982,
+                "nearest_bin_psd_code4_per_hz": 0.006577703074052016,
+                "observed_peak_minus_reference_alias_hz": 4027169.7811254123,
+                "observed_peak_minus_reference_alias_bins": 4122.815063427141,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d004_1",
+      "workload": "compat/ask/1000000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "401a304ca96f799f2aecb55fc89d1f81400d7a4bfe0ddb59bea04ab905f716fd",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d004_1",
+            "repetition": 1,
+            "source_id": "d004_1",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "ae5ef104",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 236636281,
+            "done_observed_us": 236636692,
+            "capture_cycles_mod32": 98727,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.793223443223443,
+            "mean_native_minus_q10": 4.064835164835165,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 19066.919841269842,
+            "power_variance_code4": 5347163.211584346,
+            "power_quantiles_code_squared": {
+              "q1": 15162.69,
+              "q5": 15625.0,
+              "q10": 15938.0,
+              "q25": 16900.0,
+              "q50": 19125.0,
+              "q75": 21188.0,
+              "q90": 22049.0,
+              "q95": 22405.149999999998,
+              "q99": 22987.469999999994
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3834232651524658,
+            "q90_q10_normalized_contrast": 0.16087082422934162,
+            "level_medians_code_squared": {
+              "lower": 16829.0,
+              "upper": 21146.0
+            },
+            "level_robust_sigma_code_squared": 1263.1752,
+            "robust_level_separation_sigma": 3.4175781791789457,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 18993.5,
+            "fraction_above_midpoint_descriptive": 0.515995115995116,
+            "hysteresis_thresholds_code_squared": {
+              "low": 18076.85,
+              "high": 19910.15
+            },
+            "hysteretic_high_fraction_descriptive": 0.5045787545787546,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1669,
+              "peak_frequency_hz_from_nominal_clock": 4075702.075702076,
+              "peak_psd_code4_per_hz_from_nominal_clock": 1269.3006962647087,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.5904025765514623,
+              "nonDC_windowed_AC_power_code4": 5250037.047634123,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1669.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3338
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.026884842497012625,
+                "observed_peak_minus_reference_alias_hz": 3575702.075702076,
+                "observed_peak_minus_reference_alias_bins": 1464.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497464.93367134215,
+                "alias_hz_from_nominal_RX_clock": 497464.93367134035,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.7118903384139,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.01209125927362555,
+                "observed_peak_minus_reference_alias_hz": 3578237.1420307355,
+                "observed_peak_minus_reference_alias_bins": 1465.288109661586,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d005_2",
+      "workload": "compat/ask/1000000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "27523fd67c66f31996b3ebd718476e8600860fa7f666dc10b159861837cbbe2c",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d005_2",
+            "repetition": 1,
+            "source_id": "d005_2",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "ade826d3",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 237698860,
+            "done_observed_us": 237699271,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.515262515262515,
+            "mean_native_minus_q10": 2.141880341880342,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 18836.301465201464,
+            "power_variance_code4": 4567350.110217633,
+            "power_quantiles_code_squared": {
+              "q1": 15165.0,
+              "q5": 15578.0,
+              "q10": 15925.0,
+              "q25": 16829.0,
+              "q50": 18954.0,
+              "q75": 20794.0,
+              "q90": 21608.0,
+              "q95": 21913.0,
+              "q99": 22468.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3568602825745684,
+            "q90_q10_normalized_contrast": 0.15141342285455467,
+            "level_medians_code_squared": {
+              "lower": 16778.0,
+              "upper": 20722.0
+            },
+            "level_robust_sigma_code_squared": 1217.2146,
+            "robust_level_separation_sigma": 3.240184598508759,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 18766.5,
+            "fraction_above_midpoint_descriptive": 0.5195360195360196,
+            "hysteresis_thresholds_code_squared": {
+              "low": 17914.05,
+              "high": 19618.95
+            },
+            "hysteretic_high_fraction_descriptive": 0.5078754578754578,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1669,
+              "peak_frequency_hz_from_nominal_clock": 4075702.075702076,
+              "peak_psd_code4_per_hz_from_nominal_clock": 1169.7556578039917,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.621976356079309,
+              "nonDC_windowed_AC_power_code4": 4592692.543668458,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1669.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3338
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.07154646056446438,
+                "observed_peak_minus_reference_alias_hz": 3575702.075702076,
+                "observed_peak_minus_reference_alias_bins": 1464.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497468.93367080885,
+                "alias_hz_from_nominal_RX_clock": 497468.93367080763,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.71352833819572,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.0030591974392459435,
+                "observed_peak_minus_reference_alias_hz": 3578233.142031268,
+                "observed_peak_minus_reference_alias_bins": 1465.2864716618044,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d006_3",
+      "workload": "compat/ask/1000000/mask0",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask0",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 0,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "ae557fd58fa68b5460fe3cdcf2fa832b76e340984bc45877ed86a861766a3f45",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d006_3",
+            "repetition": 1,
+            "source_id": "d006_3",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "0dc8f878",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 238768478,
+            "done_observed_us": 238768889,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -11.47008547008547,
+            "mean_native_minus_q10": 3.2615995115995116,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 18294.573443223442,
+            "power_variance_code4": 5412865.479526728,
+            "power_quantiles_code_squared": {
+              "q1": 14408.0,
+              "q5": 14824.0,
+              "q10": 15165.0,
+              "q25": 16069.0,
+              "q50": 18409.0,
+              "q75": 20465.0,
+              "q90": 21289.0,
+              "q95": 21650.0,
+              "q99": 22133.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.4038245961094626,
+            "q90_q10_normalized_contrast": 0.16799253854172383,
+            "level_medians_code_squared": {
+              "lower": 16020.0,
+              "upper": 20413.0
+            },
+            "level_robust_sigma_code_squared": 1291.3446,
+            "robust_level_separation_sigma": 3.4018804895300607,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 18227.0,
+            "fraction_above_midpoint_descriptive": 0.5139804639804639,
+            "hysteresis_thresholds_code_squared": {
+              "low": 17308.4,
+              "high": 19145.6
+            },
+            "hysteretic_high_fraction_descriptive": 0.5052503052503052,
+            "hysteretic_unclassified_fraction": 0.0001221001221001221,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1669,
+              "peak_frequency_hz_from_nominal_clock": 4075702.075702076,
+              "peak_psd_code4_per_hz_from_nominal_clock": 1384.5595480254447,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.6097727583093964,
+              "nonDC_windowed_AC_power_code4": 5544848.882311625,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1669.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3337
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.004228155926755758,
+                "observed_peak_minus_reference_alias_hz": 3575702.075702076,
+                "observed_peak_minus_reference_alias_bins": 1464.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497466.4709811225,
+                "alias_hz_from_nominal_RX_clock": 497466.47098112106,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.71251986676907,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.01233811837773316,
+                "observed_peak_minus_reference_alias_hz": 3578235.604720955,
+                "observed_peak_minus_reference_alias_bins": 1465.287480133231,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d007_1",
+      "workload": "compat/gate/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/gate/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "gate",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "c27f7dc55c978e7d0a73ee3adc7eed614ba5c4d91b0eeea5bf49ffc9446fb43c",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d007_1",
+            "repetition": 1,
+            "source_id": "d007_1",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "edfe2b23",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 239850562,
+            "done_observed_us": 239850973,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.906471306471307,
+            "mean_native_minus_q10": 2.8755189255189255,
+            "metadata12_unique_values": 1,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 12971.147191697191,
+            "power_variance_code4": 227844001.5206423,
+            "power_quantiles_code_squared": {
+              "q1": 20.0,
+              "q5": 65.0,
+              "q10": 101.0,
+              "q25": 194.0,
+              "q50": 16448.0,
+              "q75": 21706.75,
+              "q90": 24197.4,
+              "q95": 35281.59999999999,
+              "q99": 80191.31
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 239.5782178217822,
+            "q90_q10_normalized_contrast": 0.9916866954202745,
+            "level_medians_code_squared": {
+              "lower": 194.0,
+              "upper": 21609.0
+            },
+            "level_robust_sigma_code_squared": 3556.7574,
+            "robust_level_separation_sigma": 6.020933561563687,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 12149.2,
+            "fraction_above_midpoint_descriptive": 0.5122710622710622,
+            "hysteresis_thresholds_code_squared": {
+              "low": 8534.74,
+              "high": 15763.660000000002
+            },
+            "hysteretic_high_fraction_descriptive": 0.5148351648351648,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 205,
+              "peak_frequency_hz_from_nominal_clock": 500610.5006105006,
+              "peak_psd_code4_per_hz_from_nominal_clock": 25142.80283383293,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.27013021656244846,
+              "nonDC_windowed_AC_power_code4": 227293290.99253812,
+              "peak_cycles_in_snapshot_from_nominal_clock": 204.99999999999997
+            },
+            "edge_qualification": {
+              "qualified": true,
+              "reasons": [],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 409
+            },
+            "qualified_threshold_intervals": {
+              "high_width": {
+                "samples": {
+                  "count": 204,
+                  "min": 38.0,
+                  "median": 40.5,
+                  "p95": 46.0,
+                  "max": 46.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 204,
+                  "min": 0.95,
+                  "median": 1.0125,
+                  "p95": 1.15,
+                  "max": 1.15
+                }
+              },
+              "low_width": {
+                "samples": {
+                  "count": 204,
+                  "min": 36.0,
+                  "median": 38.0,
+                  "p95": 44.0,
+                  "max": 44.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 204,
+                  "min": 0.9,
+                  "median": 0.95,
+                  "p95": 1.1,
+                  "max": 1.1
+                }
+              },
+              "rising_period": {
+                "samples": {
+                  "count": 204,
+                  "min": 76.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 84.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 204,
+                  "min": 1.9,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 2.1
+                }
+              },
+              "falling_period": {
+                "samples": {
+                  "count": 203,
+                  "min": 76.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 84.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 203,
+                  "min": 1.9,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 2.1
+                }
+              }
+            },
+            "qualified_threshold_duty_estimate": 0.5148351648351648,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 25142.80283383293,
+                "observed_peak_minus_reference_alias_hz": 610.5006105005741,
+                "observed_peak_minus_reference_alias_bins": 0.2499999999999851,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497968.37870522356,
+                "alias_hz_from_nominal_RX_clock": 497968.37870522216,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.91805107978848,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 12922.064101448577,
+                "observed_peak_minus_reference_alias_hz": 2642.1219052784145,
+                "observed_peak_minus_reference_alias_bins": 1.0819489202115107,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d008_2",
+      "workload": "compat/gate/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/gate/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "gate",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "4b3743828ad84cf51a3c0cfd874648ed1ef0caea5bb14bbba9bac1a107fb848e",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d008_2",
+            "repetition": 1,
+            "source_id": "d008_2",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "5b707826",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 241032610,
+            "done_observed_us": 241033021,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.612515262515263,
+            "mean_native_minus_q10": 1.6567155067155068,
+            "metadata12_unique_values": 1,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 12737.940537240538,
+            "power_variance_code4": 228616731.1135582,
+            "power_quantiles_code_squared": {
+              "q1": 18.0,
+              "q5": 65.0,
+              "q10": 101.0,
+              "q25": 178.0,
+              "q50": 12277.5,
+              "q75": 21785.0,
+              "q90": 24161.0,
+              "q95": 34718.14999999998,
+              "q99": 79745.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 239.21782178217822,
+            "q90_q10_normalized_contrast": 0.9916742230648751,
+            "level_medians_code_squared": {
+              "lower": 178.0,
+              "upper": 21780.0
+            },
+            "level_robust_sigma_code_squared": 3448.5276,
+            "robust_level_separation_sigma": 6.264122693986848,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 12131.0,
+            "fraction_above_midpoint_descriptive": 0.5004273504273504,
+            "hysteresis_thresholds_code_squared": {
+              "low": 8522.0,
+              "high": 15740.0
+            },
+            "hysteretic_high_fraction_descriptive": 0.5015873015873016,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 205,
+              "peak_frequency_hz_from_nominal_clock": 500610.5006105006,
+              "peak_psd_code4_per_hz_from_nominal_clock": 22748.842437603533,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.2458660762072435,
+              "nonDC_windowed_AC_power_code4": 225947107.63810515,
+              "peak_cycles_in_snapshot_from_nominal_clock": 204.99999999999997
+            },
+            "edge_qualification": {
+              "qualified": true,
+              "reasons": [],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 401
+            },
+            "qualified_threshold_intervals": {
+              "high_width": {
+                "samples": {
+                  "count": 200,
+                  "min": 30.0,
+                  "median": 40.0,
+                  "p95": 46.0,
+                  "max": 46.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 0.75,
+                  "median": 1.0,
+                  "p95": 1.15,
+                  "max": 1.15
+                }
+              },
+              "low_width": {
+                "samples": {
+                  "count": 200,
+                  "min": 29.0,
+                  "median": 38.0,
+                  "p95": 44.0,
+                  "max": 388.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 0.725,
+                  "median": 0.95,
+                  "p95": 1.1,
+                  "max": 9.7
+                }
+              },
+              "rising_period": {
+                "samples": {
+                  "count": 200,
+                  "min": 59.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 433.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 1.475,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 10.825
+                }
+              },
+              "falling_period": {
+                "samples": {
+                  "count": 199,
+                  "min": 60.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 418.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 199,
+                  "min": 1.5,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 10.45
+                }
+              }
+            },
+            "qualified_threshold_duty_estimate": 0.5015873015873016,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 22748.842437603533,
+                "observed_peak_minus_reference_alias_hz": 610.5006105005741,
+                "observed_peak_minus_reference_alias_bins": 0.2499999999999851,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497964.7853524308,
+                "alias_hz_from_nominal_RX_clock": 497964.78535243124,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.9165796018206,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 11097.006437438775,
+                "observed_peak_minus_reference_alias_hz": 2645.7152580693364,
+                "observed_peak_minus_reference_alias_bins": 1.0834203981793933,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d009_3",
+      "workload": "compat/gate/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/gate/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "gate",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "749d0b8464d6c86c70ebc82f3c4f3b49fe9c0459642f03fd975cfd2680e75f6a",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d009_3",
+            "repetition": 1,
+            "source_id": "d009_3",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "73fe0794",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 242242719,
+            "done_observed_us": 242243130,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -11.58992673992674,
+            "mean_native_minus_q10": 2.2334554334554335,
+            "metadata12_unique_values": 10,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 13216.280647130647,
+            "power_variance_code4": 226353780.5741676,
+            "power_quantiles_code_squared": {
+              "q1": 36.0,
+              "q5": 80.0,
+              "q10": 116.0,
+              "q25": 205.0,
+              "q50": 16927.5,
+              "q75": 21971.75,
+              "q90": 24404.0,
+              "q95": 34180.299999999996,
+              "q99": 80629.15999999992
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 210.3793103448276,
+            "q90_q10_normalized_contrast": 0.9905383360522023,
+            "level_medians_code_squared": {
+              "lower": 197.0,
+              "upper": 21730.0
+            },
+            "level_robust_sigma_code_squared": 3651.6438,
+            "robust_level_separation_sigma": 5.8967963961873835,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 12260.0,
+            "fraction_above_midpoint_descriptive": 0.5225885225885226,
+            "hysteresis_thresholds_code_squared": {
+              "low": 8616.8,
+              "high": 15903.2
+            },
+            "hysteretic_high_fraction_descriptive": 0.526007326007326,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 205,
+              "peak_frequency_hz_from_nominal_clock": 500610.5006105006,
+              "peak_psd_code4_per_hz_from_nominal_clock": 22848.993631140034,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.252380498408366,
+              "nonDC_windowed_AC_power_code4": 221084032.23080653,
+              "peak_cycles_in_snapshot_from_nominal_clock": 204.99999999999997
+            },
+            "edge_qualification": {
+              "qualified": true,
+              "reasons": [],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 401
+            },
+            "qualified_threshold_intervals": {
+              "high_width": {
+                "samples": {
+                  "count": 200,
+                  "min": 30.0,
+                  "median": 41.0,
+                  "p95": 46.0,
+                  "max": 385.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 0.75,
+                  "median": 1.025,
+                  "p95": 1.15,
+                  "max": 9.625
+                }
+              },
+              "low_width": {
+                "samples": {
+                  "count": 200,
+                  "min": 29.0,
+                  "median": 38.0,
+                  "p95": 44.0,
+                  "max": 44.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 0.725,
+                  "median": 0.95,
+                  "p95": 1.1,
+                  "max": 1.1
+                }
+              },
+              "rising_period": {
+                "samples": {
+                  "count": 200,
+                  "min": 62.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 414.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 200,
+                  "min": 1.55,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 10.35
+                }
+              },
+              "falling_period": {
+                "samples": {
+                  "count": 199,
+                  "min": 59.0,
+                  "median": 79.0,
+                  "p95": 84.0,
+                  "max": 423.0
+                },
+                "us_from_nominal_clock": {
+                  "count": 199,
+                  "min": 1.475,
+                  "median": 1.975,
+                  "p95": 2.1,
+                  "max": 10.575
+                }
+              }
+            },
+            "qualified_threshold_duty_estimate": 0.526007326007326,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 22848.993631140034,
+                "observed_peak_minus_reference_alias_hz": 610.5006105005741,
+                "observed_peak_minus_reference_alias_bins": 0.2499999999999851,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497967.8807724616,
+                "alias_hz_from_nominal_RX_clock": 497967.88077246025,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.91784717632248,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 11178.170594467707,
+                "observed_peak_minus_reference_alias_hz": 2642.619838040322,
+                "observed_peak_minus_reference_alias_bins": 1.082152823677512,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d010_1",
+      "workload": "compat/ask/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "dbcc17e1f0ab45db77b75180ba4c76608a801b2f27bb2c8f463632d05974bcb7",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d010_1",
+            "repetition": 1,
+            "source_id": "d010_1",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "1114a635",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 243489508,
+            "done_observed_us": 243489919,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.208669108669108,
+            "mean_native_minus_q10": 4.102625152625152,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 18081.139621489623,
+            "power_variance_code4": 4596049.585450894,
+            "power_quantiles_code_squared": {
+              "q1": 14436.0,
+              "q5": 14929.0,
+              "q10": 15220.0,
+              "q25": 16045.0,
+              "q50": 18080.0,
+              "q75": 20050.0,
+              "q90": 20893.0,
+              "q95": 21233.0,
+              "q99": 21753.21
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3727332457293036,
+            "q90_q10_normalized_contrast": 0.15709024451028716,
+            "level_medians_code_squared": {
+              "lower": 16042.0,
+              "upper": 20041.0
+            },
+            "level_robust_sigma_code_squared": 1205.3537999999999,
+            "robust_level_separation_sigma": 3.317698089971592,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 18056.5,
+            "fraction_above_midpoint_descriptive": 0.5022588522588523,
+            "hysteresis_thresholds_code_squared": {
+              "low": 17205.55,
+              "high": 18907.45
+            },
+            "hysteretic_high_fraction_descriptive": 0.49835164835164836,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1669,
+              "peak_frequency_hz_from_nominal_clock": 4075702.075702076,
+              "peak_psd_code4_per_hz_from_nominal_clock": 925.9092462822424,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.4890591722830634,
+              "nonDC_windowed_AC_power_code4": 4623310.9787892625,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1669.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3337
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.011283802156177693,
+                "observed_peak_minus_reference_alias_hz": 3575702.075702076,
+                "observed_peak_minus_reference_alias_bins": 1464.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497965.8289664119,
+                "alias_hz_from_nominal_RX_clock": 497965.8289664127,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.917006961746,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.001391043487295285,
+                "observed_peak_minus_reference_alias_hz": 3577736.246735663,
+                "observed_peak_minus_reference_alias_bins": 1465.082993038254,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d011_2",
+      "workload": "compat/ask/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "eda95695189301f0c5d8b425874fe39d94513775926a2b7ae354e492e9e80363",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d011_2",
+            "repetition": 1,
+            "source_id": "d011_2",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "1b4a230e",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 244759900,
+            "done_observed_us": 244760311,
+            "capture_cycles_mod32": 98676,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -9.950793650793651,
+            "mean_native_minus_q10": 3.2286324786324787,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 18296.055006105005,
+            "power_variance_code4": 4235751.14795113,
+            "power_quantiles_code_squared": {
+              "q1": 14724.0,
+              "q5": 15210.0,
+              "q10": 15508.9,
+              "q25": 16369.0,
+              "q50": 18395.5,
+              "q75": 20189.0,
+              "q90": 20980.0,
+              "q95": 21277.0,
+              "q99": 21825.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3527716343518883,
+            "q90_q10_normalized_contrast": 0.149938748496118,
+            "level_medians_code_squared": {
+              "lower": 16325.0,
+              "upper": 20165.0
+            },
+            "level_robust_sigma_code_squared": 1166.8062,
+            "robust_level_separation_sigma": 3.2910349636469194,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 18244.45,
+            "fraction_above_midpoint_descriptive": 0.5144078144078144,
+            "hysteresis_thresholds_code_squared": {
+              "low": 17423.785,
+              "high": 19065.114999999998
+            },
+            "hysteretic_high_fraction_descriptive": 0.5073260073260073,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1668,
+              "peak_frequency_hz_from_nominal_clock": 4073260.073260073,
+              "peak_psd_code4_per_hz_from_nominal_clock": 794.9733257515118,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.4519412928937156,
+              "nonDC_windowed_AC_power_code4": 4295528.71874565,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1668.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3337
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.06863325807569001,
+                "observed_peak_minus_reference_alias_hz": 3573260.073260073,
+                "observed_peak_minus_reference_alias_bins": 1463.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497965.6774319421,
+                "alias_hz_from_nominal_RX_clock": 497965.67743194103,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.91694490837983,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.02045211432072398,
+                "observed_peak_minus_reference_alias_hz": 3575294.395828132,
+                "observed_peak_minus_reference_alias_bins": 1464.08305509162,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "d012_3",
+      "workload": "compat/ask/1000000/mask2000",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "ANALYZED",
+      "settings": {
+        "name": "compat/ask/1000000/mask2000",
+        "rx_mode": "capture",
+        "rate_hz": 40000000,
+        "samples": 16380,
+        "rx_repeats": 1,
+        "arm_delay_us": 500000,
+        "gap_us": 0,
+        "timeout_us": 20000,
+        "tx_enabled": true,
+        "tx_mode": "ask",
+        "baud": 1000000,
+        "backoff0_quarter_db": 96,
+        "backoff1_quarter_db": 112,
+        "duration_us": 1000000,
+        "mask_segment_us": 2000,
+        "bit_count": 64,
+        "pattern": "alternating"
+      },
+      "error": null,
+      "snapshots": [
+        {
+          "source_file": "snapshot-0001.native32le",
+          "raw_sha256": "aeac5c6f526c9d70278ad4396c01012cc82e9f71d44c627b1605a0eb65bf4bf9",
+          "source_header": {
+            "schema": 1,
+            "type": "snapshot",
+            "id": "d012_3",
+            "repetition": 1,
+            "source_id": "d012_3",
+            "source_repetition": 1,
+            "complete": true,
+            "reason": "complete",
+            "sample_count": 16380,
+            "raw_bytes": 65520,
+            "raw_format": "LE32_I10_Q10_metadata12_native",
+            "crc32": "e7141303",
+            "nominal_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "trigger_before_us": 246060011,
+            "done_observed_us": 246060422,
+            "capture_cycles_mod32": 98724,
+            "control": "8000bffc",
+            "status": "8004bffc",
+            "hardware_done": true,
+            "owner_before": "00000000",
+            "owner_after": "00000000",
+            "lanes_before": "00000000",
+            "lanes_after": "00000000",
+            "registers_restored": true,
+            "tail_canary_ok": true,
+            "unchanged_sentinel_words": 0,
+            "heap_scope": "run_prearm_to_snapshot_or_bench_loop_end",
+            "internal_8bit_free_before": 257336,
+            "internal_8bit_free_after": 257336,
+            "internal_8bit_largest_before": 188416,
+            "internal_8bit_largest_after": 188416,
+            "usb_during_capture": false,
+            "allocation_during_capture": false
+          },
+          "signal": {
+            "samples": 16380,
+            "nominal_sample_rate_hz": 40000000,
+            "nominal_horizon_us": 409.5,
+            "components": "native signed I10,-Q10; no Q-sign conversion, no IQ8 requantization",
+            "mean_i10": -10.03840048840049,
+            "mean_native_minus_q10": 3.051282051282051,
+            "metadata12_unique_values": 9,
+            "signed10_field_limit_fraction": 0.0,
+            "power_mean_code_squared": 17968.89297924298,
+            "power_variance_code4": 4141070.4621118815,
+            "power_quantiles_code_squared": {
+              "q1": 14464.0,
+              "q5": 14922.0,
+              "q10": 15210.0,
+              "q25": 16057.0,
+              "q50": 18010.0,
+              "q75": 19818.25,
+              "q90": 20565.0,
+              "q95": 20914.0,
+              "q99": 21458.0
+            },
+            "q90_q10_ratio_with_one_code_squared_denominator_floor": 1.3520710059171597,
+            "q90_q10_normalized_contrast": 0.14968553459119496,
+            "level_medians_code_squared": {
+              "lower": 16010.0,
+              "upper": 19748.0
+            },
+            "level_robust_sigma_code_squared": 1151.9802,
+            "robust_level_separation_sigma": 3.2448474374819987,
+            "threshold_scope": "Per-snapshot quantile/MAD heuristics; one code-squared arithmetic floor, not calibrated RF noise or SNR.",
+            "midpoint_threshold_code_squared": 17887.5,
+            "fraction_above_midpoint_descriptive": 0.5175213675213676,
+            "hysteresis_thresholds_code_squared": {
+              "low": 17084.25,
+              "high": 18690.75
+            },
+            "hysteretic_high_fraction_descriptive": 0.5062881562881563,
+            "hysteretic_unclassified_fraction": 0.0,
+            "ac_power_spectrum": {
+              "available": true,
+              "reason": null,
+              "samples": 16380,
+              "window": "symmetric_Hann",
+              "mean_removed_before_window": true,
+              "dc_bin_excluded": true,
+              "bin_spacing_hz_from_nominal_clock": 2442.002442002442,
+              "equivalent_noise_bandwidth_hz_from_nominal_clock": 3663.227303254167,
+              "peak_bin": 1668,
+              "peak_frequency_hz_from_nominal_clock": 4073260.073260073,
+              "peak_psd_code4_per_hz_from_nominal_clock": 781.5992567906634,
+              "peak_fraction_of_nonDC_windowed_AC_power": 0.47121594695175484,
+              "nonDC_windowed_AC_power_code4": 4050515.0687217964,
+              "peak_cycles_in_snapshot_from_nominal_clock": 1668.0
+            },
+            "edge_qualification": {
+              "qualified": false,
+              "reasons": [
+                "power_quantile_ratio_below_threshold",
+                "robust_level_separation_below_threshold"
+              ],
+              "options": {
+                "minimum_power_ratio": 4.0,
+                "minimum_level_separation": 4.0,
+                "minimum_ac_peak_fraction": 0.1,
+                "minimum_cycles": 3.0,
+                "minimum_state_fraction": 0.05,
+                "hysteresis_low_fraction": 0.35,
+                "hysteresis_high_fraction": 0.65
+              },
+              "minimum_samples_fixed": 32,
+              "minimum_crossings_each_polarity_fixed": 3,
+              "candidate_crossings_diagnostic_only": 3337
+            },
+            "qualified_threshold_intervals": null,
+            "qualified_threshold_duty_estimate": null,
+            "edge_scope": "Hysteretic envelope threshold crossings, not calibrated RF edges; first/last censored widths excluded; resolution one nominal sample.",
+            "alternating_references": [
+              {
+                "kind": "requested_baud_halved",
+                "unaliased_reference_hz": 500000.0,
+                "alias_hz_from_nominal_RX_clock": 500000.0,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 204.75,
+                "nearest_bin": 205,
+                "nearest_bin_frequency_hz_from_nominal_clock": 500610.50061050063,
+                "nearest_bin_psd_code4_per_hz": 0.0028811597962897103,
+                "observed_peak_minus_reference_alias_hz": 3573260.073260073,
+                "observed_peak_minus_reference_alias_bins": 1463.25,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              },
+              {
+                "kind": "software_write_average_halved",
+                "unaliased_reference_hz": 497963.05506359966,
+                "alias_hz_from_nominal_RX_clock": 497963.05506359786,
+                "alias_to_DC": false,
+                "reference_cycles_in_snapshot": 203.91587104854332,
+                "nearest_bin": 204,
+                "nearest_bin_frequency_hz_from_nominal_clock": 498168.49816849816,
+                "nearest_bin_psd_code4_per_hz": 0.006359432639592229,
+                "observed_peak_minus_reference_alias_hz": 3575297.018196475,
+                "observed_peak_minus_reference_alias_bins": 1464.0841289514567,
+                "scope": "Reference only, not an RF-demodulated clock or proof of source origin."
+              }
+            ],
+            "warnings": [
+              "Software average spans the TX loop, not a synchronized local RX snapshot; RF overlap is not proven.",
+              "Skipped source slots break a uniform alternating sequence; writes/2 need not be its fundamental.",
+              "Interrupt mask segments/gaps can give a local rate different from the whole-loop average."
+            ],
+            "RF_origin_verified": false,
+            "payload_BER_measured": false,
+            "one_way_latency_measured": false
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Each snapshot resets sample index0; no continuous stream, inter-snapshot gap filling or pooling.",
+    "Mean-removed I\u00b2+Q\u00b2 AC spectrum describes amplitude modulation, not the complex carrier spectrum.",
+    "Frequencies and threshold intervals use nominal RX clock; bin spacing/ENBW are not calibrated frequency accuracy.",
+    "Quantile/MAD thresholds are explicit heuristics, not calibrated RF SNR or sensitivity.",
+    "Threshold duty is per-snapshot occupancy, not transmitter RF duty or RF on-time.",
+    "Interfering carriers can produce envelope beating; periodicity and TX metadata alone do not prove RF origin.",
+    "No calibration-pattern BER, framed-payload decoding, audio fidelity or synchronized one-way latency claim."
+  ]
+}

@@ -24,6 +24,12 @@ void setRite(const Rite *rite);
 void setTextMode(TextMode mode);
 inline constexpr int VisionsArtTop = 19;
 bool visionsImmersive();
+#ifdef GRIM_PERF
+// Profiling overrides deliberately remain in RAM and never write NVS.
+void perfOrientation(uint8_t value);
+void perfBackdrop(uint8_t value);
+void perfImmersive(bool value);
+#endif
 
 // Coordinates are LCD pixels, after touch calibration and rotation.
 bool touch(bool down, int x, int y, uint32_t now, hal::Key &out);

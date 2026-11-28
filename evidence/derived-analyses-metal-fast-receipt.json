@@ -1,0 +1,73 @@
+{
+  "schema": "cyd-perf-derived-archive-receipt/1",
+  "status": "VERIFIED_COMPACT_ROOT_PUBLICATION_STAGED",
+  "generated_utc": "2026-11-28T00:23:41.054133+00:00",
+  "archive": "DERIVED-ANALYSES-METAL-FAST.zip",
+  "archive_sha256": "e65fedfac3532f7935a32daf89ee38118a1afcbbd4bb26833e6b6bf60ed05ef2",
+  "archive_bytes": 26822910,
+  "manifest_member": "DERIVED-ANALYSES-MANIFEST.json",
+  "manifest_sha256": "1750cef3324eedc96b000e17b1dae024eb6609fceaea1f3b4fa94f59722fb9a5",
+  "source_files": 759,
+  "source_bytes": 70514862,
+  "zip_members": 762,
+  "source_directories": [
+    "evidence/metal-fast-compat-rx-analysis",
+    "evidence/metal-fast-compat-rx-envelope",
+    "evidence/metal-fast-compat-rx2-analysis",
+    "evidence/metal-fast-compat-rx2-envelope",
+    "evidence/metal-fast-framed-rx-analysis",
+    "evidence/metal-fast-framed-rx-demod",
+    "evidence/metal-fast-framed-rx-envelope",
+    "evidence/metal-fast-framed-rx2-analysis",
+    "evidence/metal-fast-framed-rx2-demod",
+    "evidence/metal-fast-framed-rx2-envelope",
+    "evidence/metal-fast-rate-rx-analysis",
+    "evidence/metal-fast-rate-rx-envelope",
+    "evidence/metal-fast-rate-rx2-analysis",
+    "evidence/metal-fast-rate-rx2-envelope",
+    "evidence/metal-fast-reference-rx-analysis",
+    "evidence/metal-fast-reference-rx-envelope",
+    "evidence/metal-fast-reference-rx2-analysis",
+    "evidence/metal-fast-reference-rx2-envelope",
+    "evidence/metal-fast-smoke-rx-analysis",
+    "evidence/metal-fast-smoke-rx-envelope",
+    "evidence/metal-fast-smoke-rx2-analysis",
+    "evidence/metal-fast-smoke-rx2-envelope"
+  ],
+  "ignored_files_included": 667,
+  "WAV_files_included": 0,
+  "byte_exact_original_manifests": 22,
+  "original_manifest_output_mismatches": [],
+  "verification": {
+    "source_snapshot_unchanged": true,
+    "membership_and_member_hashes": true,
+    "ZIP_CRC": true,
+    "fresh_extraction_hashes": true,
+    "Git_index_changed_by_packager": false,
+    "raw_or_existing_ZIP_changed": false
+  },
+  "packager_sha256": "916ae7ae8bc23412d83e32b9819fd0485d8b97051b69160d273dda34c8ddc0da",
+  "proposal_plan_sha256": "5702310e9331d0c1e5607152cce2ad3ea371da5ac1f3e76abff92a3baf20fbce",
+  "proposed_archive_only_files": 667,
+  "proposed_index_removals": 0,
+  "proposed_publication_replacements": 0,
+  "archive_link_rewrites": 0,
+  "preexisting_missing_local_links": [
+    {
+      "source": "evidence/README.md",
+      "href": "METAL-FAST-FINDINGS.md",
+      "target": "evidence/METAL-FAST-FINDINGS.md"
+    },
+    {
+      "source": "evidence/RECOMMENDATIONS-DRAFT.md",
+      "href": "METAL-FAST-FINDINGS.md",
+      "target": "evidence/METAL-FAST-FINDINGS.md"
+    }
+  ],
+  "original_files_on_disk_unchanged": 759,
+  "live_root_files_staged": 92,
+  "new_detail_paths_unstaged": 0,
+  "initial_archive_unchanged_sha256": "166c58d13a6168ccf4653c9f852d8be6234912d7cf9e9087c4a053086ec79850",
+  "applied_audit_file": "derived-metal-fast-publication-applied.json",
+  "link_scan_scope": "Two forward links to profiling-agent METAL-FAST-FINDINGS.md were pending at snapshot time; that top-level report is outside this archive scope."
+}

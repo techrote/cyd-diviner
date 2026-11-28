@@ -1,0 +1,9 @@
+{
+  "schema": "cyd-perf-prototype-bundle/1",
+  "archive": "UNAPPROVED-AUDIO-SDR-IMAGES.zip",
+  "bytes": 9499595,
+  "sha256": "51289232c9cf2d5035efde001bd39e92e379d163f673ce13c83ad5ad7bae6cfc",
+  "review_sha256": "6595c8e79d04cc939511bade2d07184c604fcf7089a85f7ffb087f2d2d78b875",
+  "source_members_verified": 732,
+  "scope": "Four exact app-only images, compressed maps, review and exact adapted GPL receiver source; no bootloader/partition flashing script bundled."
+}

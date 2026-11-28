@@ -1,0 +1,19 @@
+{
+  "schema": "cyd-perf-raw-archive/1",
+  "file": "PHYSICAL-CAPTURES-BASELINE.zip",
+  "bytes": 22071088,
+  "sha256": "41f122a120c5f4207f6d30b01d3c0b4be67728a200ba89154fa3d957d38a7797",
+  "directories": [
+    "continuation-01",
+    "cyd-fresh-identify-01",
+    "cyd-kernels-fresh-01",
+    "full-01",
+    "identify-01",
+    "preflight-01",
+    "s3-identify-01",
+    "s3-kernels-01",
+    "s3-usb-diagnostic-01",
+    "shot-before"
+  ],
+  "note": "Closed captures preserved, including failed attempts and read-only USB diagnostic; derived analysis is separately published."
+}

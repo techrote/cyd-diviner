@@ -1,0 +1,280 @@
+{
+  "schema": "cyd-perf-derived-publication-layout/1",
+  "archive": "DERIVED-ANALYSES-METAL-FAST.zip",
+  "archive_sha256": "e65fedfac3532f7935a32daf89ee38118a1afcbbd4bb26833e6b6bf60ed05ef2",
+  "manifest_member": "DERIVED-ANALYSES-MANIFEST.json",
+  "manifest_sha256": "1750cef3324eedc96b000e17b1dae024eb6609fceaea1f3b4fa94f59722fb9a5",
+  "directory_scope": "Exactly22 terminal-frozen metal-fast analysis/envelope/demod trees; no old analyses/raw/stimulus/plan/source files.",
+  "directories": [
+    {
+      "directory": "evidence/metal-fast-compat-rx-analysis",
+      "original_files": 5,
+      "original_bytes": 185229,
+      "live_root_files": [
+        "evidence/metal-fast-compat-rx-analysis/manifest.json",
+        "evidence/metal-fast-compat-rx-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-compat-rx-analysis/native-iq.csv",
+        "evidence/metal-fast-compat-rx-analysis/rates.csv",
+        "evidence/metal-fast-compat-rx-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-compat-rx-envelope",
+      "original_files": 27,
+      "original_bytes": 4132907,
+      "live_root_files": [
+        "evidence/metal-fast-compat-rx-envelope/envelope-summary.csv",
+        "evidence/metal-fast-compat-rx-envelope/manifest.json",
+        "evidence/metal-fast-compat-rx-envelope/results.json"
+      ],
+      "archive_only_files": 24
+    },
+    {
+      "directory": "evidence/metal-fast-compat-rx2-analysis",
+      "original_files": 5,
+      "original_bytes": 185286,
+      "live_root_files": [
+        "evidence/metal-fast-compat-rx2-analysis/manifest.json",
+        "evidence/metal-fast-compat-rx2-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-compat-rx2-analysis/native-iq.csv",
+        "evidence/metal-fast-compat-rx2-analysis/rates.csv",
+        "evidence/metal-fast-compat-rx2-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-compat-rx2-envelope",
+      "original_files": 27,
+      "original_bytes": 4079766,
+      "live_root_files": [
+        "evidence/metal-fast-compat-rx2-envelope/envelope-summary.csv",
+        "evidence/metal-fast-compat-rx2-envelope/manifest.json",
+        "evidence/metal-fast-compat-rx2-envelope/results.json"
+      ],
+      "archive_only_files": 24
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx-analysis",
+      "original_files": 5,
+      "original_bytes": 319507,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx-analysis/manifest.json",
+        "evidence/metal-fast-framed-rx-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-framed-rx-analysis/native-iq.csv",
+        "evidence/metal-fast-framed-rx-analysis/rates.csv",
+        "evidence/metal-fast-framed-rx-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx-demod",
+      "original_files": 147,
+      "original_bytes": 1117606,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx-demod/decoded-summary.csv",
+        "evidence/metal-fast-framed-rx-demod/frames.csv",
+        "evidence/metal-fast-framed-rx-demod/manifest.json",
+        "evidence/metal-fast-framed-rx-demod/quality.csv",
+        "evidence/metal-fast-framed-rx-demod/results.json",
+        "evidence/metal-fast-framed-rx-demod/trials.csv"
+      ],
+      "archive_only_files": 141
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx-envelope",
+      "original_files": 45,
+      "original_bytes": 7036424,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx-envelope/envelope-summary.csv",
+        "evidence/metal-fast-framed-rx-envelope/manifest.json",
+        "evidence/metal-fast-framed-rx-envelope/results.json"
+      ],
+      "archive_only_files": 42
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx2-analysis",
+      "original_files": 5,
+      "original_bytes": 319227,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx2-analysis/manifest.json",
+        "evidence/metal-fast-framed-rx2-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-framed-rx2-analysis/native-iq.csv",
+        "evidence/metal-fast-framed-rx2-analysis/rates.csv",
+        "evidence/metal-fast-framed-rx2-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx2-demod",
+      "original_files": 148,
+      "original_bytes": 1118294,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx2-demod/decoded-summary.csv",
+        "evidence/metal-fast-framed-rx2-demod/frames.csv",
+        "evidence/metal-fast-framed-rx2-demod/manifest.json",
+        "evidence/metal-fast-framed-rx2-demod/quality.csv",
+        "evidence/metal-fast-framed-rx2-demod/results.json",
+        "evidence/metal-fast-framed-rx2-demod/trials.csv"
+      ],
+      "archive_only_files": 142
+    },
+    {
+      "directory": "evidence/metal-fast-framed-rx2-envelope",
+      "original_files": 45,
+      "original_bytes": 6761012,
+      "live_root_files": [
+        "evidence/metal-fast-framed-rx2-envelope/envelope-summary.csv",
+        "evidence/metal-fast-framed-rx2-envelope/manifest.json",
+        "evidence/metal-fast-framed-rx2-envelope/results.json"
+      ],
+      "archive_only_files": 42
+    },
+    {
+      "directory": "evidence/metal-fast-rate-rx-analysis",
+      "original_files": 5,
+      "original_bytes": 625552,
+      "live_root_files": [
+        "evidence/metal-fast-rate-rx-analysis/manifest.json",
+        "evidence/metal-fast-rate-rx-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-rate-rx-analysis/native-iq.csv",
+        "evidence/metal-fast-rate-rx-analysis/rates.csv",
+        "evidence/metal-fast-rate-rx-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-rate-rx-envelope",
+      "original_files": 87,
+      "original_bytes": 14511421,
+      "live_root_files": [
+        "evidence/metal-fast-rate-rx-envelope/envelope-summary.csv",
+        "evidence/metal-fast-rate-rx-envelope/manifest.json",
+        "evidence/metal-fast-rate-rx-envelope/results.json"
+      ],
+      "archive_only_files": 84
+    },
+    {
+      "directory": "evidence/metal-fast-rate-rx2-analysis",
+      "original_files": 5,
+      "original_bytes": 625149,
+      "live_root_files": [
+        "evidence/metal-fast-rate-rx2-analysis/manifest.json",
+        "evidence/metal-fast-rate-rx2-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-rate-rx2-analysis/native-iq.csv",
+        "evidence/metal-fast-rate-rx2-analysis/rates.csv",
+        "evidence/metal-fast-rate-rx2-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-rate-rx2-envelope",
+      "original_files": 87,
+      "original_bytes": 14392228,
+      "live_root_files": [
+        "evidence/metal-fast-rate-rx2-envelope/envelope-summary.csv",
+        "evidence/metal-fast-rate-rx2-envelope/manifest.json",
+        "evidence/metal-fast-rate-rx2-envelope/results.json"
+      ],
+      "archive_only_files": 84
+    },
+    {
+      "directory": "evidence/metal-fast-reference-rx-analysis",
+      "original_files": 5,
+      "original_bytes": 181252,
+      "live_root_files": [
+        "evidence/metal-fast-reference-rx-analysis/manifest.json",
+        "evidence/metal-fast-reference-rx-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-reference-rx-analysis/native-iq.csv",
+        "evidence/metal-fast-reference-rx-analysis/rates.csv",
+        "evidence/metal-fast-reference-rx-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-reference-rx-envelope",
+      "original_files": 39,
+      "original_bytes": 6280925,
+      "live_root_files": [
+        "evidence/metal-fast-reference-rx-envelope/envelope-summary.csv",
+        "evidence/metal-fast-reference-rx-envelope/manifest.json",
+        "evidence/metal-fast-reference-rx-envelope/results.json"
+      ],
+      "archive_only_files": 36
+    },
+    {
+      "directory": "evidence/metal-fast-reference-rx2-analysis",
+      "original_files": 5,
+      "original_bytes": 181298,
+      "live_root_files": [
+        "evidence/metal-fast-reference-rx2-analysis/manifest.json",
+        "evidence/metal-fast-reference-rx2-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-reference-rx2-analysis/native-iq.csv",
+        "evidence/metal-fast-reference-rx2-analysis/rates.csv",
+        "evidence/metal-fast-reference-rx2-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-reference-rx2-envelope",
+      "original_files": 39,
+      "original_bytes": 6279538,
+      "live_root_files": [
+        "evidence/metal-fast-reference-rx2-envelope/envelope-summary.csv",
+        "evidence/metal-fast-reference-rx2-envelope/manifest.json",
+        "evidence/metal-fast-reference-rx2-envelope/results.json"
+      ],
+      "archive_only_files": 36
+    },
+    {
+      "directory": "evidence/metal-fast-smoke-rx-analysis",
+      "original_files": 5,
+      "original_bytes": 52259,
+      "live_root_files": [
+        "evidence/metal-fast-smoke-rx-analysis/manifest.json",
+        "evidence/metal-fast-smoke-rx-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-smoke-rx-analysis/native-iq.csv",
+        "evidence/metal-fast-smoke-rx-analysis/rates.csv",
+        "evidence/metal-fast-smoke-rx-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-smoke-rx-envelope",
+      "original_files": 9,
+      "original_bytes": 1029948,
+      "live_root_files": [
+        "evidence/metal-fast-smoke-rx-envelope/envelope-summary.csv",
+        "evidence/metal-fast-smoke-rx-envelope/manifest.json",
+        "evidence/metal-fast-smoke-rx-envelope/results.json"
+      ],
+      "archive_only_files": 6
+    },
+    {
+      "directory": "evidence/metal-fast-smoke-rx2-analysis",
+      "original_files": 5,
+      "original_bytes": 52219,
+      "live_root_files": [
+        "evidence/metal-fast-smoke-rx2-analysis/manifest.json",
+        "evidence/metal-fast-smoke-rx2-analysis/METAL-REPORT.md",
+        "evidence/metal-fast-smoke-rx2-analysis/native-iq.csv",
+        "evidence/metal-fast-smoke-rx2-analysis/rates.csv",
+        "evidence/metal-fast-smoke-rx2-analysis/results.json"
+      ],
+      "archive_only_files": 0
+    },
+    {
+      "directory": "evidence/metal-fast-smoke-rx2-envelope",
+      "original_files": 9,
+      "original_bytes": 1047815,
+      "live_root_files": [
+        "evidence/metal-fast-smoke-rx2-envelope/envelope-summary.csv",
+        "evidence/metal-fast-smoke-rx2-envelope/manifest.json",
+        "evidence/metal-fast-smoke-rx2-envelope/results.json"
+      ],
+      "archive_only_files": 6
+    }
+  ],
+  "live_policy": "Original root JSON/CSV/reports/manifests remain byte-exact live files.667 detailed nested files are archive-only; all759 originals stay on disk.",
+  "initial_archive_unchanged_sha256": "166c58d13a6168ccf4653c9f852d8be6234912d7cf9e9087c4a053086ec79850"
+}

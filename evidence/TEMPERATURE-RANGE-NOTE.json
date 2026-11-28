@@ -1,0 +1,37 @@
+{
+  "schema": "cyd-temperature-range-source-review/1",
+  "evidence_class": "PINNED_SOURCE_REVIEW_NOT_PHYSICAL_MEASUREMENT",
+  "sdk_commit": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "sources": {
+    "components/esp_driver_tsens/src/temperature_sensor.c": {
+      "git_blob": "972c9f7945d8626ba2b96739929abb71d0ed6b94",
+      "git_bytes": 16780,
+      "git_sha256": "6c389e5993c2264df213f53b98d6a6dcf6e41473c5eb3595aacdd79c5dacd9d8",
+      "checkout_sha256": "7681aefc2d718ef7cc0f1f7998ed435c173c3173eedbc04831dedbdf0d36575e",
+      "url": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/esp_driver_tsens/src/temperature_sensor.c"
+    },
+    "components/esp_hw_support/sar_periph_ctrl_common.c": {
+      "git_blob": "b4612116b6d9af3ed86ad8ff95919856c77823b2",
+      "git_bytes": 5942,
+      "git_sha256": "111a242125a99bfe74d169b46c9a25fc85d5f8dcc791c7372ba6568c0f6fc9ed",
+      "checkout_sha256": "91cf39bd8a8144a841c0373523761478657dddbde9a5e1366633cd5db43c50a5",
+      "url": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/esp_hw_support/sar_periph_ctrl_common.c"
+    },
+    "components/soc/esp32s3/temperature_sensor_periph.c": {
+      "git_blob": "e75c60b317830beb39a4868e335b9393c108d249",
+      "git_bytes": 494,
+      "git_sha256": "167e4022b7309254a664c1dc3b6c01636c7cc1c9cc75f6b572f11a7cbfb2db06",
+      "checkout_sha256": "b966b42d069406105623bb94f58fb50daea5e086621321b75f86c76ccce69f3d",
+      "url": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/soc/esp32s3/temperature_sensor_periph.c"
+    },
+    "components/hal/esp32s3/include/hal/temperature_sensor_ll.h": {
+      "git_blob": "c98b9998620a2628b281e800b573221aed577b90",
+      "git_bytes": 4521,
+      "git_sha256": "3086a36b2ef51576c1ee2c4d70e3be4d871002db58a55529e0e4e1b94d620e6a",
+      "checkout_sha256": "7bc98e223be5489e666b3c2aad38a4254ee11ed26e091d98d04a4d71a77ab39b",
+      "url": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/hal/esp32s3/include/hal/temperature_sensor_ll.h"
+    }
+  },
+  "note_sha256": "f8732f6903694ac27c4ff2ad216b4e4ee17b1abbf5eada4a90138dfc6bbdd8ef",
+  "scope": "Initial range request versus automatic range selection; no new image/physical test; possible cache interaction is inference only"
+}

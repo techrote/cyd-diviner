@@ -2,6 +2,7 @@
 #include "hal.h"
 #include "cyd_controls.h"
 #include "theme.h"
+#include "perf_profile.h"
 #ifdef GRIM_CYD_PCM
 #include "cyd_pcm_protocol.h"
 #include "cyd_pcm_serial.h"
@@ -12,6 +13,12 @@
 #include <SPI.h>
 #include <XPT2046_Touchscreen.h>
 #include <driver/i2s.h>
+#ifdef GRIM_PERF
+#include <esp_heap_caps.h>
+#ifdef GRIM_PERF_I2S_EVENTS
+#include <esp_timer.h>
+#endif
+#endif
 #include <lgfx/v1/panel/Panel_ILI9341.hpp>
 #include <lgfx/v1/platforms/esp32/Bus_SPI.hpp>
 
@@ -160,6 +167,35 @@ void drawBackdropMotes(int left, int origin, int sceneBottom, int width, int cli
 constexpr int AudioBlock = 128;
 constexpr i2s_port_t AudioPort = I2S_NUM_0;
 SemaphoreHandle_t audioLock = nullptr;
+#ifdef GRIM_PERF_I2S_EVENTS
+QueueHandle_t audioEvents = nullptr;
+
+void drainAudioEvents() {
+    if (!audioEvents) return;
+    const uint64_t start = esp_timer_get_time();
+    static uint64_t previousDrain = 0;
+    perf_i2s_events::Drain drain;
+    drain.pendingBefore = uxQueueMessagesWaiting(audioEvents);
+    i2s_event_t event;
+    // Bounded consumer work, including outside measurement windows. Queue
+    // saturation between these observations is not a counted loss detector.
+    while (drain.events < perf_i2s_events::QueueCapacity && xQueueReceive(audioEvents, &event, 0) == pdTRUE) {
+        ++drain.events;
+        switch (event.type) {
+        case I2S_EVENT_TX_Q_OVF: ++drain.txUnderflow; break;
+        case I2S_EVENT_DMA_ERROR: ++drain.descriptorFault; break;
+        case I2S_EVENT_TX_DONE: ++drain.txDone; break;
+        default: ++drain.other; break;
+        }
+    }
+    drain.pendingAfter = uxQueueMessagesWaiting(audioEvents);
+    const uint64_t end = esp_timer_get_time();
+    drain.durationUs = static_cast<uint32_t>(end - start);
+    drain.intervalUs = previousDrain ? static_cast<uint32_t>(end - previousDrain) : 0;
+    previousDrain = end;
+    perf_profile::i2sEventDrain(drain, end);
+}
+#endif
 AudioFn audioFn = nullptr, overlayFn = nullptr;
 std::atomic<uint8_t> level{140};
 #ifdef GRIM_CYD_DIAGNOSTICS
@@ -173,15 +209,47 @@ void audioTask(void *) {
 #ifdef GRIM_CYD_PCM
     static_assert(AudioBlock == CYD_PCM_SAMPLES && RATE == CYD_PCM_RATE, "PCM protocol must match the I2S mixer");
 #endif
+#ifdef GRIM_PERF
+    perf_profile::audioTask(xTaskGetCurrentTaskHandle());
+    uint32_t previousBlock = 0;
+#endif
     for (;;) {
+#ifdef GRIM_PERF_I2S_EVENTS
+        drainAudioEvents();
+#endif
+#ifdef GRIM_PERF
+        const uint32_t blockAt = micros();
+        if (previousBlock) {
+            const uint32_t period = blockAt - previousBlock;
+            perf_profile::observe(perf_profile::AudioPeriod, period);
+            if (period > 6000) perf_profile::observe(perf_profile::AudioLatePeriod, 1);
+        }
+        previousBlock = blockAt;
+        uint32_t measuredAt = micros();
+#endif
         // Complete any in-flight callback before setAudio(nullptr) returns
         // and the main thread tears down the active rite.
         xSemaphoreTake(audioLock, portMAX_DELAY);
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::AudioLock, micros() - measuredAt);
+        measuredAt = micros();
+#endif
         if (audioFn) audioFn(main, AudioBlock);
         else memset(main, 0, sizeof(main));
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::AudioCallback, micros() - measuredAt);
+        measuredAt = micros();
+#endif
         if (overlayFn) overlayFn(overlay, AudioBlock);
         else memset(overlay, 0, sizeof(overlay));
+#ifdef GRIM_PERF
+        const uint32_t overlayUs = micros() - measuredAt;
+#endif
         xSemaphoreGive(audioLock);
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::AudioOverlay, overlayUs);
+        measuredAt = micros();
+#endif
 
         const int volume = level.load(std::memory_order_relaxed);
 #ifdef GRIM_CYD_PCM
@@ -204,12 +272,26 @@ void audioTask(void *) {
             signal |= (value >> 8) != 128;
 #endif
         }
-        size_t written;
-        if (i2s_write(AudioPort, pcm, sizeof(pcm), &written, portMAX_DELAY) != ESP_OK) {
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::AudioMix, micros() - measuredAt);
+        measuredAt = micros();
+#endif
+        size_t written = 0;
+        const esp_err_t writeResult = i2s_write(AudioPort, pcm, sizeof(pcm), &written, portMAX_DELAY);
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::AudioEnqueue, micros() - measuredAt);
+#endif
+        if (writeResult != ESP_OK) {
+#ifdef GRIM_PERF
+            perf_profile::observe(perf_profile::AudioWriteError, 1);
+#endif
             vTaskDelay(1);
         }
 #if defined(GRIM_CYD_PCM) || defined(GRIM_CYD_DIAGNOSTICS)
         else if (written == sizeof(pcm)) {
+#ifdef GRIM_PERF
+            perf_profile::audioBlock();
+#endif
 #ifdef GRIM_CYD_PCM
             if (pcmSession) cyd_pcm_serial::submit(pcmSession, main);
 #endif
@@ -218,6 +300,9 @@ void audioTask(void *) {
             if (signal) signalBlocks.fetch_add(1, std::memory_order_relaxed);
 #endif
         }
+#endif
+#ifdef GRIM_PERF
+        if (written != sizeof(pcm)) perf_profile::observe(perf_profile::AudioShortWrite, 1);
 #endif
     }
 }
@@ -235,7 +320,12 @@ bool beginAudio() {
     cfg.dma_buf_count = 4;
     cfg.dma_buf_len = AudioBlock;
     cfg.tx_desc_auto_clear = true;
+#ifdef GRIM_PERF_I2S_EVENTS
+    const bool installed = i2s_driver_install(AudioPort, &cfg, perf_i2s_events::QueueCapacity, &audioEvents) == ESP_OK;
+    perf_profile::i2sEventQueueAvailable(installed && audioEvents != nullptr);
+#else
     const bool installed = i2s_driver_install(AudioPort, &cfg, 0, nullptr) == ESP_OK;
+#endif
     if (installed && i2s_set_dac_mode(I2S_DAC_CHANNEL_LEFT_EN) == ESP_OK &&
         xTaskCreatePinnedToCore(audioTask, "grim-audio", 4096, nullptr, 5, nullptr, 0) == pdPASS) {
         return true;
@@ -244,6 +334,10 @@ bool beginAudio() {
         i2s_set_dac_mode(I2S_DAC_CHANNEL_DISABLE);
         i2s_driver_uninstall(AudioPort);
     }
+#ifdef GRIM_PERF_I2S_EVENTS
+    audioEvents = nullptr;
+    perf_profile::i2sEventQueueAvailable(false);
+#endif
     vSemaphoreDelete(audioLock);
     audioLock = nullptr;
     return false;
@@ -261,8 +355,14 @@ void push(const Key &key) {
 }
 
 void sendTouch(bool down, int x, int y, uint32_t now) {
+#ifdef GRIM_PERF
+    const uint32_t touchAt = micros();
+#endif
     Key key;
     if (cyd_controls::touch(down, x, y, now, key)) push(key);
+#ifdef GRIM_PERF
+    perf_profile::observe(perf_profile::TouchDispatch, micros() - touchAt);
+#endif
 }
 
 #ifdef GRIM_CYD_DIAGNOSTICS
@@ -290,7 +390,37 @@ void shot() {
     }
 }
 
+#ifdef GRIM_PERF
+void perfSpi(unsigned repetitions) {
+    if (!perf_profile::quiet() || perf_profile::running() || !displayReady || repetitions < 3 || repetitions > 128) return;
+    constexpr unsigned Rows = 8;
+    const unsigned width = lcd.width(), height = lcd.height();
+    auto *stripe = static_cast<uint16_t *>(heap_caps_malloc(width * Rows * sizeof(uint16_t), MALLOC_CAP_DMA));
+    if (!stripe) { Serial.println("PERF {\"schema\":1,\"type\":\"error\",\"message\":\"SPI stripe allocation failed\"}"); return; }
+    for (unsigned i = 0; i < width * Rows; ++i) stripe[i] = static_cast<uint16_t>((i * 31) ^ 0x5A17);
+    uint32_t timings[128];
+    for (unsigned rep = 0; rep < repetitions + 3; ++rep) {
+        const uint32_t start = micros();
+        lcd.startWrite();
+        for (unsigned y = 0; y < height; y += Rows) lcd.pushImage(0, y, width, std::min<unsigned>(Rows, height - y), stripe);
+        lcd.waitDMA(); lcd.endWrite();
+        const uint32_t elapsed = micros() - start;
+        if (rep >= 3) timings[rep - 3] = elapsed;
+        delay(1);
+    }
+    heap_caps_free(stripe); fullscreenFrameWritten = true;
+    Serial.printf("PERF {\"schema\":1,\"type\":\"spi\",\"width\":%u,\"height\":%u,\"rows\":%u,\"bytes_per_sample\":%u,\"warmup\":3,\"samples_us\":[", width, height, Rows, width * height * 2);
+    for (unsigned i = 0; i < repetitions; ++i) Serial.printf(i ? ",%u" : "%u", timings[i]);
+    Serial.println("],\"method\":\"precomputed_RGB565_pushImage_including_command_overhead_waitDMA\"}");
+}
+#endif
+
 void diagnostic(const char *cmd, uint32_t now) {
+#ifdef GRIM_PERF
+    unsigned repetitions;
+    if (sscanf(cmd, "perf spi %u", &repetitions) == 1) { perfSpi(repetitions); return; }
+    if (perf_profile::command(cmd)) return;
+#endif
     int x, y;
     bool tap = sscanf(cmd, "tap %d %d", &x, &y) == 2;
     if (tap || sscanf(cmd, "touch %d %d", &x, &y) == 2) {
@@ -337,7 +467,11 @@ void dispatchSerial(char *line, unsigned length, uint32_t now) {
 }
 
 void serialInput(uint32_t now) {
-    static char line[40];
+#ifdef GRIM_PERF_LINK
+    static char line[320]; // Private provisioning is parsed without echo.
+#else
+    static char line[128];
+#endif
     static unsigned length = 0;
     static bool overflow = false;
     uint8_t bytes[64];
@@ -380,7 +514,13 @@ void scanInput() {
     } else
 #endif
     {
+#ifdef GRIM_PERF
+        const uint32_t touchAt = micros();
+#endif
         const auto p = touch.getPoint();
+#ifdef GRIM_PERF
+        perf_profile::observe(perf_profile::TouchPoll, micros() - touchAt);
+#endif
         const bool down = p.z >= 400;
         const TouchPoint point = calibratedTouch(p.x, p.y, displayOrientation);
         // The tap which changed orientation may still be held until the first
@@ -417,6 +557,7 @@ void begin() {
     Serial.begin(115200);
 #endif
     cyd_controls::loadSettings();
+    perf_profile::begin();
     pinMode(BootPin, INPUT_PULLUP);
     for (int pin : {4, 16, BlueLedPin}) {
         digitalWrite(pin, HIGH); // The CYD RGB LED is active low.
@@ -454,7 +595,12 @@ void begin() {
 Canvas &canvas() { return cv; }
 
 #ifdef GRIM_CYD_DIAGNOSTICS
-void setFrameDrawUs(uint32_t elapsed) { frameDrawUs = elapsed; }
+void setFrameDrawUs(uint32_t elapsed) {
+    frameDrawUs = elapsed;
+#ifdef GRIM_PERF
+    perf_profile::observe(perf_profile::FrameRaster, elapsed);
+#endif
+}
 #endif
 
 static void presentDirect(FullscreenRenderer render, uint32_t now, bool menu) {
@@ -478,6 +624,9 @@ static void presentDirect(FullscreenRenderer render, uint32_t now, bool menu) {
     // Rendering and transfer are interleaved in the direct frame.
     if (!menu) frameDrawUs = 0;
     presentUs = micros() - start;
+#ifdef GRIM_PERF
+    perf_profile::frame(presentUs, true);
+#endif
 #endif
 }
 
@@ -548,12 +697,16 @@ void present() {
     lcd.endWrite();
 #ifdef GRIM_CYD_DIAGNOSTICS
     presentUs = micros() - start;
+#ifdef GRIM_PERF
+    perf_profile::frame(presentUs, false);
+#endif
 #endif
 }
 
 uint32_t ms() { return millis(); }
 
 void idle(uint32_t msec) {
+    perf_profile::poll();
     scanInput();
     if (msec) delay(msec);
 }

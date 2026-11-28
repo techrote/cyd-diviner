@@ -1,0 +1,1710 @@
+{
+  "schema": "cyd-perf-figures/1",
+  "generated_utc": "2026-11-27T20:10:49.806251+00:00",
+  "label": "S3 peer profile: complete internal and PSRAM kernels",
+  "input": "C:\\cyd-diviner\\perf-characterisation\\evidence\\physical\\s3-kernels-link-03\\results.json",
+  "input_sha256": "d89c28832226ddbe53db4efa2a1faa6876d1eb531ef3fb7d1f5c7017405a312d",
+  "capture_status": "CAPTURE COMPLETE",
+  "evidence_class": "physical_measured",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "7ac5bf7f79bb2ed6048a40367fe1d3966a1d5e53a999b2f09f28f310456bb681",
+  "profile": "kernel-s3-n4r2-peer",
+  "measured_runs": 132,
+  "figures": [
+    {
+      "name": "kernel-dsp-internal",
+      "title": "Portable DSP kernels on the measured target \u2014 internal",
+      "sample_note": "9,216 exact timed steps; each dot is a repetition statistic, line spans repetition range.",
+      "observations": [
+        {
+          "kernel": "osc-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k001",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k002",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k003",
+              "scope": "9dbd8b22aa1d",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k007",
+              "scope": "acfc226f4101",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k008",
+              "scope": "acfc226f4101",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k009",
+              "scope": "acfc226f4101",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k004",
+              "scope": "9e0e2269def4",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k005",
+              "scope": "9e0e2269def4",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k006",
+              "scope": "9e0e2269def4",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k010",
+              "scope": "1aaa153fd260",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k011",
+              "scope": "1aaa153fd260",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k012",
+              "scope": "1aaa153fd260",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k013",
+              "scope": "88cad7615851",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k014",
+              "scope": "88cad7615851",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k015",
+              "scope": "88cad7615851",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k019",
+              "scope": "42ef0765c6bc",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k020",
+              "scope": "42ef0765c6bc",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k021",
+              "scope": "42ef0765c6bc",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k016",
+              "scope": "f39175f557d7",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k017",
+              "scope": "f39175f557d7",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k018",
+              "scope": "f39175f557d7",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k022",
+              "scope": "7cb8127f7e8d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k023",
+              "scope": "7cb8127f7e8d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k024",
+              "scope": "7cb8127f7e8d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k025",
+              "scope": "b69748eb96fd",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k026",
+              "scope": "b69748eb96fd",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k027",
+              "scope": "b69748eb96fd",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k031",
+              "scope": "f3280d73b5d0",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k032",
+              "scope": "f3280d73b5d0",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k033",
+              "scope": "f3280d73b5d0",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k028",
+              "scope": "4d65ff03d352",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k029",
+              "scope": "4d65ff03d352",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k030",
+              "scope": "4d65ff03d352",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k034",
+              "scope": "7937f59c682b",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k035",
+              "scope": "7937f59c682b",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k036",
+              "scope": "7937f59c682b",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "kernel-dsp-internal.png",
+          "sha256": "f18773daa171f6b561eb6a06b9453302dc2808dc2ebe4fea611a421d4cecc8c7"
+        },
+        {
+          "file": "kernel-dsp-internal.svg",
+          "sha256": "9487341b509338b28a823ab4d7af271fed3c5b548014017e3ee0987eb7519b3d"
+        }
+      ]
+    },
+    {
+      "name": "kernel-other-internal",
+      "title": "Portable graphics and FFT kernels on the measured target \u2014 internal",
+      "sample_note": "7,680 exact timed steps; dots and lines show repetition statistics/ranges.",
+      "observations": [
+        {
+          "kernel": "fft-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k037",
+              "scope": "fd59f1075cb7",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k038",
+              "scope": "fd59f1075cb7",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k039",
+              "scope": "fd59f1075cb7",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            }
+          ]
+        },
+        {
+          "kernel": "fft-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k040",
+              "scope": "3302559c7373",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k041",
+              "scope": "3302559c7373",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k042",
+              "scope": "3302559c7373",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            }
+          ]
+        },
+        {
+          "kernel": "cellular",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k043",
+              "scope": "ff11edcb676f",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k044",
+              "scope": "ff11edcb676f",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k045",
+              "scope": "ff11edcb676f",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            }
+          ]
+        },
+        {
+          "kernel": "cellular",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k046",
+              "scope": "839629fa9ceb",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k047",
+              "scope": "839629fa9ceb",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k048",
+              "scope": "839629fa9ceb",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            }
+          ]
+        },
+        {
+          "kernel": "particles",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k049",
+              "scope": "78fbab7def49",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k050",
+              "scope": "78fbab7def49",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k051",
+              "scope": "78fbab7def49",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            }
+          ]
+        },
+        {
+          "kernel": "particles",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k052",
+              "scope": "22b894bf8626",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k053",
+              "scope": "22b894bf8626",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k054",
+              "scope": "22b894bf8626",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            }
+          ]
+        },
+        {
+          "kernel": "feedback",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k055",
+              "scope": "b2459824efc3",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k056",
+              "scope": "b2459824efc3",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k057",
+              "scope": "b2459824efc3",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            }
+          ]
+        },
+        {
+          "kernel": "feedback",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k058",
+              "scope": "45b006b60d0a",
+              "samples": 256,
+              "median_us": 3974,
+              "p99_us": 3974,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k059",
+              "scope": "45b006b60d0a",
+              "samples": 256,
+              "median_us": 3974,
+              "p99_us": 3974,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k060",
+              "scope": "45b006b60d0a",
+              "samples": 256,
+              "median_us": 3974,
+              "p99_us": 3974,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            }
+          ]
+        },
+        {
+          "kernel": "stripe-rgb565",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k061",
+              "scope": "b517391229f6",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k062",
+              "scope": "b517391229f6",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k063",
+              "scope": "b517391229f6",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            }
+          ]
+        },
+        {
+          "kernel": "stripe-rgb565",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k064",
+              "scope": "5910134b6da6",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k065",
+              "scope": "5910134b6da6",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k066",
+              "scope": "5910134b6da6",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "kernel-other-internal.png",
+          "sha256": "6871f25b8934f0d6c03b1eff09ec1364966a7d600af804842acdee796c757ec3"
+        },
+        {
+          "file": "kernel-other-internal.svg",
+          "sha256": "2763bbbbaa35732042604dd15309bc93cd5a74bba660004b399c2dc7703a57cf"
+        }
+      ]
+    },
+    {
+      "name": "kernel-dsp-psram",
+      "title": "Portable DSP kernels on the measured target \u2014 psram",
+      "sample_note": "9,216 exact timed steps; each dot is a repetition statistic, line spans repetition range.",
+      "observations": [
+        {
+          "kernel": "osc-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k067",
+              "scope": "bb91e52a1ff4",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k068",
+              "scope": "bb91e52a1ff4",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k069",
+              "scope": "bb91e52a1ff4",
+              "samples": 256,
+              "median_us": 67,
+              "p99_us": 67,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k073",
+              "scope": "604ebe31e0d7",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k074",
+              "scope": "604ebe31e0d7",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k075",
+              "scope": "604ebe31e0d7",
+              "samples": 256,
+              "median_us": 25,
+              "p99_us": 25,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k070",
+              "scope": "6b1382b73903",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k071",
+              "scope": "6b1382b73903",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k072",
+              "scope": "6b1382b73903",
+              "samples": 256,
+              "median_us": 265,
+              "p99_us": 265,
+              "precision": "float32 arithmetic, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "osc-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k076",
+              "scope": "4bc1d3d5f4a3",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k077",
+              "scope": "4bc1d3d5f4a3",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k078",
+              "scope": "4bc1d3d5f4a3",
+              "samples": 256,
+              "median_us": 97,
+              "p99_us": 97,
+              "precision": "Q15 table, Q22 fraction, int64 product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k079",
+              "scope": "f2f6deeb5dbf",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k080",
+              "scope": "f2f6deeb5dbf",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k081",
+              "scope": "f2f6deeb5dbf",
+              "samples": 256,
+              "median_us": 62,
+              "p99_us": 62,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k085",
+              "scope": "fe9ecc505ad3",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k086",
+              "scope": "fe9ecc505ad3",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k087",
+              "scope": "fe9ecc505ad3",
+              "samples": 256,
+              "median_us": 44,
+              "p99_us": 44,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k082",
+              "scope": "52f3367aa1a4",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k083",
+              "scope": "52f3367aa1a4",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k084",
+              "scope": "52f3367aa1a4",
+              "samples": 256,
+              "median_us": 248,
+              "p99_us": 248,
+              "precision": "float32 state, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "filter-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k088",
+              "scope": "27a82099d41d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k089",
+              "scope": "27a82099d41d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k090",
+              "scope": "27a82099d41d",
+              "samples": 256,
+              "median_us": 169,
+              "p99_us": 169,
+              "precision": "Q15 input, Q30 state and coefficient product",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k091",
+              "scope": "01b0bdefb3dc",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k092",
+              "scope": "01b0bdefb3dc",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k093",
+              "scope": "01b0bdefb3dc",
+              "samples": 256,
+              "median_us": 175,
+              "p99_us": 175,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-q15",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k097",
+              "scope": "6eeef1ceb2bf",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k098",
+              "scope": "6eeef1ceb2bf",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k099",
+              "scope": "6eeef1ceb2bf",
+              "samples": 256,
+              "median_us": 275,
+              "p99_us": 276,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 256,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k094",
+              "scope": "bff9d53714b9",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k095",
+              "scope": "bff9d53714b9",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k096",
+              "scope": "bff9d53714b9",
+              "samples": 256,
+              "median_us": 1741,
+              "p99_us": 1741,
+              "precision": "float32 state and coefficients, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        },
+        {
+          "kernel": "modal-q15",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k100",
+              "scope": "23e68ab96b7a",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k101",
+              "scope": "23e68ab96b7a",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            },
+            {
+              "run_id": "k102",
+              "scope": "23e68ab96b7a",
+              "samples": 256,
+              "median_us": 3346,
+              "p99_us": 3347,
+              "precision": "Q30 state/coefficients, int64 products, Q15 output",
+              "output_bytes": 1024,
+              "working_bytes": 9248
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "kernel-dsp-psram.png",
+          "sha256": "4568066dccecc0deacfb48f6434651278126157b0efb5a408deef3ac1310714e"
+        },
+        {
+          "file": "kernel-dsp-psram.svg",
+          "sha256": "a8dd087e67e42a02ee0bf14194eb8ddd13e42e7b4e795fff300ce7e61a1f6e58"
+        }
+      ]
+    },
+    {
+      "name": "kernel-other-psram",
+      "title": "Portable graphics and FFT kernels on the measured target \u2014 psram",
+      "sample_note": "7,680 exact timed steps; dots and lines show repetition statistics/ranges.",
+      "observations": [
+        {
+          "kernel": "fft-f32",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k103",
+              "scope": "a15e0014b5c1",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k104",
+              "scope": "a15e0014b5c1",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k105",
+              "scope": "a15e0014b5c1",
+              "samples": 256,
+              "median_us": 282,
+              "p99_us": 282,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 2048,
+              "working_bytes": 12292
+            }
+          ]
+        },
+        {
+          "kernel": "fft-f32",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k106",
+              "scope": "b909d0a33250",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k107",
+              "scope": "b909d0a33250",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            },
+            {
+              "run_id": "k108",
+              "scope": "b909d0a33250",
+              "samples": 256,
+              "median_us": 1350,
+              "p99_us": 1350,
+              "precision": "float32 complex, unnormalized forward",
+              "output_bytes": 8192,
+              "working_bytes": 12292
+            }
+          ]
+        },
+        {
+          "kernel": "cellular",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k109",
+              "scope": "0659f252c1f3",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k110",
+              "scope": "0659f252c1f3",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k111",
+              "scope": "0659f252c1f3",
+              "samples": 256,
+              "median_us": 1026,
+              "p99_us": 1028,
+              "precision": "uint8 cells",
+              "output_bytes": 3072,
+              "working_bytes": 24588
+            }
+          ]
+        },
+        {
+          "kernel": "cellular",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k112",
+              "scope": "27ee3f654d2b",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k113",
+              "scope": "27ee3f654d2b",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            },
+            {
+              "run_id": "k114",
+              "scope": "27ee3f654d2b",
+              "samples": 256,
+              "median_us": 4065,
+              "p99_us": 4067,
+              "precision": "uint8 cells",
+              "output_bytes": 12288,
+              "working_bytes": 24588
+            }
+          ]
+        },
+        {
+          "kernel": "particles",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k115",
+              "scope": "28eddb8bd1a7",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k116",
+              "scope": "28eddb8bd1a7",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k117",
+              "scope": "28eddb8bd1a7",
+              "samples": 256,
+              "median_us": 19,
+              "p99_us": 19,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 2048,
+              "working_bytes": 8196
+            }
+          ]
+        },
+        {
+          "kernel": "particles",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k118",
+              "scope": "321604f98f7d",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k119",
+              "scope": "321604f98f7d",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            },
+            {
+              "run_id": "k120",
+              "scope": "321604f98f7d",
+              "samples": 256,
+              "median_us": 73,
+              "p99_us": 74,
+              "precision": "Q16.16 state, int32",
+              "output_bytes": 8192,
+              "working_bytes": 8196
+            }
+          ]
+        },
+        {
+          "kernel": "feedback",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k121",
+              "scope": "2ea447e37ad1",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k122",
+              "scope": "2ea447e37ad1",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k123",
+              "scope": "2ea447e37ad1",
+              "samples": 256,
+              "median_us": 1069,
+              "p99_us": 1083,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 4800,
+              "working_bytes": 38696
+            }
+          ]
+        },
+        {
+          "kernel": "feedback",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k124",
+              "scope": "94892e711a67",
+              "samples": 256,
+              "median_us": 4021,
+              "p99_us": 4049,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k125",
+              "scope": "94892e711a67",
+              "samples": 256,
+              "median_us": 4021,
+              "p99_us": 4048,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            },
+            {
+              "run_id": "k126",
+              "scope": "94892e711a67",
+              "samples": 256,
+              "median_us": 4019,
+              "p99_us": 4045,
+              "precision": "uint8 indexed pixels, integer displacement",
+              "output_bytes": 19200,
+              "working_bytes": 38696
+            }
+          ]
+        },
+        {
+          "kernel": "stripe-rgb565",
+          "large": 0,
+          "repetitions": [
+            {
+              "run_id": "k127",
+              "scope": "748d04bf1ab4",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k128",
+              "scope": "748d04bf1ab4",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k129",
+              "scope": "748d04bf1ab4",
+              "samples": 256,
+              "median_us": 76,
+              "p99_us": 76,
+              "precision": "uint16 RGB565",
+              "output_bytes": 2560,
+              "working_bytes": 10252
+            }
+          ]
+        },
+        {
+          "kernel": "stripe-rgb565",
+          "large": 1,
+          "repetitions": [
+            {
+              "run_id": "k130",
+              "scope": "8958564f7889",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k131",
+              "scope": "8958564f7889",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            },
+            {
+              "run_id": "k132",
+              "scope": "8958564f7889",
+              "samples": 256,
+              "median_us": 301,
+              "p99_us": 301,
+              "precision": "uint16 RGB565",
+              "output_bytes": 10240,
+              "working_bytes": 10252
+            }
+          ]
+        }
+      ],
+      "files": [
+        {
+          "file": "kernel-other-psram.png",
+          "sha256": "cea033bd1501d07cfe09cc6e66e78bbd19ec089688d45f877bc18ab4f62d1d9a"
+        },
+        {
+          "file": "kernel-other-psram.svg",
+          "sha256": "4db9b46ceba956ccc7ee512218631be55ce243917bf59d429deb40644d5ce969"
+        }
+      ]
+    }
+  ],
+  "omitted": [
+    {
+      "figure": "fps",
+      "reason": "No completed physical frame counts and elapsed windows"
+    },
+    {
+      "figure": "audio-tails",
+      "reason": "No observed callback/mix/enqueue timings"
+    },
+    {
+      "figure": "stress-temperature",
+      "reason": "No completed retained stress samples"
+    }
+  ],
+  "tool_sha256": "6b4ed5ab761b52b2f0afd4e403450e807557c307686ca3e566c53094ad98fd1c",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "analysis_packages": {
+    "matplotlib": "3.10.8",
+    "numpy": "2.5.5",
+    "pillow": "13.0.0",
+    "contourpy": "1.4.0",
+    "fonttools": "4.69.1",
+    "kiwisolver": "1.5.1",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "4.0.0"
+  },
+  "limitations": [
+    "Only completed MEASURED runs are plotted; missing data are not synthesized.",
+    "Repetition ranges use matching requested settings, windows, instrumentation and actual scene/allocation receipts; differing scopes are labelled separately.",
+    "Histogram p99 values are power-of-two upper bounds, distinct from exact observed maxima.",
+    "Per-run FPS uses completed physical presentations divided by the target measurement window.",
+    "CPU utilization is target tick sampling, not cycle-exact utilization.",
+    "Temperature codes come from an undocumented RTC-library function; they are uncalibrated sensor indications, not calibrated die temperatures.",
+    "Primary capture's ESP32_ROM_raw_uncalibrated tag is retained verbatim in raw evidence; its ROM attribution is a legacy inaccurate label."
+  ],
+  "command_argv": [
+    "tools/perf/plot_results.py",
+    "evidence/physical/s3-kernels-link-03/results.json",
+    "--output",
+    "evidence/physical/s3-kernels-link-03/figures",
+    "--label",
+    "S3 peer profile: complete internal and PSRAM kernels"
+  ]
+}

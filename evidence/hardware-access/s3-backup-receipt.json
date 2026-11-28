@@ -1,0 +1,274 @@
+{
+  "schema": "cyd-perf-backup/2",
+  "utc": "2026-11-27T18:41:59.550299+00:00",
+  "port": "COM22",
+  "chip_requested": "esp32s3",
+  "requested_backup_bytes": 4194304,
+  "requested_transfer_baud": 460800,
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "operations": [
+    {
+      "operation": "serial.open",
+      "arguments": {
+        "port": "COM22",
+        "baud": 115200,
+        "dtr": false,
+        "rts": false
+      },
+      "utc": "2026-11-27T18:41:59.611051+00:00",
+      "ok": true,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.02467479999177158
+    },
+    {
+      "operation": "esptool.connect",
+      "arguments": {
+        "chip": "esp32s3",
+        "baud": 115200,
+        "mode": "no_reset",
+        "attempts": 1
+      },
+      "utc": "2026-11-27T18:41:59.635890+00:00",
+      "ok": true,
+      "stdout": "WARNING: Pre-connection option \"no_reset\" was selected. Connection may fail if the chip is not in bootloader or flasher stub mode.\nConnecting...\n",
+      "stderr": "",
+      "elapsed_seconds": 0.6062130000209436
+    },
+    {
+      "operation": "esptool.get_chip_id",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:00.243940+00:00",
+      "ok": true,
+      "result": 9,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 1.7499958630651236e-05
+    },
+    {
+      "operation": "esptool.get_chip_description",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:00.244940+00:00",
+      "ok": true,
+      "result": "ESP32-S3 (QFN56) (revision v0.2)",
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.3169460999779403
+    },
+    {
+      "operation": "esptool.get_chip_revision",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:00.562564+00:00",
+      "ok": true,
+      "result": 2,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.2646956000244245
+    },
+    {
+      "operation": "esptool.get_chip_features",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:00.828982+00:00",
+      "ok": true,
+      "result": [
+        "WiFi",
+        "BLE",
+        "Embedded Flash 4MB (XMC)",
+        "Embedded PSRAM 2MB (AP_3v3)"
+      ],
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.26484169997274876
+    },
+    {
+      "operation": "esptool.get_crystal_freq",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:01.094461+00:00",
+      "ok": true,
+      "result": 40,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 2.0200037397444248e-05
+    },
+    {
+      "operation": "esptool.get_flash_encryption_enabled",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:01.096462+00:00",
+      "ok": true,
+      "result": false,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.05243869998957962
+    },
+    {
+      "operation": "esptool.get_secure_boot_enabled",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:01.149969+00:00",
+      "ok": true,
+      "result": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.05290399998193607
+    },
+    {
+      "operation": "esptool.get_encrypted_download_disabled",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:01.203950+00:00",
+      "ok": true,
+      "result": 0,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.052813799993600696
+    },
+    {
+      "operation": "esptool.run_stub",
+      "arguments": {
+        "destination": "RAM_only"
+      },
+      "utc": "2026-11-27T18:42:01.257188+00:00",
+      "ok": true,
+      "stdout": "Stub is already running. No upload is necessary.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.00034610001603141427
+    },
+    {
+      "operation": "esptool.flash_spi_attach",
+      "arguments": {
+        "hspi_arg": 0
+      },
+      "utc": "2026-11-27T18:42:01.258692+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.05187269998714328
+    },
+    {
+      "operation": "esptool.flash_id",
+      "arguments": {},
+      "utc": "2026-11-27T18:42:01.311887+00:00",
+      "ok": true,
+      "result": 1458246,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.5828780999872833
+    },
+    {
+      "operation": "esptool.flash_set_parameters",
+      "arguments": {
+        "size": 4194304,
+        "effect": "RAM_geometry_only"
+      },
+      "utc": "2026-11-27T18:42:01.895596+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.05257499997969717
+    },
+    {
+      "operation": "esptool.change_baud",
+      "arguments": {
+        "baud": 460800
+      },
+      "utc": "2026-11-27T18:42:01.949827+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "Changing baud rate to 460800\nChanged.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.12923789996420965
+    },
+    {
+      "operation": "esptool.read_flash",
+      "arguments": {
+        "offset": 0,
+        "length": 4194304
+      },
+      "utc": "2026-11-27T18:42:02.080287+00:00",
+      "ok": true,
+      "result": {
+        "bytes_received": 4194304
+      },
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 95.76947930001188
+    },
+    {
+      "operation": "esptool.flash_md5sum",
+      "arguments": {
+        "offset": 0,
+        "length": 4194304
+      },
+      "utc": "2026-11-27T18:43:37.871695+00:00",
+      "ok": true,
+      "result": "dcac52c87f102e827b7bad0d077e90b0",
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 6.830562799994368
+    },
+    {
+      "operation": "esptool.change_baud",
+      "arguments": {
+        "baud": 115200,
+        "purpose": "leave_known_stub_baud"
+      },
+      "utc": "2026-11-27T18:43:44.703538+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "Changing baud rate to 115200\nChanged.\n",
+      "stderr": "",
+      "elapsed_seconds": 0.12898039998253807
+    },
+    {
+      "operation": "serial.close",
+      "arguments": {
+        "dtr": false,
+        "rts": false,
+        "reset": false
+      },
+      "utc": "2026-11-27T18:43:44.833240+00:00",
+      "ok": true,
+      "result": null,
+      "stdout": "",
+      "stderr": "",
+      "elapsed_seconds": 0.0013986999983899295
+    }
+  ],
+  "flash_written": false,
+  "flash_erased": false,
+  "efuses_written": false,
+  "verified": true,
+  "ram_stub_left_at_115200": true,
+  "exit_policy": "keep_RAM_stub_running_no_reset_no_app_start",
+  "esptool_version": "4.14.0",
+  "pyserial_version": "3.5",
+  "connected_baud": 115200,
+  "chip_identity_verified": true,
+  "chip_description": "ESP32-S3 (QFN56) (revision v0.2)",
+  "chip_revision": 2,
+  "chip_features": [
+    "WiFi",
+    "BLE",
+    "Embedded Flash 4MB (XMC)",
+    "Embedded PSRAM 2MB (AP_3v3)"
+  ],
+  "crystal_mhz": 40,
+  "security": {
+    "flash_encryption_enabled": false,
+    "secure_boot_enabled": false,
+    "encrypted_download_disabled": false
+  },
+  "ram_stub_loaded": true,
+  "jedec_hex": "0x164046",
+  "flash_bytes": 4194304,
+  "manufacturer_hex": "0x46",
+  "memory_type_hex": "0x40",
+  "backup": {
+    "path": "PRIVATE: verified 4 MB original-flash snapshot outside repository",
+    "bytes": 4194304,
+    "sha256": "0dc8e79f4bbd9837d8f17e9e6050eed696530921d1fd215ab24a59458215decc",
+    "md5": "dcac52c87f102e827b7bad0d077e90b0"
+  },
+  "target_md5": "dcac52c87f102e827b7bad0d077e90b0",
+  "completed": true
+}

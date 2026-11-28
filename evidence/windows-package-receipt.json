@@ -1,0 +1,46 @@
+{
+  "schema": "cyd-perf-portable-package-receipt/1",
+  "archive": "WINDOWS-CAPTURE-PACKAGE.zip",
+  "bytes": 689513,
+  "sha256": "04b021e7a96470d0c505d6b251e438d3aa0b4d8db5839c50605f5b888503ec8a",
+  "host_tools_source_sha": "29cb8d2faa9449956016011380571d6e497ec45d",
+  "file_count": 325,
+  "zip_member_count": 326,
+  "source_manifest_member": "PACKAGE-MANIFEST.json",
+  "source_manifest_sha256": "11150826b8f8dc915aec365985a42390f634f7f4fd41eb6f17604f29f07f7722",
+  "generated_readme_member": "PACKAGE-README.md",
+  "sdk_project_members": 60,
+  "member_verification": "Each member SHA256/length and every checkout-backed byte sequence verified; clean source subset checked against commit; ZIP CRC passed.",
+  "member_kind_counts": {
+    "source_checkout": 199,
+    "campaign_plan_checkout": 34,
+    "generated_stimulus_checkout": 91,
+    "generated_package_instructions": 1
+  },
+  "standalone_source_comparison": {
+    "source_snapshot": "e4dec3f0bc3212854dafe20513a6acab44eff6bd",
+    "all_standalone_source_bytes_unchanged": true,
+    "members": {
+      "src/perf_audio_core.h": "b241974e60a3aef5429730da51a3f704dc07afb48b8d3e434ca5ecf42c90bd39",
+      "src/perf_audio_core.cpp": "62ac73454508624c4b0e3c1d73694df0345694a86a73392bbac61334e562a18b",
+      "tools/perf/test_audio_core.cpp": "c5308d9b70e8b2d7a9410d40390ccb1448d4242e8ec9dab40af8d30fab584b5e",
+      "experiments/sdr/protocol.h": "ca813f500452dc92c86350cf3c7b6642a60b80e5ec2bcac492eaf720f5fe5974",
+      "experiments/sdr/protocol.cpp": "fd2087d483eaaec454cddb4fcd7c608a427ee517dc76e14e3fc46e71408fc1dd",
+      "experiments/sdr/test_protocol.cpp": "b6cc242f53358570ee71111af77e9c4e0ed71fb18050f65a6ada7d3fe8b1d0a2",
+      "src/perf_kernels.h": "d54bfa86eac11bb46bef9f65bd90b1dca50a7504586a9d2c202e1e815cdfb926",
+      "src/perf_kernels.cpp": "d5a604e4bae74e8174929c85af8fcd64e273b50021323a1e8b3ac71fa1e7d98f",
+      "tools/perf/kernels_host.cpp": "5f227d6c72123d7eab72a9e5d26fa2eb52d83dea238e76dd914fd505c9bb60c0"
+    }
+  },
+  "excluded_content_verified": "compiled firmware/bootloader/partition images or readbacks, executables, private/identity configuration and physical capture logs/results; source partition CSV is build configuration",
+  "extracted_package_validation": {
+    "status": "PASS",
+    "python": "3.12",
+    "tests": 163,
+    "command": "python -m unittest discover -s tools/perf -p 'test_*.py' -v",
+    "log": "evidence/build-logs/portable-package-final-tests.log",
+    "log_sha256": "a8ad4f9f9bd46aac0e10dcdbf8a31c4ac6e4c415107812df761c8f535ed55b89",
+    "scope": "Fresh isolated extraction; no COM/RF/flash access"
+  },
+  "firmware_context": "Latest physically executed SDR images are separately pinned to e8b4c8a; package source29cb8d2 adds current measurement documentation/attributes only after that source. Rebuilding stamps its own Git identity and needs exact-image review."
+}

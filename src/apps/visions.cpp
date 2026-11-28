@@ -10,6 +10,10 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include "../perf_profile.h"
+#ifdef GRIM_PERF_COLOR
+#include "../perf_color.h"
+#endif
 #include <algorithm>
 #include <array>
 #include <math.h>
@@ -111,7 +115,7 @@ struct TrailHistory {
         }
 #if defined(GRIM_DEVICE) && defined(GRIM_CYD_DIAGNOSTICS)
         const auto after = heap_caps_get_free_size(HeapCaps);
-        Serial.printf("Diviner trails format=%s payload=%u heap_before=%u heap_after=%u heap_delta=%d largest=%u\n",
+        if (perf_profile::quiet()) Serial.printf("Diviner trails format=%s payload=%u heap_before=%u heap_after=%u heap_delta=%d largest=%u\n",
                       indexed ? "LUT8" : rgb444 ? "RGB444" : "RGB565", unsigned(bandBytes * bands.size()),
                       unsigned(before), unsigned(after), int(before) - int(after),
                       unsigned(heap_caps_get_largest_free_block(HeapCaps)));
@@ -792,7 +796,7 @@ void prepareVision() {
     if (base == Ashfire && !s.fire) s.fire.reset(new (std::nothrow) Fire);
     if (wantsHistory && !s.history.ready() && (base != Gate || s.tunnel)) s.history.allocate(indexed);
 #if defined(GRIM_DEVICE) && defined(GRIM_CYD_DIAGNOSTICS)
-    Serial.printf("Diviner layers effect=%s heap=%u largest=%u\n",
+    if (perf_profile::quiet()) Serial.printf("Diviner layers effect=%s heap=%u largest=%u\n",
                   s.layered ? LayerNames[base] : NAMES[base], unsigned(heap_caps_get_free_size(HeapCaps)),
                   unsigned(heap_caps_get_largest_free_block(HeapCaps)));
 #endif
@@ -1002,18 +1006,40 @@ void drawVisionsNative(lgfx::LGFXBase &display, uint32_t now) {
     const int bandBytes = width * BandHeight * sizeof(lgfx::swap565_t);
     bands[0].setBuffer(pixels, width, BandHeight, 16);
     bands[1].setBuffer(pixels + bandBytes, width, BandHeight, 16);
+#ifdef GRIM_PERF_COLOR
+    // Borrow only the unused tail of the already allocated canvas. Geometry
+    // remains RGB565; the opt-in experiment stores genuine packed intermediates.
+    const size_t backingBytes = size_t(hal::W) * hal::H *
+                                (hal::canvas().getColorDepth() == lgfx::rgb565_2Byte ? 2 : 1);
+    const char *overlayName = hasTrails ? "trails" : hasRain ? "rain" : hasKaleido ? "kaleido" : "none";
+    const bool packedColour = perf_color::beginFrame(pixels, backingBytes, width, height,
+                                                    s.layered, NAMES[base], overlayName);
+#endif
     display.setAddrWindow(0, 0, width, height);
     for (int y = 0; y < height; y += BandHeight) {
         Canvas &band = bands[(y / BandHeight) % 2];
         const int rows = std::min(BandHeight, height - y);
         field.draw(band, y, rows);
+#ifdef GRIM_PERF_COLOR
+        auto *colourPixels = static_cast<lgfx::swap565_t *>(band.getBuffer());
+        if (packedColour && s.layered) perf_color::baseRoundtrip(colourPixels, rows);
+#endif
         if (hasRain) drawNativeRain(band, y, height, s);
         if (hasKaleido) kaleido.draw(band, y);
         if (hasTrails) drawNativeTrails(band, y, s);
+#ifdef GRIM_PERF_COLOR
+        if (packedColour) {
+            if (s.layered) perf_color::compositeRoundtrip(colourPixels, rows);
+            else perf_color::baseRoundtrip(colourPixels, rows);
+        }
+#endif
         display.waitDMA();
         display.writePixelsDMA(static_cast<const lgfx::swap565_t *>(band.getBuffer()), width * rows);
     }
     display.waitDMA();
+#ifdef GRIM_PERF_COLOR
+    perf_color::endFrame();
+#endif
 }
 
 void releaseVisionsMenuBackdrop() {
@@ -1123,3 +1149,62 @@ void renderNativeMenuBackdrop(lgfx::LGFXBase &display, uint32_t now) {
 #endif
 
 const Rite RITE_VISIONS = {"VISIONS", "visions", "plasma, fire, rain, feedback trails", enter, leave, onKey, draw};
+
+#ifdef GRIM_PERF
+bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_t seed) {
+    if (!S || effect >= N_VIS) return false;
+    // Rebuild visual history outside measurement; preserve the callback state.
+    hal::setAudio(nullptr);
+    S->history.release(); S->tunnel.reset(); S->fire.reset();
+    S->vis = static_cast<Vision>(effect); S->layered = layered;
+    S->history.rgb444 = format == 0; S->paused = false; S->sound = true; S->t = 0; S->speed = 1;
+    S->visualRng.s = seed; S->rng.s = seed ^ 0xA5A5A5A5;
+    memset(S->drops, 0, sizeof(S->drops));
+    S->tone.phase = S->tone2.phase = S->lfo.phase = 0;
+    S->windF = dsp::SVF{};
+    prepareVision(); retone();
+    // Describe actual allocations after prepareVision(), rather than assuming
+    // that the requested trail format or auxiliary allocation succeeded.
+    const Vision base = S->base();
+    unsigned allocatedBands = 0;
+    size_t historyBytes = 0;
+    for (const auto &band : S->history.bands) if (band) {
+        ++allocatedBands;
+        historyBytes += S->history.stride() * TrailHistory::BandRows;
+    }
+    const bool historyReady = S->history.ready();
+    const bool historyRequested = base == Trails || (S->layered && base == Gate);
+    const char *historyFormat = !historyReady ? "NONE" : S->history.indexed ? "LUT8" : S->history.rgb444 ? "RGB444" : "RGB565";
+    char settings[1536];
+    snprintf(settings, sizeof(settings),
+        "\"requested_effect_index\":%u,\"requested_effect\":\"%s\",\"requested_layered\":%s,\"requested_trail_format\":\"%s\","
+        "\"actual_base_effect_index\":%u,\"actual_base_effect\":\"%s\",\"actual_layered\":%s,\"audio_enabled\":%s,\"vision_seed\":%u,"
+        "\"history_requested\":%s,\"history_ready\":%s,\"history_format\":\"%s\",\"history_payload_bytes\":%u,"
+        "\"history_width_px\":%u,\"history_height_px\":%u,\"history_stride_bytes\":%u,\"history_band_rows\":%u,\"history_allocated_bands\":%u,"
+        "\"tunnel_required\":%s,\"tunnel_allocated\":%s,\"tunnel_payload_bytes\":%u,\"fire_required\":%s,\"fire_allocated\":%s,\"fire_payload_bytes\":%u,"
+        "\"native_fullscreen_at_receipt\":%s,\"receipt_scope\":\"after_configuration_before_next_frame\","
+        "\"native_fullscreen_history_method\":\"bounded_geometric_paths; first fullscreen frame releases pixel history and tunnel\"",
+        effect, NAMES[effect], layered ? "true" : "false", format == 0 ? "RGB444" : "RGB565",
+        unsigned(base), NAMES[base], S->layered ? "true" : "false", S->sound ? "true" : "false", unsigned(seed),
+        historyRequested ? "true" : "false", historyReady ? "true" : "false", historyFormat, unsigned(historyBytes),
+        historyReady ? unsigned(hal::W) : 0u, allocatedBands * TrailHistory::BandRows,
+        allocatedBands ? unsigned(S->history.stride()) : 0u, unsigned(TrailHistory::BandRows), allocatedBands,
+        base == Gate ? "true" : "false", S->tunnel ? "true" : "false", S->tunnel ? unsigned(sizeof(Tunnel)) : 0u,
+        base == Ashfire ? "true" : "false", S->fire ? "true" : "false", S->fire ? unsigned(sizeof(Fire)) : 0u,
+        S->nativeFullscreen ? "true" : "false");
+    perf_profile::sceneSettings("visions", settings);
+    hal::setAudio(render);
+    return true;
+}
+#ifdef GRIM_PERF_COLOR
+bool perfConfigureColor(const char *format) {
+    if (!S) return false;
+    const Vision base = S->base();
+    const char *overlay = base == Gate ? "trails" : base == Plasma ? "kaleido" : base == Ashfire ? "rain" : "none";
+    const size_t backingBytes = size_t(hal::W) * hal::H *
+                                (hal::canvas().getColorDepth() == lgfx::rgb565_2Byte ? 2 : 1);
+    return perf_color::configure(format, cyd_controls::displayWidth(), cyd_controls::displayHeight(),
+                                 backingBytes, S->layered, NAMES[base], overlay);
+}
+#endif
+#endif

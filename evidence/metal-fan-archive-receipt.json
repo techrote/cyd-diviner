@@ -1,0 +1,259 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "created_utc": "2026-11-28T00:43:33.990241+00:00",
+  "archive": "PHYSICAL-CAPTURES-METAL-FAN.zip",
+  "bytes": 1146393,
+  "sha256": "4cbc191f89108681fec2678620458e82b494623e457c7cf9dcff2a9e899a582e",
+  "capture_directories": [
+    "metal-dual-fan-framed-01"
+  ],
+  "scope": "Terminal COMPLETE fan/board-movement repeat: six shared exposures with1s requested timedTX loops and12 native RX bodies. Original source/image/plan/runtime provenance retained; uncontrolled owner fan/movement context does not establish thermal causality. No prior archive modified.",
+  "captures": [
+    {
+      "role": "parent",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "runs": 6,
+      "run_statuses": {
+        "ACQUIRED": 6
+      }
+    },
+    {
+      "role": "rx",
+      "schema": "cyd-sdr-metal-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "runs": 6,
+      "run_statuses": {
+        "ACQUIRED": 6
+      }
+    },
+    {
+      "role": "rx2",
+      "schema": "cyd-sdr-metal-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "runs": 6,
+      "run_statuses": {
+        "ACQUIRED": 6
+      }
+    }
+  ],
+  "identities": {
+    "schema": "cyd-sdr-metal-dual-identities/1",
+    "tx": {
+      "board": "Owner-identified S3 tx",
+      "port": "COM13",
+      "baud": 115200,
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\tx\\firmware.bin",
+      "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+      "expected_info": {
+        "profile": "s3-sdr-metal-tx",
+        "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+        "mac": "1c2904becc48",
+        "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+        "source_dirty": false,
+        "fast_paced_supported": true,
+        "source_integrity_supported": true,
+        "fast_schedule_helpers_digest": "4105bfc13af1768922ba9c58ca626257a1bc207ff599059e48b6e70dd4c0b7c7"
+      }
+    },
+    "rx": {
+      "board": "Owner-identified S3 rx",
+      "port": "COM22",
+      "baud": 115200,
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+      "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+      "expected_info": {
+        "profile": "s3-metal-snapshot",
+        "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+        "mac": "1c2904bec3a0",
+        "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1"
+      }
+    },
+    "rx2": {
+      "board": "Owner-identified S3 rx2",
+      "port": "COM23",
+      "baud": 115200,
+      "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+      "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+      "expected_info": {
+        "profile": "s3-metal-snapshot",
+        "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+        "mac": "1c2904bec3d8",
+        "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1"
+      }
+    }
+  },
+  "verification": {
+    "hash_comparisons_including_nested_manifests": 74,
+    "archived_files_verified": 41,
+    "zip_crc": "PASS",
+    "zip_membership": "exact_snapshot",
+    "raw_after_archive": "unchanged"
+  },
+  "members": {
+    "physical/metal-dual-fan-framed-01/artifact-hashes.json": {
+      "bytes": 4152,
+      "sha256": "85d0ced10fcc94b309a226228ea83e009ed06bbf6ae61defa95f2010befb9e4d"
+    },
+    "physical/metal-dual-fan-framed-01/results.json": {
+      "bytes": 285534,
+      "sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    "physical/metal-dual-fan-framed-01/rx/artifact-hashes.json": {
+      "bytes": 1722,
+      "sha256": "9f88efb3809b73f14a59128ce503baf5afbda779f81f0c28cf0a855986877be3"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d001_1/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "f361d8dce5e2f9684f86eada359c751db00fda017c350a19a7169941a7ad5a8a"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d001_1/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d002_2/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "a0a9e9bed5c32d96f63903d0a6071d7e9df368da9056068ca651599da0181f0a"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d002_2/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d003_3/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "4a2b37319cc8009b1220a85fd7c146bcc33798bd4fa42a46cdf39951c19fa2e2"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d003_3/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d004_1/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "d0a7a100a7fbf90bfdfc149de3896a372591be5041da20b5f7b8405e50a6a034"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d004_1/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d005_2/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "da858bf1753c083db996faa02b55c82f6806aa7edf9f3249812b769508a61583"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d005_2/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d006_3/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "baa34ea881f3ba8c71d6bad47d060bb5f1d56649e279acfca469fd2ce3c11488"
+    },
+    "physical/metal-dual-fan-framed-01/rx/d006_3/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx/results.json": {
+      "bytes": 221206,
+      "sha256": "97028d49762f3c4400a13dba55ada69f1c959c523e0b9fab436e50c8a61dcc0d"
+    },
+    "physical/metal-dual-fan-framed-01/rx/rx/serial-events.redacted.jsonl": {
+      "bytes": 21875,
+      "sha256": "68aa86b03e6711d1bf3c2fb27b64d40d7b00a209851e546e09fa2539570352a4"
+    },
+    "physical/metal-dual-fan-framed-01/rx/rx/serial-rx.redacted.bin": {
+      "bytes": 410619,
+      "sha256": "c84cda4306a16f6b696d70eb0b022654cb7d17e86ba77a3794c0a350f8c426be"
+    },
+    "physical/metal-dual-fan-framed-01/rx/rx/serial-text.redacted.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "physical/metal-dual-fan-framed-01/rx/rx/target.jsonl": {
+      "bytes": 18589,
+      "sha256": "fdcc12676ddf473c983354327be8835e1c92a1bc057d6e6d5286795f161d94a5"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/artifact-hashes.json": {
+      "bytes": 1722,
+      "sha256": "9f61d4ef0f30f6ac435f2cfe0f933df41bdf0992d1a8814a5331f0b92646911c"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d001_1/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "7c06b0e1c929b02b27a65af73d3fdaf72602aaa6ef13166b157755a84d04b3e7"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d001_1/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d002_2/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "7ab5d42a51a0055902ca51e79b31107b802b676acae01c8ec00d0da20aa275ef"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d002_2/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d003_3/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "076c5b4d6300a9c286e6186c7432ed364e5564ddcc3348361b5d0e86bda393b2"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d003_3/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "46a41c098ac14c32a19d569d7ec55efb2d531c9e1f749ee0bf0e8a8c1d9962c3"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d004_1/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "a0af7633b745b176d444076c14390bf86c1be8e3a0732b339da827f13593b057"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d004_1/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d005_2/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "7e743fecf560e02f51cbd8ecb413adfecfdeaaab66466e820fa3cf67672e04fe"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d005_2/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d006_3/snapshot-0001.native32le": {
+      "bytes": 65520,
+      "sha256": "b897d2b7e53afabb25b661de9ff0b4c1789ba20c0ec8e00011d8a2075c5b9e1f"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/d006_3/uploaded-bits.bin": {
+      "bytes": 1472,
+      "sha256": "ee9840dcc268494e29016691a2529fab8db84cff493d3f3c9951875c08b8ec4a"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/results.json": {
+      "bytes": 222081,
+      "sha256": "babf0c16400fab53cac7b097519559c8785edfef9986b51a02d933d7631e1593"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/rx/serial-events.redacted.jsonl": {
+      "bytes": 21750,
+      "sha256": "06a791f6545a14f39bff37f5be4c49d9efd821023a24283992424fa9eb9ab350"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/rx/serial-rx.redacted.bin": {
+      "bytes": 410613,
+      "sha256": "a5a76cb842669c6f5e8d2dba3d4f3168e7dfa3ef6cb98094fbfce1884af2d0b9"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/rx/serial-text.redacted.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "physical/metal-dual-fan-framed-01/rx2/rx/target.jsonl": {
+      "bytes": 18583,
+      "sha256": "f9a4d18a2395242f37901cd69aa5363e084d114f993068997368650c3b359655"
+    },
+    "physical/metal-dual-fan-framed-01/tx/serial-events.redacted.jsonl": {
+      "bytes": 20851,
+      "sha256": "6ddc52050a4ed93f6b0bb4c49e2e568d4d86af1e285ff5cf43281eb4928fba65"
+    },
+    "physical/metal-dual-fan-framed-01/tx/serial-rx.redacted.bin": {
+      "bytes": 62484,
+      "sha256": "7ca7d9468c56e9d0a7e4557f84274ffbf207d48f12521ba76b7f0c2c01108580"
+    },
+    "physical/metal-dual-fan-framed-01/tx/serial-text.redacted.jsonl": {
+      "bytes": 70211,
+      "sha256": "8d716852f26044239c5d363faaa196da96ac6db66cd80e258a7214ec865f3367"
+    }
+  }
+}

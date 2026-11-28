@@ -8,6 +8,7 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include "../perf_profile.h"
 #include <new>
 #include <stdio.h>
 #include <string.h>
@@ -178,10 +179,26 @@ void render(int16_t *out, int n) {
 }
 
 void enter() {
-    if (!S) {
+#ifdef GRIM_PERF
+    // Benchmarks start from the same DSP state on every entry. Reconstruct
+    // in place so the reset never puts a large State temporary on loopTask.
+    hal::setAudio(nullptr);
+    if (S) {
+        delete S->delay;
+        S->~State();
+        new (S) State();
+    }
+    const bool initialize = true;
+#else
+    const bool initialize = !S;
+#endif
+    if (initialize) {
 #ifdef GRIM_CYD
         static State state;
         S = &state;
+#ifdef GRIM_PERF
+        S->rng.s = perf_profile::seed();
+#endif
         seed(true);
 #else
         S = new State();
@@ -207,6 +224,11 @@ void enter() {
 #endif
 #ifndef GRIM_CYD
     seed(true);
+#endif
+#ifdef GRIM_PERF
+    char settings[256];
+    snprintf(settings, sizeof(settings), "\"root_midi\":%d,\"scale\":%d,\"voices\":%d,\"brightness\":%.3f,\"drift\":%.3f,\"wind\":%s,\"bells\":%s,\"delay_samples\":%d,\"delay_allocated\":%s", S->root, S->scale, NV, S->bright, S->drift, S->wind ? "true" : "false", S->bells ? "true" : "false", DelaySamples, S->feedback() ? "true" : "false");
+    perf_profile::sceneSettings("drone", settings);
 #endif
     hal::setAudio(render);
 }

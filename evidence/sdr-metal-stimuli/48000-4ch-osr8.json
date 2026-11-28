@@ -1,0 +1,23 @@
+{
+  "schema": "greenfield_sdr_emit/1",
+  "evidence_class": "GENERATED_STIMULUS",
+  "symbol_bit_order": "MSB_first_per_byte",
+  "source_rate_hz": 48000,
+  "effective_audio_rate_hz_at_requested_baud": 48000,
+  "channels": 4,
+  "oversample": 8,
+  "payload_bits": 256,
+  "baud_requested": 2208000,
+  "baud_required_for_source_rate": 2208000,
+  "frame_count": 32,
+  "frame_symbols": 368,
+  "symbols_total": 11776,
+  "packed_bytes": 1472,
+  "pcm_frames": 256,
+  "pcm_bytes": 2048,
+  "seed": 23063,
+  "stream_id": 1,
+  "source_frequency0_hz": 30,
+  "no_RF_measurement": true,
+  "payload_crc_present": false
+}

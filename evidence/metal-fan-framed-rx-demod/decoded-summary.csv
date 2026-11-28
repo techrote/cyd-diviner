@@ -1,0 +1,7 @@
+run_id,workload,acquisition_status,demodulation_status,source_file,selected_trial,unique_known_payload_bits_compared,unique_known_payload_bit_errors,effective_audio_rate_hz
+d001_1,fast/framed/48000-4ch-osr16/4416000,ACQUIRED,MATCHING HEADERS DECODED,snapshot-0001.native32le,0,768,1,48072.10816224876
+d002_2,fast/framed/48000-4ch-osr16/4416000,ACQUIRED,MATCHING HEADERS DECODED,snapshot-0001.native32le,0,768,0,48000.00000001459
+d003_3,fast/framed/48000-4ch-osr16/4416000,ACQUIRED,MATCHING HEADERS DECODED,snapshot-0001.native32le,0,1024,55,47988.00599700879
+d004_1,fast/framed/48000-4ch-osr32/8832000,ACQUIRED,NO MATCHING HEADERS,snapshot-0001.native32le,,,,
+d005_2,fast/framed/48000-4ch-osr32/8832000,ACQUIRED,NO MATCHING HEADERS,snapshot-0001.native32le,,,,
+d006_3,fast/framed/48000-4ch-osr32/8832000,ACQUIRED,NO MATCHING HEADERS,snapshot-0001.native32le,,,,

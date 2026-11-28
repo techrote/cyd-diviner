@@ -1,0 +1,7 @@
+{"event": "open", "host_elapsed_s": 0.015651200024876744, "utc": "2026-11-28T00:35:51.345248+00:00", "port": "COM23", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.02879950002534315, "utc": "2026-11-28T00:35:51.357777+00:00", "command": "perf info"}
+{"event": "rx", "host_elapsed_s": 0.03141019999748096, "utc": "2026-11-28T00:35:51.361292+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.03152110002702102, "utc": "2026-11-28T00:35:51.361800+00:00", "offset": 1, "bytes": 1085}
+{"event": "tx", "host_elapsed_s": 2.04349579999689, "utc": "2026-11-28T00:35:53.373158+00:00", "command": "perf info"}
+{"event": "rx", "host_elapsed_s": 2.0461820000200532, "utc": "2026-11-28T00:35:53.376158+00:00", "offset": 1086, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 2.0462583000189625, "utc": "2026-11-28T00:35:53.376158+00:00", "offset": 1087, "bytes": 1085}

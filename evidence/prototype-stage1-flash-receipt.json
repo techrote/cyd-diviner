@@ -1,0 +1,61 @@
+{
+  "schema": "cyd-prototype-stage1-preflash/1",
+  "utc": "2026-11-27T21:33:05.214890+00:00",
+  "authorization": "Authorize both stages; CYD is ready",
+  "authorized_review_sha256": "6595c8e79d04cc939511bade2d07184c604fcf7089a85f7ffb087f2d2d78b875",
+  "status": "BOTH APP-ONLY FLASHES COMPLETED; ESPTOOL DATA DIGEST VERIFIED",
+  "identities_and_tables": {
+    "cyd": [
+      "a4:f0:0f:5f:ff:54",
+      "c798c1173b1d0175c33f06340268885c4385ff5129206d90bda416ad99ea8ddd",
+      3145728
+    ],
+    "s3": [
+      "1c:29:04:be:c3:a0",
+      "f3134b747fef242287f33aa0be8a5008958132e0c7611f5bc5bb917c02c9e397",
+      1310720
+    ]
+  },
+  "table_scope": "Classic matches original backup. S3 matches separately owner-installed default table (3072B SHA148b959c...), not its originally blank backup. Full4096 region includes erased padding.",
+  "images": [
+    {
+      "id": "sdr_tx",
+      "port": "COM21",
+      "chip": "esp32",
+      "profile": "classic-sdr-tx-probe",
+      "source": "bb34b3c27c4c8388956bb05a8a5280d7a2c687a2",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_tx\\firmware.bin",
+      "application_offset": 65536,
+      "retained_application_capacity_bytes": 3145728,
+      "remaining_bytes": 2524864,
+      "bytes": 620864,
+      "sha256": "0623e6cccefd6717da560c5913f344b818ce43adf38c47b9e698785f560d2bc0",
+      "elf": {
+        "bytes": 7625588,
+        "sha256": "847ea85f1caa4f38d9624aae281f4f13b9d21c762cfd9efa4f084b0fcccbb800"
+      }
+    },
+    {
+      "id": "sdr_rx",
+      "port": "COM22",
+      "chip": "esp32s3",
+      "profile": "esp-sdr-cyd-iq",
+      "source": "3ab3b65bb62f2d9427ee33c2c3b627427e729294-cyd-iq-fdf42772e506",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_rx\\firmware.bin",
+      "application_offset": 65536,
+      "retained_application_capacity_bytes": 1310720,
+      "remaining_bytes": 659216,
+      "bytes": 651504,
+      "sha256": "b81bee95f5bd0e0393538c0183a9898856474fc9b6ddb16daaf889d3e3acd949",
+      "elf": {
+        "bytes": 8280540,
+        "sha256": "651ef3a3020f2255602e60f267516afd31cdf1fab2ed60fdc5919f54b12523ac"
+      }
+    }
+  ],
+  "completed_utc": "2026-11-27T21:33:53.381817+00:00",
+  "flash_logs": [
+    "hardware-access/sdr-cyd-flash.log",
+    "hardware-access/sdr-s3-flash.log"
+  ]
+}

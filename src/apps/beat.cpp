@@ -9,6 +9,8 @@
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
+#include "../perf_profile.h"
+#include <new>
 #include <stdio.h>
 #include <string.h>
 
@@ -296,11 +298,25 @@ void cast() {
 }
 
 void enter() {
+#ifdef GRIM_PERF
+    hal::setAudio(nullptr);
+    if (S) {
+        S->~State();
+        new (S) State();
+        load(PRESETS[0]);
+        cast();
+    }
+#endif
     if (!S) {
         S = new State();
         load(PRESETS[0]);
         cast();
     }
+#ifdef GRIM_PERF
+    char settings[256];
+    snprintf(settings, sizeof(settings), "\"preset\":%d,\"source\":\"%s\",\"bytebeat_rate_hz\":%d,\"sample_counter\":%u", S->preset, S->src, RATES[S->rate], unsigned(S->t));
+    perf_profile::sceneSettings("beat", settings);
+#endif
     hal::setAudio(render);
 }
 void leave() {}

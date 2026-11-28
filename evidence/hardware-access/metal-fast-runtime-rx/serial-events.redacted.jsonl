@@ -1,0 +1,16 @@
+{"event": "open", "host_elapsed_s": 0.02542429999448359, "utc": "2026-11-28T00:12:33.487811+00:00", "port": "COM22", "baud": 115200, "dtr": false, "rts": false}
+{"event": "tx", "host_elapsed_s": 0.025903499976266176, "utc": "2026-11-28T00:12:33.487811+00:00", "command": "metal info"}
+{"event": "rx", "host_elapsed_s": 0.03205869998782873, "utc": "2026-11-28T00:12:33.494810+00:00", "offset": 0, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.03226199996424839, "utc": "2026-11-28T00:12:33.494810+00:00", "offset": 1, "bytes": 1215}
+{"event": "tx", "host_elapsed_s": 0.03249839995987713, "utc": "2026-11-28T00:12:33.494810+00:00", "command": "metal temperature"}
+{"event": "rx", "host_elapsed_s": 0.03758529998594895, "utc": "2026-11-28T00:12:33.498538+00:00", "offset": 1216, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.0377468999940902, "utc": "2026-11-28T00:12:33.498538+00:00", "offset": 1217, "bytes": 334}
+{"event": "tx", "host_elapsed_s": 0.037845799990464, "utc": "2026-11-28T00:12:33.498538+00:00", "command": "metal temperature"}
+{"event": "rx", "host_elapsed_s": 0.041980399983003736, "utc": "2026-11-28T00:12:33.504811+00:00", "offset": 1551, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.04208210000069812, "utc": "2026-11-28T00:12:33.504811+00:00", "offset": 1552, "bytes": 334}
+{"event": "tx", "host_elapsed_s": 0.042167300009168684, "utc": "2026-11-28T00:12:33.504811+00:00", "command": "metal temperature"}
+{"event": "rx", "host_elapsed_s": 0.045668400009162724, "utc": "2026-11-28T00:12:33.506334+00:00", "offset": 1886, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.04574599995976314, "utc": "2026-11-28T00:12:33.506334+00:00", "offset": 1887, "bytes": 334}
+{"event": "tx", "host_elapsed_s": 0.0458202000008896, "utc": "2026-11-28T00:12:33.506334+00:00", "command": "metal info"}
+{"event": "rx", "host_elapsed_s": 0.05067109997617081, "utc": "2026-11-28T00:12:33.511903+00:00", "offset": 2221, "bytes": 1}
+{"event": "rx", "host_elapsed_s": 0.05076079996069893, "utc": "2026-11-28T00:12:33.511903+00:00", "offset": 2222, "bytes": 1215}

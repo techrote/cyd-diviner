@@ -1,0 +1,13 @@
+{
+  "schema": "cyd-sdr-signal-analysis-manifest/1",
+  "input_results_sha256": "cea22c38c4dad37ade4c5f3711ae6b6b2184e8a4702c6f25fb55f4ec0fb4351f",
+  "tool_sha256": "334704f510adc7677ebaacc3d5e05c824f673914ed3758d3ffe11d9d9db9a638",
+  "iq_parser_sha256": "99f51f8c91739f6a889aba66c1f680177018b42abc2d77328f506211698844b6",
+  "outputs": {
+    "results.json": "7b279ee871766728264b4ab087dcc3ded515dec49fd2004c2d2289b31aecec2e",
+    "s001_1/folded-envelope.csv": "be08cb427e24052bece8b38cb6336c6f30ac167db1fa6f04a6a7e689c30698d4",
+    "s001_1/frequency-scan.csv": "3204afa37da3dbe7891661ce3186af7d329ef371534eece786d29f47f144cd57",
+    "s001_1/windows.csv": "979d8572870ff1b91b19de47520753f64c21bd72998ec386a2e89317f34afb26",
+    "signal-summary.csv": "8d6c78ab96f4d79a2d24945a5b64e0d09222e0ccd1d0625f79ae662fb72b14f1"
+  }
+}

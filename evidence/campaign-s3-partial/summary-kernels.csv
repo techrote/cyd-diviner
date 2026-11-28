@@ -1,0 +1,3 @@
+workload,scope,kernel,large,repetitions,samples,median_us,p95_us,p99_us,max_us,working_bytes,output_bytes,median_compute_us_per_output_byte,checksum_consistent_across_repetitions,offload_status
+kernel/osc-f32/realistic/internal,9dbd8b22aa1d,osc-f32,0,3,768,65,65,65,65,9248,256,0.25390625,True,"CANDIDATE ONLY: input size, remote compute, actual goodput and RTT not measured"
+kernel/osc-f32/large/internal,9e0e2269def4,osc-f32,1,2,512,256,256,256,258,9248,1024,0.25,True,"CANDIDATE ONLY: input size, remote compute, actual goodput and RTT not measured"

@@ -1,0 +1,119 @@
+{
+  "schema": "cyd-perf-image-bundle/1",
+  "created_utc": "2026-11-28T00:12:24.929282+00:00",
+  "archive": "UNAPPROVED-SDR-METAL-FAST-IMAGES.zip",
+  "bytes": 7495006,
+  "sha256": "a09f10bf95990103f7515998197e65800bb2598fa7406c1ec4c0b01758969d36",
+  "review_sha256": "3498d187b5a1d858eecc5ef1d056532eb4d19c53a4e456613f330bcde585f3f2",
+  "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "source_files": 61,
+  "source_manifest_sha256": "2e91f547248867c0d428dacbef0a181c7addf0d7092655a44e4ff15bed205767",
+  "nested_corresponding_source": {
+    "bytes": 122222,
+    "sha256": "822bd61c64ae6452de29ec912fd2ec93817125060b97dc313aca0d1b5f825e1b"
+  },
+  "snapshot_receipt_sha256": "8aee493b342b0784a20a6f232884cfd1aa48b2828f953a528a61f61ea4d66280",
+  "bundle_members": {
+    "SNAPSHOT-README.txt": {
+      "bytes": 1193,
+      "sha256": "0b71006df2a7490ab3cd82c799052cd636a3734723814a2c83b4067792e92dc1"
+    },
+    "corresponding-source.zip": {
+      "bytes": 122222,
+      "sha256": "822bd61c64ae6452de29ec912fd2ec93817125060b97dc313aca0d1b5f825e1b"
+    },
+    "metal-fast-dual-identities.json": {
+      "bytes": 2185,
+      "sha256": "34cfba668b2f2c735c4454d238853e98d2b7c226c92c8c37902a67ecdca5b282"
+    },
+    "metal-fast-image-review.json": {
+      "bytes": 9151,
+      "sha256": "3498d187b5a1d858eecc5ef1d056532eb4d19c53a4e456613f330bcde585f3f2"
+    },
+    "plans/plan-metal-dual-fast-compat.json": {
+      "bytes": 2630,
+      "sha256": "816b6b8076439cdd4fe7440fa30d3bc722630dd087c8b388269706f65e4c2557"
+    },
+    "plans/plan-metal-dual-fast-framed.json": {
+      "bytes": 4983,
+      "sha256": "35726be07963d5dda9492e65ec97f9b4b835d3ef9c2837e58fe813e124c126ed"
+    },
+    "plans/plan-metal-dual-fast-rate.json": {
+      "bytes": 7703,
+      "sha256": "4a8aa52d4fffb67fc4b7d15486195960754b4bf9d486c5d090c4014a72f9ffcf"
+    },
+    "plans/plan-metal-dual-fast-smoke.json": {
+      "bytes": 2120,
+      "sha256": "6eaa5387008a89a53abe9e3a209b353e03d707a6f315d9fd8321a2ead11cfe86"
+    },
+    "rx/build-receipt.json": {
+      "bytes": 3819,
+      "sha256": "525684d4d2610aa1ab9b64d92af39b526ace59a70430e313db9dc46544f68047"
+    },
+    "rx/firmware.bin": {
+      "bytes": 584560,
+      "sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4"
+    },
+    "rx/firmware.elf.gz": {
+      "bytes": 2718119,
+      "sha256": "840af5319ee09f9e8fcf61c67c274664dcdc5d986b15dd1d9c3600ce3fc9a04d"
+    },
+    "rx/firmware.map.gz": {
+      "bytes": 516729,
+      "sha256": "ff926797159c5d872ab67f0f7e0892bd6e9a781011f269d178a3b2373e639b95"
+    },
+    "rx/project_description.json": {
+      "bytes": 139175,
+      "sha256": "0751f3e2045e391f269f05b1d28cbb472bb3bfbada13ad8927dbce968644d9bd"
+    },
+    "rx/sdkconfig.h": {
+      "bytes": 45527,
+      "sha256": "b755d5709c789fff566b810e355df06ce0a10d8fbac525c2b2ce71ff3aa6e78e"
+    },
+    "snapshot-receipt.json": {
+      "bytes": 2856,
+      "sha256": "8aee493b342b0784a20a6f232884cfd1aa48b2828f953a528a61f61ea4d66280"
+    },
+    "source-manifest.json": {
+      "bytes": 10604,
+      "sha256": "2e91f547248867c0d428dacbef0a181c7addf0d7092655a44e4ff15bed205767"
+    },
+    "tx/build-receipt.json": {
+      "bytes": 3912,
+      "sha256": "06d24d3f13a8c47ac4e6babf98b4826331b3b9c63d02c0043052f065d698a814"
+    },
+    "tx/firmware.bin": {
+      "bytes": 613824,
+      "sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567"
+    },
+    "tx/firmware.elf.gz": {
+      "bytes": 2800080,
+      "sha256": "a1072113cd42ef2f4f90a024819ef49118d4264fdbf313468bd8dc2d60f8bca0"
+    },
+    "tx/firmware.map.gz": {
+      "bytes": 542490,
+      "sha256": "766f0d637d4b53e0dc43683b1c81623977a0e017ee6b8dcfe50b0635d00c42f4"
+    },
+    "tx/project_description.json": {
+      "bytes": 205578,
+      "sha256": "a64172fb85dc6c2a7d018bd36dc2f0175aaba18a6b1210e919eec0879e3db8d6"
+    },
+    "tx/sdkconfig.h": {
+      "bytes": 49584,
+      "sha256": "11924885c46bb62b5aaf99761fbaf51e609f856360a1f8354be20e2abd17f3db"
+    }
+  },
+  "verification": {
+    "outer_ZIP_CRC": "PASS",
+    "nested_source_ZIP_CRC": "PASS",
+    "all_member_bytes_verified": true,
+    "all_source_bytes_match_commit": true,
+    "exact_frozen_review_preserved": true,
+    "previous_snapshots_not_modified": true,
+    "serial_or_RF_access": false,
+    "firmware_writes": false
+  },
+  "scope": "Exact app-only S3 images, compressed ELF/maps, resolved SDK configuration/build receipts, corresponding source/license/provenance, frozen review, public owned-board identities and four proposed finite plans. No bootloader/partition image, NVS, private backup/credential/RF permit, raw capture or flash automation. Source partition CSVs are build configuration.",
+  "authorization_scope": "Owner authorization of exact frozen review3498d187 was reported by root after review freeze; root separately handles actual app-only flashing and finite tests. Historical UNAPPROVED filename means no production promotion."
+}

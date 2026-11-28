@@ -1,0 +1,17 @@
+{
+  "schema": "cyd-sdr-metal-envelope-manifest/1",
+  "input_results_sha256": "04818a05cb79b87187dc8cedd4b75db5e07db0258f75a39484ab52a04bc2bfce",
+  "input_artifact_manifest_sha256": "41bd23ff85929ebe22dbf7b51406c8d8907329a87631fe0bc306522884f995ce",
+  "tool_sha256": "258cdc01fa6865479f1e4239f2cf968f1c731e438891301c55a1ab1c0bbe26ca",
+  "native_decoder_sha256": "6797ff94f861e04c32bc2cc080a2eabe1b0e4e16ead40df36a65dc2e2e0e1bfe",
+  "outputs": {
+    "d001_1/snapshot-0001-power-AC-spectrum.csv": "b48b805a6638c94fafb59ea827456421bd085cb5029b9fe93a03d7354e610f83",
+    "d001_1/snapshot-0001-qualified-threshold-edges.csv": "4955cf5f4925bc9961c997318f60e4611c9f868c684f2adbba206c87b4e70fb7",
+    "d002_1/snapshot-0001-power-AC-spectrum.csv": "141845aab22ea2c9ff79ec0c8271c424051b2bb8f16e9da7c3d469e13fdb5c4e",
+    "d002_1/snapshot-0001-qualified-threshold-edges.csv": "756d8dd458f7e361c9277b19f074204da802e33bde42e8f3ea62bcdc8fa08211",
+    "d003_1/snapshot-0001-power-AC-spectrum.csv": "83c479e640dee410570c2622b97c276dccb0f9a0249b85c337c4343b3b348b81",
+    "d003_1/snapshot-0001-qualified-threshold-edges.csv": "e896acd39dcef245442f9e2d51e440cce945c282664931602a747450dad0c84e",
+    "envelope-summary.csv": "fe521d05be1bbfaa36245f38c761054874df87283225ee3d96009123af9e6b74",
+    "results.json": "b4b5eca47fd32b8cb909306131e6d40f4e06e973f55fe44267a28e64fac21d0c"
+  }
+}

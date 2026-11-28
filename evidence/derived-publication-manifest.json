@@ -1,0 +1,28 @@
+{
+  "schema": "cyd-perf-derived-publication-manifest/1",
+  "publication_applied": true,
+  "application_scope": "unstage_NEW_added_archived_details_only; no_on_disk_deletions",
+  "archive_snapshot_bytes_preserved": true,
+  "files": {
+    "DERIVED-ANALYSES.zip": {
+      "bytes": 21617463,
+      "sha256": "166c58d13a6168ccf4653c9f852d8be6234912d7cf9e9087c4a053086ec79850"
+    },
+    "DERIVED-ANALYSES.md": {
+      "bytes": 8075,
+      "sha256": "3ce3073397c1c9a5905915b750a0c539b0838b6082cda5a2a6ea5099c1ed7cff"
+    },
+    "derived-analyses-receipt.json": {
+      "bytes": 3240,
+      "sha256": "689286d6db65eb2d652743b86402bbbe240f93b77987f9ae7ce99c85f786941e"
+    },
+    "derived-publication-layout.json": {
+      "bytes": 13805,
+      "sha256": "96cb7ed5c5da6251c39e20dca1c42b315173b0bd73c3cd1be6827a4ba1d27680"
+    },
+    "derived-publication-applied.json": {
+      "bytes": 4824,
+      "sha256": "d861f6a155c32db70511fe1fc648f2a92c75d190d188c57a07ac486eeeaba015"
+    }
+  }
+}

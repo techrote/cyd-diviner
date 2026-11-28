@@ -1,0 +1,14 @@
+{
+  "schema": "cyd-sdr-metal-smoke-findings-manifest/1",
+  "input_parent_results_sha256": "35804b342288efa1027622add8df30eeda741baafc5db054f113208b5aa1e963",
+  "input_child_results_sha256": {
+    "rx": "db8b8b225b771997fe00dbe99c9861c0fd6404cda72b474eed693fcdce10aad3",
+    "rx2": "bf6e75500b823b6c1cc41ee213f057d1b064f4f6ce8b21b773cea48074c1ed6d"
+  },
+  "compiled_source_sha": "3b4161fbcbd6832264019aa3a4fb993a85798857",
+  "outputs": {
+    "METAL-RX-SMOKE-WIFI-FINDINGS.md": "9a69bf53e9f02d0b78ccfc3080e69dd307ba68665c984e6a8a9b84ea232d396b",
+    "METAL-RX-SMOKE-WIFI-FINDINGS.json": "ebd858d75f236d61bdef2ad1efa2db048ce186a3629fc3fee550a03920cacdd4",
+    "METAL-RX-SMOKE-WIFI-FINDINGS.csv": "7414975d989b16a017546618d74ea7fa28424754e4fc8211a72bfbda8470ad16"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "USB line coding only; no application command bytes or flash write",
+  "before": [
+    {
+      "port": "COM14",
+      "hwid": "USB VID:PID=303A:4011 SER=S3AP1C2904BECC48 LOCATION=1-4:x.2"
+    },
+    {
+      "port": "COM22",
+      "hwid": "USB VID:PID=303A:1001 SER=1C:29:04:BE:C3:A0"
+    },
+    {
+      "port": "COM23",
+      "hwid": "USB VID:PID=303A:1001 SER=1C:29:04:BE:C3:D8"
+    }
+  ],
+  "after": [
+    {
+      "port": "COM14",
+      "hwid": "USB VID:PID=303A:4011 SER=S3AP1C2904BECC48 LOCATION=1-4:x.2"
+    },
+    {
+      "port": "COM22",
+      "hwid": "USB VID:PID=303A:1001 SER=1C:29:04:BE:C3:A0"
+    },
+    {
+      "port": "COM23",
+      "hwid": "USB VID:PID=303A:1001 SER=1C:29:04:BE:C3:D8"
+    }
+  ]
+}

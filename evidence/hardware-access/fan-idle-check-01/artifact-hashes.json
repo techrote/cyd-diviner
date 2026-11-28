@@ -1,0 +1,12 @@
+{
+  "results.json": "29e8c8e4fde58a4871eb542a9de5ce1682e2eda533e8dddaf5e049cc73c0c229",
+  "rx/serial-events.redacted.jsonl": "056623352b466cf85b5e2ea6fa592f1dfbd16641816a2c79af35227d1d93ceba",
+  "rx/serial-rx.redacted.bin": "23cb6f9b32053ab74029a4d88d39d5cc007fc24c2bf5963148ec72645144a243",
+  "rx/serial-text.redacted.jsonl": "8cab9caa2ce20631651c1226a9f4158a3442c1fe50fd6c1690223ca960f69c6f",
+  "rx2/serial-events.redacted.jsonl": "69ae0d87572ba2f5298ca3ee1008a31382e80c7a406ed78534c3f1b06fc5dafc",
+  "rx2/serial-rx.redacted.bin": "b67fb99f421832e126b62092ead4ed80d363ea69c6521ebd1f2b24bf7dc1faff",
+  "rx2/serial-text.redacted.jsonl": "83f66e8319863593513bb5f8d89d10e1e0350477ec6cbf589f56b760a5c05597",
+  "tx/serial-events.redacted.jsonl": "574e9836084743df265b13f050f7901e6a87d573331851b75649f0dd61143f28",
+  "tx/serial-rx.redacted.bin": "761632ea0e3bd53b9e32c568026d0265647fbbb36e8e695c836f80f47e9262d6",
+  "tx/serial-text.redacted.jsonl": "4bb9d2c91f4cf12a824c6e176b9d6de197f565b2882d18db0bf7c8766e5570b1"
+}

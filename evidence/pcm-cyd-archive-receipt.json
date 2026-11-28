@@ -1,0 +1,72 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "created_utc": "2026-11-27T22:26:39.753142+00:00",
+  "archive": "PHYSICAL-CAPTURES-PCM-CYD.zip",
+  "bytes": 573779,
+  "sha256": "aa1ed05719f9fb466cf93c21a46d18d1fe02007fb18fdeca11acd90173f588f9",
+  "capture_directories": [
+    "audio-bidirectional-01",
+    "audio-bidirectional-deferred-01",
+    "audio-deferred-fresh-01",
+    "audio-deferred-single-01",
+    "audio-fresh-single-01",
+    "pcm-preflight-01"
+  ],
+  "scope": "All five closed CYD audio MVP capture attempts plus the setup-only pcm-preflight; excludes headless S3-pair and SDR/colour captures. Terminal failures preserved.",
+  "captures": [
+    {
+      "directory": "audio-bidirectional-01",
+      "status": "FAILED",
+      "run_statuses": {
+        "FAILED": 48
+      },
+      "files": 9
+    },
+    {
+      "directory": "audio-bidirectional-deferred-01",
+      "status": "FAILED",
+      "run_statuses": {
+        "MEASURED": 2,
+        "FAILED": 46
+      },
+      "files": 9
+    },
+    {
+      "directory": "audio-deferred-fresh-01",
+      "status": "CAPTURE COMPLETE",
+      "run_statuses": {
+        "MEASURED": 1
+      },
+      "files": 9
+    },
+    {
+      "directory": "audio-deferred-single-01",
+      "status": "FAILED",
+      "run_statuses": {
+        "FAILED": 1
+      },
+      "files": 9
+    },
+    {
+      "directory": "audio-fresh-single-01",
+      "status": "FAILED",
+      "run_statuses": {
+        "FAILED": 1
+      },
+      "files": 9
+    },
+    {
+      "directory": "pcm-preflight-01",
+      "status": "SETUP DIAGNOSTIC ONLY",
+      "run_statuses": {},
+      "files": 6
+    }
+  ],
+  "verification": {
+    "artifact_hash_entries_verified": 45,
+    "archived_files_verified": 51,
+    "zip_crc": "PASS",
+    "zip_membership": "exact_snapshot",
+    "raw_after_archive": "unchanged"
+  }
+}

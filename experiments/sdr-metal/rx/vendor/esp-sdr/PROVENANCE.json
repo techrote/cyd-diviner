@@ -1,0 +1,44 @@
+{
+  "schema": "sdr-metal-vendor-source/1",
+  "upstream": "https://github.com/ESPARGOS/esp-sdr",
+  "commit": "3ab3b65bb62f2d9427ee33c2c3b627427e729294",
+  "license": "GPL-3.0; exact upstream LICENSE retained",
+  "scope": "Pinned GPL gain/DC helpers. rx_gain_verify.c has one explicitly recorded local read-only diagnostic getter; upstream apply/check bodies remain byte-identical. Own snapshot adapter follows pinned register facts; no continuous ring/FIR/FFT imported.",
+  "files": {
+    "main/common/rx_gain_verify.c": {
+      "vendored_file": "rx_gain_verify.c",
+      "sha256": "85e8522c8fbcc680dc770a53fbe82162891166af56ad9d52db343a9c65fcb230",
+      "upstream_sha256": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde",
+      "local_modification": {
+        "description": "Append metal_gain_diagnostic getter only; no upstream apply/check edits",
+        "getter_sha256": "c52d267f95787b6b1febee16ada939150102d137713a2e1bd22abb9f8f31e4d2",
+        "header": "../../main/gain_diagnostics.h",
+        "header_sha256": "56cfcb431783e32b8fe1122c8f5af54d497a306f157a904746a7a9a7a9e7f700"
+      }
+    },
+    "main/common/rx_gain_force.h": {
+      "vendored_file": "rx_gain_force.h",
+      "sha256": "879c74193af509446ce64b2f487df7a035029b6ad608fa426ba256db8e1d85a7"
+    },
+    "main/common/rx_recalibration.c": {
+      "vendored_file": "rx_recalibration.c",
+      "sha256": "dae0ab7bf554dc2c897eaf90f1416990a7bce800401423d956a4802719265dba"
+    },
+    "main/common/rx_recalibration.h": {
+      "vendored_file": "rx_recalibration.h",
+      "sha256": "0e5abc0f88bfcd9404edf6698ba910df72d91b998b1cbf3d4ae2e86f32757959"
+    },
+    "main/common/rx_calibration_state.c": {
+      "vendored_file": "rx_calibration_state.c",
+      "sha256": "b636eaf6b234c580c124c201b008ea3d276d423fe546786b34d400c6e30a8735"
+    },
+    "main/common/rx_lo.h": {
+      "vendored_file": "rx_lo.h",
+      "sha256": "8ff2a0871a8ed6a5db11b79180381ee966fc64aeea115c154ae3430ab70feaea"
+    },
+    "LICENSE": {
+      "vendored_file": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    }
+  }
+}

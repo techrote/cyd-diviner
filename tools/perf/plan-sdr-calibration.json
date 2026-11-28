@@ -1,0 +1,84 @@
+{
+  "schema": "cyd-sdr-plan/1",
+  "repetitions": 1,
+  "receiver": {
+    "duration_ms": 2000,
+    "decimation": 64,
+    "bits": 8,
+    "rate_code": 6,
+    "shift": 7,
+    "mode": 2,
+    "baseline_ms": 100,
+    "commands": [
+      "FREQ 2433",
+      "FOFS 0",
+      "GAIN MANUAL 40"
+    ]
+  },
+  "workloads": [
+    {
+      "name": "calibration/alternating/api/1000",
+      "mode": "api",
+      "baud": 1000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 500
+    },
+    {
+      "name": "calibration/alternating/api/5000",
+      "mode": "api",
+      "baud": 5000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 2500
+    },
+    {
+      "name": "calibration/alternating/api/10000",
+      "mode": "api",
+      "baud": 10000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 5000
+    },
+    {
+      "name": "calibration/alternating/api/20000",
+      "mode": "api",
+      "baud": 20000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 10000
+    },
+    {
+      "name": "calibration/alternating/ram/1000",
+      "mode": "ram",
+      "baud": 1000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 500
+    },
+    {
+      "name": "calibration/alternating/ram/5000",
+      "mode": "ram",
+      "baud": 5000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 2500
+    },
+    {
+      "name": "calibration/alternating/ram/10000",
+      "mode": "ram",
+      "baud": 10000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 5000
+    },
+    {
+      "name": "calibration/alternating/ram/20000",
+      "mode": "ram",
+      "baud": 20000,
+      "backoff_quarter_db": 96,
+      "pattern": "alternating",
+      "bit_count": 10000
+    }
+  ]
+}

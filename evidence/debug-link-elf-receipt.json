@@ -1,0 +1,8 @@
+{
+  "schema": "cyd-perf-debug-artifact/1",
+  "file": "DEBUG-LINK-ELFS.zip",
+  "bytes": 22229846,
+  "sha256": "8f167b1fb589a60bc1e729b5c59c98e3ca7a40cf89fd8a7469d76c8d91ad083a",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "purpose": "Reproduce exact ELF symbolication of physical BLE startup panic; no flashing."
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "cyd-perf-derived-publication-manifest/1",
+  "publication_applied": true,
+  "archive": "DERIVED-ANALYSES-METAL-FAST.zip",
+  "files": {
+    "DERIVED-ANALYSES-METAL-FAST.zip": {
+      "bytes": 26822910,
+      "sha256": "e65fedfac3532f7935a32daf89ee38118a1afcbbd4bb26833e6b6bf60ed05ef2"
+    },
+    "DERIVED-ANALYSES-METAL-FAST.md": {
+      "bytes": 5010,
+      "sha256": "4411428f8ab37504463ca645aa3a1894feed15c663f4f4842031c03d1a13ff07"
+    },
+    "derived-analyses-metal-fast-receipt.json": {
+      "bytes": 3178,
+      "sha256": "7b25263b22be2bc9ec04f183ba83196581669a703180d46748a7d88ce09ab459"
+    },
+    "derived-metal-fast-publication-layout.json": {
+      "bytes": 11369,
+      "sha256": "98b147fb4e6dc59d9e06f09ad198773291f5aa16d4b7b467941b446b6518d63a"
+    },
+    "derived-metal-fast-publication-applied.json": {
+      "bytes": 6460,
+      "sha256": "4659011c3187d756ee3723d307a08772419c5e36a34709b4340980324a74ca0c"
+    }
+  }
+}

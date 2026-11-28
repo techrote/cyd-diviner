@@ -1,0 +1,2867 @@
+{
+  "schema": "cyd-evidence-integrity-audit/1",
+  "started_utc": "2026-11-27T23:02:46.249776+00:00",
+  "finished_utc": "2026-11-27T23:02:50.151300+00:00",
+  "snapshot_source_sha": "fce57f109ed6f58c0d51b48b8d74478b7817304c",
+  "ending_source_sha": "fce57f109ed6f58c0d51b48b8d74478b7817304c",
+  "evidence_class": "OFFLINE_INTEGRITY_AUDIT_NOT_NEW_MEASUREMENT",
+  "status": "FAILURES_FOUND",
+  "scope": [
+    "All inventoried top-level ZIPs: CRC of every member and nested ZIP, archive receipt SHA256/bytes where present.",
+    "All embedded raw artifact-hashes.json; published raw/input/output manifests and newer SDR/PCM/color/model/stimulus outputs.",
+    "Temperature CSV parse/hash inventory; PCM endpoint temperature manifest source/output hashes.",
+    "Tracked hashed evidence: -text and raw worktree/index blob comparison. Untracked evidence awaits final staging/index audit.",
+    "Local Markdown target existence outside fenced examples; anchors, network URLs and external/private paths not validated."
+  ],
+  "excluded": [
+    "All future or in-progress sdr-metal physical captures and their derived analyses.",
+    "Private whole-flash backups, owner credentials, serial ports, RF activity, firmware writes.",
+    "Historical generator hashes are provenance, not a demand to match current evolving source.",
+    "Scientific conclusions, calibration accuracy and complete mission coverage are outside byte-integrity checks."
+  ],
+  "counts": {
+    "archives": 14,
+    "zip_file_members": 979,
+    "raw_artifact_manifest_entries": 486,
+    "analysis_manifests": 40,
+    "hash_length_checks": 2120,
+    "temperature_csvs": 4,
+    "markdown_files": 59,
+    "local_markdown_targets": 350,
+    "missing_markdown_targets": 4,
+    "tracked_hashed_files": 243,
+    "tracked_pending_index_update": 0,
+    "untracked_hashed_files_pending_staging": 323,
+    "warnings": 0,
+    "failures": 0
+  },
+  "archives": [
+    {
+      "path": "evidence/DEBUG-LINK-ELFS.zip",
+      "bytes": 22229846,
+      "sha256": "8f167b1fb589a60bc1e729b5c59c98e3ca7a40cf89fd8a7469d76c8d91ad083a",
+      "file_members": 4,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/debug-link-elf-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-BASELINE.zip",
+      "bytes": 22071088,
+      "sha256": "41f122a120c5f4207f6d30b01d3c0b4be67728a200ba89154fa3d957d38a7797",
+      "file_members": 95,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/baseline-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 52,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-COLOR.zip",
+      "bytes": 733095,
+      "sha256": "0e1eec6eea902cba428cf37f63e50a2a5f0d505d827cafaf7a5690731a593cee",
+      "file_members": 17,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/color-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 7,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-PCM-CYD.zip",
+      "bytes": 573779,
+      "sha256": "aa1ed05719f9fb466cf93c21a46d18d1fe02007fb18fdeca11acd90173f588f9",
+      "file_members": 51,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/pcm-cyd-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 45,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-PCM-S3.zip",
+      "bytes": 332632,
+      "sha256": "8b51ab1ac3944f62efb64dec120d08dcc5243af1af8751c6fef02507d0d12d32",
+      "file_members": 24,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/pcm-s3-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 21,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-SDR.zip",
+      "bytes": 4207015,
+      "sha256": "12a32067cfa50f957e6d691ed7fa62b704c706e8839b19ba205f0ff8e79aeb0c",
+      "file_members": 269,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/sdr-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 259,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+      "bytes": 15812579,
+      "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7",
+      "file_members": 240,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/supplement-archive-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 102,
+      "scope": "closed_raw"
+    },
+    {
+      "path": "evidence/UNAPPROVED-AUDIO-SDR-IMAGES.zip",
+      "bytes": 9499595,
+      "sha256": "51289232c9cf2d5035efde001bd39e92e379d163f673ce13c83ad5ad7bae6cfc",
+      "file_members": 10,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/prototype-bundle-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/UNAPPROVED-I2S-EVENT-IMAGE.zip",
+      "bytes": 2480896,
+      "sha256": "771b03d0504e23e42b88798d3fe98c81d4d4aba33b333368276bbe6c37080d23",
+      "file_members": 4,
+      "crc": "PASS",
+      "archive_receipts": [],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/UNAPPROVED-LINK-IMAGES.zip",
+      "bytes": 4195604,
+      "sha256": "04992353fc0f6d9063a8e31439bee91adeba26fb6a10e0ddedf68435c489136e",
+      "file_members": 6,
+      "crc": "PASS",
+      "archive_receipts": [],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/UNAPPROVED-PROFILING-IMAGES.zip",
+      "bytes": 7882146,
+      "sha256": "ceeba47bacd073ce22f0aad953112a09c0ee48bb455c129a55a4e48fd8fc2dab",
+      "file_members": 13,
+      "crc": "PASS",
+      "archive_receipts": [],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/UNAPPROVED-SDR-METAL-IMAGES.zip",
+      "bytes": 1937837,
+      "sha256": "4d8fb6d3a64238edf9ecae26653b49c4d85d7dc70c235bbd2fa87626bb4ff4e6",
+      "file_members": 7,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/metal-bundle-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/UNAPPROVED-SDR-METAL-POWER-IMAGES.zip",
+      "bytes": 7379453,
+      "sha256": "ba241f252599b9dbdfd69765f0f25342face25a69ba4d448ccaed36db461d50b",
+      "file_members": 9,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/metal-power-bundle-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    },
+    {
+      "path": "evidence/WINDOWS-CAPTURE-PACKAGE.zip",
+      "bytes": 529794,
+      "sha256": "12bbca644205f5af379515809a862435d33228b5f076e86c60c8fd7d64ec4081",
+      "file_members": 230,
+      "crc": "PASS",
+      "archive_receipts": [
+        "evidence/windows-package-receipt.json"
+      ],
+      "raw_artifact_manifest_entries": 0,
+      "scope": "source_build_or_portable_bundle"
+    }
+  ],
+  "analysis_manifests": [
+    {
+      "path": "evidence/audio-bidirectional-deferred-analysis/audio-analysis-manifest.json",
+      "schema": "cyd-audio-mvp-analysis-manifest/1",
+      "checks": 4,
+      "bytes": 735,
+      "sha256": "36d6adb01cc431ea6ea0e776171ffa1dad50813c977bb45b2fa4f0537476d80b"
+    },
+    {
+      "path": "evidence/audio-deferred-fresh-analysis/audio-analysis-manifest.json",
+      "schema": "cyd-audio-mvp-analysis-manifest/1",
+      "checks": 4,
+      "bytes": 737,
+      "sha256": "16810e0da4e5b33978f5e28c514f84302c946572f8aeb7aa0ceed8e189bc23dd"
+    },
+    {
+      "path": "evidence/audio-offline-osr16/manifest.json",
+      "schema": "cyd-audio-mvp-offline-manifest/1",
+      "checks": 37,
+      "bytes": 4146,
+      "sha256": "8bc92d29637c5f1e21f8e1ffa86fee01c4fc99c00200d06eff7cb2ba634490f1"
+    },
+    {
+      "path": "evidence/audio-offline-osr32/manifest.json",
+      "schema": "cyd-audio-mvp-offline-manifest/1",
+      "checks": 37,
+      "bytes": 4146,
+      "sha256": "8a4eac1de1292379c5fea6dd9d8c7e4a27bbc22411220301eb3162432a49eba3"
+    },
+    {
+      "path": "evidence/audio-s3-pair-02-analysis/audio-analysis-manifest.json",
+      "schema": "cyd-audio-mvp-analysis-manifest/1",
+      "checks": 4,
+      "bytes": 720,
+      "sha256": "d939bce726324cbd0fc44657537e682f0b9983393746280fb93ac66afbd5119d"
+    },
+    {
+      "path": "evidence/audio-s3-pair-deferred-analysis/audio-analysis-manifest.json",
+      "schema": "cyd-audio-mvp-analysis-manifest/1",
+      "checks": 4,
+      "bytes": 729,
+      "sha256": "35326e014ae2e94e5ec3fd48cb1840e4f14f5a85714b2cad19cbf7c2299939a8"
+    },
+    {
+      "path": "evidence/campaign-ble-init/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 3,
+      "bytes": 4290,
+      "sha256": "5255ce8ae417b99a0f57f87c2f541cd239cb507dc1c08295ad69b48797cc28a8"
+    },
+    {
+      "path": "evidence/campaign-ble-init/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 38,
+      "bytes": 7566,
+      "sha256": "91425f1fe01611adf67fa3888e8183f9bbc5cc30cb7fd84749ce45c41a94be51"
+    },
+    {
+      "path": "evidence/campaign-color/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 3,
+      "bytes": 10673,
+      "sha256": "eeacfcaab0518abab5a5ca98dba161f91332d17a4b079453121d2ccd8cc9fbfa"
+    },
+    {
+      "path": "evidence/campaign-color/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 38,
+      "bytes": 7510,
+      "sha256": "b16e35aa857a983bd19f42ce7d7e1e75e21f25d98d41d55678519dd8bef9b725"
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 9,
+      "bytes": 86325,
+      "sha256": "449ff927fe84968d186040f76bba18b096aa92b7f97ded3b1d08a3a410738056"
+    },
+    {
+      "path": "evidence/campaign-continuation/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 50,
+      "bytes": 10064,
+      "sha256": "00875cfd59a9581947bcd32b835b298d1df27a628816b662c231c02a230ebc86"
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 5,
+      "bytes": 28709,
+      "sha256": "ddd29f311924f820a47cfd81d5d8e567e648e7ad23adfe1caf3e1edd0beb0068"
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 46,
+      "bytes": 9776,
+      "sha256": "ceddc4f95cbb5701e379740da1bad9cfbb591307e0ebad3ff1a3e909a0027be8"
+    },
+    {
+      "path": "evidence/campaign-events/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 11,
+      "bytes": 96628,
+      "sha256": "0191642a595b68b6558c380da4dd686c3beb9c9b92560666616eb424a466b602"
+    },
+    {
+      "path": "evidence/campaign-events/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 66,
+      "bytes": 12279,
+      "sha256": "b06c643f39293190758ee3fb252a43bf5a17378bc9e0ab9a8d7b0d1d05dc5335"
+    },
+    {
+      "path": "evidence/campaign-full/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 13,
+      "bytes": 59834,
+      "sha256": "4a1e5021680c992cc009e98b1eb4c1450a6f328df50111428b2f701cd6555071"
+    },
+    {
+      "path": "evidence/campaign-full/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 82,
+      "bytes": 15309,
+      "sha256": "470d6150a7532c6b50e2f1950820eaa267d6dc41ea2496b7fb5443359efbbe48"
+    },
+    {
+      "path": "evidence/campaign-link-ble/manifest.json",
+      "schema": "cyd-perf-link-publication/1",
+      "checks": 18,
+      "bytes": 3339,
+      "sha256": "a5b2044de4c44eac1c38aabfb6a06e59f546ba5d883ba55fce08012dec916a24"
+    },
+    {
+      "path": "evidence/campaign-link-fresh-ap/manifest.json",
+      "schema": "cyd-perf-link-publication/1",
+      "checks": 18,
+      "bytes": 3356,
+      "sha256": "4d6963ca2d3c8dcbdd694a92fd030c1a27092d3e17bda6bf3f4930705bc6e300"
+    },
+    {
+      "path": "evidence/campaign-link-wifi-02/manifest.json",
+      "schema": "cyd-perf-link-publication/1",
+      "checks": 18,
+      "bytes": 3364,
+      "sha256": "46585c34a59b811138eb7650053e77517d0b31d1834ce8230a484f2a53280099"
+    },
+    {
+      "path": "evidence/campaign-link-wifi-retry/manifest.json",
+      "schema": "cyd-perf-link-publication/1",
+      "checks": 18,
+      "bytes": 3366,
+      "sha256": "03efe9d4a5ac594564209182c9d1265e8c474b2e797024aed446827800ad33b2"
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 9,
+      "bytes": 54669,
+      "sha256": "dc9f2e5057e17c2ba3e7150a7af9fb58393201e2a3a28b2a889f15ff0b0afdf4"
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 54,
+      "bytes": 10265,
+      "sha256": "876283ef7faf75e4bfe41bba1c62c52cbc69734aa5980145eb69f6a3956b4ec5"
+    },
+    {
+      "path": "evidence/campaign-s3-partial/figures/manifest.json",
+      "schema": "cyd-perf-figures/1",
+      "checks": 3,
+      "bytes": 5047,
+      "sha256": "622c2717e0e728e975e54aab20bae08298411c986ca04656b55a6a653e58e67f"
+    },
+    {
+      "path": "evidence/campaign-s3-partial/manifest.json",
+      "schema": "cyd-perf-publication/1",
+      "checks": 42,
+      "bytes": 8932,
+      "sha256": "fd6ab8c3914f6ebe2178c0310f5c3f917c0fc363f6b6b23593c7180bbbcf5318"
+    },
+    {
+      "path": "evidence/display-readbacks/manifest.json",
+      "schema": "cyd-perf-physical-readbacks/1",
+      "checks": 10,
+      "bytes": 4546,
+      "sha256": "19111da0f0ccfcd4760e8d12163660a1462dc7eb1cf4e5c514ffab5f127626da"
+    },
+    {
+      "path": "evidence/pcm-temperature/PCM-TEMPERATURE-MANIFEST.json",
+      "schema": "cyd-pcm-temperature-publication/1",
+      "checks": 6,
+      "bytes": 2011,
+      "sha256": "05fc10e32c4c89ce31f0a5066364f21bb9ea77534e2dcd7ca6f04b60f1574b39"
+    },
+    {
+      "path": "evidence/sdr-framed-23k-analysis/manifest.json",
+      "schema": "cyd-sdr-physical-demodulation-manifest/1",
+      "checks": 26,
+      "bytes": 3007,
+      "sha256": "00c5b5726e4dfe6b4080fd9c5db535caf20fb07fcba2743e81ea17cf84e7902d"
+    },
+    {
+      "path": "evidence/sdr-framed-four-analysis/manifest.json",
+      "schema": "cyd-sdr-physical-demodulation-manifest/1",
+      "checks": 26,
+      "bytes": 3021,
+      "sha256": "8be57cff6e42b5312981b2d9473ab124f3f737d3469e7a608a852ca820bb1a99"
+    },
+    {
+      "path": "evidence/sdr-framed-low-analysis/manifest.json",
+      "schema": "cyd-sdr-physical-demodulation-manifest/1",
+      "checks": 54,
+      "bytes": 5945,
+      "sha256": "28929ad6f85550adfe640163948a3bb3bdf0a208908fd69e0d3e4c59713c0ed4"
+    },
+    {
+      "path": "evidence/sdr-framed-low-analysis-v2/manifest.json",
+      "schema": "cyd-sdr-physical-demodulation-manifest/1",
+      "checks": 54,
+      "bytes": 5945,
+      "sha256": "f48356ba46fc4c6bdb72eae66e5027178246e6a99ea6a3f370dec99de5dc2c65"
+    },
+    {
+      "path": "evidence/sdr-framed-stimuli/manifest.json",
+      "schema": "cyd-sdr-stimuli-manifest/1",
+      "checks": 34,
+      "bytes": 3995,
+      "sha256": "3987b01955dcb4a2fcdc1401af2505044342fe0a4e15b1b86f044a1d335d97b7"
+    },
+    {
+      "path": "evidence/sdr-metal-stimuli/manifest.json",
+      "schema": "cyd-sdr-metal-stimuli/1",
+      "checks": 15,
+      "bytes": 6351,
+      "sha256": "f2c488400e3860660f630acfe5a7653551c64a12332de1e4cc8383dd1622ca82"
+    },
+    {
+      "path": "evidence/sdr-signals-calibration-01/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 12,
+      "bytes": 1433,
+      "sha256": "1bdb5fe926f604bad5a6c7330c34b473e0e976cbd2fba8cd588100add46a2df4"
+    },
+    {
+      "path": "evidence/sdr-signals-offset-minus80/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 6,
+      "bytes": 833,
+      "sha256": "e4704ebe23c9a5ad5820f6aac7e642241d6d60e7bb2b4c1abac13b6bbe836a80"
+    },
+    {
+      "path": "evidence/sdr-signals-offset-plus80/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 6,
+      "bytes": 833,
+      "sha256": "8c6e608700ca038dfad9675d8f1a2de421be2894d6164d85a2fb37dd86633146"
+    },
+    {
+      "path": "evidence/sdr-signals-ram-125k-01/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 15,
+      "bytes": 1733,
+      "sha256": "a08282e5fdee32054c6a405cdc285c44ea9af7a836169ab30e7bc41a04f76267"
+    },
+    {
+      "path": "evidence/sdr-signals-ram-250k-v2-01/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 15,
+      "bytes": 1733,
+      "sha256": "ba8d625bd0436b178343db67ac0066277ef00934579715acb32fcef909c41f68"
+    },
+    {
+      "path": "evidence/sdr-signals-ram-centered-01/manifest.json",
+      "schema": "cyd-sdr-signal-analysis-manifest/1",
+      "checks": 18,
+      "bytes": 2033,
+      "sha256": "175acfe01927307642bcfcf35294208b20d212b0ba65a2b302cd750f8f099c4c"
+    }
+  ],
+  "temperature_outputs": [
+    {
+      "path": "evidence/TEMPERATURE-SAMPLES.csv",
+      "bytes": 1631488,
+      "sha256": "b4d711a07e08e9b62e16def88ed53db86fe1534bf7b0b217aef877ab447bb08c",
+      "rows": 4314,
+      "columns": [
+        "capture",
+        "capture_status",
+        "run_id",
+        "workload",
+        "run_status",
+        "record_type",
+        "source_sha",
+        "firmware_sha256",
+        "input_sha256",
+        "target_elapsed_ms",
+        "host_received_elapsed_s",
+        "method_as_reported",
+        "temperature_raw",
+        "temperature_c_uncalibrated",
+        "temperature_c_indication",
+        "interpretation"
+      ]
+    },
+    {
+      "path": "evidence/TEMPERATURE-SUMMARY.csv",
+      "bytes": 845,
+      "sha256": "d47bcc64498a36f8a05aad21514d2d92a8e2081c1b4527405074d7e966634f64",
+      "rows": 12,
+      "columns": [
+        "capture",
+        "capture_status",
+        "retained_records_in_valid_windows",
+        "temperature_raw_min",
+        "temperature_raw_max",
+        "temperature_c_uncalibrated_min",
+        "temperature_c_uncalibrated_max",
+        "temperature_c_indication_min",
+        "temperature_c_indication_max"
+      ]
+    },
+    {
+      "path": "evidence/pcm-temperature/PCM-TEMPERATURE-SAMPLES.csv",
+      "bytes": 52410,
+      "sha256": "830d5bc5954c2556c7081f03a94f18ca0f2f9c7e0ef909b68f759be45feb0a77",
+      "rows": 100,
+      "columns": [
+        "capture",
+        "capture_status",
+        "run_id",
+        "workload",
+        "endpoint",
+        "board",
+        "port_as_recorded",
+        "profile",
+        "source_sha",
+        "firmware_sha256",
+        "input_results_sha256",
+        "record_type",
+        "method_as_reported",
+        "target_uptime_us",
+        "host_received_elapsed_s",
+        "observation_scope",
+        "temperature_raw",
+        "temperature_c_uncalibrated",
+        "temperature_c_indication"
+      ]
+    },
+    {
+      "path": "evidence/pcm-temperature/PCM-TEMPERATURE-SUMMARY.csv",
+      "bytes": 2669,
+      "sha256": "8f0f6364b40a05b99920fd6dbadecea5c63d31e0fda72b7bcc1212275bd8ca07",
+      "rows": 8,
+      "columns": [
+        "capture",
+        "capture_status",
+        "endpoint",
+        "board",
+        "method_as_reported",
+        "source_sha",
+        "firmware_sha256",
+        "retained_records",
+        "temperature_raw_count",
+        "temperature_raw_min",
+        "temperature_raw_max",
+        "temperature_raw_first",
+        "temperature_raw_last",
+        "temperature_c_uncalibrated_count",
+        "temperature_c_uncalibrated_min",
+        "temperature_c_uncalibrated_max",
+        "temperature_c_uncalibrated_first",
+        "temperature_c_uncalibrated_last",
+        "temperature_c_indication_count",
+        "temperature_c_indication_min",
+        "temperature_c_indication_max",
+        "temperature_c_indication_first",
+        "temperature_c_indication_last"
+      ]
+    }
+  ],
+  "package_source_commit_verification": [
+    {
+      "archive": "evidence/WINDOWS-CAPTURE-PACKAGE.zip",
+      "source_sha": "e4dec3f0bc3212854dafe20513a6acab44eff6bd",
+      "source_checkout_members_verified": 177,
+      "exact_git_blob_bytes": 160,
+      "windows_checkout_CRLF_only": [
+        "LICENSE",
+        "NOTICE.md",
+        "platformio.ini",
+        "src/perf_link.cpp",
+        "src/perf_profile.cpp",
+        "src/perf_profile.h",
+        "tools/perf/plan-audio-mvp.json",
+        "tools/perf/plan-events.json",
+        "tools/perf/plan-full.json",
+        "tools/perf/plan-link-ble.json",
+        "tools/perf/plan-link-with-ble.json",
+        "tools/perf/plan-link.json",
+        "tools/perf/plan-sdr-calibration.json",
+        "tools/perf/plan-sdr-metal-rx.json",
+        "tools/perf/plan-smoke.json",
+        "tools/perf/plan-stress.json",
+        "tools/perf/test_i2s_events.cpp"
+      ]
+    }
+  ],
+  "temperature_source_row_verification": [
+    {
+      "capture": "ble-init-link-01",
+      "input_sha256": "1f46018d16ccf450ae2460e7534c570e446ec3ec69be1ec703b95e25addb970b",
+      "sample_rows_matched_to_raw_run": 54,
+      "sample_rows": 54
+    },
+    {
+      "capture": "continuation-01",
+      "input_sha256": "0fe7607d7276050cbc1a2cf7f84c1d3182aba8e0b225c9f6d13b1dc1a3ffcfc4",
+      "sample_rows_matched_to_raw_run": 496,
+      "sample_rows": 496
+    },
+    {
+      "capture": "cyd-kernels-fresh-01",
+      "input_sha256": "cb4d53d91c8d625acab8faed07bbf91aa58a726ccc7e65d6a0510b09ed0dc41d",
+      "sample_rows_matched_to_raw_run": 132,
+      "sample_rows": 132
+    },
+    {
+      "capture": "events-link-01",
+      "input_sha256": "3f342828ff90ef36feb68f815a8e600713385f5ab46d0c9235de9ad36bde54d4",
+      "sample_rows_matched_to_raw_run": 626,
+      "sample_rows": 626
+    },
+    {
+      "capture": "full-01",
+      "input_sha256": "9adfeeca8f4ab91c8b3b3e6722128b913bda571218c16be720d702fbdbdbf715",
+      "sample_rows_matched_to_raw_run": 1755,
+      "sample_rows": 1755
+    },
+    {
+      "capture": "link-fresh-ap-01",
+      "input_sha256": "d2cb18d13e6cf48d94cea8674a3db68a250db619a17cd59f45d28cace9ccb69c",
+      "sample_rows_matched_to_raw_run": 72,
+      "sample_rows": 72
+    },
+    {
+      "capture": "link-wifi-02",
+      "input_sha256": "14563e4539e86e77d35a4f22c50af574f5278e22efc10113c19a0d93dafb471a",
+      "sample_rows_matched_to_raw_run": 486,
+      "sample_rows": 486
+    },
+    {
+      "capture": "link-wifi-retry-01",
+      "input_sha256": "c1cbc539a4f5bc38f1f26b9b5878888ee765f51dd45cb3a2531b5a08f4272b35",
+      "sample_rows_matched_to_raw_run": 252,
+      "sample_rows": 252
+    },
+    {
+      "capture": "preflight-01",
+      "input_sha256": "891fa31109edb0c8e6e51ef514755b3103e5fe2b82a88c66d00ff7e4a27ec2df",
+      "sample_rows_matched_to_raw_run": 6,
+      "sample_rows": 6
+    },
+    {
+      "capture": "s3-kernels-01",
+      "input_sha256": "8f841f8d4d6b0fab857e6823652597d6415b3ed6508f2cadde8454e42463449f",
+      "sample_rows_matched_to_raw_run": 10,
+      "sample_rows": 10
+    },
+    {
+      "capture": "s3-kernels-link-02",
+      "input_sha256": "83cdab8d971c0adb5a3fbc46b7d751abe0d4bb5bd78a0f7c27ac4495e0b8d838",
+      "sample_rows_matched_to_raw_run": 160,
+      "sample_rows": 160
+    },
+    {
+      "capture": "s3-kernels-link-03",
+      "input_sha256": "d89c28832226ddbe53db4efa2a1faa6876d1eb531ef3fb7d1f5c7017405a312d",
+      "sample_rows_matched_to_raw_run": 265,
+      "sample_rows": 265
+    },
+    {
+      "capture": "audio-bidirectional-deferred-01",
+      "input_sha256": "9178f60e650c50ebbdfe53cfa285e1810c7161ca19f3e6e7296443a7311781fb",
+      "sample_rows_matched_to_raw_run": 4,
+      "sample_rows": 4
+    },
+    {
+      "capture": "audio-deferred-fresh-01",
+      "input_sha256": "819ec4dee0e661ea2039c2f26d580bf580a7ec3825927b55a5193bbb9f7f7497",
+      "sample_rows_matched_to_raw_run": 2,
+      "sample_rows": 2
+    },
+    {
+      "capture": "audio-s3-pair-02",
+      "input_sha256": "a42e9881c8b3197170309d5095f4a9dce48969b7ace2494313d3acabbe5f127d",
+      "sample_rows_matched_to_raw_run": 44,
+      "sample_rows": 44
+    },
+    {
+      "capture": "audio-s3-pair-deferred-01",
+      "input_sha256": "2f9b69490f7e008b50c52a464d94c10bd9159290ee0a2cdd1eca847c4be29f35",
+      "sample_rows_matched_to_raw_run": 50,
+      "sample_rows": 50
+    }
+  ],
+  "git_index": [
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-BASELINE.zip",
+      "text_attribute": "unset",
+      "index_blob": "96d1bc1cd47d2fcbe41dc26b93ddf395b742c212",
+      "worktree_raw_blob": "96d1bc1cd47d2fcbe41dc26b93ddf395b742c212",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+      "text_attribute": "unset",
+      "index_blob": "84f6cbe2235d82f8844b9dc27bdfe456e472fcc2",
+      "worktree_raw_blob": "84f6cbe2235d82f8844b9dc27bdfe456e472fcc2",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/TEMPERATURE-SAMPLES.csv",
+      "text_attribute": "unset",
+      "index_blob": "022034194db8ef3c6cb775f7fd05514d219b1eb1",
+      "worktree_raw_blob": "022034194db8ef3c6cb775f7fd05514d219b1eb1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/TEMPERATURE-SUMMARY.csv",
+      "text_attribute": "unset",
+      "index_blob": "af792ef0041b0fec3742699a1896850fcc56a88c",
+      "worktree_raw_blob": "af792ef0041b0fec3742699a1896850fcc56a88c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/01-clean-0/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "570d0c875b3999a515c83381c04244938cbbae9a",
+      "worktree_raw_blob": "570d0c875b3999a515c83381c04244938cbbae9a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/01-clean-0/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/01-clean-0/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/01-clean-0/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "7e8f035d3c841e229aea27cd8499ed36b062e534",
+      "worktree_raw_blob": "7e8f035d3c841e229aea27cd8499ed36b062e534",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/02-flip-1000/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "601240741405e6e26ff2f36f56cf3dcbedaad830",
+      "worktree_raw_blob": "601240741405e6e26ff2f36f56cf3dcbedaad830",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/02-flip-1000/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/02-flip-1000/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/02-flip-1000/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "6a7cda431eb45784083db22a265fa833a3c6ba19",
+      "worktree_raw_blob": "6a7cda431eb45784083db22a265fa833a3c6ba19",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/03-burst-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "254dd1e8ebd8544634fd40d60894ab7f18dc3af6",
+      "worktree_raw_blob": "254dd1e8ebd8544634fd40d60894ab7f18dc3af6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/03-burst-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/03-burst-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/03-burst-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "b0020256d054d99ee245c8f7b366cadcbff4270a",
+      "worktree_raw_blob": "b0020256d054d99ee245c8f7b366cadcbff4270a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/04-stuck-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "8a11e4b98051aab1e01de2c579b2eddf6d05a528",
+      "worktree_raw_blob": "8a11e4b98051aab1e01de2c579b2eddf6d05a528",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/04-stuck-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/04-stuck-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/04-stuck-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "f6bb5cbc25ef3d536f5a1aeef750d91444e1647f",
+      "worktree_raw_blob": "f6bb5cbc25ef3d536f5a1aeef750d91444e1647f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/05-erase-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "28c76f26cacf81fc7840535f560788ee656dd303",
+      "worktree_raw_blob": "28c76f26cacf81fc7840535f560788ee656dd303",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/05-erase-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/05-erase-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/05-erase-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "e21cbca80fd38f94dfafb740138aea2d18ca84d9",
+      "worktree_raw_blob": "e21cbca80fd38f94dfafb740138aea2d18ca84d9",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/quality.csv",
+      "text_attribute": "unset",
+      "index_blob": "30e78bb5ad86495f478fb1fa266886dce30a46f0",
+      "worktree_raw_blob": "30e78bb5ad86495f478fb1fa266886dce30a46f0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr16/results.json",
+      "text_attribute": "unset",
+      "index_blob": "f656b5e426ca271160dda48d924666697400d00d",
+      "worktree_raw_blob": "f656b5e426ca271160dda48d924666697400d00d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/01-clean-0/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "3790207a8de8455802f279e242fb92f45fb06fbd",
+      "worktree_raw_blob": "3790207a8de8455802f279e242fb92f45fb06fbd",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/01-clean-0/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/01-clean-0/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/01-clean-0/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "cf196828dd6111292bd548e53d842a143e273442",
+      "worktree_raw_blob": "cf196828dd6111292bd548e53d842a143e273442",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/02-flip-1000/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "4155e3f7d2cfa1294eac7222f93d0ed836ad666b",
+      "worktree_raw_blob": "4155e3f7d2cfa1294eac7222f93d0ed836ad666b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/02-flip-1000/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/02-flip-1000/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/02-flip-1000/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "0524debdd9e5582aee74dc0c8967a6f2df8dbfdf",
+      "worktree_raw_blob": "0524debdd9e5582aee74dc0c8967a6f2df8dbfdf",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/03-burst-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "285be08ebf7922494214b3b491542de32e678832",
+      "worktree_raw_blob": "285be08ebf7922494214b3b491542de32e678832",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/03-burst-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/03-burst-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/03-burst-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "dae03fcb73d3aa169b31420a6146dc7cb74a1d9a",
+      "worktree_raw_blob": "dae03fcb73d3aa169b31420a6146dc7cb74a1d9a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/04-stuck-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "c1fef5be46e6e4087d864bce83722227ddcbe8d1",
+      "worktree_raw_blob": "c1fef5be46e6e4087d864bce83722227ddcbe8d1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/04-stuck-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/04-stuck-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/04-stuck-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "c0d99e7c996ed0050de39a0b56466828d545baa2",
+      "worktree_raw_blob": "c0d99e7c996ed0050de39a0b56466828d545baa2",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/05-erase-128/reconstructed.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "4301b272ef7aadf8302c8d91c612cc30d8ed1f53",
+      "worktree_raw_blob": "4301b272ef7aadf8302c8d91c612cc30d8ed1f53",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/05-erase-128/reference.pcm16le",
+      "text_attribute": "unset",
+      "index_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "worktree_raw_blob": "9f82e1c9c2651ff0b87ea980e268cb04f9e18f2b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/05-erase-128/stderr.log",
+      "text_attribute": "unset",
+      "index_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "worktree_raw_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/05-erase-128/stdout.json",
+      "text_attribute": "unset",
+      "index_blob": "55c60492116a28a0d72f6222e123162828ce409e",
+      "worktree_raw_blob": "55c60492116a28a0d72f6222e123162828ce409e",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/quality.csv",
+      "text_attribute": "unset",
+      "index_blob": "fc0fad1dc670a2a25e6079b17814fbd0e634fb16",
+      "worktree_raw_blob": "fc0fad1dc670a2a25e6079b17814fbd0e634fb16",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/audio-offline-osr32/results.json",
+      "text_attribute": "unset",
+      "index_blob": "1513bcb8961b7abcbf993849fa010f85a36a74a5",
+      "worktree_raw_blob": "1513bcb8961b7abcbf993849fa010f85a36a74a5",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "45c335f02617d06b0a277a97462042bcec7bde18",
+      "worktree_raw_blob": "45c335f02617d06b0a277a97462042bcec7bde18",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/figures/fps-radio.png",
+      "text_attribute": "unset",
+      "index_blob": "abedf16edc24ff8bc33a3ea15c8982f6c9c1175d",
+      "worktree_raw_blob": "abedf16edc24ff8bc33a3ea15c8982f6c9c1175d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/figures/fps-radio.svg",
+      "text_attribute": "unset",
+      "index_blob": "e01fc723b6a114c3607bbb3db0f5711f2e046a2f",
+      "worktree_raw_blob": "e01fc723b6a114c3607bbb3db0f5711f2e046a2f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "80e02efe1df35bbec8295bfdc77193812c3f886a",
+      "worktree_raw_blob": "80e02efe1df35bbec8295bfdc77193812c3f886a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "worktree_raw_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "11150e75c224071137fd3a5faa9aa46f86191d54",
+      "worktree_raw_blob": "11150e75c224071137fd3a5faa9aa46f86191d54",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "a838f7f77320d0151c8b44e982a4181f8f5126c5",
+      "worktree_raw_blob": "a838f7f77320d0151c8b44e982a4181f8f5126c5",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-ble-init/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "9df62136ab332cd5aa5aa687ce8aaa55bc9649a6",
+      "worktree_raw_blob": "9df62136ab332cd5aa5aa687ce8aaa55bc9649a6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "7013974742a07591b4f09270ead871d484a4b49b",
+      "worktree_raw_blob": "7013974742a07591b4f09270ead871d484a4b49b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/audio-tails.png",
+      "text_attribute": "unset",
+      "index_blob": "8641c2eddbcf6aad5e979f1f1d1165ddab369fc3",
+      "worktree_raw_blob": "8641c2eddbcf6aad5e979f1f1d1165ddab369fc3",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/audio-tails.svg",
+      "text_attribute": "unset",
+      "index_blob": "7b97cb21dc9ce1d1b897d929ef2044856809cc06",
+      "worktree_raw_blob": "7b97cb21dc9ce1d1b897d929ef2044856809cc06",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/fps-radio.png",
+      "text_attribute": "unset",
+      "index_blob": "b1181f9c442bdd395e36f4274354a65be885709a",
+      "worktree_raw_blob": "b1181f9c442bdd395e36f4274354a65be885709a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/fps-radio.svg",
+      "text_attribute": "unset",
+      "index_blob": "fe9edc9622cec9ee44189c42e9b60fc6e34b1219",
+      "worktree_raw_blob": "fe9edc9622cec9ee44189c42e9b60fc6e34b1219",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/fps-scenes.png",
+      "text_attribute": "unset",
+      "index_blob": "f11cfa093e4547d36487c46bf04c8649e8e5ff4d",
+      "worktree_raw_blob": "f11cfa093e4547d36487c46bf04c8649e8e5ff4d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/fps-scenes.svg",
+      "text_attribute": "unset",
+      "index_blob": "57fb345cda311642e3105fc3556fbc65d54c8044",
+      "worktree_raw_blob": "57fb345cda311642e3105fc3556fbc65d54c8044",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "b57e43bb56c1a0990f768d28763dd2c7dfdec621",
+      "worktree_raw_blob": "b57e43bb56c1a0990f768d28763dd2c7dfdec621",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/stress-temperature.png",
+      "text_attribute": "unset",
+      "index_blob": "2086ff875ef7c664da0f1d69601da851faaba235",
+      "worktree_raw_blob": "2086ff875ef7c664da0f1d69601da851faaba235",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/figures/stress-temperature.svg",
+      "text_attribute": "unset",
+      "index_blob": "274936ecd9c7436c944132f2cad37d0a307d8fd4",
+      "worktree_raw_blob": "274936ecd9c7436c944132f2cad37d0a307d8fd4",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "8871ee204736cdcf70cd4f5edac880bcbd28fa07",
+      "worktree_raw_blob": "8871ee204736cdcf70cd4f5edac880bcbd28fa07",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "01fa764c8f9e290b580009bc5efe8dbe396c869d",
+      "worktree_raw_blob": "01fa764c8f9e290b580009bc5efe8dbe396c869d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "a7edd48fc8564366877e04a1786399200d88a949",
+      "worktree_raw_blob": "a7edd48fc8564366877e04a1786399200d88a949",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "646ab31f5b81cdbee5369b25bba2bbfe54309a31",
+      "worktree_raw_blob": "646ab31f5b81cdbee5369b25bba2bbfe54309a31",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "2652af2dc4e3ef167a71cda6a5dbaccef9f4a330",
+      "worktree_raw_blob": "2652af2dc4e3ef167a71cda6a5dbaccef9f4a330",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-continuation/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "d16437a6ae9d1926852eea0bafae0f3b159e3cae",
+      "worktree_raw_blob": "d16437a6ae9d1926852eea0bafae0f3b159e3cae",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "0567ea5fc7f39279cf28683b077e7ec486a44b16",
+      "worktree_raw_blob": "0567ea5fc7f39279cf28683b077e7ec486a44b16",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/kernel-dsp-internal-inferred.png",
+      "text_attribute": "unset",
+      "index_blob": "51c9bbc7e0448e99a9c215f712480cb3423f2f7d",
+      "worktree_raw_blob": "51c9bbc7e0448e99a9c215f712480cb3423f2f7d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/kernel-dsp-internal-inferred.svg",
+      "text_attribute": "unset",
+      "index_blob": "e68d1e9c92af3d83d643b8d1ce6430d0a7020f79",
+      "worktree_raw_blob": "e68d1e9c92af3d83d643b8d1ce6430d0a7020f79",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/kernel-other-internal-inferred.png",
+      "text_attribute": "unset",
+      "index_blob": "3783e189c6e65819c07c4e6c1c266c07c62ecf21",
+      "worktree_raw_blob": "3783e189c6e65819c07c4e6c1c266c07c62ecf21",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/kernel-other-internal-inferred.svg",
+      "text_attribute": "unset",
+      "index_blob": "dae203d62e6f9ec026d8e9d859d8408a91be6abb",
+      "worktree_raw_blob": "dae203d62e6f9ec026d8e9d859d8408a91be6abb",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "53bf0429182ad394f473a201687e1214b8d2da8a",
+      "worktree_raw_blob": "53bf0429182ad394f473a201687e1214b8d2da8a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "worktree_raw_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "c32b0197e9f2a42db4973559cfe3a8bb5bf896a7",
+      "worktree_raw_blob": "c32b0197e9f2a42db4973559cfe3a8bb5bf896a7",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-cyd-kernels/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "221be9bb9060f1938fb33385e738b0aa70d270b1",
+      "worktree_raw_blob": "221be9bb9060f1938fb33385e738b0aa70d270b1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "cf790111dd86df25a949c2f05931b97be763da19",
+      "worktree_raw_blob": "cf790111dd86df25a949c2f05931b97be763da19",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/audio-tails.png",
+      "text_attribute": "unset",
+      "index_blob": "ba8b03cd1b7ed2192208cf43b5d5ed7ff1fcc831",
+      "worktree_raw_blob": "ba8b03cd1b7ed2192208cf43b5d5ed7ff1fcc831",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/audio-tails.svg",
+      "text_attribute": "unset",
+      "index_blob": "1317cfa027d8221d8d0af20681c6900b3b405e9b",
+      "worktree_raw_blob": "1317cfa027d8221d8d0af20681c6900b3b405e9b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-audio.png",
+      "text_attribute": "unset",
+      "index_blob": "60897fb0e5bc47e8eb0044e053ca83a9172aadae",
+      "worktree_raw_blob": "60897fb0e5bc47e8eb0044e053ca83a9172aadae",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-audio.svg",
+      "text_attribute": "unset",
+      "index_blob": "36c244fe708f360cec01feda3ae2a370463eed88",
+      "worktree_raw_blob": "36c244fe708f360cec01feda3ae2a370463eed88",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-radio.png",
+      "text_attribute": "unset",
+      "index_blob": "e08b6048337d763f108dd718e456251f6e0d2dd0",
+      "worktree_raw_blob": "e08b6048337d763f108dd718e456251f6e0d2dd0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-radio.svg",
+      "text_attribute": "unset",
+      "index_blob": "b36e72ad1eb56e686d5d9459f53fb97ab03dc398",
+      "worktree_raw_blob": "b36e72ad1eb56e686d5d9459f53fb97ab03dc398",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-scenes.png",
+      "text_attribute": "unset",
+      "index_blob": "ffd445ce837098d74cc72bcfb3fae27878fab70a",
+      "worktree_raw_blob": "ffd445ce837098d74cc72bcfb3fae27878fab70a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/fps-scenes.svg",
+      "text_attribute": "unset",
+      "index_blob": "f44bcc591eaf4bd8000ad7ca737ae6994a60555f",
+      "worktree_raw_blob": "f44bcc591eaf4bd8000ad7ca737ae6994a60555f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "67ee8bb0ddd5f3abbb3d7aed1d97351e76e62cef",
+      "worktree_raw_blob": "67ee8bb0ddd5f3abbb3d7aed1d97351e76e62cef",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/stress-temperature.png",
+      "text_attribute": "unset",
+      "index_blob": "f7795ce7d4f1daffc809122340a7b3b423ceba9b",
+      "worktree_raw_blob": "f7795ce7d4f1daffc809122340a7b3b423ceba9b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/figures/stress-temperature.svg",
+      "text_attribute": "unset",
+      "index_blob": "c6ab57752162176e14a737525c7efa66c74232a8",
+      "worktree_raw_blob": "c6ab57752162176e14a737525c7efa66c74232a8",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "68f42920974624c9b6db482626822d6ab00e1421",
+      "worktree_raw_blob": "68f42920974624c9b6db482626822d6ab00e1421",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "3f39ce13ffabe650749098324f0c2155083639c4",
+      "worktree_raw_blob": "3f39ce13ffabe650749098324f0c2155083639c4",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "3aca5cf609701d382a8af9fdf7b211e0a115c23b",
+      "worktree_raw_blob": "3aca5cf609701d382a8af9fdf7b211e0a115c23b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-events/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "2c29182db77ddbbda4b854ada5f057fe20001417",
+      "worktree_raw_blob": "2c29182db77ddbbda4b854ada5f057fe20001417",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "58c7b586477fe5556533e7c44edd0b0f2285ca64",
+      "worktree_raw_blob": "58c7b586477fe5556533e7c44edd0b0f2285ca64",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/audio-tails.png",
+      "text_attribute": "unset",
+      "index_blob": "d4d93f7bc2dbb38131c1eeab5a5fc159e7b019f3",
+      "worktree_raw_blob": "d4d93f7bc2dbb38131c1eeab5a5fc159e7b019f3",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/audio-tails.svg",
+      "text_attribute": "unset",
+      "index_blob": "502709f2f57fbb3c7937d454d49489e3e6a0ae60",
+      "worktree_raw_blob": "502709f2f57fbb3c7937d454d49489e3e6a0ae60",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-audio.png",
+      "text_attribute": "unset",
+      "index_blob": "48607ea9c0c0c060a5f894e3bab3f42bdbb423aa",
+      "worktree_raw_blob": "48607ea9c0c0c060a5f894e3bab3f42bdbb423aa",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-audio.svg",
+      "text_attribute": "unset",
+      "index_blob": "e27bb1fabb2f038c49301cee9dc6798afcf64449",
+      "worktree_raw_blob": "e27bb1fabb2f038c49301cee9dc6798afcf64449",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-radio.png",
+      "text_attribute": "unset",
+      "index_blob": "f1227e86a489ec1a911663b7345969f371fdccf8",
+      "worktree_raw_blob": "f1227e86a489ec1a911663b7345969f371fdccf8",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-radio.svg",
+      "text_attribute": "unset",
+      "index_blob": "977866a73406d0a2a7138a06afe14f60b01490ca",
+      "worktree_raw_blob": "977866a73406d0a2a7138a06afe14f60b01490ca",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-1.png",
+      "text_attribute": "unset",
+      "index_blob": "e981077d36785684d870d64750c1248a2314d408",
+      "worktree_raw_blob": "e981077d36785684d870d64750c1248a2314d408",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-1.svg",
+      "text_attribute": "unset",
+      "index_blob": "5dc682108fbf93c7cfab31924c1c9156c13fea5d",
+      "worktree_raw_blob": "5dc682108fbf93c7cfab31924c1c9156c13fea5d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-2.png",
+      "text_attribute": "unset",
+      "index_blob": "0d8385b0f41a6e69f406afa21887235c058fd31c",
+      "worktree_raw_blob": "0d8385b0f41a6e69f406afa21887235c058fd31c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-2.svg",
+      "text_attribute": "unset",
+      "index_blob": "7221007c7a8f714d0e0d320f32c09a7edbd62e60",
+      "worktree_raw_blob": "7221007c7a8f714d0e0d320f32c09a7edbd62e60",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-3.png",
+      "text_attribute": "unset",
+      "index_blob": "2e3be6086305fe02a63e712e83cf3f51982792c6",
+      "worktree_raw_blob": "2e3be6086305fe02a63e712e83cf3f51982792c6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/fps-scenes-3.svg",
+      "text_attribute": "unset",
+      "index_blob": "9126e7359a3603e9dfec8e718b92f832dbf71249",
+      "worktree_raw_blob": "9126e7359a3603e9dfec8e718b92f832dbf71249",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "e48de51178746821882a991c618ac2f64fdb84a7",
+      "worktree_raw_blob": "e48de51178746821882a991c618ac2f64fdb84a7",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "worktree_raw_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "5a0beb1093a1b17f5d13cd0943b43428ffff6c21",
+      "worktree_raw_blob": "5a0beb1093a1b17f5d13cd0943b43428ffff6c21",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "b9eeea8f7269ced7ceda0de0912c8b27152d83e1",
+      "worktree_raw_blob": "b9eeea8f7269ced7ceda0de0912c8b27152d83e1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "6899db58118516e3e7a1d8fdfd0faebcc8f99718",
+      "worktree_raw_blob": "6899db58118516e3e7a1d8fdfd0faebcc8f99718",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-full/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "7db19c2343192fe2a0af12219170cdd59c77be87",
+      "worktree_raw_blob": "7db19c2343192fe2a0af12219170cdd59c77be87",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-ble/LINK-REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "02e96791f2e9e8336c118e1b0b3ddd99cb570dc4",
+      "worktree_raw_blob": "02e96791f2e9e8336c118e1b0b3ddd99cb570dc4",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-ble/link-groups.csv",
+      "text_attribute": "unset",
+      "index_blob": "fe1ed1078037ad6fd307e14bd4ea2e9773ae9593",
+      "worktree_raw_blob": "fe1ed1078037ad6fd307e14bd4ea2e9773ae9593",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-ble/link-runs.csv",
+      "text_attribute": "unset",
+      "index_blob": "20faeb2c47c267ad03a42f2f2706d6843b11312a",
+      "worktree_raw_blob": "20faeb2c47c267ad03a42f2f2706d6843b11312a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-ble/link-summary.json",
+      "text_attribute": "unset",
+      "index_blob": "cbda1683f04e5671b7be9188b7c452781497ed96",
+      "worktree_raw_blob": "cbda1683f04e5671b7be9188b7c452781497ed96",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-fresh-ap/LINK-REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "2c5c5b10c85a09dbaac3a85a076672d026f4fced",
+      "worktree_raw_blob": "2c5c5b10c85a09dbaac3a85a076672d026f4fced",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-fresh-ap/link-groups.csv",
+      "text_attribute": "unset",
+      "index_blob": "73aae360d35a18925f0ad9450ec9fe902dd74d32",
+      "worktree_raw_blob": "73aae360d35a18925f0ad9450ec9fe902dd74d32",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-fresh-ap/link-runs.csv",
+      "text_attribute": "unset",
+      "index_blob": "d323756c37b9308d97a3cb0e0b9ba4c948d2a330",
+      "worktree_raw_blob": "d323756c37b9308d97a3cb0e0b9ba4c948d2a330",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-fresh-ap/link-summary.json",
+      "text_attribute": "unset",
+      "index_blob": "574bb5426e6c08d97af67809e8d9aca1da8e433a",
+      "worktree_raw_blob": "574bb5426e6c08d97af67809e8d9aca1da8e433a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-02/LINK-REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "bbc14644c2fe685468e92cc367e71605a02e5d0e",
+      "worktree_raw_blob": "bbc14644c2fe685468e92cc367e71605a02e5d0e",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-02/link-groups.csv",
+      "text_attribute": "unset",
+      "index_blob": "67b93952a3ecde6ffd679a2fa358e349812a59ba",
+      "worktree_raw_blob": "67b93952a3ecde6ffd679a2fa358e349812a59ba",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-02/link-runs.csv",
+      "text_attribute": "unset",
+      "index_blob": "1eda9463852b1e05c3b5da92cf618580864f5d92",
+      "worktree_raw_blob": "1eda9463852b1e05c3b5da92cf618580864f5d92",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-02/link-summary.json",
+      "text_attribute": "unset",
+      "index_blob": "eade8af692802847db6aeca1b973558a87734408",
+      "worktree_raw_blob": "eade8af692802847db6aeca1b973558a87734408",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-retry/LINK-REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "8be9b150f9dbf89d2eaaa43dddeb4fe488b6d0d7",
+      "worktree_raw_blob": "8be9b150f9dbf89d2eaaa43dddeb4fe488b6d0d7",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-retry/link-groups.csv",
+      "text_attribute": "unset",
+      "index_blob": "335cdd382946e006a94394a1f0e9e1d40b06ee0e",
+      "worktree_raw_blob": "335cdd382946e006a94394a1f0e9e1d40b06ee0e",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-retry/link-runs.csv",
+      "text_attribute": "unset",
+      "index_blob": "55d5eb9f9d3616ac6a40586143ce229c6b0c022d",
+      "worktree_raw_blob": "55d5eb9f9d3616ac6a40586143ce229c6b0c022d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-link-wifi-retry/link-summary.json",
+      "text_attribute": "unset",
+      "index_blob": "3a07b2326128c2a102aa7498b07d81b92beeee81",
+      "worktree_raw_blob": "3a07b2326128c2a102aa7498b07d81b92beeee81",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "60a1d679ec1598c4dfb04d6c5efd394c524fecc2",
+      "worktree_raw_blob": "60a1d679ec1598c4dfb04d6c5efd394c524fecc2",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-dsp-internal.png",
+      "text_attribute": "unset",
+      "index_blob": "f8c9c7a732d15f7e876c6a85df62aa7a79311492",
+      "worktree_raw_blob": "f8c9c7a732d15f7e876c6a85df62aa7a79311492",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-dsp-internal.svg",
+      "text_attribute": "unset",
+      "index_blob": "4a8b88e754575357cee0181dae13d262c2758857",
+      "worktree_raw_blob": "4a8b88e754575357cee0181dae13d262c2758857",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-dsp-psram.png",
+      "text_attribute": "unset",
+      "index_blob": "9ae78d446324cf219c25c0a875b5d831cc9e7159",
+      "worktree_raw_blob": "9ae78d446324cf219c25c0a875b5d831cc9e7159",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-dsp-psram.svg",
+      "text_attribute": "unset",
+      "index_blob": "a0a20bf344b17e684a2bf57062afad17029f710f",
+      "worktree_raw_blob": "a0a20bf344b17e684a2bf57062afad17029f710f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-other-internal.png",
+      "text_attribute": "unset",
+      "index_blob": "7820c40031bfe3575000a7c8f6ea31362c74e038",
+      "worktree_raw_blob": "7820c40031bfe3575000a7c8f6ea31362c74e038",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-other-internal.svg",
+      "text_attribute": "unset",
+      "index_blob": "cbba0cf1ba9a0ae08717bb224e0c7c173a46368a",
+      "worktree_raw_blob": "cbba0cf1ba9a0ae08717bb224e0c7c173a46368a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-other-psram.png",
+      "text_attribute": "unset",
+      "index_blob": "57b6c34ff1fb8b73a09564364e324a4bcecba575",
+      "worktree_raw_blob": "57b6c34ff1fb8b73a09564364e324a4bcecba575",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/kernel-other-psram.svg",
+      "text_attribute": "unset",
+      "index_blob": "0cdd4347f3c5975a475d7f2962d83400b1e626cd",
+      "worktree_raw_blob": "0cdd4347f3c5975a475d7f2962d83400b1e626cd",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "87d95a4a5028d6bf2ba0d6a6737718c6a3f4f61a",
+      "worktree_raw_blob": "87d95a4a5028d6bf2ba0d6a6737718c6a3f4f61a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "worktree_raw_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "309d7d15a261e4098b180cea90cd5adad2d2077f",
+      "worktree_raw_blob": "309d7d15a261e4098b180cea90cd5adad2d2077f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-kernels/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "0cfef04cd9999e5531d8af96e2ba336a3c754e4f",
+      "worktree_raw_blob": "0cfef04cd9999e5531d8af96e2ba336a3c754e4f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/REPORT.md",
+      "text_attribute": "unset",
+      "index_blob": "fd914bfca87aa805313f99cc501badd5783108b6",
+      "worktree_raw_blob": "fd914bfca87aa805313f99cc501badd5783108b6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/figures/kernel-dsp-internal.png",
+      "text_attribute": "unset",
+      "index_blob": "de0e1fa6be90e81974357822a6ec8929691d33ad",
+      "worktree_raw_blob": "de0e1fa6be90e81974357822a6ec8929691d33ad",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/figures/kernel-dsp-internal.svg",
+      "text_attribute": "unset",
+      "index_blob": "c95c26697333e539e392702911207b0a230dbbc0",
+      "worktree_raw_blob": "c95c26697333e539e392702911207b0a230dbbc0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/figures/manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "7c33d2295fe111ac0e9f4400e5cb7fd50f666304",
+      "worktree_raw_blob": "7c33d2295fe111ac0e9f4400e5cb7fd50f666304",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/stress-samples.csv",
+      "text_attribute": "unset",
+      "index_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "worktree_raw_blob": "43f86224089f5143688424a3007e8acbd19d9139",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary-kernels.csv",
+      "text_attribute": "unset",
+      "index_blob": "64944ae1baa491d2a149f63742f16ea3784b3e99",
+      "worktree_raw_blob": "64944ae1baa491d2a149f63742f16ea3784b3e99",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary-metrics.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary-missing.csv",
+      "text_attribute": "unset",
+      "index_blob": "19ec1d1a7817e42663134413b2527428140cad4d",
+      "worktree_raw_blob": "19ec1d1a7817e42663134413b2527428140cad4d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary-scenes.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary-spi.csv",
+      "text_attribute": "unset",
+      "index_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "worktree_raw_blob": "bc419be7ef8e753e766f65186e2b337747ac0e1c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/campaign-s3-partial/summary.json",
+      "text_attribute": "unset",
+      "index_blob": "2c8718a0ce59487b23d2fadf7848a522c89a12b6",
+      "worktree_raw_blob": "2c8718a0ce59487b23d2fadf7848a522c89a12b6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/display-readbacks/gate-trails-full.png",
+      "text_attribute": "unset",
+      "index_blob": "7334144c95f692523382a425f68c294c75ba2459",
+      "worktree_raw_blob": "7334144c95f692523382a425f68c294c75ba2459",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/display-readbacks/plasma-kaleido-portrait.png",
+      "text_attribute": "unset",
+      "index_blob": "f77feecda209749d952b8f7e2ef9bf73d2483de0",
+      "worktree_raw_blob": "f77feecda209749d952b8f7e2ef9bf73d2483de0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/display-readbacks/trails-manual-fullscreen.png",
+      "text_attribute": "unset",
+      "index_blob": "3835aff54d9e71b84ec5dc54ed4e2809378839da",
+      "worktree_raw_blob": "3835aff54d9e71b84ec5dc54ed4e2809378839da",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/display-readbacks/trails-rgb444.png",
+      "text_attribute": "unset",
+      "index_blob": "5cce12777296bd06512d2f22a724439ecb7003b5",
+      "worktree_raw_blob": "5cce12777296bd06512d2f22a724439ecb7003b5",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "evidence/display-readbacks/trails-rgb565.png",
+      "text_attribute": "unset",
+      "index_blob": "e0882a86bdd6f96a50ba26753d16c536fac5c380",
+      "worktree_raw_blob": "e0882a86bdd6f96a50ba26753d16c536fac5c380",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/PCM-HEAP-DIAGNOSTICS.md",
+      "text_attribute": "unset",
+      "index_blob": "d657de79af2eada1436cbb520189c70efb8415ff",
+      "worktree_raw_blob": "d657de79af2eada1436cbb520189c70efb8415ff",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/.gitignore",
+      "text_attribute": "unset",
+      "index_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "worktree_raw_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "a8dcbc56a62519d301b9ec4364759a4eefaacb3a",
+      "worktree_raw_blob": "a8dcbc56a62519d301b9ec4364759a4eefaacb3a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/POWER-INIT-VALIDATION.json",
+      "text_attribute": "unset",
+      "index_blob": "0e2c817a8b3c12cdaa667b6c4611f18bf988b627",
+      "worktree_raw_blob": "0e2c817a8b3c12cdaa667b6c4611f18bf988b627",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/README.md",
+      "text_attribute": "unset",
+      "index_blob": "1ac1700e964e5aef4092a5a8e644762c9893913b",
+      "worktree_raw_blob": "1ac1700e964e5aef4092a5a8e644762c9893913b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/TEMPERATURE-VALIDATION.json",
+      "text_attribute": "unset",
+      "index_blob": "a408f239f5ae86eb6c5a9b2fb507686197a7381f",
+      "worktree_raw_blob": "a408f239f5ae86eb6c5a9b2fb507686197a7381f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/VALIDATION.json",
+      "text_attribute": "unset",
+      "index_blob": "38c5f4e030ff3a5f377630829333b8d8bba48f5c",
+      "worktree_raw_blob": "38c5f4e030ff3a5f377630829333b8d8bba48f5c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/build.ps1",
+      "text_attribute": "unset",
+      "index_blob": "4f4f73436ff87e45d98972b49107919fab79a1ba",
+      "worktree_raw_blob": "4f4f73436ff87e45d98972b49107919fab79a1ba",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "2d027008d56a30dd68124cd3dd10f29cb60ce142",
+      "worktree_raw_blob": "2d027008d56a30dd68124cd3dd10f29cb60ce142",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/main.c",
+      "text_attribute": "unset",
+      "index_blob": "0429d636ee78a008ae54012ca31f4df15d921ab7",
+      "worktree_raw_blob": "0429d636ee78a008ae54012ca31f4df15d921ab7",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/snapshot.c",
+      "text_attribute": "unset",
+      "index_blob": "4cef65bc5972170349d4df738fc086b65dcf313c",
+      "worktree_raw_blob": "4cef65bc5972170349d4df738fc086b65dcf313c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/snapshot.h",
+      "text_attribute": "unset",
+      "index_blob": "feca38eb77f82016994cff93731ee96a60dffcdc",
+      "worktree_raw_blob": "feca38eb77f82016994cff93731ee96a60dffcdc",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/source_identity.h.in",
+      "text_attribute": "unset",
+      "index_blob": "0870844e057ef44fa2f993c8f233cdb25adf5918",
+      "worktree_raw_blob": "0870844e057ef44fa2f993c8f233cdb25adf5918",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/main/sram_guard.ld",
+      "text_attribute": "unset",
+      "index_blob": "2866054ad1e26192588b73da9af7c416bb1f3c24",
+      "worktree_raw_blob": "2866054ad1e26192588b73da9af7c416bb1f3c24",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/partitions.csv",
+      "text_attribute": "unset",
+      "index_blob": "1cbbf086461f3f120bebb234b69c285f1ff79394",
+      "worktree_raw_blob": "1cbbf086461f3f120bebb234b69c285f1ff79394",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/sdkconfig.defaults",
+      "text_attribute": "unset",
+      "index_blob": "806629f83d3d47971a925b0c7bf85c641f0fd651",
+      "worktree_raw_blob": "806629f83d3d47971a925b0c7bf85c641f0fd651",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/test_init_host.py",
+      "text_attribute": "unset",
+      "index_blob": "4abff475fa838b2740fd357e3920179ca5568b33",
+      "worktree_raw_blob": "4abff475fa838b2740fd357e3920179ca5568b33",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/test_output_bounds.py",
+      "text_attribute": "unset",
+      "index_blob": "29c00d2aebb7d1810fed8156fcaa8cb76d8be448",
+      "worktree_raw_blob": "29c00d2aebb7d1810fed8156fcaa8cb76d8be448",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/test_snapshot_host.py",
+      "text_attribute": "unset",
+      "index_blob": "561e914294d749fd8bd89beabbbeca24d01889b0",
+      "worktree_raw_blob": "561e914294d749fd8bd89beabbbeca24d01889b0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/test_temperature_host.py",
+      "text_attribute": "unset",
+      "index_blob": "d385e800e3f2b5f3fccfeefda676d92ab3c66904",
+      "worktree_raw_blob": "d385e800e3f2b5f3fccfeefda676d92ab3c66904",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/LICENSE",
+      "text_attribute": "unset",
+      "index_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "worktree_raw_blob": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/PROVENANCE.json",
+      "text_attribute": "unset",
+      "index_blob": "73b7df11bcdfffde0e41c035360ddde9f5f189fa",
+      "worktree_raw_blob": "73b7df11bcdfffde0e41c035360ddde9f5f189fa",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_calibration_state.c",
+      "text_attribute": "unset",
+      "index_blob": "4c907facf026699d4be53276bc1e617b2426e926",
+      "worktree_raw_blob": "4c907facf026699d4be53276bc1e617b2426e926",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_gain_force.h",
+      "text_attribute": "unset",
+      "index_blob": "9be8730f8f33dd8d2f3e40d466d5967b2253a424",
+      "worktree_raw_blob": "9be8730f8f33dd8d2f3e40d466d5967b2253a424",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_gain_verify.c",
+      "text_attribute": "unset",
+      "index_blob": "99cd4c45a4c02a8e52d6c11c0f9e7c9fdbfd1d15",
+      "worktree_raw_blob": "99cd4c45a4c02a8e52d6c11c0f9e7c9fdbfd1d15",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_lo.h",
+      "text_attribute": "unset",
+      "index_blob": "01247d8705bb0edf723c74439875967c5416e785",
+      "worktree_raw_blob": "01247d8705bb0edf723c74439875967c5416e785",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_recalibration.c",
+      "text_attribute": "unset",
+      "index_blob": "5704d17c1cea3ae025535d6346e8b0578215f811",
+      "worktree_raw_blob": "5704d17c1cea3ae025535d6346e8b0578215f811",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/rx/vendor/esp-sdr/rx_recalibration.h",
+      "text_attribute": "unset",
+      "index_blob": "2b080c33a3e8da4d08f0e9859acbb861edec3a3f",
+      "worktree_raw_blob": "2b080c33a3e8da4d08f0e9859acbb861edec3a3f",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/test_tx_lifecycle.py",
+      "text_attribute": "unset",
+      "index_blob": "0338ba6aa1e8db2c74f5f6031de27b17c4d8c73d",
+      "worktree_raw_blob": "0338ba6aa1e8db2c74f5f6031de27b17c4d8c73d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/.gitignore",
+      "text_attribute": "unset",
+      "index_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "worktree_raw_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "38f113acadbb7a32c28b03b0a2a1c87722c24358",
+      "worktree_raw_blob": "38f113acadbb7a32c28b03b0a2a1c87722c24358",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/README.md",
+      "text_attribute": "unset",
+      "index_blob": "5d974d719969fe79e22ea9a2a040fa4a6a8f5c9e",
+      "worktree_raw_blob": "5d974d719969fe79e22ea9a2a040fa4a6a8f5c9e",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/build.ps1",
+      "text_attribute": "unset",
+      "index_blob": "6f01ac28421ec9cdc4673cd5550a3e8266897142",
+      "worktree_raw_blob": "6f01ac28421ec9cdc4673cd5550a3e8266897142",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/main/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "0b80c2a5a506da405a0932c126bf699468c6c1f6",
+      "worktree_raw_blob": "0b80c2a5a506da405a0932c126bf699468c6c1f6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/main/metal_words.h",
+      "text_attribute": "unset",
+      "index_blob": "5f343c18ae8f291d332370e7e68f5f9dcc6d2530",
+      "worktree_raw_blob": "5f343c18ae8f291d332370e7e68f5f9dcc6d2530",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/main/tx_metal_s3.c",
+      "text_attribute": "unset",
+      "index_blob": "25ef60981b8f11033e0eb48d2adee79f5e0c2322",
+      "worktree_raw_blob": "25ef60981b8f11033e0eb48d2adee79f5e0c2322",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/partitions.csv",
+      "text_attribute": "unset",
+      "index_blob": "4e1b1984e7593f1554225545a6a7e50333d86a76",
+      "worktree_raw_blob": "4e1b1984e7593f1554225545a6a7e50333d86a76",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/receipt.py",
+      "text_attribute": "unset",
+      "index_blob": "9e2da62d77832764bcf4cdb38adf951c7d48930d",
+      "worktree_raw_blob": "9e2da62d77832764bcf4cdb38adf951c7d48930d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/sdkconfig.defaults",
+      "text_attribute": "unset",
+      "index_blob": "2c76c2995f379d458f4a78ff476b3ccca5cedbd1",
+      "worktree_raw_blob": "2c76c2995f379d458f4a78ff476b3ccca5cedbd1",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx-s3/test_words.c",
+      "text_attribute": "unset",
+      "index_blob": "844d991ad9b9e752f91e3ecd24c5b0fd9c4696dc",
+      "worktree_raw_blob": "844d991ad9b9e752f91e3ecd24c5b0fd9c4696dc",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/.gitignore",
+      "text_attribute": "unset",
+      "index_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "worktree_raw_blob": "a90ab6f1e57d5a9fe3aaea9fd04d8ffa937b11c3",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "e1e30a1324472c6d48ea0b85d7d1fe0171ecfbb6",
+      "worktree_raw_blob": "e1e30a1324472c6d48ea0b85d7d1fe0171ecfbb6",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/README.md",
+      "text_attribute": "unset",
+      "index_blob": "73ab18481f6e9cd553c443b53f5b5db6d4fb66e0",
+      "worktree_raw_blob": "73ab18481f6e9cd553c443b53f5b5db6d4fb66e0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/build.ps1",
+      "text_attribute": "unset",
+      "index_blob": "31c323c930babed4642e1f76586600a5946f1d9b",
+      "worktree_raw_blob": "31c323c930babed4642e1f76586600a5946f1d9b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/main/CMakeLists.txt",
+      "text_attribute": "unset",
+      "index_blob": "328ccb83a842109b230133214e4ccaa996758d5d",
+      "worktree_raw_blob": "328ccb83a842109b230133214e4ccaa996758d5d",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/main/metal_words.h",
+      "text_attribute": "unset",
+      "index_blob": "22e3814967ea864f28b4153461f6a36d586e6031",
+      "worktree_raw_blob": "22e3814967ea864f28b4153461f6a36d586e6031",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/main/tx_metal.c",
+      "text_attribute": "unset",
+      "index_blob": "ef3d7a81a1ffd4c418660c3e3d6e82c2c73e3681",
+      "worktree_raw_blob": "ef3d7a81a1ffd4c418660c3e3d6e82c2c73e3681",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/partitions.csv",
+      "text_attribute": "unset",
+      "index_blob": "d5e82c5b6b2659cd805fb6cbc403305d934cbd5b",
+      "worktree_raw_blob": "d5e82c5b6b2659cd805fb6cbc403305d934cbd5b",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/receipt.py",
+      "text_attribute": "unset",
+      "index_blob": "149a6acf59ae53595b4af6fd1c9bc270ada0d70a",
+      "worktree_raw_blob": "149a6acf59ae53595b4af6fd1c9bc270ada0d70a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/sdkconfig.defaults",
+      "text_attribute": "unset",
+      "index_blob": "2ddb709e975ecd0af0823f18e85d20976ce18501",
+      "worktree_raw_blob": "2ddb709e975ecd0af0823f18e85d20976ce18501",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr-metal/tx/test_words.c",
+      "text_attribute": "unset",
+      "index_blob": "844d991ad9b9e752f91e3ecd24c5b0fd9c4696dc",
+      "worktree_raw_blob": "844d991ad9b9e752f91e3ecd24c5b0fd9c4696dc",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/PROTOCOL.md",
+      "text_attribute": "unset",
+      "index_blob": "13fcf450b942994dec85aac1ba5e7e8ab8ed6dcc",
+      "worktree_raw_blob": "13fcf450b942994dec85aac1ba5e7e8ab8ed6dcc",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-emit-metal-validation.json",
+      "text_attribute": "unset",
+      "index_blob": "0b9c792b360519881ca6416d3f5309df9aba6135",
+      "worktree_raw_blob": "0b9c792b360519881ca6416d3f5309df9aba6135",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-regression-low-sps.json",
+      "text_attribute": "unset",
+      "index_blob": "b448bdf1ad8bf1288ab0be9e8bc2b86f5e304650",
+      "worktree_raw_blob": "b448bdf1ad8bf1288ab0be9e8bc2b86f5e304650",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-regression-metal.json",
+      "text_attribute": "unset",
+      "index_blob": "68d5af54e7347568d69e7578a9616b96847c43c0",
+      "worktree_raw_blob": "68d5af54e7347568d69e7578a9616b96847c43c0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-validation-low-sps.json",
+      "text_attribute": "unset",
+      "index_blob": "d221ad7957e4e27bc877693dc184fa6fa1d10d6c",
+      "worktree_raw_blob": "d221ad7957e4e27bc877693dc184fa6fa1d10d6c",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-validation-metal.json",
+      "text_attribute": "unset",
+      "index_blob": "bee9d013c328e3da54851b570e8a6e779765cc12",
+      "worktree_raw_blob": "bee9d013c328e3da54851b570e8a6e779765cc12",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/host-validation.json",
+      "text_attribute": "unset",
+      "index_blob": "83e8cce70925ab8ff156ebb326e19f5cff021219",
+      "worktree_raw_blob": "83e8cce70925ab8ff156ebb326e19f5cff021219",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/protocol-manifest-low-sps.json",
+      "text_attribute": "unset",
+      "index_blob": "19eced0d211cf44d732a0f8c8b0653fb71b8d444",
+      "worktree_raw_blob": "19eced0d211cf44d732a0f8c8b0653fb71b8d444",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/protocol-manifest-metal.json",
+      "text_attribute": "unset",
+      "index_blob": "cc5574f9ef83b155b8fa4631fad6ad6c3a165101",
+      "worktree_raw_blob": "cc5574f9ef83b155b8fa4631fad6ad6c3a165101",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/protocol-manifest.json",
+      "text_attribute": "unset",
+      "index_blob": "380fe97f052302cb16a611b89e19bced28cb08e0",
+      "worktree_raw_blob": "380fe97f052302cb16a611b89e19bced28cb08e0",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/protocol.cpp",
+      "text_attribute": "unset",
+      "index_blob": "37c2838ec0fae5bc6b3890a80ed271b2c2a5f8d9",
+      "worktree_raw_blob": "37c2838ec0fae5bc6b3890a80ed271b2c2a5f8d9",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/protocol.h",
+      "text_attribute": "unset",
+      "index_blob": "82fc21c67bc8e557dd36fd6afb7d1076d96735db",
+      "worktree_raw_blob": "82fc21c67bc8e557dd36fd6afb7d1076d96735db",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/test_emit_cli.py",
+      "text_attribute": "unset",
+      "index_blob": "117328b99dff3a40de56e7834fc0b0221be37e0a",
+      "worktree_raw_blob": "117328b99dff3a40de56e7834fc0b0221be37e0a",
+      "index_matches_worktree": true
+    },
+    {
+      "path": "experiments/sdr/test_protocol.cpp",
+      "text_attribute": "unset",
+      "index_blob": "59c34840b56562a844caff0c10a5fb055e1426d8",
+      "worktree_raw_blob": "59c34840b56562a844caff0c10a5fb055e1426d8",
+      "index_matches_worktree": true
+    }
+  ],
+  "untracked_hashed_files_pending_staging": [
+    "evidence/PHYSICAL-CAPTURES-COLOR.zip",
+    "evidence/audio-bidirectional-deferred-analysis/AUDIO-REPORT.md",
+    "evidence/audio-bidirectional-deferred-analysis/audio-summary.csv",
+    "evidence/audio-bidirectional-deferred-analysis/audio-summary.json",
+    "evidence/audio-deferred-fresh-analysis/AUDIO-REPORT.md",
+    "evidence/audio-deferred-fresh-analysis/audio-summary.csv",
+    "evidence/audio-deferred-fresh-analysis/audio-summary.json",
+    "evidence/audio-offline-osr16/01-clean-0/comparison.wav",
+    "evidence/audio-offline-osr16/01-clean-0/reconstructed.wav",
+    "evidence/audio-offline-osr16/01-clean-0/reference.wav",
+    "evidence/audio-offline-osr16/02-flip-1000/comparison.wav",
+    "evidence/audio-offline-osr16/02-flip-1000/reconstructed.wav",
+    "evidence/audio-offline-osr16/02-flip-1000/reference.wav",
+    "evidence/audio-offline-osr16/03-burst-128/comparison.wav",
+    "evidence/audio-offline-osr16/03-burst-128/reconstructed.wav",
+    "evidence/audio-offline-osr16/03-burst-128/reference.wav",
+    "evidence/audio-offline-osr16/04-stuck-128/comparison.wav",
+    "evidence/audio-offline-osr16/04-stuck-128/reconstructed.wav",
+    "evidence/audio-offline-osr16/04-stuck-128/reference.wav",
+    "evidence/audio-offline-osr16/05-erase-128/comparison.wav",
+    "evidence/audio-offline-osr16/05-erase-128/reconstructed.wav",
+    "evidence/audio-offline-osr16/05-erase-128/reference.wav",
+    "evidence/audio-offline-osr32/01-clean-0/comparison.wav",
+    "evidence/audio-offline-osr32/01-clean-0/reconstructed.wav",
+    "evidence/audio-offline-osr32/01-clean-0/reference.wav",
+    "evidence/audio-offline-osr32/02-flip-1000/comparison.wav",
+    "evidence/audio-offline-osr32/02-flip-1000/reconstructed.wav",
+    "evidence/audio-offline-osr32/02-flip-1000/reference.wav",
+    "evidence/audio-offline-osr32/03-burst-128/comparison.wav",
+    "evidence/audio-offline-osr32/03-burst-128/reconstructed.wav",
+    "evidence/audio-offline-osr32/03-burst-128/reference.wav",
+    "evidence/audio-offline-osr32/04-stuck-128/comparison.wav",
+    "evidence/audio-offline-osr32/04-stuck-128/reconstructed.wav",
+    "evidence/audio-offline-osr32/04-stuck-128/reference.wav",
+    "evidence/audio-offline-osr32/05-erase-128/comparison.wav",
+    "evidence/audio-offline-osr32/05-erase-128/reconstructed.wav",
+    "evidence/audio-offline-osr32/05-erase-128/reference.wav",
+    "evidence/audio-s3-pair-02-analysis/AUDIO-REPORT.md",
+    "evidence/audio-s3-pair-02-analysis/audio-summary.csv",
+    "evidence/audio-s3-pair-02-analysis/audio-summary.json",
+    "evidence/audio-s3-pair-deferred-analysis/AUDIO-REPORT.md",
+    "evidence/audio-s3-pair-deferred-analysis/audio-summary.csv",
+    "evidence/audio-s3-pair-deferred-analysis/audio-summary.json",
+    "evidence/campaign-color/REPORT.md",
+    "evidence/campaign-color/figures/fps-scenes.png",
+    "evidence/campaign-color/figures/fps-scenes.svg",
+    "evidence/campaign-color/figures/manifest.json",
+    "evidence/campaign-color/stress-samples.csv",
+    "evidence/campaign-color/summary-kernels.csv",
+    "evidence/campaign-color/summary-metrics.csv",
+    "evidence/campaign-color/summary-missing.csv",
+    "evidence/campaign-color/summary-scenes.csv",
+    "evidence/campaign-color/summary-spi.csv",
+    "evidence/campaign-color/summary.json",
+    "evidence/pcm-temperature/PCM-TEMPERATURE-SAMPLES.csv",
+    "evidence/pcm-temperature/PCM-TEMPERATURE-SUMMARY.csv",
+    "evidence/plan-sdr-framed.json",
+    "evidence/sdr-framed-23k-analysis/decoded-summary.csv",
+    "evidence/sdr-framed-23k-analysis/results.json",
+    "evidence/sdr-framed-23k-analysis/rf-quality.csv",
+    "evidence/sdr-framed-23k-analysis/s001_1/core-stderr.log",
+    "evidence/sdr-framed-23k-analysis/s001_1/core-stdout.json",
+    "evidence/sdr-framed-23k-analysis/s001_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-23k-analysis/s001_1/decoded.pcm16le",
+    "evidence/sdr-framed-23k-analysis/s001_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-23k-analysis/s001_1/frames.jsonl",
+    "evidence/sdr-framed-23k-analysis/s001_1/reference-received-domain.wav",
+    "evidence/sdr-framed-23k-analysis/s002_2/core-stderr.log",
+    "evidence/sdr-framed-23k-analysis/s002_2/core-stdout.json",
+    "evidence/sdr-framed-23k-analysis/s002_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-23k-analysis/s002_2/decoded.pcm16le",
+    "evidence/sdr-framed-23k-analysis/s002_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-23k-analysis/s002_2/frames.jsonl",
+    "evidence/sdr-framed-23k-analysis/s002_2/reference-received-domain.wav",
+    "evidence/sdr-framed-23k-analysis/s003_3/core-stderr.log",
+    "evidence/sdr-framed-23k-analysis/s003_3/core-stdout.json",
+    "evidence/sdr-framed-23k-analysis/s003_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-23k-analysis/s003_3/decoded.pcm16le",
+    "evidence/sdr-framed-23k-analysis/s003_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-23k-analysis/s003_3/frames.jsonl",
+    "evidence/sdr-framed-23k-analysis/s003_3/reference-received-domain.wav",
+    "evidence/sdr-framed-four-analysis/decoded-summary.csv",
+    "evidence/sdr-framed-four-analysis/results.json",
+    "evidence/sdr-framed-four-analysis/rf-quality.csv",
+    "evidence/sdr-framed-four-analysis/s001_1/core-stderr.log",
+    "evidence/sdr-framed-four-analysis/s001_1/core-stdout.json",
+    "evidence/sdr-framed-four-analysis/s001_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-four-analysis/s001_1/decoded.pcm16le",
+    "evidence/sdr-framed-four-analysis/s001_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-four-analysis/s001_1/frames.jsonl",
+    "evidence/sdr-framed-four-analysis/s001_1/reference-received-domain.wav",
+    "evidence/sdr-framed-four-analysis/s002_2/core-stderr.log",
+    "evidence/sdr-framed-four-analysis/s002_2/core-stdout.json",
+    "evidence/sdr-framed-four-analysis/s002_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-four-analysis/s002_2/decoded.pcm16le",
+    "evidence/sdr-framed-four-analysis/s002_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-four-analysis/s002_2/frames.jsonl",
+    "evidence/sdr-framed-four-analysis/s002_2/reference-received-domain.wav",
+    "evidence/sdr-framed-four-analysis/s003_3/core-stderr.log",
+    "evidence/sdr-framed-four-analysis/s003_3/core-stdout.json",
+    "evidence/sdr-framed-four-analysis/s003_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-four-analysis/s003_3/decoded.pcm16le",
+    "evidence/sdr-framed-four-analysis/s003_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-four-analysis/s003_3/frames.jsonl",
+    "evidence/sdr-framed-four-analysis/s003_3/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/decoded-summary.csv",
+    "evidence/sdr-framed-low-analysis-v2/results.json",
+    "evidence/sdr-framed-low-analysis-v2/rf-quality.csv",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s001_1/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s002_2/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s003_3/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s004_1/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s005_2/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s006_3/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis-v2/s007_1/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/decoded-summary.csv",
+    "evidence/sdr-framed-low-analysis/results.json",
+    "evidence/sdr-framed-low-analysis/rf-quality.csv",
+    "evidence/sdr-framed-low-analysis/s001_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s001_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s001_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s001_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s001_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s001_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s001_1/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s002_2/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s002_2/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s002_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s002_2/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s002_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s002_2/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s002_2/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s003_3/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s003_3/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s003_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s003_3/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s003_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s003_3/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s003_3/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s004_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s004_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s004_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s004_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s004_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s004_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s004_1/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s005_2/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s005_2/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s005_2/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s005_2/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s005_2/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s005_2/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s005_2/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s006_3/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s006_3/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s006_3/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s006_3/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s006_3/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s006_3/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s006_3/reference-received-domain.wav",
+    "evidence/sdr-framed-low-analysis/s007_1/core-stderr.log",
+    "evidence/sdr-framed-low-analysis/s007_1/core-stdout.json",
+    "evidence/sdr-framed-low-analysis/s007_1/decoded-received-concatenated.wav",
+    "evidence/sdr-framed-low-analysis/s007_1/decoded.pcm16le",
+    "evidence/sdr-framed-low-analysis/s007_1/frames-annotated.jsonl",
+    "evidence/sdr-framed-low-analysis/s007_1/frames.jsonl",
+    "evidence/sdr-framed-low-analysis/s007_1/reference-received-domain.wav",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/boxcar-digital-only.wav",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/core-stderr.log",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/core-stdout.json",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/reference.wav",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/stimulus-boxcar.pcm",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/stimulus-reference.pcm",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/stimulus-symbols.bits",
+    "evidence/sdr-framed-stimuli/1000Hz-1ch-osr4/stimulus.json",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/boxcar-digital-only.wav",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/core-stderr.log",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/core-stdout.json",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/reference.wav",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/stimulus-boxcar.pcm",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/stimulus-reference.pcm",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/stimulus-symbols.bits",
+    "evidence/sdr-framed-stimuli/1000Hz-2ch-osr4/stimulus.json",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/boxcar-digital-only.wav",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/core-stderr.log",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/core-stdout.json",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/reference.wav",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/stimulus-boxcar.pcm",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/stimulus-reference.pcm",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/stimulus-symbols.bits",
+    "evidence/sdr-framed-stimuli/2000Hz-2ch-osr4/stimulus.json",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/boxcar-digital-only.wav",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/core-stderr.log",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/core-stdout.json",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/reference.wav",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-boxcar.pcm",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-reference.pcm",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-symbols.bits",
+    "evidence/sdr-framed-stimuli/500Hz-4ch-osr4/stimulus.json",
+    "evidence/sdr-framed-stimuli/stimuli.json",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr32-boxcar.pcm",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr32-reference.pcm",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr32-symbols.bits",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr4-boxcar.pcm",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr4-reference.pcm",
+    "evidence/sdr-metal-stimuli/24000-2ch-osr4-symbols.bits",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr4-boxcar.pcm",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr4-reference.pcm",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr4-symbols.bits",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr8-boxcar.pcm",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr8-reference.pcm",
+    "evidence/sdr-metal-stimuli/48000-2ch-osr8-symbols.bits",
+    "evidence/sdr-metal-stimuli/48000-4ch-osr8-boxcar.pcm",
+    "evidence/sdr-metal-stimuli/48000-4ch-osr8-reference.pcm",
+    "evidence/sdr-metal-stimuli/48000-4ch-osr8-symbols.bits",
+    "evidence/sdr-signals-calibration-01/results.json",
+    "evidence/sdr-signals-calibration-01/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-calibration-01/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-calibration-01/s001_1/windows.csv",
+    "evidence/sdr-signals-calibration-01/s002_1/folded-envelope.csv",
+    "evidence/sdr-signals-calibration-01/s002_1/frequency-scan.csv",
+    "evidence/sdr-signals-calibration-01/s002_1/windows.csv",
+    "evidence/sdr-signals-calibration-01/s003_1/folded-envelope.csv",
+    "evidence/sdr-signals-calibration-01/s003_1/frequency-scan.csv",
+    "evidence/sdr-signals-calibration-01/s003_1/windows.csv",
+    "evidence/sdr-signals-calibration-01/signal-summary.csv",
+    "evidence/sdr-signals-offset-minus80/results.json",
+    "evidence/sdr-signals-offset-minus80/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-offset-minus80/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-offset-minus80/s001_1/windows.csv",
+    "evidence/sdr-signals-offset-minus80/signal-summary.csv",
+    "evidence/sdr-signals-offset-plus80/results.json",
+    "evidence/sdr-signals-offset-plus80/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-offset-plus80/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-offset-plus80/s001_1/windows.csv",
+    "evidence/sdr-signals-offset-plus80/signal-summary.csv",
+    "evidence/sdr-signals-ram-125k-01/results.json",
+    "evidence/sdr-signals-ram-125k-01/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-125k-01/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-125k-01/s001_1/windows.csv",
+    "evidence/sdr-signals-ram-125k-01/s002_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-125k-01/s002_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-125k-01/s002_1/windows.csv",
+    "evidence/sdr-signals-ram-125k-01/s003_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-125k-01/s003_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-125k-01/s003_1/windows.csv",
+    "evidence/sdr-signals-ram-125k-01/s004_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-125k-01/s004_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-125k-01/s004_1/windows.csv",
+    "evidence/sdr-signals-ram-125k-01/signal-summary.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/results.json",
+    "evidence/sdr-signals-ram-250k-v2-01/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s001_1/windows.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s002_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s002_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s002_1/windows.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s003_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s003_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s003_1/windows.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s004_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s004_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/s004_1/windows.csv",
+    "evidence/sdr-signals-ram-250k-v2-01/signal-summary.csv",
+    "evidence/sdr-signals-ram-centered-01/results.json",
+    "evidence/sdr-signals-ram-centered-01/s001_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-centered-01/s001_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-centered-01/s001_1/windows.csv",
+    "evidence/sdr-signals-ram-centered-01/s002_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-centered-01/s002_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-centered-01/s002_1/windows.csv",
+    "evidence/sdr-signals-ram-centered-01/s003_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-centered-01/s003_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-centered-01/s003_1/windows.csv",
+    "evidence/sdr-signals-ram-centered-01/s004_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-centered-01/s004_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-centered-01/s004_1/windows.csv",
+    "evidence/sdr-signals-ram-centered-01/s005_1/folded-envelope.csv",
+    "evidence/sdr-signals-ram-centered-01/s005_1/frequency-scan.csv",
+    "evidence/sdr-signals-ram-centered-01/s005_1/windows.csv",
+    "evidence/sdr-signals-ram-centered-01/signal-summary.csv"
+  ],
+  "ignored_local_raw_or_historical_staging_files": [
+    "evidence/physical/audio-bidirectional-deferred-01/results.json",
+    "evidence/physical/audio-deferred-fresh-01/results.json",
+    "evidence/physical/audio-s3-pair-02/results.json",
+    "evidence/physical/audio-s3-pair-deferred-01/results.json",
+    "evidence/physical/ble-init-link-01/results.json",
+    "evidence/physical/color-quick-01/results.json",
+    "evidence/physical/continuation-01/figures/audio-tails.png",
+    "evidence/physical/continuation-01/figures/audio-tails.svg",
+    "evidence/physical/continuation-01/figures/fps-radio.png",
+    "evidence/physical/continuation-01/figures/fps-radio.svg",
+    "evidence/physical/continuation-01/figures/fps-scenes.png",
+    "evidence/physical/continuation-01/figures/fps-scenes.svg",
+    "evidence/physical/continuation-01/figures/manifest.json",
+    "evidence/physical/continuation-01/figures/stress-temperature.png",
+    "evidence/physical/continuation-01/figures/stress-temperature.svg",
+    "evidence/physical/continuation-01/results.json",
+    "evidence/physical/continuation-01/summary-kernels.csv",
+    "evidence/physical/continuation-01/summary-metrics.csv",
+    "evidence/physical/continuation-01/summary-missing.csv",
+    "evidence/physical/continuation-01/summary-scenes.csv",
+    "evidence/physical/continuation-01/summary-spi.csv",
+    "evidence/physical/continuation-01/summary.json",
+    "evidence/physical/cyd-kernels-fresh-01/figures/kernel-dsp-internal-inferred.png",
+    "evidence/physical/cyd-kernels-fresh-01/figures/kernel-dsp-internal-inferred.svg",
+    "evidence/physical/cyd-kernels-fresh-01/figures/kernel-other-internal-inferred.png",
+    "evidence/physical/cyd-kernels-fresh-01/figures/kernel-other-internal-inferred.svg",
+    "evidence/physical/cyd-kernels-fresh-01/figures/manifest.json",
+    "evidence/physical/cyd-kernels-fresh-01/results.json",
+    "evidence/physical/cyd-kernels-fresh-01/summary-kernels.csv",
+    "evidence/physical/cyd-kernels-fresh-01/summary-metrics.csv",
+    "evidence/physical/cyd-kernels-fresh-01/summary-missing.csv",
+    "evidence/physical/cyd-kernels-fresh-01/summary-scenes.csv",
+    "evidence/physical/cyd-kernels-fresh-01/summary-spi.csv",
+    "evidence/physical/cyd-kernels-fresh-01/summary.json",
+    "evidence/physical/events-link-01/figures/audio-tails.png",
+    "evidence/physical/events-link-01/figures/audio-tails.svg",
+    "evidence/physical/events-link-01/figures/fps-audio.png",
+    "evidence/physical/events-link-01/figures/fps-audio.svg",
+    "evidence/physical/events-link-01/figures/fps-radio.png",
+    "evidence/physical/events-link-01/figures/fps-radio.svg",
+    "evidence/physical/events-link-01/figures/fps-scenes.png",
+    "evidence/physical/events-link-01/figures/fps-scenes.svg",
+    "evidence/physical/events-link-01/figures/manifest.json",
+    "evidence/physical/events-link-01/figures/stress-temperature.png",
+    "evidence/physical/events-link-01/figures/stress-temperature.svg",
+    "evidence/physical/events-link-01/results.json",
+    "evidence/physical/events-link-01/summary.json",
+    "evidence/physical/full-01/figures/audio-tails.png",
+    "evidence/physical/full-01/figures/audio-tails.svg",
+    "evidence/physical/full-01/figures/fps-audio.png",
+    "evidence/physical/full-01/figures/fps-audio.svg",
+    "evidence/physical/full-01/figures/fps-radio.png",
+    "evidence/physical/full-01/figures/fps-radio.svg",
+    "evidence/physical/full-01/figures/fps-scenes-1.png",
+    "evidence/physical/full-01/figures/fps-scenes-1.svg",
+    "evidence/physical/full-01/figures/fps-scenes-2.png",
+    "evidence/physical/full-01/figures/fps-scenes-2.svg",
+    "evidence/physical/full-01/figures/fps-scenes-3.png",
+    "evidence/physical/full-01/figures/fps-scenes-3.svg",
+    "evidence/physical/full-01/figures/manifest.json",
+    "evidence/physical/full-01/results.json",
+    "evidence/physical/full-01/summary-kernels.csv",
+    "evidence/physical/full-01/summary-metrics.csv",
+    "evidence/physical/full-01/summary-missing.csv",
+    "evidence/physical/full-01/summary-scenes.csv",
+    "evidence/physical/full-01/summary-spi.csv",
+    "evidence/physical/full-01/summary.json",
+    "evidence/physical/link-fresh-ap-01/results.json",
+    "evidence/physical/link-wifi-02/results.json",
+    "evidence/physical/link-wifi-retry-01/results.json",
+    "evidence/physical/preflight-01/results.json",
+    "evidence/physical/readback-scenes/gate-trails-full/display.rgb565le",
+    "evidence/physical/readback-scenes/plasma-kaleido-portrait/display.rgb565le",
+    "evidence/physical/readback-scenes/trails-manual-fullscreen/display.rgb565le",
+    "evidence/physical/readback-scenes/trails-rgb444/display.rgb565le",
+    "evidence/physical/readback-scenes/trails-rgb565/display.rgb565le",
+    "evidence/physical/s3-kernels-01/figures/kernel-dsp-internal.png",
+    "evidence/physical/s3-kernels-01/figures/kernel-dsp-internal.svg",
+    "evidence/physical/s3-kernels-01/figures/manifest.json",
+    "evidence/physical/s3-kernels-01/results.json",
+    "evidence/physical/s3-kernels-01/summary-kernels.csv",
+    "evidence/physical/s3-kernels-01/summary-metrics.csv",
+    "evidence/physical/s3-kernels-01/summary-missing.csv",
+    "evidence/physical/s3-kernels-01/summary-scenes.csv",
+    "evidence/physical/s3-kernels-01/summary-spi.csv",
+    "evidence/physical/s3-kernels-01/summary.json",
+    "evidence/physical/s3-kernels-link-02/results.json",
+    "evidence/physical/s3-kernels-link-03/results.json",
+    "evidence/physical/sdr-framed-23k-01/artifact-hashes.json",
+    "evidence/physical/sdr-framed-23k-01/results.json",
+    "evidence/physical/sdr-framed-centered-low-01/artifact-hashes.json",
+    "evidence/physical/sdr-framed-centered-low-01/results.json",
+    "evidence/physical/sdr-framed-four-retry-02/artifact-hashes.json",
+    "evidence/physical/sdr-framed-four-retry-02/results.json"
+  ],
+  "failures": [],
+  "warnings": [],
+  "broken_markdown_links": [
+    {
+      "source": "evidence/campaign-link-ble/LINK-REPORT.md",
+      "target": "link-analysis-manifest.json",
+      "status": "missing"
+    },
+    {
+      "source": "evidence/campaign-link-fresh-ap/LINK-REPORT.md",
+      "target": "link-analysis-manifest.json",
+      "status": "missing"
+    },
+    {
+      "source": "evidence/campaign-link-wifi-02/LINK-REPORT.md",
+      "target": "link-analysis-manifest.json",
+      "status": "missing"
+    },
+    {
+      "source": "evidence/campaign-link-wifi-retry/LINK-REPORT.md",
+      "target": "link-analysis-manifest.json",
+      "status": "missing"
+    }
+  ],
+  "markdown_scope": {
+    "outside_checkout_targets": [],
+    "anchors_checked": false
+  },
+  "changed_during_audit": [],
+  "arrived_after_inventory": {
+    "archives": [],
+    "manifests": []
+  }
+}

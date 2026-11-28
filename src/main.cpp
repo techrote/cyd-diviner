@@ -4,6 +4,10 @@
 #include "rite.h"
 #include "uisfx.h"
 #include "theme.h"
+#include "perf_profile.h"
+#ifdef GRIM_PERF_COLOR
+#include "perf_color.h"
+#endif
 #include <algorithm>
 #include <math.h>
 #include <stdio.h>
@@ -43,6 +47,10 @@ Mode mode = SPLASH;
 int sel = 0;
 float slide = 0; // animated carousel position, eases toward sel
 const Rite *active = nullptr;
+#ifdef GRIM_PERF
+const Rite *perfAudioRite = nullptr;
+uint32_t perfSeed = 0x5A17;
+#endif
 uint32_t t0 = 0, selAt = 0;
 #ifndef GRIM_CYD
 uint32_t volShownAt = 0, escArmedAt = 0;
@@ -283,7 +291,7 @@ void open(const Rite *rite) {
 #endif
     if (active->enter) active->enter();
 #ifdef GRIM_CYD_DIAGNOSTICS
-    Serial.printf("Diviner rite %s heap=%u\n", active->name, ESP.getFreeHeap());
+    if (perf_profile::quiet()) Serial.printf("Diviner rite %s heap=%u\n", active->name, ESP.getFreeHeap());
 #endif
 }
 void close() {
@@ -291,6 +299,10 @@ void close() {
     // makes cleanup ordering explicit and prevents one final callback from
     // touching resources while a leave hook is releasing them.
     hal::setAudio(nullptr);
+#ifdef GRIM_PERF
+    if (perfAudioRite && perfAudioRite->leave) perfAudioRite->leave();
+    perfAudioRite = nullptr;
+#endif
     if (active && active->leave) active->leave();
     uisfx::trigger(uisfx::BACK);
 #ifdef GRIM_CYD
@@ -304,7 +316,7 @@ void close() {
     if (returnToSettings) cyd_controls::openCarouselSettings();
 #endif
 #ifdef GRIM_CYD_DIAGNOSTICS
-    Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
+    if (perf_profile::quiet()) Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
 #endif
 }
 
@@ -315,7 +327,7 @@ void finishSplash(uint32_t now) {
     cyd_controls::setRite(nullptr);
 #endif
 #ifdef GRIM_CYD_DIAGNOSTICS
-    Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
+    if (perf_profile::quiet()) Serial.printf("Diviner menu heap=%u\n", ESP.getFreeHeap());
 #endif
 }
 
@@ -332,6 +344,60 @@ bool volumeKey(const hal::Key &k) {
 }
 } // namespace
 
+#ifdef GRIM_PERF
+uint32_t perf_profile::seed() { return perfSeed; }
+bool perfConfigureVision(unsigned effect, bool layered, unsigned format, uint32_t seed);
+#ifdef GRIM_PERF_COLOR
+bool perfConfigureColor(const char *format);
+#endif
+bool grimPerfCommand(const char *line) {
+    char scene[24]; unsigned value, effect, layered, fullscreen, format;
+#ifdef GRIM_PERF_COLOR
+    char colour[20];
+    if (sscanf(line, "perf color %19s", colour) == 1) {
+        if (perf_profile::running()) return false;
+        if (!strcmp(colour, "info")) { perf_color::report(); return true; }
+        return active == &RITE_VISIONS && perfConfigureColor(colour);
+    }
+#endif
+    if (sscanf(line, "perf scene %23s", scene) == 1) {
+        const Rite *rite = nullptr;
+        if (!strcmp(scene, "visions")) rite = &RITE_VISIONS;
+        else if (!strcmp(scene, "drone")) rite = &RITE_DRONE;
+        else if (!strcmp(scene, "seq")) rite = &RITE_SEQ;
+        else if (!strcmp(scene, "beat")) rite = &RITE_BEAT;
+        else if (strcmp(scene, "menu")) return false;
+        if (active || perfAudioRite) close();
+        else finishSplash(hal::ms());
+        srand(perfSeed); motesInit();
+        if (rite) open(rite);
+        return true;
+    }
+    if (sscanf(line, "perf combined %23s", scene) == 1 && active == &RITE_VISIONS) {
+        const Rite *rite = !strcmp(scene, "drone") ? &RITE_DRONE : !strcmp(scene, "seq") ? &RITE_SEQ : !strcmp(scene, "beat") ? &RITE_BEAT : nullptr;
+        if (!rite) return false;
+        hal::setAudio(nullptr);
+        if (perfAudioRite && perfAudioRite->leave) perfAudioRite->leave();
+        perfAudioRite = rite;
+        if (rite->enter) rite->enter();
+        return true;
+    }
+    if (sscanf(line, "perf key %u", &value) == 1 && value < 128 && active) {
+        hal::Key key; key.ch = static_cast<char>(value); active->key(key); return true;
+    }
+    if (sscanf(line, "perf volume %u", &value) == 1 && value <= 255) { hal::setVolume(value); return true; }
+    if (sscanf(line, "perf seed %u", &value) == 1) { perfSeed = value; srand(perfSeed); return true; }
+    if (sscanf(line, "perf orient %u", &value) == 1 && value < 4) { cyd_controls::perfOrientation(value); return true; }
+    if (sscanf(line, "perf backdrop %u", &value) == 1 && value < 4) { cyd_controls::perfBackdrop(value); return true; }
+    if (sscanf(line, "perf vision %u %u %u %u", &effect, &layered, &fullscreen, &format) == 4 && active == &RITE_VISIONS && effect < 6 && layered <= 1 && fullscreen <= 1 && format <= 1) {
+        const bool okay = perfConfigureVision(effect, layered, format, perfSeed);
+        cyd_controls::perfImmersive(fullscreen);
+        return okay;
+    }
+    return false;
+}
+#endif
+
 void grimSetup() {
     hal::begin();
     hal::setOverlayAudio(uisfx::render); // UI blips layer over everything
@@ -342,6 +408,10 @@ void grimSetup() {
 
 void grimLoop() {
     uint32_t start = hal::ms();
+#ifdef GRIM_PERF
+    perf_profile::poll();
+    const uint32_t updateAt = micros();
+#endif
     hal::Key k;
     while (hal::pollKey(k)) {
         if (mode == SPLASH) {
@@ -393,6 +463,9 @@ void grimLoop() {
         else if (wasNav && active != &RITE_DRONE) uisfx::trigger(uisfx::MOVE);
     }
 
+#ifdef GRIM_PERF
+    perf_profile::observe(perf_profile::FrameUpdate, micros() - updateAt);
+#endif
     uint32_t now = hal::ms();
 #ifdef GRIM_CYD
     if (active == &RITE_VISIONS && cyd_controls::visionsImmersive()) {

@@ -1,0 +1,137 @@
+{
+  "schema": "sdr-metal-rx-receive-enable-validation/1",
+  "utc": "2026-11-27T23:10:06.425524+00:00",
+  "evidence_class": "HOST_VALIDATION_NOT_RF_MEASUREMENT",
+  "sdk_sha": "b774170ff46c393eeb5e495ea37936038d3f4f4f",
+  "baseline_source_sha": "fce57f109ed6f58c0d51b48b8d74478b7817304c",
+  "physical_state_before_this_change": "Power-only direct init succeeds on two boards, every tested gain fails direct; WiFi_NULL tune succeeds. Receive-enable addition has not been flashed or physically validated.",
+  "change": "Balanced SDK receive mode after direct PHY enable and before disable; explicit ownership and invocation counters. Read-only outside-window last-tune/AGC/PBUS/SYSCON diagnostics; default manual gain verification still hard fails.",
+  "source_sha256": {
+    "main/main.c": "04999c1f83a18e159fecd0e73dec2ce204a6ab0aac8099e646e5060e73c73d3e",
+    "main/snapshot.c": "5824b99b8943d73304b8bb80fc10f397c893212b16396a255fffbcca991941bd",
+    "main/snapshot.h": "bb0acc2fe1d4888e71f77690a0a6913a98f274a066fb4b2f11c9ea27d010ad04",
+    "main/gain_diagnostics.h": "56cfcb431783e32b8fe1122c8f5af54d497a306f157a904746a7a9a7a9e7f700",
+    "vendor/esp-sdr/rx_gain_verify.c": "85e8522c8fbcc680dc770a53fbe82162891166af56ad9d52db343a9c65fcb230",
+    "vendor/esp-sdr/PROVENANCE.json": "abf1e94d71febc04ce56dd97214cad3c6c362ec4a35024b4bd657e13d38ceef4",
+    "test_init_host.py": "9722face6f9df17e760148ce798166c91d8c27be33177eb96a254175d1e6c2b9",
+    "test_gain_diagnostics_host.py": "75b1e70a18c157358205992573fe74c3af270f0e5b0e339e58c82856e0dc3a81",
+    "test_snapshot_host.py": "13210337d0e03d0f4e643dd483d157a81533b770823d6804ae416360d4270aa1",
+    "test_output_bounds.py": "93517ac82779720134bf19e2a12615e427100f588ac2634fde444ec4c84f1fa3"
+  },
+  "primary_sdk_files_sha256": {
+    "components/esp_phy/include/esp_phy_init.h": "3e4be588f3792cb730541eaf4e6eb9d2f1b7cb053bdff06f437ccc33e861ed58",
+    "components/esp_wifi/esp32s3/esp_adapter.c": "790560ec0dab48728fda3d91be6241d235366d333f87aa31042ff5b3d8df4e4e",
+    "components/esp_hw_support/periph_ctrl.c": "08d2cec6318bd832c3832bc3a17d1ff666613d1fcab9e2bdb26485b8ff916e1f",
+    "components/soc/esp32s3/register/soc/syscon_reg.h": "9ac4c963b62d53d0f7c5dc0d7c46e2c4eae69b0179a68c6d2a5240f2d0a12c2d",
+    "components/esp_phy/lib/esp32s3/libphy.a": "038ac2bc37dc297e295811bc095d2b360a49aa0dddaa51ccb4b60ce2d1b2b73f"
+  },
+  "vendor_upstream_prefix_preserved": true,
+  "vendor_upstream_sha256": "163befcdfa634027ae21d7e25a46c0c2fa4a1a181394439bd966134b95360cde",
+  "vendor_local_sha256": "85e8522c8fbcc680dc770a53fbe82162891166af56ad9d52db343a9c65fcb230",
+  "timed_snapshot_body_byte_identical_to_baseline": true,
+  "timed_snapshot_body_sha256": "6cef608ee325cca4928b574bbb1e56e908b5373229cd2ed8bbc547eec8e92646",
+  "host_results": {
+    "lifecycle": {
+      "schema": "sdr-metal-init-host-test/1",
+      "evidence_class": "HOST_LIFECYCLE_SHIM",
+      "checks": 125,
+      "valid": true,
+      "RF_measurement": false,
+      "source_function_sha256": "3c1cc8a4aa263c3575234b04965fedf8a975205ee8d4c763dc52c21c76c6b68a",
+      "idle_boot_has_no_RF_initialization": true
+    },
+    "gain_diagnostics": {
+      "schema": "sdr-metal-gain-host-test/1",
+      "evidence_class": "HOST_MMIO_SHIM",
+      "checks": 655448,
+      "gain_words_exhaustive": 65536,
+      "valid": true,
+      "RF_measurement": false,
+      "tune_body_sha256": "f16bef6ef0367df70014af2016a9492dc171d85895ecf91c90fe1ca7e29f7ab1",
+      "getter_body_sha256": "c52d267f95787b6b1febee16ada939150102d137713a2e1bd22abb9f8f31e4d2"
+    },
+    "snapshot": {
+      "schema": "sdr-metal-snapshot-host-test/1",
+      "evidence_class": "HOST_MMIO_SHIM",
+      "checks": 110,
+      "valid": true,
+      "RF_measurement": false
+    },
+    "temperature": {
+      "schema": "sdr-metal-temperature-host-test/1",
+      "evidence_class": "HOST_SENSOR_SHIM",
+      "cases": 9,
+      "source_function_sha256": "05da8ee057352c552d1297fe621e8132358fbb23f9694ac116bee677863ccc0d",
+      "tested": [
+        "success",
+        "install_failure",
+        "enable_failure",
+        "read_failure",
+        "disable_failure",
+        "uninstall_failure",
+        "NaN",
+        "finite_formatter_overflow",
+        "infinity"
+      ],
+      "valid": true,
+      "temperature_accuracy_measured": false,
+      "RF_measurement": false
+    }
+  },
+  "json_bounds": {
+    "schema": "sdr-metal-output-bounds/1",
+    "evidence_class": "STATIC_BOUND",
+    "max_dynamic_string_bytes_assumed": 64,
+    "records": [
+      {
+        "type": "error",
+        "upper_bound_including_NUL": 111,
+        "capacity": 2048
+      },
+      {
+        "type": "temperature",
+        "upper_bound_including_NUL": 515,
+        "capacity": 2048
+      },
+      {
+        "type": "info",
+        "upper_bound_including_NUL": 1901,
+        "capacity": 2048
+      },
+      {
+        "type": "rx_diagnostics",
+        "upper_bound_including_NUL": 951,
+        "capacity": 2048
+      },
+      {
+        "type": "snapshot",
+        "upper_bound_including_NUL": 1158,
+        "capacity": 2048
+      },
+      {
+        "type": "armed",
+        "upper_bound_including_NUL": 352,
+        "capacity": 2048
+      },
+      {
+        "type": "run_end",
+        "upper_bound_including_NUL": 1373,
+        "capacity": 2048
+      },
+      {
+        "type": "init",
+        "upper_bound_including_NUL": 628,
+        "capacity": 2048
+      },
+      {
+        "type": "tune",
+        "upper_bound_including_NUL": 187,
+        "capacity": 2048
+      }
+    ],
+    "valid": true
+  },
+  "target_build": "PENDING_PARENT_BUILD",
+  "RF_measurement": false,
+  "future_fast_bench": "Proposal only in README; not implemented."
+}

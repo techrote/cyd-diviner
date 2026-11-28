@@ -1,0 +1,28 @@
+{
+  "schema": "cyd-perf-derived-publication-layout/1",
+  "archive": "DERIVED-ANALYSES-METAL-FAN.zip",
+  "archive_sha256": "f41e5db392d0c47849a9f5327f975a8362683b2baa8d0c9ad102444da029c980",
+  "manifest_member": "DERIVED-ANALYSES-MANIFEST.json",
+  "manifest_sha256": "3e86e1711c7ffbae6973ccbc6db435133b64c840e3a413941b8deb34e6362006",
+  "source_directories": [
+    "evidence/metal-fan-framed-rx-demod",
+    "evidence/metal-fan-framed-rx2-demod"
+  ],
+  "live_original_paths": [
+    "evidence/metal-fan-framed-rx-demod/decoded-summary.csv",
+    "evidence/metal-fan-framed-rx-demod/frames.csv",
+    "evidence/metal-fan-framed-rx-demod/manifest.json",
+    "evidence/metal-fan-framed-rx-demod/quality.csv",
+    "evidence/metal-fan-framed-rx-demod/results.json",
+    "evidence/metal-fan-framed-rx-demod/trials.csv",
+    "evidence/metal-fan-framed-rx2-demod/decoded-summary.csv",
+    "evidence/metal-fan-framed-rx2-demod/frames.csv",
+    "evidence/metal-fan-framed-rx2-demod/manifest.json",
+    "evidence/metal-fan-framed-rx2-demod/quality.csv",
+    "evidence/metal-fan-framed-rx2-demod/results.json",
+    "evidence/metal-fan-framed-rx2-demod/trials.csv"
+  ],
+  "nested_archive_only_files": 81,
+  "policy": "Keep all root-level original JSON/CSV/manifests; nested trial/PCM/IQ/log/frame data byte-exact in archive. No originals deleted.",
+  "scope": "Fan/board-movement six-exposure repeat; no controlled thermal inference; existingarchives andmetadata unchanged."
+}

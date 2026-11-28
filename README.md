@@ -24,6 +24,12 @@ for VLC on Windows.
 | `cardputer` | M5Stack Cardputer ADV with the Daedric Launcher | Original keyboard workflow with 16 rites. This is PlatformIO's default target |
 | `native` | Desktop with SDL2 development libraries and a POSIX-compatible C++ toolchain | Simulator with desktop audio, WAV export, and simulated radio data |
 
+Opt-in performance characterisation uses `cyd-profile` and the portable
+`kernel-esp32`/`kernel-s3`/`kernel-c3` targets. See the
+[measurement and recovery guide](docs/PERFORMANCE.md) and
+[Windows capture harness](tools/perf/README.md). These are unapproved profiling
+images; hardware access, backup and flashing remain separate owner actions.
+
 ## CYD quick start
 
 Use the ESP32-2432S028R revision with an ILI9341 display and XPT2046 touch

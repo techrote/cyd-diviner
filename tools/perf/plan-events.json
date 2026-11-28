@@ -1,0 +1,223 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "duration_ms": 10000,
+  "warmup_ms": 2000,
+  "workloads": [
+    {
+      "name": "menu/landscape/theme",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu"
+      ],
+      "orientation": "landscape",
+      "backdrop": "theme",
+      "audio": "local_dac"
+    },
+    {
+      "name": "audio/drone/landscape/local",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene drone"
+      ],
+      "orientation": "landscape",
+      "audio": "local_dac",
+      "scene": "drone"
+    },
+    {
+      "name": "audio/seq/landscape/local",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene seq"
+      ],
+      "orientation": "landscape",
+      "audio": "local_dac",
+      "scene": "seq"
+    },
+    {
+      "name": "audio/beat/landscape/local",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene beat"
+      ],
+      "orientation": "landscape",
+      "audio": "local_dac",
+      "scene": "beat"
+    },
+    {
+      "name": "audio/drone/local-and-pcm",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene drone"
+      ],
+      "audio": "local_dac_and_usb_pcm",
+      "pcm": true,
+      "scene": "drone"
+    },
+    {
+      "name": "visions/fullscreen/layered/pcm",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "pcm": true,
+      "audio": "local_dac_and_usb_pcm",
+      "effect": "gate-trails",
+      "fullscreen": true,
+      "layered": true
+    },
+    {
+      "name": "combined/fullscreen/gate-trails/drone",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0",
+        "perf combined drone"
+      ],
+      "audio": "drone",
+      "layered": true,
+      "fullscreen": true
+    },
+    {
+      "name": "touch/visions-fullscreen-transitions",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 0 0"
+      ],
+      "actions": [
+        {
+          "at_ms": 1000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 1500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 2000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 2500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 3000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 3500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 4000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 4500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 5000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 5500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 6000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 6500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 7000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 7500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 8000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 8500,
+          "command": "tap 160 120"
+        }
+      ],
+      "limitation": "Artwork taps remain within Visions; firmware processing only, not physical latency."
+    },
+    {
+      "name": "sustained/cpu-both-cores",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene menu"
+      ],
+      "stress_seconds": 365,
+      "warmup_ms": 0,
+      "duration_ms": 365000,
+      "repetitions": 1,
+      "limitation": "Near 100% CPU requires measured busy percentages; sensor indication is uncalibrated unless independently calibrated."
+    },
+    {
+      "name": "instrumentation/off/fullscreen-layered",
+      "commands": [
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0",
+        "perf enable 0"
+      ],
+      "instrumentation": false
+    },
+    {
+      "name": "instrumentation/on/fullscreen-layered",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "instrumentation": true
+    }
+  ]
+}

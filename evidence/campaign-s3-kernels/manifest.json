@@ -1,0 +1,268 @@
+{
+  "schema": "cyd-perf-publication/1",
+  "label": "S3 complete internal and PSRAM kernel matrix",
+  "capture_status": "CAPTURE COMPLETE",
+  "publication_scope": "complete_capture",
+  "allow_partial_requested": false,
+  "measured_run_count": 132,
+  "evidence_class": "physical_measured",
+  "source_sha": "174a79670d4b0da656ebd615f0cd1620aa0ddbb1",
+  "firmware_sha256": "7ac5bf7f79bb2ed6048a40367fe1d3966a1d5e53a999b2f09f28f310456bb681",
+  "profile": "kernel-s3-n4r2-peer",
+  "source_tree_state": "sha256:1b7d5aacd09d257dff759f95413047b74fe2b6de7592b7a3f147e39aea0c07ed",
+  "input_results_sha256": "d89c28832226ddbe53db4efa2a1faa6876d1eb531ef3fb7d1f5c7017405a312d",
+  "archive": {
+    "href": "../PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "member_prefix": "physical/s3-kernels-link-03",
+    "bytes": 15812579,
+    "sha256": "15dcd4b987177ca3c8c7e504a1e9a41eef1f342414519519ce9610b3100cf8a7",
+    "verified_members": {
+      "physical/s3-kernels-link-03/artifact-hashes.json": {
+        "bytes": 809,
+        "sha256": "366511bf448a2118f2644fd81cff0d82373237fe6572088de3acb9fa43a89073",
+        "compressed_bytes": 439
+      },
+      "physical/s3-kernels-link-03/kernel-sensors.csv": {
+        "bytes": 146500,
+        "sha256": "ee004dc1c993923476cb5c1a761d5e63660050f20a5eb0623d0182cf84549ee7",
+        "compressed_bytes": 6794
+      },
+      "physical/s3-kernels-link-03/kernel-timings.csv": {
+        "bytes": 6128046,
+        "sha256": "b70d54dc1f0e018c56250b53cf05e72d2ad2322d3aeb806f45f2ea1db6bd58ae",
+        "compressed_bytes": 112557
+      },
+      "physical/s3-kernels-link-03/metrics.csv": {
+        "bytes": 234464,
+        "sha256": "7f27eab83f5ee67d3f889ebbb5a570093ecf239cf8d30586fc750f2206f7acc6",
+        "compressed_bytes": 10707
+      },
+      "physical/s3-kernels-link-03/results.json": {
+        "bytes": 1321391,
+        "sha256": "d89c28832226ddbe53db4efa2a1faa6876d1eb531ef3fb7d1f5c7017405a312d",
+        "compressed_bytes": 31811
+      },
+      "physical/s3-kernels-link-03/samples.csv": {
+        "bytes": 199460,
+        "sha256": "09201d126cc5374e702e561f6bfbb9703b8ac37fe53b45f6a0222b568f442e72",
+        "compressed_bytes": 7521
+      },
+      "physical/s3-kernels-link-03/serial-events.jsonl": {
+        "bytes": 187922,
+        "sha256": "f6059c6758ffa2f9062a1ed3a0165d23298f22fcfb5e9861e2065bbad6fd406e",
+        "compressed_bytes": 24093
+      },
+      "physical/s3-kernels-link-03/serial-rx.bin": {
+        "bytes": 551195,
+        "sha256": "c50ac2882308ce84e1300489cd232d1be338628ef20bae3ac5cf24a45afac4f8",
+        "compressed_bytes": 13810
+      },
+      "physical/s3-kernels-link-03/serial-text.log": {
+        "bytes": 551195,
+        "sha256": "c50ac2882308ce84e1300489cd232d1be338628ef20bae3ac5cf24a45afac4f8",
+        "compressed_bytes": 13810
+      },
+      "physical/s3-kernels-link-03/target.jsonl": {
+        "bytes": 630512,
+        "sha256": "f9c05681e06769f6485d0dd322e34eb01db774fead6caaeb1768cd3b36fd281a",
+        "compressed_bytes": 19298
+      }
+    }
+  },
+  "inputs": {
+    "artifact-hashes.json": {
+      "bytes": 809,
+      "sha256": "366511bf448a2118f2644fd81cff0d82373237fe6572088de3acb9fa43a89073"
+    },
+    "kernel-sensors.csv": {
+      "bytes": 146500,
+      "sha256": "ee004dc1c993923476cb5c1a761d5e63660050f20a5eb0623d0182cf84549ee7"
+    },
+    "kernel-timings.csv": {
+      "bytes": 6128046,
+      "sha256": "b70d54dc1f0e018c56250b53cf05e72d2ad2322d3aeb806f45f2ea1db6bd58ae"
+    },
+    "metrics.csv": {
+      "bytes": 234464,
+      "sha256": "7f27eab83f5ee67d3f889ebbb5a570093ecf239cf8d30586fc750f2206f7acc6"
+    },
+    "results.json": {
+      "bytes": 1321391,
+      "sha256": "d89c28832226ddbe53db4efa2a1faa6876d1eb531ef3fb7d1f5c7017405a312d"
+    },
+    "samples.csv": {
+      "bytes": 199460,
+      "sha256": "09201d126cc5374e702e561f6bfbb9703b8ac37fe53b45f6a0222b568f442e72"
+    },
+    "serial-events.jsonl": {
+      "bytes": 187922,
+      "sha256": "f6059c6758ffa2f9062a1ed3a0165d23298f22fcfb5e9861e2065bbad6fd406e"
+    },
+    "serial-rx.bin": {
+      "bytes": 551195,
+      "sha256": "c50ac2882308ce84e1300489cd232d1be338628ef20bae3ac5cf24a45afac4f8"
+    },
+    "serial-text.log": {
+      "bytes": 551195,
+      "sha256": "c50ac2882308ce84e1300489cd232d1be338628ef20bae3ac5cf24a45afac4f8"
+    },
+    "target.jsonl": {
+      "bytes": 630512,
+      "sha256": "f9c05681e06769f6485d0dd322e34eb01db774fead6caaeb1768cd3b36fd281a"
+    },
+    "summary.json": {
+      "bytes": 25874,
+      "sha256": "41d7237f0e0b7d5d94e62c7aa700dc8d8264e38485b1438b51b6b4ae9d6b267a"
+    },
+    "summary-scenes.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-metrics.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-kernels.csv": {
+      "bytes": 8563,
+      "sha256": "15e28c7ebc77d6f076b30d3a0c00788d0189d243d105a6920403d519f3ad30b6"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "figures/manifest.json": {
+      "bytes": 54669,
+      "sha256": "dc9f2e5057e17c2ba3e7150a7af9fb58393201e2a3a28b2a889f15ff0b0afdf4"
+    },
+    "figures/kernel-dsp-internal.png": {
+      "bytes": 109567,
+      "sha256": "f18773daa171f6b561eb6a06b9453302dc2808dc2ebe4fea611a421d4cecc8c7"
+    },
+    "figures/kernel-dsp-internal.svg": {
+      "bytes": 38850,
+      "sha256": "9487341b509338b28a823ab4d7af271fed3c5b548014017e3ee0987eb7519b3d"
+    },
+    "figures/kernel-other-internal.png": {
+      "bytes": 121818,
+      "sha256": "6871f25b8934f0d6c03b1eff09ec1364966a7d600af804842acdee796c757ec3"
+    },
+    "figures/kernel-other-internal.svg": {
+      "bytes": 36176,
+      "sha256": "2763bbbbaa35732042604dd15309bc93cd5a74bba660004b399c2dc7703a57cf"
+    },
+    "figures/kernel-dsp-psram.png": {
+      "bytes": 109990,
+      "sha256": "4568066dccecc0deacfb48f6434651278126157b0efb5a408deef3ac1310714e"
+    },
+    "figures/kernel-dsp-psram.svg": {
+      "bytes": 38847,
+      "sha256": "a8dd087e67e42a02ee0bf14194eb8ddd13e42e7b4e795fff300ce7e61a1f6e58"
+    },
+    "figures/kernel-other-psram.png": {
+      "bytes": 121940,
+      "sha256": "cea033bd1501d07cfe09cc6e66e78bbd19ec089688d45f877bc18ab4f62d1d9a"
+    },
+    "figures/kernel-other-psram.svg": {
+      "bytes": 36178,
+      "sha256": "4db9b46ceba956ccc7ee512218631be55ce243917bf59d429deb40644d5ce969"
+    }
+  },
+  "outputs": {
+    "figures/kernel-dsp-internal.png": {
+      "bytes": 109567,
+      "sha256": "f18773daa171f6b561eb6a06b9453302dc2808dc2ebe4fea611a421d4cecc8c7"
+    },
+    "figures/kernel-dsp-internal.svg": {
+      "bytes": 38850,
+      "sha256": "9487341b509338b28a823ab4d7af271fed3c5b548014017e3ee0987eb7519b3d"
+    },
+    "figures/kernel-dsp-psram.png": {
+      "bytes": 109990,
+      "sha256": "4568066dccecc0deacfb48f6434651278126157b0efb5a408deef3ac1310714e"
+    },
+    "figures/kernel-dsp-psram.svg": {
+      "bytes": 38847,
+      "sha256": "a8dd087e67e42a02ee0bf14194eb8ddd13e42e7b4e795fff300ce7e61a1f6e58"
+    },
+    "figures/kernel-other-internal.png": {
+      "bytes": 121818,
+      "sha256": "6871f25b8934f0d6c03b1eff09ec1364966a7d600af804842acdee796c757ec3"
+    },
+    "figures/kernel-other-internal.svg": {
+      "bytes": 36176,
+      "sha256": "2763bbbbaa35732042604dd15309bc93cd5a74bba660004b399c2dc7703a57cf"
+    },
+    "figures/kernel-other-psram.png": {
+      "bytes": 121940,
+      "sha256": "cea033bd1501d07cfe09cc6e66e78bbd19ec089688d45f877bc18ab4f62d1d9a"
+    },
+    "figures/kernel-other-psram.svg": {
+      "bytes": 36178,
+      "sha256": "4db9b46ceba956ccc7ee512218631be55ce243917bf59d429deb40644d5ce969"
+    },
+    "figures/manifest.json": {
+      "bytes": 54669,
+      "sha256": "dc9f2e5057e17c2ba3e7150a7af9fb58393201e2a3a28b2a889f15ff0b0afdf4"
+    },
+    "REPORT.md": {
+      "bytes": 11942,
+      "sha256": "dee1f33e1f8f9b901bb24af275b468d5934e8b790e0087e3dd4ac17b6e72dd99"
+    },
+    "stress-samples.csv": {
+      "bytes": 350,
+      "sha256": "2168f4206ad3eacbb80d144961d3be84b5291a55b35be1148f54924885f4a55d"
+    },
+    "summary-kernels.csv": {
+      "bytes": 8563,
+      "sha256": "15e28c7ebc77d6f076b30d3a0c00788d0189d243d105a6920403d519f3ad30b6"
+    },
+    "summary-metrics.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-missing.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-scenes.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary-spi.csv": {
+      "bytes": 17,
+      "sha256": "c0d1d6ca9d7369517a99ec902aa8238791138247b2ac70ee63f6a17c1b6d2ab4"
+    },
+    "summary.json": {
+      "bytes": 19335,
+      "sha256": "737b622c3efb0df593752b09909f12dbeb5a183824c4c7576df001a5a56af34f"
+    }
+  },
+  "stress_rows": 0,
+  "tools": {
+    "publish_evidence.py": {
+      "bytes": 17922,
+      "sha256": "efb24ea5b397326a7386e33bfaf1eae5230c6903c40615ce7b3712f1c464c456"
+    },
+    "report.py": {
+      "bytes": 39621,
+      "sha256": "f42734404218a4e1c4028621da9cc9582fb32c770e97474610b232c8ff52a3c9"
+    },
+    "summarize.py": {
+      "bytes": 11400,
+      "sha256": "f0738c3ee838c429d4b83ec27c2a541f46609754b708df015b3b241ddffef452"
+    },
+    "capture.py": {
+      "bytes": 43047,
+      "sha256": "c98d541c781af8e03971c64e54d816e0c67548e3089a9a55ef9109a2ffa16163"
+    }
+  },
+  "limitations": [
+    "Raw archive membership and source hashes are verified; this tool does not independently attest hardware readings or the flashed image.",
+    "Report is editable. Subsequent manual edits require refreshing output hashes or regenerating this bundle.",
+    "Manifest excludes its own digest to avoid a self-referential hash."
+  ]
+}

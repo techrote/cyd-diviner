@@ -1,0 +1,572 @@
+{
+  "schema": "cyd-perf-plan/1",
+  "seed": 23063,
+  "repetitions": 3,
+  "duration_ms": 10000,
+  "warmup_ms": 2000,
+  "workloads": [
+    {
+      "name": "radio-init/ble/menu",
+      "status": "NOT RUN",
+      "reason": "Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware."
+    },
+    {
+      "name": "radio-init/ble/fullscreen-layered",
+      "status": "NOT RUN",
+      "reason": "Initial a4549f8 BLE-controller setup returned radio mode unsupported; failed attempt retained in full-01. Further BLE investigation uses separately identified firmware."
+    },
+    {
+      "name": "radio-init/espnow/menu",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu",
+        "perf radio espnow"
+      ],
+      "radio": "espnow",
+      "traffic": "none",
+      "limitation": "Controller initialization only; no scans, association, peers, traffic, or goodput claim."
+    },
+    {
+      "name": "radio-init/espnow/fullscreen-layered",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0",
+        "perf radio espnow"
+      ],
+      "radio": "espnow",
+      "traffic": "none",
+      "fullscreen": true,
+      "layered": true,
+      "limitation": "Controller initialization only; traffic/coexistence measurements require owned peers."
+    },
+    {
+      "name": "touch/scripted-menu-rapid",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf backdrop 0",
+        "perf scene menu"
+      ],
+      "actions": [
+        {
+          "at_ms": 1000,
+          "command": "tap 20 120"
+        },
+        {
+          "at_ms": 1220,
+          "command": "tap 300 120"
+        },
+        {
+          "at_ms": 1440,
+          "command": "tap 20 120"
+        },
+        {
+          "at_ms": 1660,
+          "command": "tap 300 120"
+        },
+        {
+          "at_ms": 1880,
+          "command": "tap 20 120"
+        },
+        {
+          "at_ms": 2100,
+          "command": "tap 300 120"
+        },
+        {
+          "at_ms": 2320,
+          "command": "tap 20 120"
+        },
+        {
+          "at_ms": 2540,
+          "command": "tap 300 120"
+        }
+      ],
+      "limitation": "Scripted diagnostic injection measures firmware processing only, not physical contact latency."
+    },
+    {
+      "name": "touch/visions-fullscreen-transitions",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 0 0"
+      ],
+      "actions": [
+        {
+          "at_ms": 1000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 1500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 2000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 2500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 3000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 3500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 4000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 4500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 5000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 5500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 6000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 6500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 7000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 7500,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 8000,
+          "command": "tap 160 120"
+        },
+        {
+          "at_ms": 8500,
+          "command": "tap 160 120"
+        }
+      ],
+      "limitation": "Artwork taps remain within Visions; firmware processing only, not physical latency."
+    },
+    {
+      "name": "sustained/cpu-both-cores",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene menu"
+      ],
+      "stress_seconds": 365,
+      "warmup_ms": 0,
+      "duration_ms": 365000,
+      "repetitions": 1,
+      "limitation": "Near 100% CPU requires measured busy percentages; sensor indication is uncalibrated unless independently calibrated."
+    },
+    {
+      "name": "post-stress/visions-fullscreen-layered",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene visions",
+        "perf vision 1 1 1 0"
+      ],
+      "audio": "local_dac",
+      "effect": "gate-trails",
+      "fullscreen": true,
+      "layered": true
+    },
+    {
+      "name": "spi/full-frame-rgb565",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf orient 0",
+        "perf scene menu"
+      ],
+      "kind": "spi",
+      "samples": 128
+    },
+    {
+      "name": "kernel/osc-f32/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "osc-f32",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/osc-f32/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "osc-f32",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/osc-q15/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "osc-q15",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/osc-q15/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "osc-q15",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/filter-f32/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "filter-f32",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/filter-f32/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "filter-f32",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/filter-q15/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "filter-q15",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/filter-q15/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "filter-q15",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/modal-f32/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "modal-f32",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/modal-f32/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "modal-f32",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/modal-q15/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "modal-q15",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/modal-q15/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "modal-q15",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/fft-f32/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "fft-f32",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/fft-f32/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "fft-f32",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/cellular/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "cellular",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/cellular/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "cellular",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/particles/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "particles",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/particles/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "particles",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/feedback/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "feedback",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/feedback/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "feedback",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/stripe-rgb565/realistic",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "stripe-rgb565",
+      "kernel_samples": 256,
+      "large": false,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "kernel/stripe-rgb565/large",
+      "commands": [
+        "perf enable 1",
+        "perf radio off",
+        "perf seed 23063",
+        "perf scene menu"
+      ],
+      "kind": "kernel",
+      "kernel": "stripe-rgb565",
+      "kernel_samples": 256,
+      "large": true,
+      "limitation": "Target compute window blocks foreground UI, while the ordinary audio worker remains scheduled."
+    },
+    {
+      "name": "physical/contact-to-photon",
+      "status": "NOT RUN",
+      "reason": "Requires owner-operated physical touch stimulus and external optical timing fixture."
+    },
+    {
+      "name": "audio/usb-only-dac-disabled",
+      "status": "NOT RUN",
+      "reason": "Existing PCM streams the same mixed blocks sent to the local DAC; independent DAC-disable path is not assumed."
+    },
+    {
+      "name": "audio/external-dac-loopback",
+      "status": "NOT RUN",
+      "reason": "External acquisition fixture required to detect analog gaps/distortion independently."
+    },
+    {
+      "name": "wireless/wifi-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized owned AP/peer and configured traffic endpoint; no network probes are automatic."
+    },
+    {
+      "name": "wireless/ble-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized BLE peer; no scans/probes of unrelated devices."
+    },
+    {
+      "name": "wireless/espnow-goodput-rtt",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized ESP-NOW peer and owned channel."
+    },
+    {
+      "name": "wireless/coexistence",
+      "status": "NOT RUN",
+      "reason": "Requires explicitly authorized Wi-Fi/BLE/ESP-NOW peers and separately captured local-workload baseline."
+    },
+    {
+      "name": "portable/esp32-s3-physical",
+      "status": "NOT RUN",
+      "reason": "Physical S3 board identity/backup/flash authorization required; compile-only is distinct evidence."
+    },
+    {
+      "name": "portable/esp32-c3-physical",
+      "status": "NOT RUN",
+      "reason": "Physical C3 board identity/backup/flash authorization required; compile-only is distinct evidence."
+    }
+  ],
+  "continuation_of": "physical/full-01",
+  "reason": "Continue untouched a4549f8 image after BLE setup failure; preserve195completed repetitions"
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "cyd-perf-fan-idle-followup/1",
+  "status": "PARTIAL_OBSERVATIONS_WITH_RECOVERY",
+  "evidence_class": "POST_CAMPAIGN_DRIVER_TEMPERATURE_OBSERVATIONS",
+  "utc": "2026-11-28T00:37:56.038035+00:00",
+  "owner_context": "Owner pointed blower fan at board; it is moving in airflow. Readings after finite SDR campaign, audio restoration and TX idle.",
+  "initial_check_status": "FAILED",
+  "valid_initial_readings": 7,
+  "latest_valid_readings": {
+    "COM13": {
+      "port": "COM13",
+      "driver_c": 29.9,
+      "host_utc": "2026-11-28T00:35:55.379377+00:00",
+      "profile": "s3-sdr-metal-tx",
+      "scope": "fanpresent;TXidle;statusquery"
+    },
+    "COM22": {
+      "port": "COM22",
+      "driver_c": 38.1,
+      "host_utc": "2026-11-28T00:37:12.633473+00:00",
+      "profile": "kernel-s3-n4r2-audio",
+      "scope": "afterread-onlyreset/recovery;fanpresent;audio/radioidle"
+    },
+    "COM23": {
+      "port": "COM23",
+      "driver_c": 41.0,
+      "host_utc": "2026-11-28T00:35:53.376665+00:00",
+      "profile": "kernel-s3-n4r2-audio",
+      "scope": "fanpresent;TXidle;statusquery"
+    }
+  },
+  "failure": "COM22thirdstatusqueryreceivedincompletetextandtimedout; no missingreading synthesized",
+  "recovery_status": "COMPLETE",
+  "firmware_write": false,
+  "raw_inputs_sha256": {
+    "evidence/hardware-access/fan-idle-check-01/results.json": "29e8c8e4fde58a4871eb542a9de5ce1682e2eda533e8dddaf5e049cc73c0c229",
+    "evidence/hardware-access/fan-com22-recovery.json": "b6fcdd3bf2ac7b3563a5adb8c6845363ca2bbd4ffb874566058624b408d553e3"
+  },
+  "limits": [
+    "TX is idle after the campaign; fan and workload changes are confounded",
+    "No matched fan-on/fan-off workload or calibrated external thermometry",
+    "COM22postrecoveryreadinghasnewbootcontext",
+    "Owner reportsboardmovinginblowerairflow; no subsequentRFcomparisonswereperformed"
+  ]
+}
