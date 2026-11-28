@@ -1,0 +1,64 @@
+{
+  "schema": "cyd-sdr-metal-plan/1",
+  "repetitions": 3,
+  "receiver": {
+    "init_path": "phy",
+    "frequency_mhz": 2433,
+    "offset_khz": -80,
+    "manual_gain_index": 40
+  },
+  "transmitter": {
+    "init_path": "phy",
+    "symbol_capacity": 16384,
+    "trace_capacity": 0,
+    "trace_stride": 0
+  },
+  "temperature_queries": true,
+  "rf_overlap_scope": "RX arm/TX setup use independent clocks; requested overlap is not synchronized proof; inspect native IQ",
+  "workloads": [
+    {
+      "name": "fast/framed/48000-4ch-osr16/4416000",
+      "rx_mode": "capture",
+      "rate_hz": 40000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": true,
+      "tx_mode": "fast",
+      "baud": 4416000,
+      "backoff0_quarter_db": 96,
+      "backoff1_quarter_db": 112,
+      "duration_us": 1000000,
+      "mask_segment_us": 0,
+      "bit_count": 11776,
+      "pattern": "greenfield_framed_TDM_PDM",
+      "bits_file": "sdr-metal-fast-stimuli/48000-4ch-osr16-symbols.bits"
+    },
+    {
+      "name": "fast/framed/48000-4ch-osr32/8832000",
+      "rx_mode": "capture",
+      "rate_hz": 80000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": true,
+      "tx_mode": "fast",
+      "baud": 8832000,
+      "backoff0_quarter_db": 96,
+      "backoff1_quarter_db": 112,
+      "duration_us": 1000000,
+      "mask_segment_us": 0,
+      "bit_count": 11776,
+      "pattern": "greenfield_framed_TDM_PDM",
+      "bits_file": "sdr-metal-fast-stimuli/48000-4ch-osr32-symbols.bits"
+    }
+  ],
+  "framing_scope": "Finite native snapshots crop frame edges; missing/cropped frames are not automatically RF loss. Precomputed32-frame rings repeat source sequence0..31.",
+  "status": "PROPOSED_NOT_EXECUTED; exact-image authorization required",
+  "followup_context": "Owner requested quick repeat withblowerfan andboardmovinginairflow; currentgeometry/thermal/workloadhistory differ. Not isolatedthermalAB.",
+  "comparison_parent": "metal-dual-fast-framed-01"
+}

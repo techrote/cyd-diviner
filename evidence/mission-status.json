@@ -9,7 +9,7 @@
   "flash_written": true,
   "backup_status": "Four owner devices have independently verified private full-flash backups outside Git",
   "requested_end_state": "CYD keeps colour/audio profiler; COM22/COM23 return to approved kernel/audio profilers after SDR; owner new COM14-nowCOM13 board retains requested TX role",
-  "current_state": "COM22/COM23 restored approvedad9cbfd kernel/audio profilers and idle; COM13 retains requested e8b4c8a metalTX image/radioidle; CYD unchanged, colour/audio profiler lastverifiedinstalled and currently disconnected",
+  "current_state": "Afterownerfanretry,COM22/COM23 restoredapprovedad9audio andverifiedidle;COM13retainse8bTX/radioidle;CYDunchanged/lastverifiedcolouraudio/disconnected",
   "stress": {
     "requested_seconds": 365,
     "measured_seconds": 365.0,
@@ -64,7 +64,8 @@
     "METAL-FRAMED-WIFI-FINDINGS.md",
     "METAL-FRAMED-POSITION-COMPARISON.md",
     "RECOMMENDATIONS-DRAFT.md",
-    "METAL-FAST-FINDINGS.md"
+    "METAL-FAST-FINDINGS.md",
+    "FAN-FRAMED-REPEAT.md"
   ],
   "raw_archives": [
     "PHYSICAL-CAPTURES-BASELINE.zip",
@@ -74,11 +75,12 @@
     "PHYSICAL-CAPTURES-PCM-S3.zip",
     "PHYSICAL-CAPTURES-SDR.zip",
     "PHYSICAL-CAPTURES-SUPPLEMENT.zip",
-    "PHYSICAL-CAPTURES-METAL-FAST.zip"
+    "PHYSICAL-CAPTURES-METAL-FAST.zip",
+    "PHYSICAL-CAPTURES-METAL-FAN.zip"
   ],
   "method_note": "Tick-basedCPUutilization, rawclassicRTCtemperature, S3driverCelsius, nativeclockarithmetic, CPU-observedcapturetime, USBreadouttime, conditionalBERanddigitalreconstructionhaveexplicitseparatescopes. Failedrawattemptsandpartialrowsremainretained.",
   "sdr_record_pr": "https://github.com/techrote/WiDAC-ESP32S3-SDR/pull/1",
-  "final_hardware_receipt": "metal-final-audio-restore-receipt.json",
+  "final_hardware_receipt": "metal-fan-audio-restore-receipt.json",
   "sdr_temperature_ledger": "metal-fast-temperatures.json",
   "sdr_fast_phase": {
     "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
@@ -92,12 +94,31 @@
   },
   "derived_archives": [
     "DERIVED-ANALYSES.zip",
-    "DERIVED-ANALYSES-METAL-FAST.zip"
+    "DERIVED-ANALYSES-METAL-FAST.zip",
+    "DERIVED-ANALYSES-METAL-FAN.zip"
   ],
   "coverage_audit": "FINAL-COVERAGE-AUDIT.md",
-  "integrity_audit": "FINAL-INTEGRITY-AUDIT.md",
+  "integrity_audit": "POST-FAN-INTEGRITY-AUDIT.md",
+  "sdr_fan_followup": {
+    "status": "CAPTURE COMPLETE",
+    "shared_TX_windows": 6,
+    "independent_receivers": 2,
+    "same_firmware_source": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+    "requested_bauds": [
+      4416000,
+      8832000
+    ],
+    "TX_driver_C_range": [
+      29.9,
+      55.9
+    ],
+    "context": "Ownerblowerfan;boardmoving;history/geometry/calibration andtemperatureconfounded; noisolatedthermalcause",
+    "report": "FAN-FRAMED-REPEAT.md",
+    "restore_receipt": "metal-fan-audio-restore-receipt.json"
+  },
+  "temperature_range_note": "TEMPERATURE-RANGE-NOTE.md",
   "schema": "cyd-perf-mission-status/3",
-  "utc": "2026-11-28T00:27:48.643136+00:00",
+  "utc": "2026-11-28T00:50:23.817279+00:00",
   "captures": [
     {
       "name": "audio-bidirectional-01",
@@ -821,6 +842,51 @@
       "diagnostic_only": false,
       "complete_shared_sdr_tx_exposures": 0,
       "independently_valid_receiver_bodies": 0
+    },
+    {
+      "name": "metal-dual-fan-framed-01",
+      "schema": "cyd-sdr-metal-dual-capture/1",
+      "status": "CAPTURE COMPLETE",
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958",
+      "runs": {
+        "ACQUIRED": 6
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "error": null,
+      "diagnostic_only": false,
+      "complete_shared_sdr_tx_exposures": 6,
+      "independently_valid_receiver_bodies": 12
     },
     {
       "name": "metal-dual-fast-compat-01",
@@ -40610,6 +40676,372 @@
       },
       "metadata_policy": null,
       "results_sha256": "c1cbc539a4f5bc38f1f26b9b5878888ee765f51dd45cb3a2531b5a08f4272b35"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 1,
+      "run_id": "d001_1",
+      "workload": "fast/framed/48000-4ch-osr16/4416000",
+      "repetition": 1,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 2,
+      "run_id": "d002_2",
+      "workload": "fast/framed/48000-4ch-osr16/4416000",
+      "repetition": 2,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 3,
+      "run_id": "d003_3",
+      "workload": "fast/framed/48000-4ch-osr16/4416000",
+      "repetition": 3,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 4,
+      "run_id": "d004_1",
+      "workload": "fast/framed/48000-4ch-osr32/8832000",
+      "repetition": 1,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 5,
+      "run_id": "d005_2",
+      "workload": "fast/framed/48000-4ch-osr32/8832000",
+      "repetition": 2,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "capture": "metal-dual-fan-framed-01",
+      "capture_status": "CAPTURE COMPLETE",
+      "capture_schema": "cyd-sdr-metal-dual-capture/1",
+      "ordinal": 6,
+      "run_id": "d006_3",
+      "workload": "fast/framed/48000-4ch-osr32/8832000",
+      "repetition": 3,
+      "status": "ACQUIRED",
+      "profile_status": null,
+      "error": {},
+      "source_sha": null,
+      "firmware_sha256": null,
+      "cyd_source_sha": null,
+      "cyd_firmware_sha256": null,
+      "peer_source_sha": null,
+      "peer_firmware_sha256": null,
+      "complete_workload_window": true,
+      "separately_complete_local_profile": false,
+      "unfinished_raw_row_in_closed_failed_capture": false,
+      "complete_shared_sdr_tx_exposure": true,
+      "independently_valid_receiver_count": 2,
+      "receiver_statuses": {
+        "rx": "ACQUIRED",
+        "rx2": "ACQUIRED"
+      },
+      "endpoint_identities": {
+        "tx": {
+          "board": "Owner-identified S3 tx",
+          "port": "COM13",
+          "profile": "s3-sdr-metal-tx",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": null,
+          "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+          "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+          "mac": "1c2904becc48"
+        },
+        "rx": {
+          "board": "Owner-identified S3 rx",
+          "port": "COM22",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3a0"
+        },
+        "rx2": {
+          "board": "Owner-identified S3 rx2",
+          "port": "COM23",
+          "profile": "s3-metal-snapshot",
+          "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+          "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1",
+          "tx_source_digest": null,
+          "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+          "mac": "1c2904bec3d8"
+        }
+      },
+      "metadata_policy": null,
+      "results_sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
     },
     {
       "capture": "metal-dual-fast-compat-01",

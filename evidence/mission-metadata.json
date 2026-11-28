@@ -9,7 +9,7 @@
   "flash_written": true,
   "backup_status": "Four owner devices have independently verified private full-flash backups outside Git",
   "requested_end_state": "CYD keeps colour/audio profiler; COM22/COM23 return to approved kernel/audio profilers after SDR; owner new COM14-nowCOM13 board retains requested TX role",
-  "current_state": "COM22/COM23 restored approvedad9cbfd kernel/audio profilers and idle; COM13 retains requested e8b4c8a metalTX image/radioidle; CYD unchanged, colour/audio profiler lastverifiedinstalled and currently disconnected",
+  "current_state": "Afterownerfanretry,COM22/COM23 restoredapprovedad9audio andverifiedidle;COM13retainse8bTX/radioidle;CYDunchanged/lastverifiedcolouraudio/disconnected",
   "stress": {
     "requested_seconds": 365,
     "measured_seconds": 365.0,
@@ -64,7 +64,8 @@
     "METAL-FRAMED-WIFI-FINDINGS.md",
     "METAL-FRAMED-POSITION-COMPARISON.md",
     "RECOMMENDATIONS-DRAFT.md",
-    "METAL-FAST-FINDINGS.md"
+    "METAL-FAST-FINDINGS.md",
+    "FAN-FRAMED-REPEAT.md"
   ],
   "raw_archives": [
     "PHYSICAL-CAPTURES-BASELINE.zip",
@@ -74,11 +75,12 @@
     "PHYSICAL-CAPTURES-PCM-S3.zip",
     "PHYSICAL-CAPTURES-SDR.zip",
     "PHYSICAL-CAPTURES-SUPPLEMENT.zip",
-    "PHYSICAL-CAPTURES-METAL-FAST.zip"
+    "PHYSICAL-CAPTURES-METAL-FAST.zip",
+    "PHYSICAL-CAPTURES-METAL-FAN.zip"
   ],
   "method_note": "Tick-basedCPUutilization, rawclassicRTCtemperature, S3driverCelsius, nativeclockarithmetic, CPU-observedcapturetime, USBreadouttime, conditionalBERanddigitalreconstructionhaveexplicitseparatescopes. Failedrawattemptsandpartialrowsremainretained.",
   "sdr_record_pr": "https://github.com/techrote/WiDAC-ESP32S3-SDR/pull/1",
-  "final_hardware_receipt": "metal-final-audio-restore-receipt.json",
+  "final_hardware_receipt": "metal-fan-audio-restore-receipt.json",
   "sdr_temperature_ledger": "metal-fast-temperatures.json",
   "sdr_fast_phase": {
     "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
@@ -92,8 +94,27 @@
   },
   "derived_archives": [
     "DERIVED-ANALYSES.zip",
-    "DERIVED-ANALYSES-METAL-FAST.zip"
+    "DERIVED-ANALYSES-METAL-FAST.zip",
+    "DERIVED-ANALYSES-METAL-FAN.zip"
   ],
   "coverage_audit": "FINAL-COVERAGE-AUDIT.md",
-  "integrity_audit": "FINAL-INTEGRITY-AUDIT.md"
+  "integrity_audit": "POST-FAN-INTEGRITY-AUDIT.md",
+  "sdr_fan_followup": {
+    "status": "CAPTURE COMPLETE",
+    "shared_TX_windows": 6,
+    "independent_receivers": 2,
+    "same_firmware_source": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+    "requested_bauds": [
+      4416000,
+      8832000
+    ],
+    "TX_driver_C_range": [
+      29.9,
+      55.9
+    ],
+    "context": "Ownerblowerfan;boardmoving;history/geometry/calibration andtemperatureconfounded; noisolatedthermalcause",
+    "report": "FAN-FRAMED-REPEAT.md",
+    "restore_receipt": "metal-fan-audio-restore-receipt.json"
+  },
+  "temperature_range_note": "TEMPERATURE-RANGE-NOTE.md"
 }

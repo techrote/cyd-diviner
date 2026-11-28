@@ -110,6 +110,12 @@ decoded payload and audio latency remain different evidence classes.
   [576 outside-window temperature readings](metal-fast-temperatures.json) and
   [verified final application state](metal-final-audio-restore-receipt.json)
   remain separate evidence.
+  A later owner-requested [fan-assisted repeat](FAN-FRAMED-REPEAT.md) retains
+  six additional windows with the same images/settings: 4.416 Mbaud control
+  and 8.832 Mbaud retry. One receiver then recovered 8.832 Mbaud headers with
+  25.5% conditional payload errors; the other recovered none. Fan airflow,
+  board movement, geometry and workload history were not independently
+  controlled, so this is a separate cohort with no isolated thermal cause.
 * [WiDAC Draft/HOLD PR #1](https://github.com/techrote/WiDAC-ESP32S3-SDR/pull/1)
   records the standalone SDR prototypes, lab notebook and byte-exact source
   origins. Historical physical observations retain their original Diviner

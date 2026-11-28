@@ -365,6 +365,15 @@ established continuous on-device audio output, intelligibility or synchronized
 one-way latency. Treat it as a basis for further link/decoder work, not a
 replacement for the measured packet-audio delivery/deadline characterization.
 
+A later [fan-assisted six-window repeat](FAN-FRAMED-REPEAT.md) used the same
+images and 4.416/8.832 Mbaud settings with a cooler TX indication of 29.9–55.9 °C.
+At 8.832 Mbaud COM23 recovered headers in three windows, with 196 errors/768
+compared bits (25.5%); COM22 recovered none. The control recovered headers in
+all three windows on each receiver. Fan airflow, moving-board geometry,
+initialization and workload history are confounded. This does not establish
+a thermal cause or clean high-rate audio, and does not replace the earlier
+cohort's recorded no-header result.
+
 [The 576-reading temperature ledger](metal-fast-temperatures.json) preserves
 TX driver indications up to 98.9 °C, outside its configured 10–80 °C request
 range. Accuracy is externally unverified; no thermal explanation for decoding

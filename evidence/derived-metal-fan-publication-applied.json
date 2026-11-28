@@ -1,0 +1,27 @@
+{
+  "schema": "cyd-perf-derived-publication-applied-audit/1",
+  "utc": "2026-11-28T00:44:56.572473+00:00",
+  "operation": "new_FAN_raw_and_compact_derived_publication_only; no_original_deletions",
+  "raw_archive_sha256": "4cbc191f89108681fec2678620458e82b494623e457c7cf9dcff2a9e899a582e",
+  "derived_archive_sha256": "f41e5db392d0c47849a9f5327f975a8362683b2baa8d0c9ad102444da029c980",
+  "live_original_paths_staged": [
+    "evidence/metal-fan-framed-rx-demod/decoded-summary.csv",
+    "evidence/metal-fan-framed-rx-demod/frames.csv",
+    "evidence/metal-fan-framed-rx-demod/manifest.json",
+    "evidence/metal-fan-framed-rx-demod/quality.csv",
+    "evidence/metal-fan-framed-rx-demod/results.json",
+    "evidence/metal-fan-framed-rx-demod/trials.csv",
+    "evidence/metal-fan-framed-rx2-demod/decoded-summary.csv",
+    "evidence/metal-fan-framed-rx2-demod/frames.csv",
+    "evidence/metal-fan-framed-rx2-demod/manifest.json",
+    "evidence/metal-fan-framed-rx2-demod/quality.csv",
+    "evidence/metal-fan-framed-rx2-demod/results.json",
+    "evidence/metal-fan-framed-rx2-demod/trials.csv"
+  ],
+  "nested_archive_only_files": 81,
+  "new_detail_paths_unstaged": 0,
+  "all_original_derived_files_on_disk_unchanged": 93,
+  "staged_file_count_before": 0,
+  "staged_file_count_after": 20,
+  "newly_staged_paths_by_this_step": 20
+}

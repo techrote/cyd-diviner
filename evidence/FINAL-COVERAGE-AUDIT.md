@@ -39,6 +39,20 @@ their then-pending colour/PCM/SDR statements are not the current coverage state.
 | Remote video, lower priority | Primary-source research and architectural limits are recorded. | **No video transport prototype or physical video result**. OOK envelope/store rate cannot establish FPV video capability. |
 | FPV-inspired, deliberately imperfect multichannel one-bit audio | Independent greenfield NRZ framing, CRC8 header, unchecked payload, per-channel first-order sigma-delta TDM and boxcar reconstruction; actual custom RF payloads and host PCM reconstruction exist. New paced-source integrity and native demodulation tools have separate identities and declared selection policies. | Finite precomputed replay and conditional received-frame error/quality do not prove live continuous multichannel audio. Cropped native apertures and missing headers are not a measured packet-loss denominator. Payload errors are accepted deliberately; an acquired header is not clean audio or useful sustained throughput. |
 
+## Later fan-assisted repeat
+
+After the primary publication, the owner added a blower fan and requested a
+quick repeat of the 8.832 Mbaud failure. [The separate report](FAN-FRAMED-REPEAT.md)
+retains six more shared windows with the same firmware and settings: three at
+4.416 Mbaud and three at 8.832 Mbaud. TX driver indications were 29.9–55.9 °C.
+At 8.832 Mbaud one receiver recovered headers in all three windows with
+196 errors/768 compared bits; the other recovered none. Both controls recovered
+headers in all three windows. Movement, RF geometry, initialization and workload
+history also changed, so the result does not isolate thermals. It does not alter
+the earlier no-header observations or establish continuous high-rate audio.
+The audio profilers were restored again after the repeat, with the new
+[restoration receipt](metal-fan-audio-restore-receipt.json).
+
 ## Sustained stress and temperature
 
 Both classic-CYD runs exceed the requested **360 seconds** and retain their
@@ -78,8 +92,8 @@ ordinary/diagnostic/native/plugin and opt-in builds, portable kernels and host
 checks. Its evidence class is build/host validation, not owner-board execution.
 It cannot fill a C3, RF, audio or calibrated-temperature measurement gap.
 
-The current derived index has **49 terminal captures and 1,157 heterogeneous
-run rows**: 690 MEASURED, 255 ACQUIRED, 207 FAILED, three IN PROGRESS and two
+The current derived index has **50 terminal captures and 1,163 heterogeneous
+run rows**: 690 MEASURED, 261 ACQUIRED, 207 FAILED, three IN PROGRESS and two
 NOT RUN. The three IN PROGRESS rows are unfinished operations retained inside
 closed historical failed captures, not active campaigns or measured results.
 Dual TX rows retain both endpoint identities and receiver statuses; USB-only

@@ -119,6 +119,12 @@ above that requested range have no independently established accuracy. No
 external die/ambient measurement was made. The ranges do not establish a
 calibrated thermal margin or a thermal cause for any decoding outcome.
 
+**Range clarification:** the pinned driver can automatically switch ranges;
+80 °C is an initial request, not an absolute measurement ceiling. Exceeding it
+alone does not invalidate 98.9 °C. [The pinned source review](TEMPERATURE-RANGE-NOTE.md)
+records this distinction and the unobserved raw-ADC/active-range/calibration
+state; no reading has been removed or corrected retrospectively.
+
 These are separate one-second payload bursts with setup, deferred readout and
 idle intervals, plus receiver-only acquisition. They are not another
 360-second continuous CPU stress experiment. Both earlier **365-second
@@ -126,3 +132,36 @@ classic-CYD near-full-CPU tests** and their raw RTC sensor observations remain
 reported above without conversion to calibrated Celsius. Native TX/RX clocks
 are independent; RX query timestamps are target-local and the TX sensor record
 does not report a target query timestamp.
+
+## Owner blower-fan follow-up, after the campaign
+
+The owner subsequently pointed a blower fan at a board and reported it moving
+in the airflow. [The separate follow-up record](FAN-IDLE-CHECK.json) retains
+the partial observation and recovery, without changing the 576-reading ledger
+or earlier raw archives. The TX was idle throughout this check.
+
+The transmitter on COM13 reported **29.9 °C three times**. COM22 reported
+46.1 then 44.1 °C; COM23 reported 42.0 then 41.0 °C. A later COM22 status
+response was incomplete and timed out, so the planned five-round check remains
+FAILED with seven valid readings. A read-only MAC/watchdog reset recovered
+COM22; its original approved audio image/source and inactive radio were
+verified, with a new-boot indication of **38.1 °C**. No firmware was written.
+
+These indications are lower than the earlier TX peak, but fan airflow and
+reduced/changed workload are not isolated. The COM22 recovery also changes its
+boot context. This is neither a controlled fan-on/fan-off thermal experiment
+nor a repeat of the RF decoding tests; movement in the airflow must not be
+retroactively assigned to the earlier receiver-position comparison.
+
+The owner then requested a quick repeat of the high-rate decoding failure.
+[Six finite fan-assisted windows](FAN-FRAMED-REPEAT.md) repeated the original
+4.416/8.832 Mbaud settings three times each with the exact same SDR images.
+Their 36 before/after readings are retained separately in that capture, with
+TX indications **29.9–55.9 °C**. At 8.832 Mbaud, COM23 recovered headers in
+three windows with 196 errors/768 compared payload bits, while COM22 recovered
+none. The 4.416 Mbaud control recovered headers on both boards in all three
+windows. Cooler conditions, fresh receiver initialization, changed workload
+history and moving-board RF geometry are confounded. Improved header recovery
+on one receiver does not establish a thermal cause or a clean high-rate link.
+Both audio profilers were restored and verified idle again in the
+[follow-up restoration receipt](metal-fan-audio-restore-receipt.json).

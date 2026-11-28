@@ -1,0 +1,34 @@
+{
+  "schema": "cyd-perf-derived-publication-manifest/1",
+  "publication_applied": true,
+  "files": {
+    "PHYSICAL-CAPTURES-METAL-FAN.zip": {
+      "bytes": 1146393,
+      "sha256": "4cbc191f89108681fec2678620458e82b494623e457c7cf9dcff2a9e899a582e"
+    },
+    "metal-fan-archive-receipt.json": {
+      "bytes": 11195,
+      "sha256": "20e94e58dcda3c957b0ad9a5cf605a34576b6663a0e4acdf32d8d06d51339811"
+    },
+    "DERIVED-ANALYSES-METAL-FAN.zip": {
+      "bytes": 353840,
+      "sha256": "f41e5db392d0c47849a9f5327f975a8362683b2baa8d0c9ad102444da029c980"
+    },
+    "DERIVED-ANALYSES-METAL-FAN.md": {
+      "bytes": 2512,
+      "sha256": "d7d7180bd96a6e1f423da5da2280809856824e7dcb77d515e77b9b6e7596c720"
+    },
+    "derived-analyses-metal-fan-receipt.json": {
+      "bytes": 2078,
+      "sha256": "23a249ee0a550477cfd733aa67e6ef2a1ce2e45d5c2ae002d77f314f78428db9"
+    },
+    "derived-metal-fan-publication-layout.json": {
+      "bytes": 1487,
+      "sha256": "3db4f2d638ad255cdf04de9409bf7d864b16988dc7e8a4ce25cfe971c2073df4"
+    },
+    "derived-metal-fan-publication-applied.json": {
+      "bytes": 1353,
+      "sha256": "291b494ee51bae76c1854d3c76aaf64de31208f2fe246349612496dd87a28936"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "schema": "cyd-perf-mission-index-manifest/1",
   "evidence_class": "DERIVED_CAPTURE_INDEX",
-  "metadata_sha256": "bbad0163b02b264e93dd6929b2e2d7648609ac033b02e33bd3adcdc698491bde",
+  "metadata_sha256": "31ff0a03bc002491cfd46c42eb84088d6290963e9769b2d255d56e529f701c19",
   "tool_sha256": "6f64f3d0a3f88bf94bf20f4f4e72bea4b95b021319c67829a4398861388c8572",
   "capture_results_sha256": {
     "audio-bidirectional-01/results.json": "e39b34a9f4378deb3e5153a51bfe393b0084df3f8b7c0fee444cebf5f049d47c",
@@ -23,6 +23,7 @@
     "link-wifi-01/results.json": "12f2f1fab2aa41e2e648f55fba102df8401ba874c006e3eaea17d81bb17a00fc",
     "link-wifi-02/results.json": "14563e4539e86e77d35a4f22c50af574f5278e22efc10113c19a0d93dafb471a",
     "link-wifi-retry-01/results.json": "c1cbc539a4f5bc38f1f26b9b5878888ee765f51dd45cb3a2531b5a08f4272b35",
+    "metal-dual-fan-framed-01/results.json": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958",
     "metal-dual-fast-compat-01/results.json": "d803df907023f6bf1a740cab9e53fcaf2a520f600a69ccb485fbbe0e11fd6ce5",
     "metal-dual-fast-framed-01/results.json": "5984862c3dbf8efcea5a040a25b5d60f07122253fd144f7b237b3296e65998ec",
     "metal-dual-fast-rate-01/results.json": "151b8cb0a034b1d788f6110b766cdf55f90c8c54d0ec0859eb9f37d6c3188098",
@@ -55,7 +56,7 @@
     "sdr-ram-centered-01/results.json": "35acdd4a84bfcb3bec49af08bb4bf072239b3b6290583a44f84d48a12e3c5a56"
   },
   "outputs": {
-    "mission-status.json": "f5812f891d0030f4fa949a57807f21e7c3b3fe4e66466a9ad25ba72762edc5c0",
-    "measurement-status.csv": "c76767035dac079a5e26af8632608b2f76b51f58f7a39fe7ba2fd82e88e3fb30"
+    "mission-status.json": "21ec02d5e1a8f6d274d7cd8aeafb62332fe875e0d9170a9da26e5cabf05c5827",
+    "measurement-status.csv": "7dcea52d672720107973e8c1d3c58757779388091c798e29aa5285d53b5ba389"
   }
 }

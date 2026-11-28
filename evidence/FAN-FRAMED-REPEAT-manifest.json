@@ -1,0 +1,151 @@
+{
+  "schema": "cyd-fan-framed-repeat-manifest/1",
+  "status": "COMPLETE",
+  "created_utc": "2026-11-28T00:48:23.726071+00:00",
+  "scope": "New four-file closed fan comparison only; no capture, firmware, source, plan, identity or previous analysis mutations.",
+  "hardware_access": false,
+  "native_or_envelope_reanalysis": false,
+  "archive_files_verified": [
+    {
+      "path": "evidence/PHYSICAL-CAPTURES-METAL-FAN.zip",
+      "bytes": 1146393,
+      "sha256": "4cbc191f89108681fec2678620458e82b494623e457c7cf9dcff2a9e899a582e"
+    },
+    {
+      "path": "evidence/DERIVED-ANALYSES-METAL-FAN.zip",
+      "bytes": 353840,
+      "sha256": "f41e5db392d0c47849a9f5327f975a8362683b2baa8d0c9ad102444da029c980"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/results.json",
+      "bytes": 285534,
+      "sha256": "718f52968a6268974b4af144d8a75d3586b131e863f9f6b6ca4e108617dce958"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/artifact-hashes.json",
+      "bytes": 4152,
+      "sha256": "85d0ced10fcc94b309a226228ea83e009ed06bbf6ae61defa95f2010befb9e4d"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/rx/results.json",
+      "bytes": 221206,
+      "sha256": "97028d49762f3c4400a13dba55ada69f1c959c523e0b9fab436e50c8a61dcc0d"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/rx/artifact-hashes.json",
+      "bytes": 1722,
+      "sha256": "9f88efb3809b73f14a59128ce503baf5afbda779f81f0c28cf0a855986877be3"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/rx2/results.json",
+      "bytes": 222081,
+      "sha256": "babf0c16400fab53cac7b097519559c8785edfef9986b51a02d933d7631e1593"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fan-framed-01/rx2/artifact-hashes.json",
+      "bytes": 1722,
+      "sha256": "9f61d4ef0f30f6ac435f2cfe0f933df41bdf0992d1a8814a5331f0b92646911c"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/results.json",
+      "bytes": 963401,
+      "sha256": "5984862c3dbf8efcea5a040a25b5d60f07122253fd144f7b237b3296e65998ec"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/artifact-hashes.json",
+      "bytes": 10512,
+      "sha256": "4c22270692c8320d78ccc2c95a09265908bf9588e0994fc685560e32f210832a"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/rx/results.json",
+      "bytes": 752346,
+      "sha256": "b4b8dbbb778d8e732e4539afa444b2589cbce78f5ab4a89cdd8a66c4770a2699"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/rx/artifact-hashes.json",
+      "bytes": 4797,
+      "sha256": "24989a3c63d96fe4e036825e6f041d5b89c7fb20b6bb08fd7359668ec8f98654"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/rx2/results.json",
+      "bytes": 753191,
+      "sha256": "c79bbde0e5f831f36df9098bf2100b73af9c7d4eb7141816089ad17c13707db6"
+    },
+    {
+      "path": "evidence/physical/metal-dual-fast-framed-01/rx2/artifact-hashes.json",
+      "bytes": 4797,
+      "sha256": "d77f19461baa2bd706c0147c7f671d13dcf7665eb78e9bec66556146ba645bce"
+    },
+    {
+      "path": "evidence/metal-fan-framed-rx-demod/manifest.json",
+      "bytes": 6110,
+      "sha256": "d9f70719fef065c2ef069438f8ec964e9978521ca7af9fa4dfa29d6c0f105bd1"
+    },
+    {
+      "path": "evidence/metal-fan-framed-rx2-demod/manifest.json",
+      "bytes": 6497,
+      "sha256": "1ceea234b8728e4e7ad8afc5f98c3e194cc99c5e207d546725abb37799f8d7b1"
+    },
+    {
+      "path": "evidence/metal-fast-framed-rx-demod/manifest.json",
+      "bytes": 18353,
+      "sha256": "403157ab42956d76e8eab63bdf6e0ab16d4281759747df27d5e97610149c3733"
+    },
+    {
+      "path": "evidence/metal-fast-framed-rx2-demod/manifest.json",
+      "bytes": 18482,
+      "sha256": "f3229ab64b9901a877c8845de2c1bf78662837192ba99b5f2d9e2ff43ad97c06"
+    },
+    {
+      "path": "evidence/plan-metal-dual-fan-framed.json",
+      "bytes": 2189,
+      "sha256": "e8d6439ee885bfb9b656c245d656448df31ff5b05e96e8df577ec5f063966181"
+    },
+    {
+      "path": "evidence/metal-fan-rx-reflash-receipt.json",
+      "bytes": 5432,
+      "sha256": "b769350f8a780aef33308533b8c722234e0f0e5d5baaae2512bced6072c329ca"
+    },
+    {
+      "path": "evidence/metal-fan-audio-restore-receipt.json",
+      "bytes": 14213,
+      "sha256": "098da3792993b9aac7a9a506feefc4943e7a66b58d24639661bee8899839a59e"
+    },
+    {
+      "path": "evidence/metal-fan-archive-receipt.json",
+      "bytes": 11195,
+      "sha256": "20e94e58dcda3c957b0ad9a5cf605a34576b6663a0e4acdf32d8d06d51339811"
+    },
+    {
+      "path": "evidence/derived-analyses-metal-fan-receipt.json",
+      "bytes": 2078,
+      "sha256": "23a249ee0a550477cfd733aa67e6ef2a1ce2e45d5c2ae002d77f314f78428db9"
+    }
+  ],
+  "original_findings_hashes_unchanged": {
+    "evidence/METAL-FAST-FINDINGS.md": "9dcc77bebb48ae50939de1a45db2b4ddfef940256944deedd19984d5cbac599f",
+    "evidence/METAL-FAST-FINDINGS.json": "3f1bfbe056024e13651646eb6251353368284f09044949c20d48d13d97096ec6",
+    "evidence/METAL-FAST-FINDINGS.csv": "c4bf8b44c00882f95cf151a597f7e89635e12a72b8998df516c22b126d3eb3b7",
+    "evidence/METAL-FAST-FINDINGS-MANIFEST.json": "884cecf5ebedae2881534a542e2b5702d03da61af80f842d3da2e63ceeb98bf2"
+  },
+  "local_markdown_links_verified": true,
+  "outputs": [
+    {
+      "path": "evidence/FAN-FRAMED-REPEAT.md",
+      "bytes": 5315,
+      "sha256": "862ebc86e0ee79c6c58116e90bc532cfab4a138ab8d68c0de03538a24bad90c8"
+    },
+    {
+      "path": "evidence/FAN-FRAMED-REPEAT.json",
+      "bytes": 28473,
+      "sha256": "ebb38610bb2e43fb7a8bfcfac9635de691c4e53d64a5eba613aedd514d85199f"
+    },
+    {
+      "path": "evidence/FAN-FRAMED-REPEAT.csv",
+      "bytes": 4824,
+      "sha256": "f9016c330f4ccb19497b2c1e10115f1f783122d2e36159a30155363a06ad0d8c"
+    }
+  ]
+}

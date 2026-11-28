@@ -1,0 +1,52 @@
+{
+  "schema": "cyd-perf-derived-archive-receipt/1",
+  "status": "VERIFIED_COMPACT_ROOT_PUBLICATION_STAGED",
+  "generated_utc": "2026-11-28T00:43:34.822815+00:00",
+  "archive": "DERIVED-ANALYSES-METAL-FAN.zip",
+  "archive_sha256": "f41e5db392d0c47849a9f5327f975a8362683b2baa8d0c9ad102444da029c980",
+  "archive_bytes": 353840,
+  "manifest_member": "DERIVED-ANALYSES-MANIFEST.json",
+  "manifest_sha256": "3e86e1711c7ffbae6973ccbc6db435133b64c840e3a413941b8deb34e6362006",
+  "source_files": 93,
+  "source_bytes": 707648,
+  "zip_members": 96,
+  "source_directories": [
+    "evidence/metal-fan-framed-rx-demod",
+    "evidence/metal-fan-framed-rx2-demod"
+  ],
+  "ignored_files_included": 81,
+  "WAV_files_included": 0,
+  "byte_exact_original_manifests": 2,
+  "original_manifest_output_mismatches": [],
+  "verification": {
+    "source_snapshot_unchanged": true,
+    "membership_and_member_hashes": true,
+    "ZIP_CRC": true,
+    "fresh_extraction_hashes": true,
+    "Git_index_changed_by_packager": false,
+    "raw_or_existing_ZIP_changed": false
+  },
+  "packager_sha256": "916ae7ae8bc23412d83e32b9819fd0485d8b97051b69160d273dda34c8ddc0da",
+  "proposal_plan_sha256": "4831e721a3126bf2ee5a2c8ea9ca802a6b7d70e9eec044c8bad4c82f5d76a680",
+  "proposed_archive_only_files": 81,
+  "proposed_index_removals": 0,
+  "proposed_publication_replacements": 0,
+  "archive_link_rewrites": 0,
+  "preexisting_missing_local_links": [
+    {
+      "source": "evidence/README.md",
+      "href": "FAN-FRAMED-REPEAT.md",
+      "target": "evidence/FAN-FRAMED-REPEAT.md"
+    },
+    {
+      "source": "evidence/TEMPERATURE.md",
+      "href": "FAN-FRAMED-REPEAT.md",
+      "target": "evidence/FAN-FRAMED-REPEAT.md"
+    }
+  ],
+  "original_files_on_disk_unchanged": 93,
+  "live_root_files_staged": 12,
+  "new_detail_paths_unstaged": 0,
+  "applied_audit_file": "derived-metal-fan-publication-applied.json",
+  "link_scan_scope": "Forward links to the separately written FAN-FRAMED-REPEAT.md were pending at archive snapshot; report is outside this archive scope."
+}
