@@ -4,6 +4,7 @@
 #include "../src/cyd_settings_file.h"
 #include "../src/rite.h"
 #include "../src/theme.h"
+#include "../src/native_script.h"
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
@@ -52,6 +53,71 @@ hal::Key tap(int x, int y) { auto key = press(x, y); release(); return key; }
 hal::Key logicalTap(int x, int y) {
     return tap(cyd_controls::viewportLeft() + x * cyd_controls::viewportWidth() / 240,
                cyd_controls::viewportTop() + y * cyd_controls::viewportHeight() / 135);
+}
+
+// Reproduce the missed Hide edge without sleeping, then use the actual native
+// adapter with the same declared 1700/1900/2100/2350/2600 ms action sequence.
+// The simulated render stall skips directly to 2300 ms, and no input poll is
+// allowed between the next script contacts.
+void delayedScriptRegression() {
+    using namespace cyd_controls;
+    release();
+    setRite(&RITE_GLYPHSONG);
+    logicalTap(100, 40);
+    assert(viewportBottom() == 110);
+    std::vector<hal::Key> keys;
+    auto emit = [&](bool down, int x, int y) {
+        hal::Key key{};
+        if (touch(down, x, y, now, key)) keys.push_back(key);
+    };
+
+    // Old overdue-burst behavior: Sing is admitted, Hide at the same actual
+    // instant is lost because its down edge cancels the pending release.
+    now += 2300;
+    emit(true, 295, 228); emit(false, 295, 228);
+    emit(true, 248, 228); emit(false, 248, 228);
+    assert(keys.size() == 1 && keys[0].nav == hal::N_ENTER);
+    assert(viewportBottom() == 110);
+    release();
+    tap(248, 228);
+    assert(viewportBottom() == 180);
+    logicalTap(100, 40);
+    assert(viewportBottom() == 110);
+    keys.clear();
+
+    native_script::Schedule clock;
+    native_script::TouchEdges edges;
+    const uint32_t start = now;
+    clock.reset(start);
+    now = start + 2300; // both first actions would be overdue in the old loop
+    assert(clock.dispatch(1700, now));
+    edges.tap(295, 228, emit);
+    assert(!clock.dispatch(1900, now));
+    now = start + 2499;
+    assert(!clock.dispatch(1900, now));
+    now = start + 2500;
+    assert(clock.dispatch(1900, now));
+    edges.tap(248, 228, emit);
+    assert(viewportBottom() == 180); // known up state was settled before Hide
+    now = start + 2700;
+    assert(clock.dispatch(2100, now)); edges.tap(280, 195, emit);
+    now = start + 2950;
+    assert(clock.dispatch(2350, now)); edges.tap(280, 195, emit);
+    now = start + 3200;
+    assert(clock.dispatch(2600, now)); edges.tap(280, 195, emit);
+    assert(keys.size() == 4 && keys[0].nav == hal::N_ENTER);
+    for (size_t i = 1; i < keys.size(); ++i) assert(keys[i].nav == hal::N_TAB);
+    assert(!edges.held());
+    release();
+    setRite(nullptr);
+
+    // Counter rollover must not make a future action appear overdue.
+    clock.reset(0xfffffff0u);
+    assert(!clock.dispatch(32, 15));
+    assert(clock.dispatch(32, 16));
+    assert(!clock.dispatch(64, 47));
+    assert(clock.dispatch(64, 48));
+    std::puts("PASS scripted touch: forced 600 ms stall, preserved action intervals, settled release, Hide + three Mode edges, timer rollover");
 }
 
 int main() {
@@ -138,5 +204,6 @@ int main() {
     assert(!saveColourway(colour));
     assert(theme::colourScheme() == theme::ColourScheme::Ember);
     std::remove(file.c_str());
+    delayedScriptRegression();
     std::puts("PASS CYD controls: gesture capture/release, lifecycle isolation, docks, glyph keyboard/caret, four orientations, palette persistence/failure");
 }

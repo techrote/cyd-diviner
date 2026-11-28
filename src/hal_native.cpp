@@ -4,12 +4,15 @@
 // Env vars for headless previews (SDL_VIDEODRIVER=offscreen):
 //   GRIM_SCRIPT="ms:action;..."  actions: shot:<file.ppm>, key:<chars>, enter,
 //                                back, esc, tab, up, down, left, right, quit
-//                                (times are from start; key: types each char)
+//                                (planned times; stalls preserve intervals)
+//                                key: types each char; CYD also has tap:x,y
+//                                and touch:x,y,down; separate taps by >30 ms
 //   GRIM_WAV=<file.wav>          write the audio stream to a WAV instead of SDL
 #include "hal.h"
 #include "build_identity.h"
 #include "audio_lifecycle.h"
 #include "timing_stats.h"
+#include "native_script.h"
 #ifdef GRIM_CYD
 #include "cyd_controls.h"
 #include "theme.h"
@@ -66,9 +69,9 @@ std::thread wavThread;
 SDL_AudioDeviceID audioDevice = 0;
 diagnostics::TimingStats audioTiming, frameTiming;
 std::atomic<uint32_t> audioSkipped{0};
-uint32_t scriptStart = 0;
+native_script::Schedule scriptSchedule;
 #ifdef GRIM_CYD
-bool scriptedTouch = false;
+native_script::TouchEdges scriptedTouch;
 int scriptedX = 0, scriptedY = 0;
 bool directFrameWritten = false;
 struct Mote { int x, y; uint16_t colour; uint8_t alpha; };
@@ -235,36 +238,37 @@ void prepareScript() {
         } else script.push_back({at, act});
     }
     std::stable_sort(script.begin(), script.end(), [](const auto &a, const auto &b) { return a.at < b.at; });
-    scriptStart = hal::ms();
+    scriptSchedule.reset(hal::ms());
 }
 
 void runScript() {
-    while (nextStep < script.size() && hal::ms()-scriptStart >= script[nextStep].at) {
-        const std::string act = script[nextStep++].action;
-        if (act.rfind("shot:", 0) == 0) { saveShot(act.substr(5)); continue; }
-        if (act == "quit") { stopWanted.store(true, std::memory_order_release); continue; }
+    if (nextStep >= script.size()) return;
+    const uint32_t now = hal::ms();
+    if (!scriptSchedule.dispatch(script[nextStep].at, now)) return;
+    const std::string act = script[nextStep++].action;
+    if (act.rfind("shot:", 0) == 0) { saveShot(act.substr(5)); return; }
+    if (act == "quit") { stopWanted.store(true, std::memory_order_release); return; }
 #ifdef GRIM_CYD
-        int x = 0, y = 0, down = 0;
-        if (sscanf(act.c_str(), "touch:%d,%d,%d", &x, &y, &down) == 3) {
-            scriptedTouch = down != 0; scriptedX = x; scriptedY = y; sendTouch(down != 0, x, y); continue;
-        }
-        if (sscanf(act.c_str(), "tap:%d,%d", &x, &y) == 2) {
-            sendTouch(true, x, y); sendTouch(false, x, y); scriptedTouch = false; continue;
-        }
-#endif
-        hal::Key k;
-        if (act.rfind("char:", 0) == 0 && act.size() > 5) k.ch = act[5];
-        else if (act == "enter") k.nav = hal::N_ENTER;
-        else if (act == "back") k.nav = hal::N_BACK;
-        else if (act == "esc") { k.nav = hal::N_ESC; k.ch = '`'; }
-        else if (act == "tab") k.nav = hal::N_TAB;
-        else if (act == "up") { k.nav = hal::N_UP; k.ch = ';'; k.fn = true; }
-        else if (act == "down") { k.nav = hal::N_DOWN; k.ch = '.'; k.fn = true; }
-        else if (act == "left") { k.nav = hal::N_LEFT; k.ch = ','; k.fn = true; }
-        else if (act == "right") { k.nav = hal::N_RIGHT; k.ch = '/'; k.fn = true; }
-        else continue;
-        push(k);
+    int x = 0, y = 0, down = 0;
+    if (sscanf(act.c_str(), "touch:%d,%d,%d", &x, &y, &down) == 3) {
+        scriptedX = x; scriptedY = y; scriptedTouch.set(down != 0, x, y, sendTouch); return;
     }
+    if (sscanf(act.c_str(), "tap:%d,%d", &x, &y) == 2) {
+        scriptedTouch.tap(x, y, sendTouch); return;
+    }
+#endif
+    hal::Key k;
+    if (act.rfind("char:", 0) == 0 && act.size() > 5) k.ch = act[5];
+    else if (act == "enter") k.nav = hal::N_ENTER;
+    else if (act == "back") k.nav = hal::N_BACK;
+    else if (act == "esc") { k.nav = hal::N_ESC; k.ch = '`'; }
+    else if (act == "tab") k.nav = hal::N_TAB;
+    else if (act == "up") { k.nav = hal::N_UP; k.ch = ';'; k.fn = true; }
+    else if (act == "down") { k.nav = hal::N_DOWN; k.ch = '.'; k.fn = true; }
+    else if (act == "left") { k.nav = hal::N_LEFT; k.ch = ','; k.fn = true; }
+    else if (act == "right") { k.nav = hal::N_RIGHT; k.ch = '/'; k.fn = true; }
+    else return;
+    push(k);
 }
 
 // --- audio -------------------------------------------------------------------
@@ -420,7 +424,7 @@ void idle(uint32_t msec) {
 bool pollKey(Key &k) {
     runScript(); scanSdl();
 #ifdef GRIM_CYD
-    if (scriptedTouch) sendTouch(true, scriptedX, scriptedY);
+    if (scriptedTouch.held()) sendTouch(true, scriptedX, scriptedY);
     else {
         int32_t x = 0, y = 0;
         const bool down = lcd->getTouch(&x, &y);
