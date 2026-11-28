@@ -18,7 +18,8 @@ from link_capture import SecretGuard
 from sdr_capture import SDRPort, digest
 from sdr_metal_capture import (MetalRX, default_plan, validate_plan, validate_snapshot,
                                validate_tx_cleanup, validate_sensor_cleanup,
-                               tx_output_transport_info, validate_tx_transport)
+                               tx_output_transport_info, validate_tx_transport, require_fast_capability,
+                               require_source_integrity_capability, SourceIntegrityError)
 
 RECEIVERS = ("rx", "rx2")
 
@@ -99,6 +100,8 @@ def execute_dual_run(run, ports, plan, plan_path, folders, guard):
         raise ValueError("Dual-receiver experiment requires explicit 500,000us arm delay")
     cursors = {name: len(port.records) for name, port in ports.items()}
     output_before = tx_output_transport_info(tx.records)
+    if case.get("tx_enabled") and case.get("tx_mode") == "fast": require_fast_capability(output_before)
+    if case.get("tx_enabled") and (output_before or {}).get("source_integrity_supported") is True: require_source_integrity_capability(output_before)
     snapshot_cursors = {name: len(ports[name].decoder.snapshots) for name in RECEIVERS}
     received, failures = {}, {}
     run["receivers"] = {name: {"status": "IN PROGRESS", "shared_exposure_id": run_id} for name in RECEIVERS}
@@ -199,8 +202,10 @@ def execute_dual_run(run, ports, plan, plan_path, folders, guard):
                 run["transmitter_output_before"] = output_before
                 output_after = tx.request("info", lambda r: r.get("type") == "info", records=True)
                 run["transmitter_output_after"] = output_after
-            run["transmitter_output_validation"] = validate_tx_transport(tx.records[cursors["tx"]:], output_before, output_after)
-        except (RuntimeError, TimeoutError, ValueError, OSError) as error: failures["tx"] = str(error)
+            run["transmitter_output_validation"] = validate_tx_transport(tx.records[cursors["tx"]:], output_before, output_after, packed)
+        except (RuntimeError, TimeoutError, ValueError, OSError) as error:
+            if isinstance(error, SourceIntegrityError): run["transmitter_source_validation"] = error.validation
+            failures["tx"] = str(error)
     # A terminal receiver may be read even if the other receiver failed.
     for name in RECEIVERS:
         port, child = ports[name], run["receivers"][name]

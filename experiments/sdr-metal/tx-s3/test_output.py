@@ -44,11 +44,13 @@ static int usb_serial_jtag_wait_tx_done(unsigned ticks) { assert(ticks==5000);re
 '''
 COMMAND_FAKES = r'''
 enum { CpuHz=240000000,DurationLimitUs=2000000,MaskLimitUs=20000 };
-typedef enum { Api,Ram,Gate,Ask } Backend;
-static uint32_t capacity=64,loaded_bits=64,permit,trace_stride,trace_capacity=512;
+typedef enum { Api,Ram,Gate,Ask,Fast } Backend;
+static uint32_t capacity=64,loaded_bits=64,loaded_crc32,permit,trace_stride,trace_capacity=512;
 static bool minimal_phy;
 static uint8_t storage[64],*packed=storage;
-static unsigned transmissions;
+static unsigned transmissions,prepare_calls;
+static bool prepare_allowed;
+static bool prepare_fast(uint32_t baud) { ++prepare_calls;return baud!=0&&prepare_allowed; }
 static void info(void) {}
 static void temperature(void) {}
 static void error(const char *s) { (void)s; }
@@ -61,7 +63,7 @@ TEST = r'''
 static void reset(void) {
     memset(&output_stats,0,sizeof(output_stats));output_resync_pending=false;
     now=wire_length=driver_calls=zero_budget=read_calls=transmissions=0;
-    write_mode=flush_status=0;permit=0x1234;loaded_bits=64;
+    write_mode=flush_status=0;permit=0x1234;loaded_bits=64;trace_stride=0;prepare_calls=0;prepare_allowed=true;
 }
 int main(void) {
     char maximum[4096],oversize[4097],longline[1501];
@@ -91,7 +93,14 @@ int main(void) {
     assert(transmissions==0&&permit==0&&output_stats.lines_failed==1);
     reset();char accepted[]="tx gate 1000000 96 112 1000 0 1234";command(accepted);assert(transmissions==1&&permit==0);
     reset();write_mode=6;char failed_upload[]="load 8 0";command(failed_upload);assert(loaded_bits==0&&read_calls==0);
-    puts("PASS 15 actual-body formatter/write-all/framing/counter/start-gate scenarios");return 0;
+    reset();char accepted_fast[]="tx fast 2208000 96 112 1000 0 1234";command(accepted_fast);
+    assert(transmissions==1&&prepare_calls==1&&permit==0);
+    reset();char zero_fast[]="tx fast 0 96 112 1000 0 1234";command(zero_fast);assert(transmissions==0&&prepare_calls==0);
+    reset();char masked_fast[]="tx fast 2208000 96 112 1000 1 1234";command(masked_fast);assert(transmissions==0&&prepare_calls==0);
+    reset();trace_stride=1;char traced_fast[]="tx fast 2208000 96 112 1000 0 1234";command(traced_fast);assert(transmissions==0&&prepare_calls==0);
+    reset();prepare_allowed=false;char unavailable_fast[]="tx fast 2208000 96 112 1000 0 1234";command(unavailable_fast);
+    assert(transmissions==0&&prepare_calls==1&&permit==0&&output_stats.lines_attempted==0);
+    puts("PASS 20 actual-body formatter/write-all/framing/counter/start-gate/fast-admission scenarios");return 0;
 }
 '''
 
@@ -111,7 +120,7 @@ def main():
     if ran.returncode:
         raise SystemExit(ran.stdout + ran.stderr)
     print(json.dumps({"schema": "sdr-metal-tx-output-host/1", "evidence_class": "HOST_FAKE_SDK",
-                      "physical_execution": False, "scenarios": 15, "status": "PASS", "stdout": ran.stdout.strip()}))
+                      "physical_execution": False, "scenarios": 20, "status": "PASS", "stdout": ran.stdout.strip()}))
 
 
 if __name__ == "__main__":

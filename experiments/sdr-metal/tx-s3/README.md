@@ -48,7 +48,7 @@ observe TRACE_STRIDE
 init phy|wifi
 load BIT_COUNT CRC32_HEX
 permit PRIVATE_NONZERO_8HEX
-tx api|ram|gate|ask BAUD BACKOFF0 BACKOFF1 DURATION_US MASK_SEGMENT_US PRIVATE_PERMIT
+tx api|ram|gate|ask|fast BAUD BACKOFF0 BACKOFF1 DURATION_US MASK_SEGMENT_US PRIVATE_PERMIT
 temperature
 ```
 
@@ -123,3 +123,97 @@ The actual-body fake tests cover short/zero/error writes, the exact formatter
 boundary, partial-line recovery, counter saturation and the pre-RF drain
 gate. Static bounds cover every complete SDR record; target compilation also
 checks printf argument types. These tests do not establish USB or RF behavior.
+
+## Experimental fast paced word stream
+
+`fast` is a separate S3-only paced benchmark; the previous raw and generic
+loop bodies remain unchanged. It requires positive baud, `observe 0` and
+`MASK_SEGMENT_US=0`. It introduces no baud cap below the CPU cycle clock and
+does not claim to attain the requested rate. Its IRQ-enabled IRAM loop has
+only the cycle wait/finite guard, MMIO write, next-deadline addition, source
+count and a fractional carry once per waveform ring. There is no per-word
+64-bit division, trace, lateness histogram, USB, allocation or mask branch.
+
+Before RF initialization, a checked internal 8-bit DRAM array of four bytes per
+loaded symbol is allocated on demand. It receives the rational cycle deltas
+after all SDK startup calibration and tone initialization.
+`reserve` releases that optional schedule; otherwise its retained capacity is
+reported in `info`. Both waveform and delta ranges, and the loop's IRAM
+placement, are checked before admission. The header digest is independently
+reported. A failed schedule allocation/placement check consumes the one-use
+permit and returns without RF initialization.
+
+For CPU clock `C`, requested baud `B` and ring length `N`, the precomputed
+phase-zero deltas are `floor((i+1)*C/B)-floor(i*C/B)`. A fractional accumulator
+adds zero or one cycle at each ring boundary. Every ring start is therefore
+the exact floor of the global rational clock, with no accumulating rounding
+drift. Within each ring a scheduled start is that exact floor or one cycle
+early: less than two cycles early relative to the real rational time. The
+precomputed table's min/max excludes its separately reported boundary carry;
+the last gap can be one cycle larger. CPU 240 MHz is configured, not independently
+calibrated against RF. Cycle-counter wrap is handled by relative unsigned
+elapsed time; the finite 2 s duration plus one slowest-symbol interval remains
+below half the 32-bit counter range.
+
+Late deadlines never select a later source index: every completed write is
+the next source word. The loop catches up in order when it can, and overload
+slows the stream. The finite end can leave a source tail unsent; it is not an
+individual-bit-skip policy or successful delivery at the requested baud.
+The minimal path does not measure per-word lateness or maximum transient
+backlog; those fields are null. Request, achieved write rate and intact source
+prefix count must accompany any receiver observation.
+
+The separate `tx_fast_clock` record reports the requested ideal word count,
+unsent tail/ahead counts, next scheduled and ideal source-word clocks, signed
+end error, nonnegative end backlog, phase/ring/delta metadata and rounding
+bounds. End error is loop elapsed minus the ideal next source-word start;
+a negative value can be the normal final wait. These are software-clock
+observations, not radiated edge timestamps, decoded throughput or one-way
+audio latency. `tx_end` separately requires that clock record's driver
+acceptance. New IRQ/masked implementations or receiver-visible performance
+require their own reviewed experiments.
+
+Host-only fast validation:
+
+```powershell
+python test_fast_loop.py
+python test_source_integrity.py
+# Build/run test_fast_schedule.cpp with ASAN+UBSAN on a native/WSL C++ compiler.
+```
+
+The portable independent mathematical oracle checks exact rational floors,
+rounding, distant rings, boundary carries and buffer guards. The actual-loop
+fake covers source order with IRQ/overload and a wrapping counter. Neither
+establishes target timing or RF waveform fidelity.
+
+## Source memory integrity at PHY lifecycle boundaries
+
+The uploaded packed stream's expected CRC32 is retained, then checked before
+radio initialization and again after startup calibration. A mismatch returns
+an integrity record and ordinary error without entering a timed loop; the
+post-startup failure first cleans up the owned radio. The packed CRC is checked
+again after all SDK tone initialization. Only then are the word ring and fast
+deltas populated and checked before the loop. The word builder accumulates a
+CRC of the intended words separately from the array's subsequent CRC; the
+freshly built delta CRC supplies its before/after-loop reference.
+
+`tx_source_integrity` records expected/upload, pre/post-radio, pre/post-loop and
+post-teardown packed CRCs, intended/actual word CRCs, delta build/pre/post CRCs,
+buffer addresses and byte counts. Unexecuted stages are explicitly marked by
+checked/loop-started flags; their zero fields are not measurements. Pre-loop
+packed/word/delta mismatch prevents the loop. Post-loop checks are immediately
+after the saved-word restoration and before SDK tone/PHY teardown; the final
+checks observe teardown separately. `timed_source_integrity_ok` and
+`retained_source_integrity_ok` distinguish those stages. A post-teardown-only
+change must not be assigned to an earlier RF payload error.
+
+The packed source and word ring are checked in every backend; deltas apply only
+to `fast`. `tx_end` requires delivery of this record and exposes the strict
+retained-source result. CRC computation, allocation, population and formatting
+remain outside all three timed loops. They add setup/teardown time while SDK
+radio/tone requests can be active; the two-second requested payload remains
+separate from a hard RF-duration bound. These boundary observations do not
+exclude CRC collisions or changes between checks and are not independent
+over-air payload attestation. No SRAM reservation or new MMIO write was added
+to address an unproven overlap; actual addresses and failed checks remain
+evidence for further diagnosis.

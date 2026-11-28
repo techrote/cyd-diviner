@@ -19,6 +19,7 @@
 #include "esp_heap_caps.h"
 #include "esp_log.h"
 #include "esp_mac.h"
+#include "esp_memory_utils.h"
 #include "esp_phy_cert_test.h"
 #include "esp_phy_init.h"
 #include "esp_private/wifi.h"
@@ -30,6 +31,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "metal_words.h"
+#include "fast_schedule.h"
 
 #if !CONFIG_IDF_TARGET_ESP32S3 || !CONFIG_ESP_MAIN_TASK_AFFINITY_CPU0 || CONFIG_PM_ENABLE
 #error Pinned ESP32-S3, CPU0 main task and disabled power management required.
@@ -108,7 +110,7 @@ static void temperature(void) {
 int cmd_parse(char *a,char *b,int *c,char **d) { (void)a;(void)b;(void)c;(void)d;return -1; }
 
 enum { CpuHz=240000000, Channel=6, DurationLimitUs=2000000, MaskLimitUs=20000 };
-typedef enum { Api, Ram, Gate, Ask } Backend;
+typedef enum { Api, Ram, Gate, Ask, Fast } Backend;
 typedef struct { uint32_t symbol,completion_cycle,late_cycles,word; } Trace;
 typedef struct { uint32_t start_cycle,end_cycle,gap_before_cycles; } Segment;
 typedef struct {
@@ -121,14 +123,22 @@ typedef struct {
     const uint32_t *words; uint32_t length; Trace *trace; uint32_t trace_capacity;
     Segment *segments;
 } Loop;
+typedef struct {
+    const uint32_t *words,*deltas;uint32_t length,baud,ring_remainder,duration_cycles;
+} FastLoop;
+typedef struct { uint32_t writes,elapsed_cycles,next_start_cycles,ring_phase; } FastResult;
+static FastResult IRAM_ATTR __attribute__((noinline)) fast_store_loop(const FastLoop *p);
+_Static_assert((uint64_t)DurationLimitUs*240+CpuHz<INT32_MAX,"Fast deadlines stay below half a cycle-counter wrap");
 static uint8_t *packed;
-static uint32_t *words,capacity,loaded_bits,permit,trace_capacity,trace_stride;
+static uint32_t *words,capacity,loaded_bits,loaded_crc32,permit,trace_capacity,trace_stride;
+static uint32_t *fast_deltas,fast_delta_capacity;
+static metal_fast_schedule_t fast_schedule;
 static Trace *traces;
 static Segment *segments;
 static bool minimal_phy=true,radio_ready,wifi_driver_initialized,event_loop_owned,direct_power_domain_owned;
 static uint32_t saved_word,observed_word1;
 static int wifi_stop_status=INT_MIN,wifi_deinit_status=INT_MIN,event_loop_create_status=INT_MIN,event_loop_delete_status=INT_MIN,teardown_status=INT_MIN;
-static const char *backend_name(Backend b) { return b==Api?"api":b==Ram?"ram":b==Gate?"gate":"ask"; }
+static const char *backend_name(Backend b) { return b==Api?"api":b==Ram?"ram":b==Gate?"gate":b==Ask?"ask":"fast"; }
 static void error(const char *s) { output_printf("SDR {\"type\":\"error\",\"message\":\"%s\"}\n",s); }
 static unsigned level_at(uint32_t n) { return (packed[n>>3]>>(7-(n&7)))&1u; }
 static inline uint32_t IRAM_ATTR cycles(void) { return esp_cpu_get_cycle_count(); }
@@ -140,8 +150,9 @@ static bool reserve(uint32_t n,uint32_t t) {
     if(!n || n>UINT32_MAX/sizeof(uint32_t) || t>UINT32_MAX/sizeof(Trace))return false;
     /* These allocations are entirely outside any RF/timed window. Explicit
      * reserve replaces buffers; a failure leaves an unloaded, idle probe. */
-    heap_caps_free(words);heap_caps_free(packed);heap_caps_free(traces);heap_caps_free(segments);
-    words=NULL;packed=NULL;traces=NULL;segments=NULL;capacity=loaded_bits=trace_capacity=0;
+    heap_caps_free(words);heap_caps_free(packed);heap_caps_free(traces);heap_caps_free(segments);heap_caps_free(fast_deltas);
+    fast_deltas=NULL;fast_delta_capacity=0;memset(&fast_schedule,0,sizeof(fast_schedule));
+    words=NULL;packed=NULL;traces=NULL;segments=NULL;capacity=loaded_bits=loaded_crc32=trace_capacity=0;
     words=heap_caps_malloc((size_t)n*sizeof(uint32_t),MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     packed=heap_caps_malloc(((size_t)n+7)/8,MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     if(t) {
@@ -153,6 +164,18 @@ static bool reserve(uint32_t n,uint32_t t) {
     }
     capacity=n;trace_capacity=t;memset(packed,0,((size_t)n+7)/8);return true;
 }
+static bool prepare_fast(uint32_t baud) {
+    if(!loaded_bits||!baud||baud>CpuHz)return false;
+    if(fast_delta_capacity<loaded_bits) {
+        heap_caps_free(fast_deltas);fast_deltas=NULL;fast_delta_capacity=0;
+        fast_deltas=heap_caps_malloc((size_t)loaded_bits*sizeof(uint32_t),MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
+        if(!fast_deltas)return false;
+        fast_delta_capacity=loaded_bits;
+    }
+    /* Allocate before RF, but populate only after PHY startup calibration. */
+    return esp_ptr_in_iram((const void *)fast_store_loop)&&esp_ptr_in_dram(words)&&esp_ptr_in_dram(words+loaded_bits-1)&&
+        esp_ptr_in_dram(fast_deltas)&&esp_ptr_in_dram(fast_deltas+loaded_bits-1);
+}
 static void info(void) {
     uint8_t mac[6];esp_chip_info_t chip;esp_chip_info(&chip);esp_read_mac(mac,ESP_MAC_WIFI_STA);
     output_printf("SDR {\"type\":\"info\",\"protocol\":2,\"profile\":\"s3-sdr-metal-tx\","
@@ -160,7 +183,8 @@ static void info(void) {
         "\"mac\":\"%02x%02x%02x%02x%02x%02x\",\"chip_revision\":%u,\"cpu_mhz\":%u,\"main_core\":%u,"
         "\"init_path\":\"%s\",\"radio_ready\":%s,\"nvs_initialized\":false,\"phy_calibration_storage\":false,"
         "\"wifi_driver_owned\":%s,\"default_event_loop_owned\":%s,\"direct_power_domain_owned\":%s,\"direct_power_domain_api_scope\":\"owned_invocation_reference; void_API_not_physical_power_attestation\","
-        "\"capacity_symbols\":%u,\"loaded_bits\":%u,\"trace_capacity\":%u,\"trace_stride\":%u,\"segment_capacity\":%u,"
+        "\"capacity_symbols\":%u,\"loaded_bits\":%u,\"loaded_crc32\":%u,\"trace_capacity\":%u,\"trace_stride\":%u,\"segment_capacity\":%u,"
+        "\"fast_paced_supported\":true,\"source_integrity_supported\":true,\"fast_schedule_bytes_reserved\":%u,\"fast_schedule_helpers_digest\":\"%s\",\"fast_constraint\":\"positive_baud; IRQ_enabled; observe0; mask0; populated_after_startup_calibration\","
         "\"waveform_memory\":\"internal_8bit_DRAM\",\"finite_duration_limit_us\":%u,\"mask_segment_limit_us\":%u,"
         "\"baud_limit_scope\":\"paced_rate_at_most_CPU_cycle_clock; zero_is_unpaced; achieved_rate_and_missed_slots_measured\","
         "\"register_address\":\"0x60006040\",\"gate_mask\":%u,\"amplitude_mask\":%u,\"mmio_semantics\":\"pinned_S3_vendor_object_inference_RF_unverified\","
@@ -174,7 +198,7 @@ static void info(void) {
         "\"output_counter_scope\":\"cumulative_u32_saturating_and_u64_bytes; snapshot_before_current_line; driver_acceptance_not_host_parse_proof\"}\n",
         SDR_SOURCE_SHA,SDR_SOURCE_DIRTY?"true":"false",SDR_SOURCE_DIGEST,SDR_WORDS_DIGEST,esp_get_idf_version(),
         mac[0],mac[1],mac[2],mac[3],mac[4],mac[5],(unsigned)chip.revision,(unsigned)(esp_clk_cpu_freq()/1000000),(unsigned)xPortGetCoreID(),
-        minimal_phy?"experimental_direct_PHY":"WiFi_NULL",radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",(unsigned)capacity,(unsigned)loaded_bits,(unsigned)trace_capacity,(unsigned)trace_stride,(unsigned)trace_capacity,
+        minimal_phy?"experimental_direct_PHY":"WiFi_NULL",radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",(unsigned)capacity,(unsigned)loaded_bits,(unsigned)loaded_crc32,(unsigned)trace_capacity,(unsigned)trace_stride,(unsigned)trace_capacity,(unsigned)(fast_delta_capacity*sizeof(uint32_t)),SDR_FAST_DIGEST,
         (unsigned)DurationLimitUs,(unsigned)MaskLimitUs,(unsigned)METAL_ENABLE_MASK,(unsigned)METAL_AMPLITUDE_MASK,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_32BIT),
@@ -290,7 +314,69 @@ static Result IRAM_ATTR __attribute__((noinline)) timed_loop(const Loop *p) {
     if(masked) { portCLEAR_INTERRUPT_MASK_FROM_ISR(old_mask);mask_closed=cycles();uint32_t duration=mask_closed-mask_started;r.mask_cycles+=duration;if(duration>r.mask_max_cycles)r.mask_max_cycles=duration;if(r.segment_records)p->segments[r.segment_records-1].end_cycle=mask_closed-first; }
     r.elapsed_cycles=cycles()-first;return r;
 }
+/* Minimal paced backend: no per-symbol division, trace, lateness histogram or
+ * mask branch. Late deadlines retain every word in order; the finite end may
+ * leave an explicit source tail unsent. One fractional carry is paid per ring.
+ * The source and schedule buffers, this code and its literal pool are internal.
+ * Deadline+one interval stays below INT32_MAX for the allowed finite duration. */
+static FastResult IRAM_ATTR __attribute__((noinline)) fast_store_loop(const FastLoop *p) {
+    FastResult r={0};const uint32_t *word=p->words,*limit=word+p->length,*delta=p->deltas;
+    const uint32_t duration=p->duration_cycles,baud=p->baud,remainder=p->ring_remainder;
+    uint32_t next=0,phase=0;const uint32_t first=cycles();
+    for(;;) {
+        uint32_t elapsed;
+        do { elapsed=cycles()-first;if(elapsed>=duration)goto done; }while(elapsed<next);
+        store_word(*word++);++r.writes;next+=*delta++;
+        if(word==limit) {
+            word=p->words;delta=p->deltas;
+            next+=metal_fast_ring_carry(&phase,remainder,baud);
+        }
+    }
+done:
+    r.elapsed_cycles=cycles()-first;r.next_start_cycles=next;r.ring_phase=phase;return r;
+}
+typedef struct {
+    uint32_t packed_expected,packed_before_radio,packed_after_radio,packed_after_tone,packed_before_loop,packed_after_loop,packed_after_teardown;
+    uint32_t words_expected,words_before_loop,words_after_loop,words_after_teardown;
+    uint32_t deltas_after_build,deltas_before_loop,deltas_after_loop,deltas_after_teardown;
+    bool after_radio_checked,after_tone_checked,preloop_checked,loop_started,teardown_checked,delta_required,delta_built;
+} SourceIntegrity;
+static bool timed_source_ok(const SourceIntegrity *s) {
+    return s->after_radio_checked&&s->after_tone_checked&&s->preloop_checked&&s->loop_started&&
+        s->packed_before_radio==s->packed_expected&&s->packed_after_radio==s->packed_expected&&
+        s->packed_after_tone==s->packed_expected&&
+        s->packed_before_loop==s->packed_expected&&s->packed_after_loop==s->packed_expected&&
+        s->words_before_loop==s->words_expected&&s->words_after_loop==s->words_expected&&
+        (!s->delta_required||(s->delta_built&&s->deltas_before_loop==s->deltas_after_build&&s->deltas_after_loop==s->deltas_after_build));
+}
+static bool retained_source_ok(const SourceIntegrity *s) {
+    return timed_source_ok(s)&&s->teardown_checked&&s->packed_after_teardown==s->packed_expected&&
+        s->words_after_teardown==s->words_expected&&(!s->delta_required||s->deltas_after_teardown==s->deltas_after_build);
+}
+static bool emit_source_integrity(const SourceIntegrity *s) {
+    return output_printf("SDR {\"type\":\"tx_source_integrity\",\"ok\":%s,\"timed_source_integrity_ok\":%s,\"retained_source_integrity_ok\":%s,"
+        "\"after_radio_checked\":%s,\"after_tone_checked\":%s,\"preloop_checked\":%s,\"loop_started\":%s,\"teardown_checked\":%s,\"delta_required\":%s,"
+        "\"packed_expected_crc32\":%u,\"packed_before_radio_crc32\":%u,\"packed_after_radio_crc32\":%u,\"packed_after_tone_crc32\":%u,\"packed_before_loop_crc32\":%u,\"packed_after_loop_crc32\":%u,\"packed_after_teardown_crc32\":%u,"
+        "\"words_expected_crc32\":%u,\"words_before_loop_crc32\":%u,\"words_after_loop_crc32\":%u,\"words_after_teardown_crc32\":%u,"
+        "\"deltas_after_build_crc32\":%u,\"deltas_before_loop_crc32\":%u,\"deltas_after_loop_crc32\":%u,\"deltas_after_teardown_crc32\":%u,"
+        "\"packed_address\":%u,\"packed_bytes\":%u,\"words_address\":%u,\"words_bytes\":%u,\"deltas_address\":%u,\"deltas_bytes\":%u,"
+        "\"schedule_populated_after_startup_calibration\":%s,\"schedule_population_scope\":\"after_all_SDK_startup_and_tone_setup_before_timed_loop\",\"buffer_word_byte_order\":\"native_little_endian_u32\",\"packed_bit_order\":\"MSB_first_per_byte\",\"crc_scope\":\"CRC32_LE_seed0_full_buffers_at_marked_stages; unobserved_interval_changes_and_collisions_not_excluded\","
+        "\"observer_scope\":\"outside_timed_loops; adds_setup_teardown_time; register_API_and_CRC_proof_not_independent_RF_payload_attestation\"}\n",
+        retained_source_ok(s)?"true":"false",timed_source_ok(s)?"true":"false",retained_source_ok(s)?"true":"false",
+        s->after_radio_checked?"true":"false",s->after_tone_checked?"true":"false",s->preloop_checked?"true":"false",s->loop_started?"true":"false",s->teardown_checked?"true":"false",s->delta_required?"true":"false",
+        (unsigned)s->packed_expected,(unsigned)s->packed_before_radio,(unsigned)s->packed_after_radio,(unsigned)s->packed_after_tone,(unsigned)s->packed_before_loop,(unsigned)s->packed_after_loop,(unsigned)s->packed_after_teardown,
+        (unsigned)s->words_expected,(unsigned)s->words_before_loop,(unsigned)s->words_after_loop,(unsigned)s->words_after_teardown,
+        (unsigned)s->deltas_after_build,(unsigned)s->deltas_before_loop,(unsigned)s->deltas_after_loop,(unsigned)s->deltas_after_teardown,
+        (unsigned)(uintptr_t)packed,(unsigned)((loaded_bits+7)/8),(unsigned)(uintptr_t)words,(unsigned)(loaded_bits*sizeof(uint32_t)),
+        s->delta_required?(unsigned)(uintptr_t)fast_deltas:0,s->delta_required?(unsigned)(loaded_bits*sizeof(uint32_t)):0,s->delta_built?"true":"false")>=0;
+}
 static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint32_t duration_us,uint32_t mask_us) {
+    const size_t packed_bytes=(loaded_bits+7)/8,word_bytes=(size_t)loaded_bits*sizeof(uint32_t);
+    SourceIntegrity integrity={0};integrity.packed_expected=loaded_crc32;integrity.delta_required=backend==Fast;
+    integrity.packed_before_radio=esp_rom_crc32_le(0,packed,packed_bytes);
+    if(integrity.packed_before_radio!=loaded_crc32) {
+        (void)emit_source_integrity(&integrity);error("source packed CRC changed before radio initialization");return;
+    }
     const unsigned heap_before=(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     const unsigned largest_before=(unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     uint64_t request=esp_timer_get_time();
@@ -300,6 +386,10 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
     }
     const unsigned heap_radio=(unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
     const unsigned largest_radio=(unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT);
+    integrity.after_radio_checked=true;integrity.packed_after_radio=esp_rom_crc32_le(0,packed,packed_bytes);
+    if(integrity.packed_after_radio!=loaded_crc32) {
+        stop_radio();(void)emit_source_integrity(&integrity);error("source packed CRC changed during radio initialization");return;
+    }
     esp_phy_tx_contin_en(true);esp_phy_wifi_tx_tone(1,Channel,b0);
     saved_word=*(volatile uint32_t *)UINT32_C(0x60006040);observed_word1=saved_word;
     bool available=(saved_word&METAL_ENABLE_MASK)!=0;
@@ -307,24 +397,57 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         esp_phy_wifi_tx_tone(1,Channel,b1);observed_word1=*(volatile uint32_t *)UINT32_C(0x60006040);
         available=(observed_word1&METAL_ENABLE_MASK)!=0;
     }
-    Result r={0};uint64_t begin=0,end=0;uint32_t restored_word=0;
+    Result r={0};FastResult fast={0};uint64_t begin=0,end=0;uint32_t restored_word=0;
+    if(available) {
+        integrity.after_tone_checked=true;integrity.packed_after_tone=esp_rom_crc32_le(0,packed,packed_bytes);
+        available=integrity.packed_after_tone==loaded_crc32;
+    }
     if(available) {
         const uint32_t low=backend==Ask?metal_amplitude_word(saved_word,saved_word):metal_gate_word(saved_word,0);
         const uint32_t high=backend==Ask?metal_amplitude_word(saved_word,observed_word1):metal_gate_word(saved_word,1);
-        for(uint32_t i=0;i<loaded_bits;++i)words[i]=level_at(i)?high:low;
+        for(uint32_t i=0;i<loaded_bits;++i) {
+            uint32_t intended=level_at(i)?high:low;words[i]=intended;
+            integrity.words_expected=esp_rom_crc32_le(integrity.words_expected,(const uint8_t *)&intended,sizeof(intended));
+        }
+        if(backend==Fast) {
+            integrity.delta_built=metal_fast_schedule_build(&fast_schedule,CpuHz,baud,loaded_bits,fast_deltas);
+            integrity.deltas_after_build=esp_rom_crc32_le(0,(const uint8_t *)fast_deltas,word_bytes);
+        }
+        integrity.packed_before_loop=esp_rom_crc32_le(0,packed,packed_bytes);
+        integrity.words_before_loop=esp_rom_crc32_le(0,(const uint8_t *)words,word_bytes);
+        if(backend==Fast)integrity.deltas_before_loop=esp_rom_crc32_le(0,(const uint8_t *)fast_deltas,word_bytes);
+        integrity.preloop_checked=true;
+        available=integrity.packed_before_loop==loaded_crc32&&integrity.words_before_loop==integrity.words_expected&&
+            (backend!=Fast||(integrity.delta_built&&integrity.deltas_before_loop==integrity.deltas_after_build));
+    }
+    if(available) {
         Loop p={backend,baud,duration_us*240,mask_us*240,b0,trace_stride,words,loaded_bits,traces,trace_capacity,segments};
-        begin=esp_timer_get_time();
-        if(!baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask))r=raw_store_loop(&p);else r=timed_loop(&p);
+        integrity.loop_started=true;begin=esp_timer_get_time();
+        if(backend==Fast) {
+            const FastLoop f={words,fast_deltas,loaded_bits,baud,fast_schedule.ring_remainder,duration_us*240};
+            fast=fast_store_loop(&f);r.writes=fast.writes;r.elapsed_cycles=fast.elapsed_cycles;
+        }
+        else if(!baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask))r=raw_store_loop(&p);else r=timed_loop(&p);
         end=esp_timer_get_time();
         store_word(saved_word); /* Restore all saved bits before PHY teardown. */
         restored_word=*(volatile uint32_t *)UINT32_C(0x60006040);
+        integrity.packed_after_loop=esp_rom_crc32_le(0,packed,packed_bytes);
+        integrity.words_after_loop=esp_rom_crc32_le(0,(const uint8_t *)words,word_bytes);
+        if(backend==Fast)integrity.deltas_after_loop=esp_rom_crc32_le(0,(const uint8_t *)fast_deltas,word_bytes);
     }
     esp_phy_wifi_tx_tone(0,Channel,b0);esp_phy_tx_contin_en(false);
     const uint32_t tone_disabled_word=*(volatile uint32_t *)UINT32_C(0x60006040);
     stop_radio();
+    integrity.packed_after_teardown=esp_rom_crc32_le(0,packed,packed_bytes);
+    integrity.words_after_teardown=esp_rom_crc32_le(0,(const uint8_t *)words,word_bytes);
+    if(backend==Fast)integrity.deltas_after_teardown=esp_rom_crc32_le(0,(const uint8_t *)fast_deltas,word_bytes);
+    integrity.teardown_checked=true;
+    char late_count[16],late_maximum[16];
+    snprintf(late_count,sizeof(late_count),"%u",(unsigned)r.late_writes);
+    snprintf(late_maximum,sizeof(late_maximum),"%u",(unsigned)r.late_max);
     bool result_accepted=output_printf("SDR {\"type\":\"tx_result\",\"mode\":\"%s\",\"init_path\":\"%s\",\"backend_available\":%s,\"backend_state\":\"%s\","
         "\"requested_baud\":%u,\"unpaced\":%s,\"backoff0_quarter_db\":%u,\"backoff1_quarter_db\":%u,\"requested_duration_us\":%u,"
-        "\"pattern_bits\":%u,\"processed_bits\":%u,\"skipped_paced_slots\":%u,\"late_writes\":%u,\"late_cycles_max\":%u,"
+        "\"pattern_bits\":%u,\"processed_bits\":%u,\"skipped_paced_slots\":%u,\"late_writes\":%s,\"late_cycles_max\":%s,"
         "\"elapsed_cycles\":%u,\"start_us\":%llu,\"end_us\":%llu,\"rf_request_us\":%llu,\"teardown_complete_us\":%llu,"
         "\"achieved_writes_per_s\":%.3f,\"mean_loop_cycles_per_write\":%.3f,\"requested_mask_segment_us\":%u,\"masked_segments\":%u,"
         "\"actual_mask_cycles_sum\":%llu,\"actual_mask_cycles_max\":%u,\"intersegment_gap_cycles_sum\":%llu,\"intersegment_gap_cycles_max\":%u,"
@@ -337,22 +460,46 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         "\"heap_8bit_before_radio_bytes\":%u,\"heap_8bit_largest_before_radio_bytes\":%u,\"heap_8bit_after_radio_bytes\":%u,\"heap_8bit_largest_after_radio_bytes\":%u,"
         "\"heap_8bit_free_bytes\":%u,\"heap_8bit_largest_bytes\":%u,\"temperature_raw_before\":null,\"temperature_raw_after\":null,"
         "\"temperature_method\":\"not_collected_use_explicit_temperature_command\",\"physical_rf_verified\":false}\n",
-        backend_name(backend),minimal_phy?"experimental_direct_PHY":"WiFi_NULL",available?"true":"false",available?"expected_enable_bit_observed_RF_unverified":"unexpected_enable_bit_no_MMIO_written",
-        (unsigned)baud,baud?"false":"true",(unsigned)b0,(unsigned)b1,(unsigned)duration_us,(unsigned)loaded_bits,(unsigned)r.writes,(unsigned)r.skipped_slots,(unsigned)r.late_writes,(unsigned)r.late_max,(unsigned)r.elapsed_cycles,
+        backend_name(backend),minimal_phy?"experimental_direct_PHY":"WiFi_NULL",available?"true":"false",available?"expected_enable_bit_observed_RF_unverified":integrity.after_tone_checked?"source_integrity_failed_no_loop":"unexpected_enable_bit_no_MMIO_written",
+        (unsigned)baud,baud?"false":"true",(unsigned)b0,(unsigned)b1,(unsigned)duration_us,(unsigned)loaded_bits,(unsigned)r.writes,(unsigned)r.skipped_slots,backend==Fast?"null":late_count,backend==Fast?"null":late_maximum,(unsigned)r.elapsed_cycles,
         (unsigned long long)begin,(unsigned long long)end,(unsigned long long)request,(unsigned long long)esp_timer_get_time(),
         r.elapsed_cycles?(double)r.writes*CpuHz/r.elapsed_cycles:0.,r.writes?(double)r.elapsed_cycles/r.writes:0.,(unsigned)mask_us,(unsigned)r.masked_segments,
         (unsigned long long)r.mask_cycles,(unsigned)r.mask_max_cycles,(unsigned long long)r.gap_cycles,(unsigned)r.gap_max_cycles,
         (unsigned)saved_word,(unsigned)observed_word1,(unsigned)saved_word,(unsigned)restored_word,(unsigned)r.trace_count,(unsigned)trace_stride,(unsigned)r.segment_records,(unsigned)(r.masked_segments-r.segment_records),
-        !baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask)?"minimal_unpaced_MMIO":"observed_paced_masked_or_library",
+        backend==Fast?"fast_rational_DRAM_paced":!baud&&!mask_us&&!trace_stride&&(backend==Gate||backend==Ask)?"minimal_unpaced_MMIO":"observed_paced_masked_or_library",
         minimal_phy?"esp_phy_disable_void":"WiFi_stop_deinit",wifi_stop_status,wifi_deinit_status,event_loop_create_status,event_loop_delete_status,teardown_status,wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",heap_before,largest_before,heap_radio,largest_radio,
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT))>=0;
+    bool source_integrity_accepted=result_accepted&&emit_source_integrity(&integrity);
+    bool fast_clock_accepted=backend!=Fast;
+    if(backend==Fast&&result_accepted&&source_integrity_accepted) {
+        const uint64_t target_words=((uint64_t)duration_us*baud+999999)/1000000;
+        const uint64_t ideal_next=(uint64_t)fast.writes*CpuHz/baud;
+        const int64_t clock_error=(int64_t)fast.elapsed_cycles-(int64_t)ideal_next;
+        fast_clock_accepted=output_printf("SDR {\"type\":\"tx_fast_clock\",\"requested_baud\":%u,\"target_duration_cycles\":%u,\"source_words_completed\":%u,"
+            "\"ideal_words_by_target_end\":%llu,\"target_tail_words_not_transmitted\":%llu,\"target_words_ahead_due_rounding\":%llu,"
+            "\"schedule_next_start_cycles\":%u,\"ideal_next_start_cycles_floor\":%llu,\"end_clock_error_cycles\":%lld,\"end_ideal_backlog_cycles\":%llu,"
+            "\"ring_length_symbols\":%u,\"ring_cycles_floor\":%llu,\"ring_remainder\":%u,\"ring_phase_at_end\":%u,"
+            "\"precomputed_delta_min_cycles\":%u,\"precomputed_delta_max_cycles\":%u,\"ring_boundary_extra_cycles_max\":1,"
+            "\"schedule_bytes_reserved\":%u,\"schedule_memory\":\"internal_8bit_DRAM\",\"floor_reference_early_cycles_max\":1,\"real_reference_early_cycles_strict_upper_bound\":2,"
+            "\"clock_reference\":\"nominal_240MHz_CPU_cycle_counter_not_independent_RF_clock\","
+            "\"rounding_scope\":\"exact_floor_at_ring_starts; within_ring_floor_or_one_cycle_early; no_accumulating_rounding_drift\","
+            "\"late_policy\":\"retain_every_source_word; catch_up_in_order; finite_end_leaves_unsent_tail\","
+            "\"end_clock_error_scope\":\"loop_elapsed_minus_ideal_next_source_word_start; negative_can_be_normal_final_wait\","
+            "\"per_word_lateness_observed\":false,\"max_transient_backlog_cycles\":null,"
+            "\"timed_observers\":\"cycle_wait_and_finite_guard; MMIO_store; deadline_delta; source_count; ring_wrap_carry\",\"physical_rf_verified\":false}\n",
+            (unsigned)baud,(unsigned)(duration_us*240),(unsigned)fast.writes,(unsigned long long)target_words,
+            (unsigned long long)(target_words>fast.writes?target_words-fast.writes:0),(unsigned long long)(fast.writes>target_words?fast.writes-target_words:0),
+            (unsigned)fast.next_start_cycles,(unsigned long long)ideal_next,(long long)clock_error,(unsigned long long)(clock_error>0?clock_error:0),
+            (unsigned)loaded_bits,(unsigned long long)fast_schedule.ring_cycles_floor,(unsigned)fast_schedule.ring_remainder,(unsigned)fast.ring_phase,
+            (unsigned)fast_schedule.min_delta_cycles,(unsigned)fast_schedule.max_delta_cycles,(unsigned)(fast_delta_capacity*sizeof(uint32_t)))>=0;
+    }
     uint32_t traces_accepted=0,segments_accepted=0;
-    if(result_accepted)for(uint32_t i=0;i<r.trace_count;++i) {
+    if(result_accepted&&source_integrity_accepted&&fast_clock_accepted)for(uint32_t i=0;i<r.trace_count;++i) {
         if(output_printf("SDR {\"type\":\"tx_trace\",\"symbol\":%u,\"completion_cycle\":%u,\"late_cycles\":%u,\"word\":%u}\n",(unsigned)traces[i].symbol,(unsigned)traces[i].completion_cycle,(unsigned)traces[i].late_cycles,(unsigned)traces[i].word)<0)break;
         ++traces_accepted;
     }
-    if(result_accepted&&traces_accepted==r.trace_count)for(uint32_t i=0;i<r.segment_records;++i) {
+    if(result_accepted&&source_integrity_accepted&&fast_clock_accepted&&traces_accepted==r.trace_count)for(uint32_t i=0;i<r.segment_records;++i) {
         if(output_printf("SDR {\"type\":\"tx_segment\",\"index\":%u,\"start_cycle\":%u,\"end_cycle\":%u,\"gap_before_cycles\":%u}\n",(unsigned)i,(unsigned)segments[i].start_cycle,(unsigned)segments[i].end_cycle,(unsigned)segments[i].gap_before_cycles)<0)break;
         ++segments_accepted;
     }
@@ -361,6 +508,8 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
     bool prior_drained=output_flush();
     output_printf("SDR {\"type\":\"tx_end\",\"trace_records\":%u,\"segment_records\":%u,"
         "\"tx_result_driver_accepted\":%s,\"trace_records_driver_accepted\":%u,\"segment_records_driver_accepted\":%u,"
+        "\"fast_clock_required\":%s,\"fast_clock_driver_accepted\":%s,"
+        "\"source_integrity_required\":true,\"source_integrity_driver_accepted\":%s,\"source_integrity_ok\":%s,"
         "\"all_prior_records_driver_accepted\":%s,\"prior_output_drained\":%s,\"backend_available\":%s,"
         "\"restored_word_requested\":%u,\"restored_word_readback\":%u,\"restored_word_matches\":%s,"
         "\"tone_disable_requested\":true,\"continuous_tone_disable_requested\":true,\"tone_disable_word_readback\":%u,\"tone_enable_bit_after_stop_request\":%s,"
@@ -371,7 +520,9 @@ static void transmit(Backend backend,uint32_t baud,uint32_t b0,uint32_t b1,uint3
         "\"output_counter_scope\":\"before_tx_end_format; driver_acceptance_and_prior_drain_not_host_parse_proof; final_flush_failure_visible_next_info\","
         "\"stop_proof_scope\":\"SDK_requests_and_register_readback_before_PHY_teardown_not_physical_RF_cessation\"}\n",
         (unsigned)r.trace_count,(unsigned)r.segment_records,result_accepted?"true":"false",(unsigned)traces_accepted,(unsigned)segments_accepted,
-        result_accepted&&traces_accepted==r.trace_count&&segments_accepted==r.segment_records?"true":"false",prior_drained?"true":"false",available?"true":"false",
+        backend==Fast?"true":"false",backend==Fast?(fast_clock_accepted?"true":"false"):"null",
+        source_integrity_accepted?"true":"false",retained_source_ok(&integrity)?"true":"false",
+        result_accepted&&source_integrity_accepted&&fast_clock_accepted&&traces_accepted==r.trace_count&&segments_accepted==r.segment_records?"true":"false",prior_drained?"true":"false",available?"true":"false",
         (unsigned)saved_word,(unsigned)restored_word,available?(saved_word==restored_word?"true":"false"):"null",(unsigned)tone_disabled_word,
         tone_disabled_word&METAL_ENABLE_MASK?"true":"false",teardown_status,radio_ready?"true":"false",wifi_driver_initialized?"true":"false",event_loop_owned?"true":"false",direct_power_domain_owned?"true":"false",
         (unsigned)output_stats.lines_attempted,(unsigned)output_stats.lines_accepted,(unsigned)output_stats.lines_failed,(unsigned)output_stats.format_failures,
@@ -390,19 +541,21 @@ static void command(char *line) {
     if(sscanf(line,"init %15s %c",mode,&extra)==1&&(!strcmp(mode,"phy")||!strcmp(mode,"wifi"))) { minimal_phy=!strcmp(mode,"phy");output_puts("SDR {\"type\":\"init_path\",\"ok\":true}");return; }
     if(sscanf(line,"permit %" SCNx32 " %c",&token,&extra)==1&&token) { permit=token;output_puts("SDR {\"type\":\"permit\",\"ok\":true}");return; }
     if(sscanf(line,"load %" SCNu32 " %" SCNx32 " %c",&a,&b,&extra)==2&&a&&a<=capacity) {
-        loaded_bits=0;uint32_t n=(a+7)/8,got=0;if(output_puts("SDR {\"type\":\"ready\"}")<0||!output_flush())return;int64_t deadline=esp_timer_get_time()+5000000;
+        loaded_bits=loaded_crc32=0;uint32_t n=(a+7)/8,got=0;if(output_puts("SDR {\"type\":\"ready\"}")<0||!output_flush())return;int64_t deadline=esp_timer_get_time()+5000000;
         while(got<n&&esp_timer_get_time()<deadline) { int count=usb_serial_jtag_read_bytes(packed+got,n-got,pdMS_TO_TICKS(50));if(count>0)got+=count; }
-        if(got!=n||esp_rom_crc32_le(0,packed,n)!=b)error("upload length or CRC mismatch");else { loaded_bits=a;output_printf("SDR {\"type\":\"loaded\",\"bits\":%u}\n",(unsigned)a); }return;
+        if(got!=n||esp_rom_crc32_le(0,packed,n)!=b)error("upload length or CRC mismatch");else { loaded_bits=a;loaded_crc32=b;output_printf("SDR {\"type\":\"loaded\",\"bits\":%u}\n",(unsigned)a); }return;
     }
     if(sscanf(line,"tx %15s %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNu32 " %" SCNx32 " %c",mode,&a,&b,&c,&d,&e,&token,&extra)==7&&
-        (!strcmp(mode,"api")||!strcmp(mode,"ram")||!strcmp(mode,"gate")||!strcmp(mode,"ask"))&&a<=CpuHz&&b>=32&&b<=120&&c>=32&&c<=120&&
+        (!strcmp(mode,"api")||!strcmp(mode,"ram")||!strcmp(mode,"gate")||!strcmp(mode,"ask")||!strcmp(mode,"fast"))&&a<=CpuHz&&b>=32&&b<=120&&c>=32&&c<=120&&
         d&&d<=DurationLimitUs&&e<=MaskLimitUs&&(!e||(!strcmp(mode,"gate")||!strcmp(mode,"ask")))&&
+        (strcmp(mode,"fast")||(a&&!e&&!trace_stride))&&
         (!e||((uint64_t)d+e-1)/e+1<=trace_capacity)&&token&&token==permit&&loaded_bits) {
         permit=0;
+        if(!strcmp(mode,"fast")&&!prepare_fast(a)) { error("fast schedule allocation or configuration failed before RF");return; }
         bool starting_accepted=output_puts("SDR {\"type\":\"tx_starting\"}")>=0;
         bool starting_drained=output_flush();
         if(!starting_accepted||!starting_drained)return; /* No RF without a drained start boundary. */
-        transmit(!strcmp(mode,"api")?Api:!strcmp(mode,"ram")?Ram:!strcmp(mode,"gate")?Gate:Ask,a,b,c,d,e);return;
+        transmit(!strcmp(mode,"api")?Api:!strcmp(mode,"ram")?Ram:!strcmp(mode,"gate")?Gate:!strcmp(mode,"ask")?Ask:Fast,a,b,c,d,e);return;
     }
     error("invalid command, permission, configuration or finite bound");
 }

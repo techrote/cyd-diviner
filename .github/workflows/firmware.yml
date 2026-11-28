@@ -90,6 +90,10 @@ jobs:
           python experiments/sdr-metal/rx/test_gain_diagnostics_host.py --output /tmp/cyd-metal-gain-tests
           python experiments/sdr-metal/tx-s3/test_output.py
           python experiments/sdr-metal/tx-s3/test_output_bounds.py
+          python experiments/sdr-metal/tx-s3/test_fast_loop.py
+          python experiments/sdr-metal/tx-s3/test_source_integrity.py
+          g++ -std=c++17 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr-metal/tx-s3/test_fast_schedule.cpp -o /tmp/cyd-metal-fast-schedule
+          /tmp/cyd-metal-fast-schedule
           python experiments/sdr-metal/rx/test_output_bounds.py
           gcc -std=c11 -O1 -Wall -Wextra -Werror -fsanitize=address,undefined experiments/sdr-metal/tx/test_words.c -o /tmp/cyd-metal-tx-words
           /tmp/cyd-metal-tx-words

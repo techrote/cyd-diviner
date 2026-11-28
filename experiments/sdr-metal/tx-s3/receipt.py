@@ -19,7 +19,7 @@ def main():
     source=pathlib.Path(__file__).resolve().parent
     sdk_sha=subprocess.check_output(['git','-C',str(args.sdk),'rev-parse','HEAD'],text=True).strip()
     if sdk_sha!='b774170ff46c393eeb5e495ea37936038d3f4f4f':raise SystemExit('Wrong SDK revision')
-    files=['.gitignore','CMakeLists.txt','sdkconfig.defaults','partitions.csv','main/CMakeLists.txt','main/tx_metal_s3.c','main/metal_words.h','test_words.c','test_output.py','test_output_bounds.py','README.md','build.ps1','receipt.py']
+    files=['.gitignore','CMakeLists.txt','sdkconfig.defaults','partitions.csv','main/CMakeLists.txt','main/tx_metal_s3.c','main/metal_words.h','main/fast_schedule.h','test_words.c','test_output.py','test_output_bounds.py','test_fast_schedule.cpp','test_fast_loop.py','test_source_integrity.py','README.md','build.ps1','receipt.py']
     artifacts=['cyd_sdr_metal_tx_s3.bin','cyd_sdr_metal_tx_s3.elf','cyd_sdr_metal_tx_s3.map','config/sdkconfig.h','project_description.json']
     receipt={'schema':'cyd-sdr-metal-tx-build/1','created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
              'status':'BUILD_EVIDENCE_ONLY_NOT_AUTHORIZED_FOR_FLASH','profile':'s3-sdr-metal-tx','sdk_commit':sdk_sha,

@@ -64,9 +64,14 @@ for call in re.finditer(r'\berror\s*\(', text):
 backend_body = re.search(r'static const char \*backend_name\([^)]*\)\s*\{([^}]+)\}', text)[1]
 backend_width = max(len(ast.literal_eval(v)) for v in re.findall(LITERAL, backend_body))
 assert re.search(r'char number\[32\]', text)
-string_assumptions = {'SDR_SOURCE_SHA': 40, 'SDR_SOURCE_DIGEST': 64, 'SDR_WORDS_DIGEST': 64,
+assert 'char late_count[16],late_maximum[16]' in text
+assert 'snprintf(late_count,sizeof(late_count),"%u",(unsigned)r.late_writes)' in text
+assert 'snprintf(late_maximum,sizeof(late_maximum),"%u",(unsigned)r.late_max)' in text
+string_assumptions = {'SDR_SOURCE_SHA': 40, 'SDR_SOURCE_DIGEST': 64, 'SDR_WORDS_DIGEST': 64, 'SDR_FAST_DIGEST': 64,
                       'esp_get_idf_version()': 64, 'number': 31, 's': max(map(len, errors)),
-                      'backend_name(backend)': backend_width}
+                      'backend_name(backend)': backend_width,
+                      'backend==Fast?"null":late_count': 10,
+                      'backend==Fast?"null":late_maximum': 10}
 
 
 def string_width(expression):
@@ -132,11 +137,15 @@ for call in re.finditer(r'\boutput_(printf|puts)\s*\(', text):
                     'capacity': capacity, 'string_arguments': strings})
 
 expected = {'temperature', 'error', 'info', 'radio_error', 'tx_result', 'tx_trace', 'tx_segment',
-            'tx_end', 'reserved', 'observe', 'init_path', 'permit', 'ready', 'loaded', 'tx_starting'}
+            'tx_end', 'tx_fast_clock', 'tx_source_integrity', 'reserved', 'observe', 'init_path', 'permit', 'ready', 'loaded', 'tx_starting'}
 assert {r['type'] for r in records} == expected
 assert len(records) == len(expected)
-for name in ('raw_store_loop', 'timed_loop'):
-    begin = text.index('static Result IRAM_ATTR __attribute__((noinline)) ' + name)
+for name in ('raw_store_loop', 'timed_loop', 'fast_store_loop'):
+    return_type = 'FastResult' if name == 'fast_store_loop' else 'Result'
+    prefix = 'static ' + return_type + ' IRAM_ATTR __attribute__((noinline)) ' + name
+    definition = re.search(re.escape(prefix) + r'\([^;{}]*\)\s*\{', text)
+    assert definition, ('Missing actual loop definition', name)
+    begin = definition.start()
     body = text[begin:text.index('\n}', begin)+2]
     assert not re.search(r'\boutput_(?:printf|puts|flush|write_all)\s*\(', body)
 assert not re.search(r'(?<![\w])(?:printf|puts)\s*\(', text)

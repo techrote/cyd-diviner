@@ -11,6 +11,7 @@ import math
 import pathlib
 import re
 import secrets
+import struct
 import time
 
 from capture import utc_now
@@ -172,12 +173,14 @@ def validate_plan(plan):
             or type(case.get("tx_enabled")) is not bool):
             raise ValueError("Invalid finite RX snapshot/bench settings")
         if case["tx_enabled"]:
-            if (case.get("tx_mode") not in ("api", "ram", "gate", "ask") or not 0 <= case.get("baud", -1) <= 240000000
+            if (case.get("tx_mode") not in ("api", "ram", "gate", "ask", "fast") or not 0 <= case.get("baud", -1) <= 240000000
                 or not 32 <= case.get("backoff0_quarter_db", 0) <= 120 or not 32 <= case.get("backoff1_quarter_db", 0) <= 120
                 or not 1 <= case.get("duration_us", 0) <= 2000000 or not 0 <= case.get("mask_segment_us", -1) <= 20000
                 or not 1 <= case.get("bit_count", 0) <= tx["symbol_capacity"]
                 or (case["mask_segment_us"] and case["tx_mode"] not in ("gate", "ask"))):
                 raise ValueError("Invalid TX finite mode/rate/backoff/IRQ mask/preloaded pattern")
+            if case["tx_mode"] == "fast" and (not case["baud"] or case["mask_segment_us"] or tx["trace_stride"]):
+                raise ValueError("Fast requires positive baud, IRQ enabled/mask0 and observe0")
             if case["mask_segment_us"] and math.ceil(case["duration_us"] / case["mask_segment_us"]) + 1 > tx["trace_capacity"]:
                 raise ValueError("Mask segment records exceed explicit preallocated capacity")
             if case.get("pattern") != "alternating" and not case.get("bits_file"):
@@ -227,7 +230,190 @@ def tx_output_transport_info(records):
     return infos[-1]
 
 
-def validate_tx_transport(records, before_info=None, after_info=None):
+def require_fast_capability(info):
+    if (not info or info.get("profile") != "s3-sdr-metal-tx" or info.get("cpu_mhz") != 240
+        or info.get("fast_paced_supported") is not True or info.get("output_transport") != TX_OUTPUT_TRANSPORT
+        or info.get("output_line_capacity_bytes") != 4096 or info.get("output_line_timeout_us") != 5000000
+        or not re.fullmatch(r"[0-9a-f]{64}", info.get("fast_schedule_helpers_digest", ""))):
+        raise RuntimeError("Fast requires the explicitly advertised S3 rational-clock backend and write-all transport")
+
+
+class SourceIntegrityError(RuntimeError):
+    def __init__(self, validation):
+        self.validation = validation
+        super().__init__("TX source integrity failed: " + validation["failure_scope"])
+
+
+def require_source_integrity_capability(info):
+    if (not info or info.get("profile") != "s3-sdr-metal-tx" or info.get("source_integrity_supported") is not True
+        or info.get("gate_mask") != 1 << 18 or info.get("amplitude_mask") != 255 << 10
+        or not re.fullmatch(r"[0-9a-f]{64}", info.get("word_helpers_digest", ""))):
+        raise RuntimeError("Source integrity requires the reviewed S3 word-helper identity and gate/amplitude masks")
+
+
+def expected_source_crcs(uploaded, result, info):
+    """Recompute intended packed/LE32 words and phase-zero fast deltas on host."""
+    require_source_integrity_capability(info)
+    count = result.get("pattern_bits")
+    if (type(count) is not int or not 1 <= count <= 1000000 or not isinstance(uploaded, bytes)
+        or len(uploaded) != (count + 7) // 8):
+        raise RuntimeError("Source-integrity proof requires exact uploaded bytes and active bit count")
+    initialized, observed = result.get("initialized_word"), result.get("observed_backoff1_word")
+    if (any(type(v) is not int or not 0 <= v <= 0xffffffff for v in (initialized, observed))
+        or not initialized & info["gate_mask"] or result.get("restored_word_requested") != initialized):
+        raise RuntimeError("Source word mapping lacks initialized/restored unsigned-word proof")
+    mode = result.get("mode")
+    if mode not in ("api", "ram", "gate", "ask", "fast"): raise RuntimeError("Unknown source word mapping mode")
+    gate, amplitude = info["gate_mask"], info["amplitude_mask"]
+    low = initialized if mode == "ask" else initialized & ~gate
+    high = (initialized & ~amplitude) | (observed & amplitude) if mode == "ask" else initialized | gate
+    words_crc = 0
+    for index in range(count):
+        value = high if (uploaded[index // 8] >> (7 - index % 8)) & 1 else low
+        words_crc = binascii.crc32(struct.pack("<I", value), words_crc)
+    deltas_crc = None
+    if mode == "fast":
+        rate = result.get("requested_baud")
+        if type(rate) is not int or not 1 <= rate <= 240000000: raise RuntimeError("Fast delta source lacks a positive rate")
+        deltas_crc = 0
+        for index in range(count):
+            delta = (index + 1) * 240000000 // rate - index * 240000000 // rate
+            deltas_crc = binascii.crc32(struct.pack("<I", delta), deltas_crc)
+    return {"packed_crc32": binascii.crc32(uploaded) & 0xffffffff, "words_crc32": words_crc & 0xffffffff,
+            "deltas_crc32": deltas_crc & 0xffffffff if deltas_crc is not None else None,
+            "packed_bytes": len(uploaded), "words_bytes": count * 4,
+            "packed_sha256": hashlib.sha256(uploaded).hexdigest()}
+
+
+def validate_tx_source_integrity(result, record, before_info, after_info, uploaded):
+    require_source_integrity_capability(before_info)
+    require_source_integrity_capability(after_info)
+    expected = expected_source_crcs(uploaded, result, before_info)
+    fast = result["mode"] == "fast"
+    crc_fields = ("packed_expected", "packed_before_radio", "packed_after_radio", "packed_after_tone",
+        "packed_before_loop", "packed_after_loop", "packed_after_teardown", "words_expected", "words_before_loop",
+        "words_after_loop", "words_after_teardown", "deltas_after_build", "deltas_before_loop", "deltas_after_loop", "deltas_after_teardown")
+    if any(type(record.get(k + "_crc32")) is not int or not 0 <= record[k + "_crc32"] <= 0xffffffff for k in crc_fields):
+        raise RuntimeError("Source-integrity receipt has missing/invalid unsigned CRC fields")
+    flags = ("after_radio_checked", "after_tone_checked", "preloop_checked", "loop_started", "teardown_checked")
+    if (any(record.get(k) is not True for k in flags) or record.get("delta_required") is not fast
+        or record.get("schedule_populated_after_startup_calibration") is not fast
+        or record.get("buffer_word_byte_order") != "native_little_endian_u32"
+        or record.get("packed_bit_order") != "MSB_first_per_byte"
+        or record.get("schedule_population_scope") != "after_all_SDK_startup_and_tone_setup_before_timed_loop"):
+        raise RuntimeError("Source-integrity stages/loop/population/byte-order proof incomplete")
+    if (record.get("packed_bytes") != expected["packed_bytes"] or record.get("words_bytes") != expected["words_bytes"]
+        or record.get("deltas_bytes") != (expected["words_bytes"] if fast else 0)
+        or type(after_info.get("loaded_crc32")) is not int or after_info["loaded_crc32"] != expected["packed_crc32"]
+        or after_info.get("loaded_bits") != result["pattern_bits"]):
+        raise RuntimeError("Source lengths/post-terminal upload identity differ from host bytes")
+    intervals = []
+    for buffer in ("packed", "words", "deltas"):
+        address, size = record.get(buffer + "_address"), record.get(buffer + "_bytes")
+        if (type(address) is not int or not 0 <= address <= 0xffffffff or type(size) is not int or size < 0
+            or (buffer == "deltas" and not fast and address != 0)
+            or (size and (not address or address + size > 0x100000000 or (buffer != "packed" and address % 4)))):
+            raise RuntimeError("Source buffer address/count/alignment proof invalid")
+        if size: intervals.append((address, address + size))
+    if any(a < d and c < b for i, (a, b) in enumerate(intervals) for c, d in intervals[i + 1:]):
+        raise RuntimeError("Reported source buffers overlap")
+    stage_errors = []
+    for stage in ("expected", "before_radio", "after_radio", "after_tone", "before_loop", "after_loop", "after_teardown"):
+        if record["packed_" + stage + "_crc32"] != expected["packed_crc32"]: stage_errors.append("packed_" + stage)
+    for stage in ("expected", "before_loop", "after_loop", "after_teardown"):
+        if record["words_" + stage + "_crc32"] != expected["words_crc32"]: stage_errors.append("words_" + stage)
+    for stage in ("after_build", "before_loop", "after_loop", "after_teardown"):
+        value = record["deltas_" + stage + "_crc32"]
+        if value != (expected["deltas_crc32"] if fast else 0): stage_errors.append("deltas_" + stage)
+    target_timed = (all(record["packed_" + stage + "_crc32"] == record["packed_expected_crc32"]
+                        for stage in ("before_radio", "after_radio", "after_tone", "before_loop", "after_loop"))
+        and all(record["words_" + stage + "_crc32"] == record["words_expected_crc32"] for stage in ("before_loop", "after_loop"))
+        and (not fast or all(record["deltas_" + stage + "_crc32"] == record["deltas_after_build_crc32"] for stage in ("before_loop", "after_loop"))))
+    target_retained = (target_timed and record["packed_after_teardown_crc32"] == record["packed_expected_crc32"]
+        and record["words_after_teardown_crc32"] == record["words_expected_crc32"]
+        and (not fast or record["deltas_after_teardown_crc32"] == record["deltas_after_build_crc32"]))
+    timed = not any(not value.endswith("after_teardown") for value in stage_errors)
+    retained = not stage_errors
+    validation = {"status": "VALIDATED" if retained else "FAILED", "host_expected": expected,
+        "timed_checkpoint_CRCs_match": timed, "retained_checkpoint_CRCs_match": retained,
+        "target_reported_timed_integrity": target_timed, "target_reported_retained_integrity": target_retained,
+        "mismatching_stages": stage_errors, "failure_scope": "none" if retained else
+            "TEARDOWN_ONLY_CHANGE; timed checkpoints match; no RF BER attribution" if timed else
+            "SOURCE_CHECKPOINT_OR_MAPPING_MISMATCH; stages retained; RF cause not isolated",
+        "deltas": "host_recomputed_phase_zero_LE32" if fast else "NOT APPLICABLE",
+        "scope": "CRC32_at_marked_buffer_stages; transient changes/collisions and physical RF payload not independently attested"}
+    if any(record.get(k) is not v for k, v in (("ok", target_retained), ("timed_source_integrity_ok", target_timed), ("retained_source_integrity_ok", target_retained))):
+        raise RuntimeError("Source-integrity flags contradict host-computed CRC stages")
+    if not retained: raise SourceIntegrityError(validation)
+    return validation
+
+
+def validate_tx_fast_clock(result, clock, before_info, after_info):
+    """Integer schedule/carry proof, not measured RF symbols or transient jitter."""
+    require_fast_capability(before_info)
+    require_fast_capability(after_info)
+    if after_info["fast_schedule_helpers_digest"] != before_info["fast_schedule_helpers_digest"]:
+        raise RuntimeError("Fast schedule helper identity changed during the exposure")
+    unsigned = ("requested_baud", "target_duration_cycles", "source_words_completed", "ideal_words_by_target_end",
+        "target_tail_words_not_transmitted", "target_words_ahead_due_rounding", "schedule_next_start_cycles",
+        "ideal_next_start_cycles_floor", "end_ideal_backlog_cycles", "ring_length_symbols", "ring_cycles_floor",
+        "ring_remainder", "ring_phase_at_end", "precomputed_delta_min_cycles", "precomputed_delta_max_cycles",
+        "schedule_bytes_reserved", "ring_boundary_extra_cycles_max", "floor_reference_early_cycles_max",
+        "real_reference_early_cycles_strict_upper_bound")
+    if any(type(clock.get(k)) is not int or not 0 <= clock[k] <= 0xffffffffffffffff for k in unsigned):
+        raise RuntimeError("Fast clock receipt lacks bounded unsigned counts")
+    if type(clock.get("end_clock_error_cycles")) is not int:
+        raise RuntimeError("Fast clock error must be a signed integer")
+    rate, words, duration, length, elapsed = (result.get(k) for k in
+        ("requested_baud", "processed_bits", "requested_duration_us", "pattern_bits", "elapsed_cycles"))
+    zero_fields = ("requested_mask_segment_us", "trace_stride", "trace_count", "segment_records", "skipped_paced_slots")
+    if (any(type(v) is not int or v <= 0 for v in (rate, words, duration, length, elapsed))
+        or rate > 240000000 or duration > 2000000 or max(words, length, elapsed) > 0xffffffff or result.get("mode") != "fast"
+        or result.get("loop_variant") != "fast_rational_DRAM_paced" or result.get("unpaced") is not False
+        or result.get("backend_available") is not True
+        or any(type(result.get(k)) is not int or result[k] != 0 for k in zero_fields)
+        or "late_writes" not in result or result["late_writes"] is not None
+        or "late_cycles_max" not in result or result["late_cycles_max"] is not None):
+        raise RuntimeError("Fast result violates positive-rate/no-skip/unobserved-lateness/IRQ-observer contract")
+    cpu = 240000000
+    target_cycles = duration * 240
+    target_words = (duration * rate + 999999) // 1000000
+    ideal_next = words * cpu // rate
+    rings, partial = divmod(words, length)
+    scheduled = rings * length * cpu // rate + partial * cpu // rate
+    ring_remainder = length * cpu % rate
+    expected = {"requested_baud": rate, "target_duration_cycles": target_cycles, "source_words_completed": words,
+        "ideal_words_by_target_end": target_words, "target_tail_words_not_transmitted": max(0, target_words - words),
+        "target_words_ahead_due_rounding": max(0, words - target_words), "schedule_next_start_cycles": scheduled,
+        "ideal_next_start_cycles_floor": ideal_next, "end_clock_error_cycles": elapsed - ideal_next,
+        "end_ideal_backlog_cycles": max(0, elapsed - ideal_next), "ring_length_symbols": length,
+        "ring_cycles_floor": length * cpu // rate, "ring_remainder": ring_remainder,
+        "ring_phase_at_end": rings * ring_remainder % rate,
+        "precomputed_delta_min_cycles": cpu // rate,
+        "precomputed_delta_max_cycles": cpu // rate + int(length * (cpu % rate) >= rate),
+        "ring_boundary_extra_cycles_max": 1, "floor_reference_early_cycles_max": 1,
+        "real_reference_early_cycles_strict_upper_bound": 2}
+    prior_rings, prior_partial = divmod(words - 1, length)
+    prior_start = prior_rings * length * cpu // rate + prior_partial * cpu // rate
+    if (any(clock.get(k) != v for k, v in expected.items()) or elapsed < target_cycles
+        or prior_start >= target_cycles or ideal_next - scheduled not in (0, 1)
+        or clock["schedule_bytes_reserved"] < length * 4 or clock["schedule_bytes_reserved"] % 4
+        or after_info.get("fast_schedule_bytes_reserved") != clock["schedule_bytes_reserved"]
+        or clock.get("schedule_memory") != "internal_8bit_DRAM"
+        or clock.get("per_word_lateness_observed") is not False or clock.get("max_transient_backlog_cycles") is not None):
+        raise RuntimeError("Fast counts/rate/rounding/carry/tail/schedule-allocation correlation failed")
+    for key, expected_value in (("achieved_writes_per_s", words * cpu / elapsed),
+                                ("mean_loop_cycles_per_write", elapsed / words)):
+        value = result.get(key)
+        if type(value) not in (int, float) or not math.isfinite(value) or abs(value - expected_value) > .001:
+            raise RuntimeError("Fast software rate does not match reported count/cycles")
+    return {"status": "VALIDATED", "source_words_completed": words,
+        "target_tail_words_not_transmitted": max(0, target_words - words),
+        "floor_reference_early_cycles_at_end": ideal_next - scheduled,
+        "scope": "rational_schedule_and_source_prefix_counter_consistency; no_RF_symbol_or_max_transient_lateness_proof"}
+
+
+def validate_tx_transport(records, before_info=None, after_info=None, uploaded_packed=None):
     """New write-all transport proof; legacy captures retain their old scope.
 
     Driver counters are cumulative snapshots before the reporting line itself.
@@ -236,8 +422,10 @@ def validate_tx_transport(records, before_info=None, after_info=None):
     This does not turn SDK acceptance or register state into RF cessation proof.
     """
     ends = [r for r in records if r.get("type") == "tx_end"]
+    fast_clocks = [r for r in records if r.get("type") == "tx_fast_clock"]
+    integrity_records = [r for r in records if r.get("type") == "tx_source_integrity"]
     advertised = (before_info or {}).get("output_transport")
-    new_fields = any("tx_result_driver_accepted" in r or "output_lines_attempted" in r for r in ends)
+    new_fields = bool(fast_clocks or integrity_records) or (before_info or {}).get("source_integrity_supported") is True or any(r.get("type") == "tx_result" and r.get("mode") == "fast" for r in records) or any("tx_result_driver_accepted" in r or "output_lines_attempted" in r for r in ends)
     if advertised is None and not new_fields:
         return {"status": "NOT_APPLICABLE", "scope": "legacy_TX_without_write_all_receipts"}
     if advertised != TX_OUTPUT_TRANSPORT:
@@ -247,7 +435,7 @@ def validate_tx_transport(records, before_info=None, after_info=None):
     if after_info is None:
         raise RuntimeError("Metal TX post-terminal info required to observe final output flush")
     identity = ("profile", "source_sha", "tx_source_digest", "word_helpers_digest", "mac", "output_transport",
-                "output_line_capacity_bytes", "output_line_timeout_us")
+                "output_line_capacity_bytes", "output_line_timeout_us", "source_integrity_supported")
     if after_info.get("type") != "info" or any(after_info.get(k) != before_info.get(k) for k in identity):
         raise RuntimeError("Metal TX post-terminal runtime identity/transport changed")
     results = [r for r in records if r.get("type") == "tx_result"]
@@ -259,6 +447,26 @@ def validate_tx_transport(records, before_info=None, after_info=None):
     if (records.index(result) >= records.index(end)
         or any(records.index(r) <= records.index(result) or records.index(r) >= records.index(end) for r in traces + segments)):
         raise RuntimeError("Metal TX output records are outside the result/terminal batch")
+    source_validation = None
+    if before_info.get("source_integrity_supported") is True:
+        if (len(integrity_records) != 1 or end.get("source_integrity_required") is not True
+            or end.get("source_integrity_driver_accepted") is not True
+            or not records.index(result) < records.index(integrity_records[0]) < records.index(end)
+            or any(records.index(r) < records.index(integrity_records[0]) for r in fast_clocks + traces + segments)):
+            raise RuntimeError("Source-integrity record/acceptance/order is missing or duplicated")
+        source_validation = validate_tx_source_integrity(result, integrity_records[0], before_info, after_info, uploaded_packed)
+        if end.get("source_integrity_ok") is not True: raise RuntimeError("Source-integrity terminal flag rejects retained source")
+    elif integrity_records or any(k in end for k in ("source_integrity_required", "source_integrity_driver_accepted", "source_integrity_ok")):
+        raise RuntimeError("Source-integrity receipt lacks its runtime capability")
+    fast_validation = None
+    if result.get("mode") == "fast":
+        if (len(fast_clocks) != 1 or end.get("fast_clock_required") is not True
+            or end.get("fast_clock_driver_accepted") is not True
+            or not records.index(result) < records.index(fast_clocks[0]) < records.index(end)):
+            raise RuntimeError("Fast clock record/terminal acceptance missing, duplicated or outside its batch")
+        fast_validation = validate_tx_fast_clock(result, fast_clocks[0], before_info, after_info)
+    elif fast_clocks or ("fast_clock_required" in end and end["fast_clock_required"] is not False) or end.get("fast_clock_driver_accepted") is not None:
+        raise RuntimeError("Non-fast result has unexpected fast-clock receipt or acceptance flags")
     expected_counts = {"trace_records": len(traces), "segment_records": len(segments),
                        "trace_records_driver_accepted": len(traces), "segment_records_driver_accepted": len(segments)}
     if any(type(end.get(k)) is not int or end[k] != value for k, value in expected_counts.items()):
@@ -296,12 +504,14 @@ def validate_tx_transport(records, before_info=None, after_info=None):
     for first, last in ((before_info, end), (end, after_info)):
         if any(last[k] < first[k] for k in TX_OUTPUT_U32 + TX_OUTPUT_U64):
             raise RuntimeError("Metal TX output counters regressed/reset during the batch")
-    if (end["output_lines_accepted"] - before_info["output_lines_accepted"] < 1 + len(traces) + len(segments)
+    if (end["output_lines_accepted"] - before_info["output_lines_accepted"] < 1 + len(traces) + len(segments) + len(fast_clocks) + len(integrity_records)
         or after_info["output_lines_accepted"] <= end["output_lines_accepted"]
         or after_info["output_bytes_accepted"] <= end["output_bytes_accepted"]):
         raise RuntimeError("Metal TX output counters lack complete batch/terminal progress")
     return {"status": "VALIDATED", "transport": TX_OUTPUT_TRANSPORT,
             "trace_records": len(traces), "segment_records": len(segments),
+            "fast_clock": fast_validation,
+            "source_integrity": source_validation,
             "scope": "host_parsed_batch_plus_driver_acceptance_and_post_terminal_flush_counters; not_RF_cessation_proof",
             "retry_scope": "short_and_zero_writes_allowed_when_full_output_succeeds; cumulative_failure_counters_must_be_zero"}
 
@@ -311,6 +521,8 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
     case, run_id = run["settings"], run["run_id"]
     rx_cursor, tx_cursor, snapshot_cursor = len(rx.records), len(tx.records), len(rx.decoder.snapshots)
     output_before = tx_output_transport_info(tx.records)
+    if case.get("tx_enabled") and case.get("tx_mode") == "fast": require_fast_capability(output_before)
+    if case.get("tx_enabled") and (output_before or {}).get("source_integrity_supported") is True: require_source_integrity_capability(output_before)
     def save_snapshot(receipt, payload):
         filename = f"snapshot-{len(rx.decoder.snapshots) - snapshot_cursor:04}.native32le"
         path = folder / filename
@@ -433,7 +645,11 @@ def execute_run(run, tx, rx, plan, plan_path, folder, guard):
             run["transmitter_output_before"] = output_before
             run["transmitter_output_after"] = output_after
             run["tx_target"] = tx.records[tx_cursor:]
-        run["transmitter_output_validation"] = validate_tx_transport(run["tx_target"], output_before, output_after)
+        try:
+            run["transmitter_output_validation"] = validate_tx_transport(run["tx_target"], output_before, output_after, packed)
+        except SourceIntegrityError as error:
+            run["transmitter_source_validation"] = error.validation
+            raise
     run["physical_rf_verified"] = None
     run["temperature_after"] = {"tx": temperature(tx), "rx": temperature(rx, True)}
     run["status"] = "ACQUIRED"
