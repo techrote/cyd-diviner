@@ -69,7 +69,7 @@ struct Audio {
     dsp::Delay16<4096> dl;
     uint32_t ctrl = 0;
 };
-struct State {
+struct State : audio_exchange::InternalState {
     Band band = B_WIFI;
     int scale = 0, root = 45, sel = 0;
     float air = 0.55f;

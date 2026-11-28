@@ -21,7 +21,7 @@ for VLC on Windows.
 | `cyd` | Classic ESP32-2432S028R with 4 MB flash, an ILI9341 LCD, and XPT2046 resistive touch | Standalone touchscreen firmware with 18 rites and a palette editor |
 | `cyd-pcm` | The same CYD, with the Windows VLC plugin on the host | Touchscreen firmware with live USB serial audio |
 | `cyd-diagnostics` | The same CYD | Serial touch injection, display readback, and hardware diagnostics |
-| `cardputer` | M5Stack Cardputer ADV with the Daedric Launcher | Keyboard workflow with 20 rites. This is PlatformIO's default target |
+| `cardputer` | M5Stack Cardputer ADV, 8 MB flash; current app-slot capacity required | Keyboard workflow with 20 rites. This is PlatformIO's default target |
 | `native` | Desktop with SDL2 development libraries and a POSIX-compatible C++ toolchain | Keyboard simulator with desktop audio, WAV export, and simulated radio data |
 | `native-cyd` | The same desktop | Actual CYD touch controls, four orientations, palettes and optional file persistence; simulated radio |
 
@@ -47,6 +47,19 @@ Firmware CI uploads source-identified packages with app/full images, actual
 partition maps and SHA-256 checksums. No device has been flashed by this mission.
 The old 1600 KiB Cardputer Launcher app slot must not be assumed sufficient.
 
+### Touch instrument previews
+
+These are rendered native-CYD specimens, with [exact capture provenance](docs/convergence/previews/README.md).
+Final-source captures and WAV recordings are also retained in the simulator CI artifact.
+
+| CANON | DRONE | GLYPHSONG |
+| --- | --- | --- |
+| ![CANON phase reels and phrase grid](docs/convergence/previews/canon.png) | ![DRONE style and XY surface](docs/convergence/previews/drone.png) | ![GLYPHSONG singing and piano roll](docs/convergence/previews/glyphsong.png) |
+
+| SPECTRA | COVEN | GLYPHSONG composition |
+| --- | --- | --- |
+| ![SPECTRA waterfall and BLE controls](docs/convergence/previews/spectra.png) | ![COVEN musical circle](docs/convergence/previews/coven.png) | ![GLYPHSONG touch keyboard](docs/convergence/previews/glyphsong-keyboard.png) |
+
 ## CYD quick start
 
 Use the ESP32-2432S028R revision with an ILI9341 display and XPT2046 touch
@@ -69,7 +82,8 @@ are for the Cardputer ADV.
 - Tap either side of the carousel to browse and the centre to open the selected
   rite. The compact cards frame the rite names, with the selected rite's
   subtitle and description below.
-- The touch controls start hidden. In landscape, the backdrop fills the 320×240
+- The carousel and legacy rite controls start hidden. CANON, DRONE, GLYPHSONG,
+  SPECTRA and COVEN open their instrument docks on entry. In landscape, the backdrop fills the 320×240
   LCD around the centred 320×180 artwork. Patterns and the carousel's drifting
   particles continue into the top and bottom margins.
   Tap the small unlabelled chevron in the lower-left corner to show or hide
@@ -238,17 +252,27 @@ backend.
 
 ## Cardputer ADV
 
-Build `cardputer`, then copy `.pio/build/cardputer/firmware.bin` to the SD
-card and install it with the [Daedric Launcher](https://github.com/bmorcelli/Launcher).
-See the [Cardputer flashing guide](dist/FLASHING.md) for the bundled upstream
-images and their offsets.
+Build `cardputer` or obtain the exact-source CI bundle linked from the Draft
+pull request. The qualified configuration uses an 8 MB standalone partition
+table. The bundle's `manifest.json` and independent `audit.json` give the actual
+application size, slot capacity, image offsets and SHA-256 checksums.
+
+Before an owner-approved update, verify that the existing installation's app
+slot can hold this application. Do not assume the older Launcher slot is large
+enough. App-only installation through [Daedric Launcher](https://github.com/bmorcelli/Launcher)
+is conditional on that verified capacity. Installing the supplied full image
+replaces the partition layout and can overwrite a Launcher installation and its
+data; follow the [backup and evaluation procedure](docs/convergence/OWNER-EVALUATION.md).
+The bundled upstream `dist/` images are historical reference, not this
+candidate's qualified binaries. No hardware was flashed during this mission.
 
 ```sh
 pio run -e cardputer
 ```
 
 On Cardputer, **G0** or the backtick key leaves a rite. Press Back twice in
-the carousel to return to the Launcher. **Fn** with **-** or **=** changes
+the carousel to restart. This returns to a Launcher only when that boot arrangement
+is installed; the standalone layout restarts Diviner. **Fn** with **-** or **=** changes
 volume.
 
 ## Desktop simulator
@@ -368,7 +392,12 @@ released when the scene no longer needs them or you leave Visions.
 - To generate a compilation database for clangd, run
   `pio run -e native -t compiledb`.
 
-GitHub Actions builds the four firmware targets and the Windows VLC module.
+GitHub Actions builds four firmware targets, both simulator profiles, three portable
+qualification modes and the Windows VLC module. [Convergence qualification](docs/convergence/QUALIFICATION.md)
+distinguishes this candidate's results from the historical hardware checks below.
+
+### Historical hardware evidence before convergence
+
 The initial CYD hardware smoke test exercised the original 14 rites with injected touches and
 verified LCD readback, DAC sample delivery, Wi-Fi scanning, and BLE discovery.
 The PCM bench test delivered 8,433 frames over 45 seconds with zero CRC errors

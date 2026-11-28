@@ -119,3 +119,19 @@ leave and re-enter all five instruments, then revisit Palette and fullscreen
 layered Visions. Listen while dragging and switching modes. Keep physical touch
 feel, acoustic continuity, radio coexistence and NVS persistence as separate owner
 acceptance results from the native controller tests.
+
+## Rendered convergence specimens
+
+The [preview gallery](previews/README.md) contains actual native-CYD captures of
+all five instruments, the composition keyboard and layered/fullscreen Visions.
+The manifest records the clean tested source, binary identity and each PNG hash.
+These pixels were reviewed alongside required-state assertions. They establish
+rendering and scripted interaction evidence, not physical resistive-touch feel.
+
+The original frozen local tour exposed collapsed taps after a slow frame.
+`native_script::Schedule` now dispatches one event per poll and preserves planned
+spacing from actual dispatch. `TouchEdges` settles a known released contact
+before its next down edge without interrupting held drags. A deterministic
+600 ms stall and timer-rollover regression verifies the production controller;
+no screenshot assertion was relaxed. The corrected eight-process remote tour
+passed. See [qualification history](QUALIFICATION.md) for exact revisions.

@@ -14,7 +14,7 @@ seams to evaluate, not completed compatibility claims or stable external APIs.
 
 | Capability / retrieval terms | Source and dependency boundary | Evidence and constraint |
 | --- | --- | --- |
-| Formants, animalese, machine vocalization | `vox.h` + `dsp.h` + `audio_exchange.h`; C++17, math, lock-free-width atomics | Host Voice 188 B, Reader 592 B; finite/deterministic at 24/48 kHz. Nominal formant and actual SVF peak differ. Stylized speech-like synthesis, not natural language or UTAU. |
+| Formants, animalese, machine vocalization | `vox.h` + `dsp.h` + `audio_exchange.h` + `audio_storage.h`; C++17, math, qualified 32-bit atomics | Host Voice 188 B, Reader 592 B; finite/deterministic at 24/48 kHz. Nominal formant and actual SVF peak differ. Stylized speech-like synthesis, not natural language or UTAU. |
 | Syllables, annotated singing | `dsp_score.h`; bounded input/output, caller-owned score | 40 input characters, at most 48 notes; explicit degrees/holds, deterministic composition, no render-thread score allocation. |
 | Generative phase counterpoint | CANON's control snapshot and audio state in `apps/canon.cpp` | Four phase clocks, distinct FM voices, phrase/rest editing, scales, hold/alignment. Separate UI from callback before transplant. Host state 17,320 B. |
 | Six-style generative drone | `apps/drone.cpp`, `dsp.h` | Five pads, three FM bells, float delay; host state 18,240 B. Control-rate LFO frequency bug corrected. |
@@ -45,6 +45,15 @@ those tested numerical properties only. Per-sample smoothing, noise decay and
 control divisors still require deliberate time normalization for 44.1/48/96 kHz
 USB Audio or VST work. A reduced-rate oscillator must advance by its stride:
 the old 5.2 Hz vox vibrato advanced every sixteenth sample and ran at 0.325 Hz.
+
+On the qualified ESP32-S3/IDF5.5 toolchain, generic atomics are only sometimes
+lock-free: external-memory control words use a critical section. The five
+instrument States explicitly allocate from internal DRAM; exchange and callback
+gate constructors enforce aligned internal atomic storage. Publication uses at
+most two strong CAS attempts, consumption/admission at most one. Carry this
+storage contract into a port, preserve null-allocation fallback, and re-inspect
+generated/runtime code before widening the narrowly supported IDF exception.
+See [target code-generation evidence](DSP-ATOMIC-COMPATIBILITY.md).
 
 Retain the receiving project's buffer ownership, interrupt and host transport
 contracts. A USB callback must not allocate/compile scores or wait for radio.

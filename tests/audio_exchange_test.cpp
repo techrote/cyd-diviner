@@ -18,6 +18,20 @@ static void check(const Message &m) {
 }
 int main() {
     constexpr uint32_t ITER = 250000;
+    // Repeated publication-token reuse must retain the final whole payload,
+    // even if the consumer misses many complete producer cycles. A consumed
+    // revision is not delivered twice, and an empty consume preserves output.
+    audio_exchange::Latest<Message> coalesced;
+    Message retained = make(0);
+    assert(!coalesced.consume(retained)); check(retained);
+    uint32_t revision = 0;
+    for (uint32_t batch = 1; batch <= 1000; ++batch) {
+        for (uint32_t i = 0; i < batch % 31 + 2; ++i) coalesced.publish(make(++revision));
+        assert(coalesced.consume(retained)); check(retained);
+        assert(retained.sequence == revision);
+        assert(!coalesced.consume(retained)); check(retained);
+        assert(retained.sequence == revision);
+    }
     audio_exchange::Latest<Message> latest;
     std::atomic<bool> producerDone{false};
     std::thread producer([&] {
@@ -80,5 +94,5 @@ int main() {
     reader.post("same"); reader.post("size"); reader.step(voice);
     assert(std::strcmp(reader.txt, "size") == 0);
     reader.stop(); reader.step(voice); assert(reader.len == 0);
-    std::printf("PASS latest: %u publications, %u coherent receipts; queue: %u ordered; Reader: %u concurrent steps\n",ITER,accepted,ITER,steps);
+    std::printf("PASS latest: %u publications, %u coherent receipts, %u coalesced token-reuse publications; queue: %u ordered; Reader: %u concurrent steps\n",ITER,accepted,revision,ITER,steps);
 }

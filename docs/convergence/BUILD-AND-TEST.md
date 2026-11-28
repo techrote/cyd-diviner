@@ -23,7 +23,10 @@ Windows for the existing VLC plugin. Pillow **13.0.0** converts preview images.
 The build's `manifest.json` records the actually resolved package and library
 versions, chip, flash capacity, source SHA/tree/content snapshot, image offsets,
 partition entries, ELF/map hashes and firmware checksums. Treat that manifest
-as authoritative for its artifact. Header/source counts are not component
+as authoritative for its artifact. Versionless VCS libraries additionally record
+PlatformIO's resolved version and, when available, the full installed Git revision;
+the XPT2046 v1.4 tag resolved to `d57f64c8b5f2bc5b8d10d121550806eeff7b06d9` in the
+independent audit. Header/source counts are not component
 flash-size measurements.
 
 ```sh
@@ -36,6 +39,11 @@ python tools/package_firmware.py cardputer
 python tools/package_firmware.py cyd
 python tools/package_firmware.py cyd-diagnostics
 python tools/package_firmware.py cyd-pcm
+qualified_sha=$(git rev-parse HEAD)
+for target in cardputer cyd cyd-diagnostics cyd-pcm; do
+  python tools/audit_firmware.py delivery/$target --source "$qualified_sha" \
+    --environment "$target" --repository . --output delivery/$target/audit.json
+done
 ```
 
 Put the virtual environment outside the checkout, or explicitly ignore it
@@ -49,6 +57,15 @@ is for explicitly labeled development experiments, never qualified delivery.
 `firmware.bin` is app-only. The `<environment>-full.bin` artifact starts at zero
 and combines the actual bootloader, partition table, configured bootstrap and
 application at their actual offsets. No hard-coded Launcher address is assumed.
+The independent auditor checks all original bundle checksums, actual ESP image
+segment checksums/appended SHA, chip/flash header, partition MD5 and bounds, full
+image offsets/erased gaps, embedded source identity and a separately reconstructed
+Git content snapshot. It also reports ELF static DRAM, excluding dynamic memory.
+It shares no implementation imports with the packager. Its own `audit.json` is
+outside the original SHA256SUMS set; supply the same `--output` when rerunning to
+exclude only that receipt from the bundle-file inventory. Physical execution and
+secure-boot signature qualification are outside this unsigned-image audit.
+
 Read [owner evaluation](OWNER-EVALUATION.md) before any separately authorized
 installation. No hardware has been flashed by the mission.
 
@@ -65,13 +82,22 @@ PASS/FAIL/BLOCKED results; timeouts fail. It runs the actual new instrument
 renderers with test HAL seams, numerical DSP, same-length text/score publication,
 bounded queues, CV1 membership/timing, actual callback lifetime, five allocation
 failures, concurrent UI/render work and legacy exact-output comparison. Normal
-runs retain seventeen WAV specimens. The packaging suite uses synthetic binary
-fixtures only; those are not firmware artifacts.
+runs retain seventeen WAV specimens. The packaging suite uses 28 synthetic binary
+fixtures; those are not firmware artifacts. Five installed-dependency fixtures
+check declared versus resolved versions, VCS metadata locations and full revisions.
+The firmware jobs additionally audit their real freshly built bytes.
+
+Normal qualification also runs seven evidence-classification guard cases and an
+independent bounded SPSC interleaving model. The Cardputer job retains a separate
+atomic-probe artifact containing actual compiler configuration and disassembly
+for the selected runtime, snapshot exchange, state allocator and callback gate.
+This establishes code-path evidence; embedded cycle timing still needs hardware.
 
 ASan includes UBSan; TSan is a separate run. Default ASan enables leak checking.
 The development workspace's ptrace restriction blocked LeakSanitizer; setting
 `ASAN_OPTIONS=detect_leaks=0:halt_on_error=1` allowed memory/undefined-behavior
-checks but does not establish leak freedom. CI keeps leak checking enabled.
+checks but does not establish leak freedom. The first complete CI passed with leak checking enabled; every final CI job keeps
+it enabled and reports its own result.
 The TSan CI job reduces that runner's `vm.mmap_rnd_bits` to 28 for GCC runtime
 compatibility and uses a non-PIE test executable. A sanitizer startup failure is
 BLOCKED, never PASS. These component tests do not certify all older UI/audio
@@ -101,6 +127,9 @@ For interactive desktop use run `.pio/build/native/program` or
 `GRIM_SETTINGS=/path/settings.bin` opts native-CYD into checksummed persistence.
 Frame-cycle timing includes deliberate 33 ms pacing. Synthetic `GRIM_SCRIPT`
 input is handled on the UI thread; `quit` drains/releases the audio and rite.
+Script dispatch preserves declared inter-event spacing even after a slow frame;
+one action runs per poll. A forced 600 ms stall fixture exercises the real
+controller's release debounce and timer rollover. See the [qualification history](QUALIFICATION.md).
 Native timing is desktop evidence and must not be presented as ESP32 headroom.
 
 ## CI artifact interpretation

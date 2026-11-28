@@ -52,8 +52,11 @@ def main():
                     status = "FAIL"; log += "\nUnreadable nested report: " + str(e)
                 if status not in ("PASS", "FAIL", "BLOCKED") or (code != 0 and status == "PASS"):
                     status = "FAIL"
+            elif nested_report is not None:
+                status = "FAIL"
+                log += "\nRequired qualification report missing: " + str(nested_report)
             else:
-                status = "PASS" if code == 0 else "BLOCKED" if blocked and nested_report is None else "FAIL"
+                status = "PASS" if code == 0 else "BLOCKED" if blocked else "FAIL"
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL)
             log, _ = process.communicate()
@@ -83,6 +86,11 @@ def main():
         run("lifecycle", [str(exe)], timeout=60)
     if a.sanitizer == "none":
         run("firmware-packaging", [sys.executable, "tests/package_firmware_test.py"])
+        run("dependency-metadata", [sys.executable, "tests/dependency_metadata_test.py"])
+        run("qualification-guards", [sys.executable, "tests/qualification_guard_test.py"])
+        run("audio-exchange-model", [sys.executable, "tests/audio_exchange_model.py",
+                                     "--output", str(out / "audio-exchange-model.json")],
+            nested_report=out / "audio-exchange-model.json")
     report["status"] = ("FAIL" if any(x["status"] == "FAIL" for x in report["cases"]) else
                         "BLOCKED" if any(x["status"] == "BLOCKED" for x in report["cases"]) else "PASS")
     if capture(ROOT) != {k: report[k] for k in ("source_sha", "source_tree", "dirty", "source_snapshot")}:

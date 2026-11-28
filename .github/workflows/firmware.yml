@@ -37,12 +37,31 @@ jobs:
           key: pio-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('platformio.ini') }}
       - name: Build exact candidate source
         run: pio run -e ${{ matrix.target }}
+      - name: Inspect actual ESP32-S3 atomic configuration and generated paths
+        if: matrix.target == 'cardputer'
+        run: |
+          pio run -e cardputer -t compiledb
+          python tools/probe_atomics.py --environment cardputer --output delivery/atomic-probe-cardputer
       - name: Verify provenance and partition layout; package images
         run: python tools/package_firmware.py ${{ matrix.target }}
+      - name: Independently audit packaged image bytes and exact source
+        run: >-
+          python tools/audit_firmware.py delivery/${{ matrix.target }}
+          --source ${{ github.event.pull_request.head.sha || github.sha }}
+          --environment ${{ matrix.target }} --repository .
+          --output delivery/${{ matrix.target }}/audit.json
       - uses: actions/upload-artifact@v4
         with:
           name: firmware-${{ matrix.target }}-${{ github.event.pull_request.head.sha || github.sha }}
           path: delivery/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.target == 'cardputer'
+        with:
+          name: atomic-probe-cardputer-${{ github.event.pull_request.head.sha || github.sha }}
+          path: delivery/atomic-probe-cardputer/
           if-no-files-found: error
           retention-days: 30
 
@@ -70,6 +89,9 @@ jobs:
           UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
           TSAN_OPTIONS: halt_on_error=1
         run: python tools/qualify.py --sanitizer ${{ matrix.sanitizer }} --output delivery/portable-${{ matrix.sanitizer }}
+      - name: Expose concise qualification receipts
+        if: always()
+        run: python tools/ci_receipts.py delivery/portable-${{ matrix.sanitizer }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -113,6 +135,9 @@ jobs:
           tests/touch_tests.sh > delivery/native-cyd/controller.log 2>&1
           SANITIZE=1 tests/touch_tests.sh > delivery/native-cyd/controller-sanitized.log 2>&1
           python tests/touch_tour.py --binary .pio/build/native-cyd/program --output delivery/native-cyd
+      - name: Expose rendered previews and exact-source receipts
+        if: always()
+        run: python tools/ci_receipts.py delivery/${{ matrix.target }} --previews
       - name: Retain simulator and reproduction instructions
         run: |
           cp .pio/build/${{ matrix.target }}/program delivery/${{ matrix.target }}/diviner-${{ matrix.target }}-linux

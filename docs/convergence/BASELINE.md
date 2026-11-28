@@ -54,7 +54,8 @@ Build success, numeric correctness, thread-sanitized component tests, native
 application runs and physical hardware behavior are separate gates. New
 instrument TSan checks do not assert that all older rites or third-party SDL
 internals are race-free. ASan/UBSan are not race detectors. Local LeakSanitizer
-is blocked by ptrace restrictions; independent CI must report its own result.
+was blocked by ptrace restrictions; the first complete CI run subsequently passed
+with leak checking enabled. Final-source receipts must identify their own run.
 
 Native radio fixtures use deterministic invented identities; actual Wi-Fi,
 BLE, ESP-NOW coexistence, radio-induced audio disturbance and multi-board
@@ -62,3 +63,30 @@ musical timing require the [owner procedure](OWNER-EVALUATION.md).
 
 See [qualification](QUALIFICATION.md), [interaction](INTERACTION.md),
 [upstream synchronization](UPSTREAM-SYNC.md) and [portability RAG](PORTABILITY-RAG.md).
+
+## Reviewed unmerged work and historical motion instrument
+
+The final repository inventory still found no open upstream pull requests.
+Upstream issue #5 requests further SEQ/MIDI/track-editing features; those are
+outside this convergence and have not been silently added. The upstream
+branch `codex/ir-tv-support-retire-network` at
+`46222df5b086668470e936e1b0fe33811d7694f8` diverges from current main by four
+branch-only and ten main-only commits. Its IR expansion, network-rite retirement
+and alternative DRONE work are not the selected upstream main baseline;
+retiring the owner's existing network rites would conflict with preservation.
+The upstream `drone-bell-styles` and older CI branches were also inventoried.
+Owner PR #7 remains open Draft at the exact revision above.
+
+TILT was introduced in `eeb19eb7972b41913e48ef3930867347a2c54d5c` and removed in
+`b51f06b8f8535fdba54b3396ad7f024b0e670dde`. Its four-voice chord followed a
+simulated marble: horizontal movement chose scale degrees, vertical position
+controlled filter brightness, speed controlled shimmer, rim impacts chimed,
+and a detected shake scattered bells. It provided level calibration, axis
+flips, recenter/lock and keyboard nudges when no IMU was present.
+
+Useful future lessons are a capability-reporting accelerometer HAL, explicit
+calibration/orientation and separation of gesture events from synthesis. A
+future port should use measured elapsed time instead of the old fixed 33 ms
+physics step, and replace its volatile strike ring/shared targets with the
+qualified bounded exchange mechanisms. This is historical research, not an
+integrated or physically qualified motion instrument. TILT remains removed.

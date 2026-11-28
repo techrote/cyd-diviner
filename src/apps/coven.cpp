@@ -64,7 +64,7 @@ struct Audio {
     float padAmp = 0, dlLp = 0;
     uint32_t ctrl = 0;
 };
-struct State {
+struct State : audio_exchange::InternalState {
     uint8_t me[6] = {};
     coven::Session session;
     int rootPc = 9, oct = 3, scale = 0, degree = 4;

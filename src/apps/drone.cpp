@@ -90,7 +90,7 @@ struct Telemetry {
     int lastMoved = -1;
     uint32_t movedAt = 0;
 };
-struct State : Controls {
+struct State : Controls, audio_exchange::InternalState {
     Controls audio;
     audio_exchange::Latest<Controls> updates;
     audio_exchange::Latest<Telemetry> feedback;

@@ -50,7 +50,7 @@ struct Telemetry {
     int cur = -1, noteLeft = 0, noteLen = 1, letter = -1, vowel = vox::V_SCHWA;
     float amp = 0, f1 = 520, f2 = 1450;
 };
-struct State {
+struct State : audio_exchange::InternalState {
     char text[MAXT + 1] = "present day. present time?";
     int len = 0, caret = 0;
     int style = 0;

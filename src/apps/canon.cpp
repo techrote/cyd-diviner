@@ -72,7 +72,7 @@ struct Controls {
 };
 struct LoopView { int idx = 0; uint32_t count = 0, sps = 1, hits = 0; };
 struct Telemetry { LoopView L[NL]; };
-struct State : Controls {
+struct State : Controls, audio_exchange::InternalState {
     Controls audio;
     audio_exchange::Latest<Controls> updates;
     audio_exchange::Latest<Telemetry> feedback;

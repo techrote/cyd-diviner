@@ -25,6 +25,26 @@ retracting a length or comparing its unchanged value did not stop a producer
 writing the exact buffer the consumer was copying. Repeated equal-length
 messages are specifically stress-tested.
 
+Publication uses at most two strong compare-and-swap attempts; consumption
+uses one and may defer a newer value until the next callback. After a failed
+producer attempt, only the sole consumer could have changed the middle token,
+and it cleared the dirty bit. It cannot change that clean token again before
+the producer publishes, so the second strong attempt succeeds. A second
+failure is a hard contract violation. Neither endpoint uses a CAS retry loop.
+Acquire/release transfers slot ownership; the consumer never copies a slot
+until its successful acquisition. This remains safe when a token is reused
+after several coalesced producer publications.
+
+On ESP32, all five new instrument State allocations explicitly request
+`MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT`. Allocation remains nothrow and the
+existing low-memory screen remains reachable. The ESP32-S3 IDF 5.5 PSRAM
+workaround intentionally reports its generic 32-bit atomic trait as only
+sometimes lock-free. The narrowly admitted internal-address backend checks
+each exchange's aligned control words during construction, even with
+`NDEBUG`. Other targets still require the always-lock-free trait. See
+[DSP-ATOMIC-COMPATIBILITY.md](DSP-ATOMIC-COMPATIBILITY.md) for the target
+disassembly, storage contract and qualification boundary.
+
 `Reader::post()` and `stop()` are UI-producer operations. All other Reader
 configuration and runtime access belongs to the audio thread, or to a period
 when its callback is detached. GLYPHSONG submits text, score, mode, pitch and
