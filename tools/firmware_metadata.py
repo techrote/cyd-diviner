@@ -13,6 +13,37 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=env.subst("$PROJECT_DIR"), text=True).strip()
 
 
+
+def library_identity(directory, manifest):
+    """Read installed resolution as well as the library's declared version.
+
+    PlatformIO 6.2 stores .piopm under VCS metadata first, then the package root.
+    Reading its JSON avoids a PlatformIO import in standalone qualification.
+    """
+    directory = pathlib.Path(directory)
+    installed = {}
+    for relative in (".git/.piopm", ".hg/.piopm", ".svn/.piopm", ".piopm"):
+        metadata = directory / relative
+        if metadata.is_file():
+            installed = json.loads(metadata.read_text(encoding="utf-8"))
+            break
+    version = manifest.get("version") or installed.get("version")
+    result = {"name": manifest.get("name") or installed.get("name") or directory.name,
+              "version": version}
+    if installed.get("version"):
+        result["resolved_version"] = installed["version"]
+    if installed.get("spec"):
+        result["source_spec"] = {key: value for key, value in installed["spec"].items()
+                                 if key in ("owner", "id", "name", "requirements", "uri")
+                                 and value is not None}
+    if (directory / ".git").exists():
+        revision = subprocess.check_output(["git", "-C", str(directory), "rev-parse", "HEAD"],
+                                           text=True, timeout=15).strip()
+        if len(revision) != 40 or any(c not in "0123456789abcdef" for c in revision):
+            raise ValueError("Invalid installed dependency Git revision")
+        result["resolved_revision"] = revision
+    return result
+
 def record(source, target, env):
     build = pathlib.Path(env.subst("$BUILD_DIR"))
     firmware = build / (env.subst("$PROGNAME") + ".bin")
@@ -39,21 +70,22 @@ def record(source, target, env):
             packages.append({"name": data.get("name", name), "version": data.get("version")})
     libs = []
     libroot = pathlib.Path(env.subst("$PROJECT_LIBDEPS_DIR")) / env.subst("$PIOENV")
-    for manifest in sorted(libroot.glob("*/library.json")):
-        data = json.loads(manifest.read_text())
-        libs.append({"name": data.get("name", manifest.parent.name), "version": data.get("version")})
-    for manifest in sorted(libroot.glob("*/library.properties")):
-        if (manifest.parent / "library.json").is_file():
-            continue  # one dependency entry; prefer PlatformIO's manifest
-        data = {}
-        for line in manifest.read_text(encoding="utf-8-sig").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            key, separator, value = line.partition("=")
-            if separator:
-                data[key.strip()] = value.strip()
-        libs.append({"name": data.get("name", manifest.parent.name), "version": data.get("version")})
+    directories = ({p.parent for p in libroot.glob("*/library.json")} |
+                   {p.parent for p in libroot.glob("*/library.properties")})
+    for directory in sorted(directories):
+        manifest = directory / "library.json"
+        if manifest.is_file():
+            data = json.loads(manifest.read_text())
+        else:
+            data = {}
+            for line in (directory / "library.properties").read_text(encoding="utf-8-sig").splitlines():
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                key, separator, value = line.partition("=")
+                if separator:
+                    data[key.strip()] = value.strip()
+        libs.append(library_identity(directory, data))
     debug = []
     for suffix in ("elf", "map"):
         path = build / (env.subst("$PROGNAME") + "." + suffix)
