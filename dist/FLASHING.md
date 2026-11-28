@@ -16,13 +16,24 @@ Using esptool (install with `pip install esptool`):
   download mode, then run the command.
 - You can also drag this file into https://espressif.github.io/esptool-js/
   (Web Serial, Chrome/Edge) and flash at offset 0.
+- Back up first if you care about what's on the device:
+  `esptool --chip esp32s3 --port /dev/ttyACM0 read-flash 0 0x800000 backup.bin`
 
-## App-only image — `daedric-grimoire.bin`
-Just the application partition, for installing over the Daedric Launcher's
-`grimoi` OTA slot (leaves the bootloader/Launcher/NVS untouched):
+## App-only image — `daedric-grimoire.bin` (about 1.66 MB)
+Just the application, for updating a device that already runs the grimoire.
+
+**Standalone install** (the full image above, or any stock 8 MB layout with
+the app at 0x10000) — update the app and keep your saved Wi-Fi networks,
+sequencer patterns and other settings:
 
     esptool --chip esp32s3 --port /dev/ttyACM0 --baud 921600 \
-      --no-stub write-flash 0x170000 daedric-grimoire.bin
+      write-flash 0x10000 daedric-grimoire.bin
+
+**Under the Launcher** — install it from the Launcher (SD card or its USB
+serial installer) so the Launcher sizes the partition. Do **not** write it
+over an older Launcher slot by offset: since November 2026 the app is larger
+than the old 1600 KB `grimoi` slot, and writing past the end of a slot
+corrupts whatever follows it.
 
 ## Verify
     sha256sum -c SHA256SUMS.txt
