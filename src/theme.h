@@ -43,8 +43,15 @@ void text(const char *s, int x, int y, uint16_t c, int size = 1);
 void textCentre(const char *s, int cx, int y, uint16_t c, int size = 1);
 void textRight(const char *s, int rx, int y, uint16_t c, int size = 1);
 
+// Labelled slider: dim label at x, bar of width w starting at bx, filled to v (0..1).
+void meter(const char *label, int x, int y, int bx, int w, float v);
+// "C", "C#", ... for a MIDI note (any octave, negative-safe).
+const char *noteName(int midi);
+
 // Top bar: Daedric name + latin name, battery; bottom hint line.
 void header(const char *daedric, const char *latin);
 void footer(const char *hint);
+// Whole-screen notice for a rite that could not get its memory.
+void starved(const char *daedric, const char *latin);
 
 } // namespace theme

@@ -2,11 +2,17 @@
 // ES8311 codec) itself; this file only adapts it to hal.h.
 #include "hal.h"
 #include <M5Cardputer.h>
+#include <atomic>
+#include <esp_heap_caps.h>
+#include <stdarg.h>
 
 namespace hal {
 namespace {
 Canvas *cv = nullptr;
-volatile AudioFn audioFn = nullptr;
+std::atomic<AudioFn> audioFn{nullptr};
+// true while the audio task is inside a voice callback; setAudio() waits on
+// it so a rite can free its state in leave() without racing the other core.
+std::atomic<bool> rendering{false};
 uint8_t vol = 140;
 
 constexpr int BLK = 256;
@@ -21,9 +27,11 @@ void audioTask(void *) {
         // playRaw queues at most two buffers per channel and does not copy, so
         // with three buffers the one being filled is never in flight.
         while (M5Cardputer.Speaker.isPlaying(0) >= 2) vTaskDelay(1);
+        rendering = true;
         AudioFn fn = audioFn;
         if (fn) fn(abuf[i], BLK);
         else memset(abuf[i], 0, sizeof(abuf[i]));
+        rendering = false;
         AudioFn ofn = overlayFn; // UI sfx, mixed on top of whatever's playing
         if (ofn) {
             ofn(obuf, BLK);
@@ -130,7 +138,10 @@ bool pollKey(Key &k) {
 }
 bool anyHeld() { return M5Cardputer.Keyboard.isPressed(); }
 
-void setAudio(AudioFn fn) { audioFn = fn; }
+void setAudio(AudioFn fn) {
+    audioFn = fn;
+    while (rendering) vTaskDelay(1); // let an in-flight block finish
+}
 void setOverlayAudio(AudioFn fn) { overlayFn = fn; }
 void setVolume(uint8_t v) {
     vol = v;
@@ -139,6 +150,17 @@ void setVolume(uint8_t v) {
 uint8_t volume() { return vol; }
 
 int batteryPercent() { return M5Cardputer.Power.getBatteryLevel(); }
+uint32_t heapFree() { return esp_get_free_heap_size(); }
+uint32_t heapLargest() { return heap_caps_get_largest_free_block(MALLOC_CAP_8BIT); }
+void debugf(const char *fmt, ...) {
+    char b[160];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(b, sizeof b, fmt, ap);
+    va_end(ap);
+    Serial.println(b);
+}
+
 void backToLauncher() {
     audioFn = nullptr;
     delay(50);

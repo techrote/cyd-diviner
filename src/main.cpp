@@ -12,6 +12,8 @@ using namespace theme;
 
 namespace {
 const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
+                             &RITE_CANON,  &RITE_SPECTRA, &RITE_GLYPHSONG,
+                             &RITE_COVEN,
                              &RITE_WIRED,  &RITE_VISIONS, &RITE_ORACLE,
                              &RITE_LINK,   &RITE_SCRY,   &RITE_LISTEN,
                              &RITE_KIN,    &RITE_NET,    &RITE_GEMINI, &RITE_IR,
@@ -244,7 +246,9 @@ void grimLoop() {
             if (k.nav == hal::N_LEFT || k.nav == hal::N_UP) { sel = (sel + N_RITES - 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_RIGHT || k.nav == hal::N_DOWN) { sel = (sel + 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_ENTER) open(sel);
-            else if (k.ch >= '1' && k.ch < '1' + N_RITES) open(sel = k.ch - '1');
+            // digits 1-9 jump straight to the first nine rites; with more than
+            // nine, a bare '1' + N_RITES bound would also catch : < > ? @ A-E
+            else if (k.ch >= '1' && k.ch <= '9' && k.ch - '1' < N_RITES) open(sel = k.ch - '1');
             // keep the carousel from spinning the long way round on wrap
             if (sel - slide > N_RITES / 2.f) slide += N_RITES;
             if (slide - sel > N_RITES / 2.f) slide -= N_RITES;
@@ -260,7 +264,8 @@ void grimLoop() {
                       k.nav == hal::N_RIGHT;
         if (!active->key(k)) close();
         // click on list/grid moves in any rite, except over the drone's held sound
-        else if (wasNav && active != &RITE_DRONE) uisfx::trigger(uisfx::MOVE);
+        // and in GLYPHSONG, where ; . , / are punctuation being typed
+        else if (wasNav && active != &RITE_DRONE && active != &RITE_GLYPHSONG) uisfx::trigger(uisfx::MOVE);
     }
 
     uint32_t now = hal::ms();

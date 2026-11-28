@@ -10,6 +10,7 @@
 #include <Preferences.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include <esp_now.h>
 #include <esp_wifi.h>
 #include <lwip/sockets.h>
 #include <lwip/netdb.h>
@@ -25,7 +26,7 @@
 
 namespace net {
 namespace {
-enum Radio { R_NONE, R_WIFI, R_SNIFF, R_BLE };
+enum Radio { R_NONE, R_WIFI, R_SNIFF, R_BLE, R_NOW };
 Radio radio = R_NONE;
 Preferences prefs;
 bool scanStarted = false;
@@ -93,7 +94,8 @@ void radioStop() {
         // succeed again.
         BLEDevice::deinit(false);
     }
-    if (radio == R_WIFI || radio == R_SNIFF) {
+    if (radio == R_NOW) esp_now_deinit();
+    if (radio == R_WIFI || radio == R_SNIFF || radio == R_NOW) {
         WiFi.disconnect(true, false);
         WiFi.mode(WIFI_OFF);
     }
@@ -101,14 +103,21 @@ void radioStop() {
 }
 
 // ---- Wi-Fi ---------------------------------------------------------------
-void wifiBegin() {
+void wifiBegin(bool connect) {
+    if (radio == R_WIFI && !connect && WiFi.status() != WL_CONNECTED) {
+        // a join is still being retried (e.g. LINK's saved network is out of
+        // range): esp_wifi_scan_start() refuses with ESP_ERR_WIFI_STATE until
+        // it gives up, so a listener must abort it to hear anything
+        WiFi.disconnect(false, false);
+        return;
+    }
     if (radio != R_WIFI) {
         radioStop();
         WiFi.persistent(false);
         WiFi.mode(WIFI_STA);
         WiFi.setSleep(false);
         radio = R_WIFI;
-        if (WiFi.status() != WL_CONNECTED) {
+        if (connect && WiFi.status() != WL_CONNECTED) {
             prefs.begin("grimnet", true);
             String last = prefs.getString("last", "");
             prefs.end();
@@ -149,10 +158,20 @@ std::vector<AP> cacheList() {
 }
 } // namespace
 
+int lastScanStatus = -1;
+uint32_t scanRetryAt = 0;
+int wifiScanStatus() { return lastScanStatus; }
 int wifiScan(std::vector<AP> &out) {
-    wifiBegin();
+    if (radio != R_WIFI) wifiBegin();
     int16_t n = WiFi.scanComplete();
+    lastScanStatus = n;
     if (n == WIFI_SCAN_FAILED || !scanStarted) {
+        // a refused scan used to be re-issued every frame; back off instead
+        if (n == WIFI_SCAN_FAILED && scanStarted && millis() < scanRetryAt) {
+            out = cacheList();
+            return out.empty() ? -1 : (int)out.size();
+        }
+        scanRetryAt = millis() + 700;
         // async, include hidden, ACTIVE scan, 300ms/channel dwell: a longer
         // dwell and probe requests catch phones/APs that beacon infrequently.
         WiFi.scanNetworks(true, true, false, 300);
@@ -245,6 +264,61 @@ void snifferPoll(uint32_t mgmt[14], uint32_t data[14], int &rssiLast) {
         gData[c] = 0;
     }
     rssiLast = gRssi;
+}
+
+// ---- ESP-NOW -------------------------------------------------------------
+namespace {
+const uint8_t BCAST[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+constexpr int NQ = 8;
+NowPkt nq[NQ];
+volatile int nqHead = 0, nqTail = 0;
+portMUX_TYPE nqMux = portMUX_INITIALIZER_UNLOCKED;
+void nowRecv(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
+    if (len <= 0) return;
+    portENTER_CRITICAL_ISR(&nqMux);
+    int n = (nqHead + 1) % NQ;
+    if (n != nqTail) {
+        NowPkt &p = nq[nqHead];
+        memcpy(p.mac, info->src_addr, 6);
+        p.rssi = info->rx_ctrl ? info->rx_ctrl->rssi : -80;
+        p.len = len > 250 ? 250 : len;
+        memcpy(p.data, data, p.len);
+        nqHead = n;
+    }
+    portEXIT_CRITICAL_ISR(&nqMux);
+}
+} // namespace
+void nowBegin() {
+    if (radio == R_NOW) return;
+    radioStop();
+    WiFi.persistent(false);
+    WiFi.mode(WIFI_STA);
+    esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
+    if (esp_now_init() != ESP_OK) return;
+    esp_now_register_recv_cb(nowRecv);
+    esp_now_peer_info_t peer = {};
+    memcpy(peer.peer_addr, BCAST, 6);
+    peer.channel = 1;
+    peer.ifidx = WIFI_IF_STA;
+    esp_now_add_peer(&peer);
+    nqHead = 0;
+    nqTail = 0;
+    radio = R_NOW;
+}
+bool nowSend(const void *data, int len) {
+    return radio == R_NOW && esp_now_send(BCAST, (const uint8_t *)data, len) == ESP_OK;
+}
+void nowMac(uint8_t mac[6]) { esp_wifi_get_mac(WIFI_IF_STA, mac); }
+bool nowPoll(NowPkt &out) {
+    bool got = false;
+    portENTER_CRITICAL(&nqMux);
+    if (nqTail != nqHead) {
+        out = nq[nqTail];
+        nqTail = (nqTail + 1) % NQ;
+        got = true;
+    }
+    portEXIT_CRITICAL(&nqMux);
+    return got;
 }
 
 // ---- BLE -----------------------------------------------------------------

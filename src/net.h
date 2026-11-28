@@ -25,10 +25,15 @@ struct AP {
     bool known;   // we have saved credentials
 };
 
-void wifiBegin();            // bring the radio up (STA), load saved creds
+// Bring the radio up (STA). connect=true rejoins the last saved network;
+// connect=false only listens, and also aborts a pending join, because the
+// radio refuses to scan while it is still trying to connect.
+void wifiBegin(bool connect = true);
 void radioStop();            // tear down whatever radio is up
 WifiState wifiState();
 int wifiScan(std::vector<AP> &out); // async: returns count, -1 while running; call again
+// Last raw scan state for diagnostics: -1 running, -2 failed, >=0 found.
+int wifiScanStatus();
 void wifiConnect(const char *ssid, const char *pass);
 void wifiForget(const char *ssid);
 std::string wifiIP();
@@ -57,6 +62,21 @@ std::string captiveURL();
 void snifferBegin();
 void snifferSetChannel(int ch);
 void snifferPoll(uint32_t mgmt[14], uint32_t data[14], int &rssiLast);
+
+// ---- ESP-NOW (coven) -----------------------------------------------------
+// Connectionless broadcast on channel 1, the same channel DYAD and TETHER
+// dongles use, so the coven hears them too. Frames are queued from the Wi-Fi
+// task; poll from the UI thread.
+struct NowPkt {
+    uint8_t mac[6];
+    int8_t rssi;
+    uint8_t len;
+    uint8_t data[250];
+};
+void nowBegin();
+bool nowSend(const void *data, int len); // broadcast
+bool nowPoll(NowPkt &out);               // one queued frame, false if none
+void nowMac(uint8_t mac[6]);             // this device's own address
 
 // ---- BLE (familiars / kin) ----------------------------------------------
 struct BleDev {

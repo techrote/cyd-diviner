@@ -35,6 +35,17 @@ struct Osc {
         phase += inc;
         return v;
     }
+    // Phase-modulated sine: offset in cycles (any sign/size). Bells use this
+    // for 2-op FM so the strike has real inharmonic partials.
+    inline float pmSine(float cyc) {
+        const float *t = sineTable();
+        cyc -= floorf(cyc);
+        uint32_t ph = phase + (uint32_t)(cyc * 4294967040.f);
+        uint32_t i = ph >> 22;
+        float frac = (ph & 0x3FFFFF) * (1.f / 4194304.f);
+        phase += inc;
+        return t[i] + (t[i + 1] - t[i]) * frac;
+    }
     inline float saw() {
         float v = (int32_t)phase * (1.f / 2147483648.f);
         phase += inc;
@@ -95,12 +106,29 @@ struct SVF {
 };
 
 template <int N> struct Delay {
+    // power-of-two lengths wrap with a mask instead of an integer divide
+    // (three per sample per rite on the audio core)
+    static constexpr bool POW2 = (N & (N - 1)) == 0;
     float buf[N] = {};
     int w = 0;
-    inline float tap(int d) const { return buf[(w - d + N) % N]; }
+    inline float tap(int d) const { return buf[POW2 ? (w - d) & (N - 1) : (w - d + N) % N]; }
     inline void put(float v) {
         buf[w] = v;
-        w = (w + 1) % N;
+        w = POW2 ? (w + 1) & (N - 1) : (w + 1) % N;
+    }
+};
+
+// The same echo line stored as int16 (half the RAM): for rites that share
+// the heap with a radio stack. Plenty of resolution for a dark echo.
+template <int N> struct Delay16 {
+    static_assert((N & (N - 1)) == 0, "Delay16 length must be a power of two");
+    int16_t buf[N] = {};
+    int w = 0;
+    inline float tap(int d) const { return buf[(w - d) & (N - 1)] * (1.f / 16384.f); }
+    inline void put(float v) {
+        v = v > 1.99f ? 1.99f : v < -1.99f ? -1.99f : v;
+        buf[w] = (int16_t)(v * 16384.f);
+        w = (w + 1) & (N - 1);
     }
 };
 

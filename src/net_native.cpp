@@ -5,6 +5,7 @@
 #include "net.h"
 #include <SDL2/SDL.h>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <map>
@@ -24,7 +25,8 @@ const int FAKE_AUTH[] = {1, 1, 1, 0, 1, 0, 1, 1, 0, 1};
 int scanCalls = 0;
 } // namespace
 
-void wifiBegin() {
+int wifiScanStatus() { return scanCalls ? -1 : 0; }
+void wifiBegin(bool) {
     if (wstate == WST_OFF) { wstate = WST_CONNECTING; stateAt = now(); ssid = "wired-house"; }
 }
 void radioStop() { wstate = WST_OFF; }
@@ -280,6 +282,55 @@ std::string gemMeta() { return gmeta; }
 std::string gemBody() { return gbody; }
 std::string gemURL() { return gurl; }
 int gemProgress() { return gprog; }
+
+// ESP-NOW: two fake DYAD dongles talking, a TETHER beacon, and (with
+// GRIM_FAKE_COVEN) another Cardputer in the circle.
+namespace {
+uint32_t nowNext = 0;
+int nowN = 0;
+const char *DY_LINES[] = {
+    "the window smells of rain again", "do you remember the copper hill?", "i kept the lantern lit for you",
+    "something hums under the floor", "tell me about the river", "i am not afraid of the dark today",
+};
+} // namespace
+void nowBegin() { nowNext = now() + 1500; }
+bool nowSend(const void *, int) { return true; }
+void nowMac(uint8_t mac[6]) {
+    const uint8_t m[6] = {0x34, 0x85, 0x18, 0xAA, 0x0C, 0x77};
+    memcpy(mac, m, 6);
+}
+bool nowPoll(NowPkt &p) {
+    if (now() < nowNext) return false;
+    nowNext = now() + 2600 + (nowN * 997) % 2400;
+    int k = nowN++;
+    memset(&p, 0, sizeof p);
+    uint8_t inve[6] = {0x50, 0x78, 0x7D, 0x2C, 0x57, 0x00}, veeth[6] = {0x50, 0x78, 0x7D, 0x2C, 0x5E, 0x24};
+    if (k % 4 == 3) { // a tether beacon: binary, no text
+        memcpy(p.mac, veeth, 6);
+        p.rssi = -58;
+        p.len = 24;
+        for (int i = 0; i < 24; ++i) p.data[i] = (uint8_t)(i * 37 + k);
+        return true;
+    }
+    if (getenv("GRIM_FAKE_COVEN") && k % 5 == 1) {
+        uint8_t m[6] = {0x34, 0x85, 0x18, 0x01, 0x02, 0x03};
+        memcpy(p.mac, m, 6);
+        p.rssi = -50;
+        const char cv[] = {'C', 'V', '1', 0, 1, 2, 7, 0, 0, 0};
+        memcpy(p.data, cv, sizeof cv);
+        p.len = sizeof cv;
+        return true;
+    }
+    bool a = k & 1;
+    memcpy(p.mac, a ? inve : veeth, 6);
+    p.rssi = a ? -47 : -61;
+    char w[250];
+    snprintf(w, sizeof w, "DY1|%08x|%08x|%d|0|0|%s|%d|x|y|%s", a ? 0x2c5700 : 0x2c5e24, a ? 0x2c5e24 : 0x2c5700, k,
+             a ? "ask" : "tell", a ? 40 : -25, DY_LINES[k % 6]);
+    p.len = strlen(w);
+    memcpy(p.data, w, p.len);
+    return true;
+}
 
 } // namespace net
 #endif

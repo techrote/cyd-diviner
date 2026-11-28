@@ -4,11 +4,13 @@
 //
 // keys  a w s e d f t g y h u j k : root note (piano row, a = C)
 //       1-6 scale   z/x octave   ;/. brightness   ,// drift
+//       p style (bell voice + pad colour + delay space)
 //       n wind   b bells   space freeze   r reseed
 #include "../dsp.h"
 #include "../rite.h"
 #include "../theme.h"
 #include <stdio.h>
+#include <new>
 #include <string.h>
 #ifdef GRIM_DEVICE
 #include <esp_system.h>
@@ -28,7 +30,38 @@ const Scale SCALES[] = {
     {"hijaz", {0, 1, 4, 5, 7, 8, 10}, 7},    {"fifths", {0, 7, 0, 7, 0, 7, 0}, 2},
 };
 constexpr int N_SCALES = sizeof(SCALES) / sizeof(SCALES[0]);
-const char *NOTE_NAMES[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+
+// A style is the instrument, independent of the scale: how the bells are
+// struck (2-op FM ratio/index/decay, register, density, clusters), what the
+// pad is made of (saw vs triangle, detune, sub) and how big the room is.
+struct Style {
+    const char *name;
+    float ratio, index;   // FM modulator ratio and depth (cycles)
+    float decay;          // bell ring time, seconds
+    int8_t reg;           // semitones above the C3 octave of the root
+    float density;        // strike rate multiplier
+    uint8_t cluster;      // max notes per strike (rolled)
+    float saw, detune, sub, res;
+    int16_t tapA, tapB;   // delay taps (<= 4095)
+    float fb, wet;
+};
+const Style STYLES[] = {
+    // name      ratio idx   dec  reg dens cl  saw  det     sub  res   tapA  tapB  fb    wet
+    {"temple",   1.40f, .32f, 4.0f, 12, 1.0f, 1, .80f, .0031f, .6f, .00f, 4095, 3072, .62f, .50f},
+    {"tubular",  3.50f, .22f, 3.0f, 12, 1.2f, 2, .55f, .0022f, .5f, .10f, 3600, 2400, .55f, .45f},
+    {"bowl",     2.76f, .10f, 7.5f, 0,  .45f, 1, .15f, .0012f, .6f, .05f, 4095, 3900, .64f, .55f},
+    {"kalimba",  1.00f, .18f, 0.7f, 12, 2.6f, 3, .35f, .0040f, .4f, .20f, 2200, 1500, .45f, .40f},
+    {"gong",     1.17f, .60f, 8.0f, -12, .30f, 1, .90f, .0050f, .45f, .25f, 4095, 2900, .65f, .50f},
+    {"ice",      4.00f, .14f, 2.2f, 12, 1.6f, 2, .25f, .0018f, .3f, .35f, 1800, 1150, .58f, .55f},
+};
+constexpr int N_STYLES = sizeof(STYLES) / sizeof(STYLES[0]);
+constexpr int BELL_CEIL = 76; // E5: no bell fundamental above ~660 Hz
+
+struct Bell {
+    dsp::Osc car, mod;
+    dsp::Decay env, modEnv;
+};
+constexpr int NB = 3;
 
 constexpr int NV = 5;
 struct Voice {
@@ -48,12 +81,14 @@ struct State {
     bool safeMode = false;
     float windAmp = 1;      // eases toward the wind toggle
     Voice v[NV];
-    dsp::SVF filt, windF, bellF;
+    dsp::SVF filt, windF;
     dsp::Osc lfo, lfo2;
     dsp::Noise rng;
-    dsp::Osc bell;
-    dsp::Decay bellEnv;
-    float bellHz = 880;
+    int style = 0;
+    Bell bl[NB];
+    int nextBell = 0;
+    int strikeLeft = 0, strikeDeg = 0;
+    uint32_t strikeAt = 0;
     // Keep the feedback buffer below 20 KB on the PSRAM-less Cardputer. The
     // old 9000-sample delay used 36 KB by itself and could exhaust/fragment
     // heap after visiting radio-heavy rites before opening DRONE.
@@ -96,6 +131,31 @@ void seed(bool snap) {
     retune(0, snap);
 }
 
+void applyStyle() {
+    const Style &st = STYLES[S->style];
+    for (int i = 0; i < NB; ++i) {
+        S->bl[i].env.time(st.decay);
+        S->bl[i].modEnv.time(st.decay * 0.22f);
+    }
+}
+
+void strike(int degree) {
+    State &s = *S;
+    const Style &st = STYLES[s.style];
+    const Scale &sc = SCALES[s.scale];
+    int d = ((degree % sc.n) + sc.n) % sc.n;
+    int note = 48 + s.root % 12 + sc.steps[d] + st.reg + 12 * (degree / sc.n);
+    while (note > BELL_CEIL) note -= 12;
+    while (note < 26) note += 12;
+    float hz = dsp::midiHz(note);
+    Bell &b = s.bl[s.nextBell];
+    s.nextBell = (s.nextBell + 1) % NB;
+    b.car.hz(hz);
+    b.mod.hz(hz * st.ratio);
+    b.env.trigger(0.35f + (s.rng.next() % 100) * 0.0025f);
+    b.modEnv.trigger(1.f);
+}
+
 void moveVoice() {
     // pick a voice (never the root drone) and step it a little through the scale
     int i = 1 + S->rng.next() % (NV - 1);
@@ -119,8 +179,9 @@ void render(int16_t *out, int n) {
             for (int k = 0; k < NV; ++k) {
                 Voice &v = s.v[k];
                 v.hz += (v.target - v.hz) * 0.0045f;
-                v.a.hz(v.hz * 1.0031f);
-                v.b.hz(v.hz * 0.9968f);
+                const float det = STYLES[s.style].detune;
+                v.a.hz(v.hz * (1.f + det));
+                v.b.hz(v.hz * (1.f - det));
                 v.sub.hz(v.hz * 0.5f);
                 v.amp += (v.ampTarget - v.amp) * v.swellRate * 64;
                 if (fabsf(v.amp - v.ampTarget) < 0.01f) v.ampTarget = 0.1f + (s.rng.next() % 100) / 120.f;
@@ -129,7 +190,7 @@ void render(int16_t *out, int n) {
             float l2 = s.lfo2.sine();
             float cut = 120.f + s.bright * s.bright * 2600.f * (1.f + 0.45f * l + 0.2f * l2);
             s.cutoffNow = cut;
-            s.filt.set(cut, 0.35f + 0.25f * s.bright);
+            s.filt.set(cut, fminf(0.9f, 0.35f + 0.25f * s.bright + STYLES[s.style].res));
             s.windF.set(300.f + 900.f * (0.5f + 0.5f * l2), 0.85f);
             s.windAmp += ((s.wind ? 1.f : 0.f) - s.windAmp) * 0.006f;
             if (!s.freeze && s.ctrl > s.nextMove) {
@@ -137,49 +198,84 @@ void render(int16_t *out, int n) {
                 uint32_t gap = (uint32_t)((1.f - s.drift) * 9.f * hal::RATE) + hal::RATE / 2;
                 s.nextMove = s.ctrl + gap / 2 + s.rng.next() % gap;
             }
-            if (s.bells && !s.safeMode && s.rng.next() % (int)(hal::RATE / 64 * (3.5f - s.drift * 2.f)) == 0) {
-                const Scale &sc = SCALES[s.scale];
-                int d = s.rng.next() % sc.n;
-                s.bellHz = dsp::midiHz(s.root + sc.steps[d] + 36 + (s.rng.next() & 1) * 12);
-                s.bell.hz(s.bellHz);
-                s.bellF.set(s.bellHz, 0.98f);
-                s.bellEnv.trigger(0.5f);
+            const Style &st = STYLES[s.style];
+            if (s.bells && !s.safeMode) {
+                if (s.strikeLeft > 0 && s.ctrl >= s.strikeAt) {
+                    // rolled cluster: climb the scale in thirds, slightly uneven
+                    strike(s.strikeDeg);
+                    s.strikeDeg += 2;
+                    --s.strikeLeft;
+                    s.strikeAt = s.ctrl + hal::RATE / 9 + s.rng.next() % (hal::RATE / 6);
+                } else if (s.strikeLeft == 0) {
+                    int odds = (int)(hal::RATE / 64 * (3.5f - s.drift * 2.f) / st.density);
+                    if (odds < 8) odds = 8;
+                    if (s.rng.next() % odds == 0) {
+                        s.strikeDeg = s.rng.next() % SCALES[s.scale].n;
+                        s.strikeLeft = 1 + s.rng.next() % st.cluster;
+                        s.strikeAt = s.ctrl;
+                    }
+                }
             }
         }
+        const Style &st = STYLES[s.style];
         float mix = 0;
         for (int k = 0; k < NV; ++k) {
             Voice &v = s.v[k];
-            float x = (v.a.saw() + v.b.saw()) * 0.5f + v.sub.sine() * 0.6f;
+            float sa = v.a.saw(), sb = v.b.saw();
+            float saw = (sa + sb) * 0.5f;
+            float tri = fabsf(sa) + fabsf(sb) - 1.f; // same phases, folded
+            float x = saw * st.saw + tri * (1.f - st.saw) * 1.3f + v.sub.sine() * st.sub;
             mix += x * v.amp;
         }
         mix = s.filt.lp(mix * 0.32f);
         if (s.windAmp > 0.001f) mix += s.windF.bp(s.rng.white()) * 0.09f * s.windAmp;
-        float bl = s.bell.sine() * s.bellEnv.tick();
-        mix += bl * 0.18f;
+        float bells = 0;
+        for (int k = 0; k < NB; ++k) {
+            Bell &b = s.bl[k];
+            if (b.env.v < 0.0004f) continue;
+            float m = b.mod.sine() * st.index * b.modEnv.tick();
+            bells += b.car.pmSine(m) * b.env.tick();
+        }
+        mix += bells * 0.24f;
         // dark delay: two taps, low-passed feedback
-        float wet = s.safeMode ? 0.f : s.dl.tap(4095) * 0.55f + s.dl.tap(3072) * 0.3f;
+        float wet = s.safeMode ? 0.f : s.dl.tap(st.tapA) * 0.55f + s.dl.tap(st.tapB) * 0.3f;
         s.dlLp += (wet - s.dlLp) * 0.18f;
-        s.dl.put(mix + s.dlLp * 0.62f);
-        float o = mix * 0.8f + s.dlLp * 0.5f;
+        s.dl.put(mix + s.dlLp * st.fb);
+        float o = mix * 0.8f + s.dlLp * st.wet;
         int16_t p = dsp::toPcm(o * 0.9f);
         out[i] = p;
         if ((i & 3) == 0) s.scope.put(p);
     }
 }
 
+// The ~17 KB of voices and delay are freed on leave so radio rites get that
+// heap back; only the player's settings survive until the next visit.
+struct Saved {
+    bool valid;
+    int root, scale, style;
+    float bright, drift;
+    bool wind, bells, freeze;
+} saved = {};
+
 void enter() {
     if (!S) {
-        S = new State();
-        if (!S) {
-            // Do not let an exhausted heap turn opening DRONE into a reboot.
-            hal::setAudio(nullptr);
-            return;
+        S = new (std::nothrow) State();
+        if (!S) return; // draw() says so; any key leaves
+        if (saved.valid) {
+            S->root = saved.root;
+            S->scale = saved.scale;
+            S->style = saved.style;
+            S->bright = saved.bright;
+            S->drift = saved.drift;
+            S->wind = saved.wind;
+            S->bells = saved.bells;
+            S->freeze = saved.freeze;
+            S->windAmp = S->wind ? 1.f : 0.f;
         }
     }
     S->lfo.hz(0.045f);
     S->lfo2.hz(0.013f);
-    S->bellEnv.time(1.6f);
-    S->bellF.set(880, 0.9f);
+    applyStyle();
 #ifdef GRIM_DEVICE
     // Radio rites can leave the PSRAM-less S3 heap fragmented. Safe mode keeps
     // the core drone alive while dropping bells and feedback if headroom is low.
@@ -190,11 +286,17 @@ void enter() {
     seed(true);
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+    if (!S) return;
+    saved = {true, S->root, S->scale, S->style, S->bright, S->drift, S->wind, S->bells, S->freeze};
+    delete S; // the shell has already detached audio
+    S = nullptr;
+}
 
 const char PIANO[] = "awsedftgyhujk";
 
 bool onKey(const hal::Key &k) {
+    if (!S) return false;
     State &s = *S;
     if (k.ch) {
         const char *p = strchr(PIANO, k.ch);
@@ -220,6 +322,7 @@ bool onKey(const hal::Key &k) {
     switch (k.ch) {
     case 'z': if (s.root >= 24) s.root -= 12; for (int i = 0; i < NV; ++i) retune(i, false); break;
     case 'x': if (s.root < 60) s.root += 12; for (int i = 0; i < NV; ++i) retune(i, false); break;
+    case 'p': s.style = (s.style + 1) % N_STYLES; applyStyle(); break;
     case 'n': s.wind = !s.wind; break;
     case 'b': s.bells = !s.bells; break;
     case 'q': s.safeMode = !s.safeMode; break;
@@ -230,6 +333,7 @@ bool onKey(const hal::Key &k) {
 }
 
 void draw(uint32_t now) {
+    if (!S) { starved("DRONE", "drone"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);
@@ -276,24 +380,21 @@ void draw(uint32_t now) {
     char b[40];
     int px = 132;
     frame(px - 4, 24, 110, 92, C_CLOT, C_UMBER);
-    snprintf(b, sizeof b, "%s%d", NOTE_NAMES[s.root % 12], s.root / 12 - 1);
+    snprintf(b, sizeof b, "%s%d", noteName(s.root), s.root / 12 - 1);
     text("root", px, 29, C_DIM);
     text(b, px + 40, 26, C_GLOW, 2);
     text("mode", px, 46, C_DIM);
     text(SCALES[s.scale].name, px + 40, 46, C_BONE);
-    auto bar = [&](const char *label, float v, int y) {
-        text(label, px, y, C_DIM);
-        cv.drawRect(px + 40, y + 1, 60, 6, C_CLOT);
-        cv.fillRect(px + 41, y + 2, (int)(58 * v), 4, C_RUST);
-    };
-    bar("light", s.bright, 58);
-    bar("drift", s.drift, 70);
+    meter("light", px, 58, px + 40, 60, s.bright);
+    meter("drift", px, 70, px + 40, 60, s.drift);
     snprintf(b, sizeof b, "%s %s %s", s.safeMode ? "SAFE" : (s.wind ? "WIND" : "wind"), s.bells ? "BELL" : "bell",
              s.freeze ? "HOLD" : "flow");
     text(b, px, 84, s.safeMode ? C_GLOW : (s.freeze ? C_GLOW : C_EMBER));
+    text("style", px, 96, C_DIM);
+    text(STYLES[s.style].name, px + 40, 96, C_BONE);
     snprintf(b, sizeof b, "lp %4dhz", (int)s.cutoffNow);
-    text(b, px, 96, C_DIM);
-    footer("a-k root 1-6 mode ;. ,/ q safe spc hold");
+    text(b, px, 106, C_DIM);
+    footer("a-k root 1-6 mode p style spc hold");
 }
 } // namespace
 

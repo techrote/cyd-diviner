@@ -161,4 +161,24 @@ void footer(const char *hint) {
     textCentre(hint, hal::W / 2, hal::H - 9, C_DIM);
 }
 
+void meter(const char *label, int x, int y, int bx, int w, float v) {
+    Canvas &cv = hal::canvas();
+    text(label, x, y, C_DIM);
+    cv.drawRect(bx, y + 1, w, 6, C_CLOT);
+    cv.fillRect(bx + 1, y + 2, (int)((w - 2) * (v < 0 ? 0 : v > 1 ? 1 : v)), 4, C_RUST);
+}
+
+const char *noteName(int midi) {
+    static const char *const N[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    return N[((midi % 12) + 12) % 12];
+}
+
+void starved(const char *daedric, const char *latin) {
+    hal::canvas().fillScreen(C_VOID);
+    header(daedric, latin);
+    textCentre("not enough memory to open", 120, 58, C_EMBER);
+    textCentre("leave a radio rite or restart", 120, 72, C_DIM);
+    footer("any key: back");
+}
+
 } // namespace theme

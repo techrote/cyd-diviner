@@ -1,2 +1,2 @@
-12537f826231397ed958c60bd545755328ac5838df9d2024d8446e6c6881fde2  daedric-grimoire-cardputer-adv.bin
-a0c786cbe659857fa5b35cdc79e1fa278266666bbba169caf07101d0317b4ed3  daedric-grimoire.bin
+9e89edaa1cd1691dc0865b2bef8e022666516862c1707ac306837eeeae31a39f  daedric-grimoire-cardputer-adv.bin
+21a44adeedba42a5921434091ad19880390143fd3fc4e5f37f9052ae42205f10  daedric-grimoire.bin
