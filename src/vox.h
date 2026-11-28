@@ -40,7 +40,21 @@ inline const uint8_t LETTER[26] = {
     V_A | O_LIQUID << 4,  V_I | O_FRIC << 4,                                                // y z
 };
 
+// onset / coda masks for sung syllables (several consonants can stack)
+enum : uint8_t { M_PLOSIVE = 1, M_FRIC = 2, M_NASAL = 4, M_LIQUID = 8 };
+
 inline bool isLetter(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
+// how a consonant really sounds in a word (not its letter name)
+inline uint8_t consMask(char c) {
+    switch (c | 32) {
+    case 'b': case 'c': case 'd': case 'g': case 'k': case 'p': case 'q': case 't': return M_PLOSIVE;
+    case 'j': case 'x': return M_PLOSIVE | M_FRIC;
+    case 'f': case 'h': case 's': case 'v': case 'z': return M_FRIC;
+    case 'm': case 'n': return M_NASAL;
+    case 'l': case 'r': case 'w': case 'y': return M_LIQUID;
+    default: return 0;
+    }
+}
 inline char lower(char c) { return c >= 'A' && c <= 'Z' ? c + 32 : c; }
 inline int vowelOf(char c) { return isLetter(c) ? LETTER[lower(c) - 'a'] & 15 : V_SCHWA; }
 
@@ -53,6 +67,9 @@ struct Voice {
     float amp = 0, noise = 0, noiseK = 0.999f;
     int len = 0, pos = 0;
     float legato = 0; // 0 = clipped syllables, 1 = joined (chant)
+    float vibT = 0;   // sung notes: vibrato grows in toward this
+    int switchAt = -1, codaAt = -1, vowel2 = 0;
+    uint8_t coda = 0;
     float gain = 1;
     uint32_t ctl = 0;
     volatile int vowel = V_SCHWA; // for the UI
@@ -74,11 +91,44 @@ struct Voice {
         default: break;
         }
         f0T = hz;
+        switchAt = codaAt = -1;
         if (legato < 0.5f) f0 = hz * 1.03f; // a tiny scoop, like a chirp
         len = samples;
         pos = 0;
     }
     void hush() { len = 0; }
+
+    void setVowel(int vw) {
+        vowel = vw;
+        FT[0] = VOWEL[vw].f1;
+        FT[1] = VOWEL[vw].f2;
+        FT[2] = VOWEL[vw].f3;
+    }
+    // Sing one held syllable: onset consonants, a vowel (gliding to vowel2 for
+    // a diphthong), then a coda near the end. Used by GLYPHSONG's word mode.
+    void sing(uint8_t onset, int vw, int vw2, uint8_t codaMask, float hz, int samples) {
+        setVowel(vw);
+        hiss.set(3500, 0.55f);
+        if (onset & M_PLOSIVE) { noise = 0.8f; noiseK = 0.9965f; }
+        if (onset & M_FRIC) { noise = 0.6f; noiseK = 0.9993f; }
+        if (onset & M_NASAL) { F[0] = 260; F[1] = 1100; }
+        if (onset & M_LIQUID) F[1] = VOWEL[vw].f2 * 0.6f;
+        f0T = hz;
+        vibDepth = 0;
+        vibT = 0.007f;
+        len = samples;
+        pos = 0;
+        vowel2 = vw2;
+        switchAt = vw2 != vw ? samples * 11 / 20 : -1;
+        coda = codaMask;
+        codaAt = codaMask ? samples * 4 / 5 : -1;
+    }
+    void codaNow() {
+        if (coda & M_NASAL) { FT[0] = 260; FT[1] = 1100; FT[2] = 2400; } // hum it shut
+        if (coda & M_FRIC) { noise = 0.45f; noiseK = 0.9993f; }
+        if (coda & M_PLOSIVE) { noise = 0.5f; noiseK = 0.996f; len = pos + hal::RATE / 60; } // stop + release
+        if ((coda & M_LIQUID) && !(coda & M_NASAL)) FT[1] *= 0.75f;
+    }
 
     inline float tick() {
         // silent between lines: skip the filters entirely (COVEN's voice is
@@ -91,6 +141,7 @@ struct Voice {
             float glide = legato > 0.5f ? 0.02f : 0.12f;
             f0 += (f0T - f0) * glide;
             for (int k = 0; k < 3; ++k) F[k] += (FT[k] - F[k]) * 0.22f;
+            vibDepth += (vibT - vibDepth) * 0.004f;
             glot.hz(f0 * (1.f + vibDepth * vib.sine()));
             // re-tune a band only once it has actually moved (set() costs a
             // sinf and a sqrtf; settled formants are the common case)
@@ -109,6 +160,8 @@ struct Voice {
             float rel = 0.32f - 0.24f * legato;
             int rs = (int)(len * (1.f - rel));
             e = pos < att ? (float)pos / att : pos > rs ? (float)(len - pos) / (len - rs) : 1.f;
+            if (pos == switchAt) setVowel(vowel2);
+            if (pos == codaAt) codaNow();
             ++pos;
         }
         amp += (e - amp) * 0.03f;

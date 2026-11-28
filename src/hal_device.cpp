@@ -3,6 +3,8 @@
 #include "hal.h"
 #include <M5Cardputer.h>
 #include <atomic>
+#include <esp_heap_caps.h>
+#include <stdarg.h>
 
 namespace hal {
 namespace {
@@ -148,11 +150,17 @@ void setVolume(uint8_t v) {
 uint8_t volume() { return vol; }
 
 int batteryPercent() { return M5Cardputer.Power.getBatteryLevel(); }
-bool accel(float &x, float &y, float &z) {
-    if (!M5.Imu.isEnabled()) return false;
-    M5.Imu.update();
-    return M5.Imu.getAccel(&x, &y, &z);
+uint32_t heapFree() { return esp_get_free_heap_size(); }
+uint32_t heapLargest() { return heap_caps_get_largest_free_block(MALLOC_CAP_8BIT); }
+void debugf(const char *fmt, ...) {
+    char b[160];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(b, sizeof b, fmt, ap);
+    va_end(ap);
+    Serial.println(b);
 }
+
 void backToLauncher() {
     audioFn = nullptr;
     delay(50);

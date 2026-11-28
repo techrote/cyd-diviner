@@ -20,7 +20,6 @@ extern const Rite RITE_BEAT;
 extern const Rite RITE_CANON;
 extern const Rite RITE_SPECTRA;
 extern const Rite RITE_GLYPHSONG;
-extern const Rite RITE_TILT;
 extern const Rite RITE_COVEN;
 extern const Rite RITE_WIRED;
 extern const Rite RITE_VISIONS;

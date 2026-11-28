@@ -63,12 +63,12 @@ struct State {
     volatile float bellHz = 0;
     float subAmp = 0, crowd = 0;
     dsp::SVF tone;
-    dsp::Delay<4096> dl;
+    dsp::Delay16<4096> dl; // 8 KB: this rite shares the heap with Wi-Fi/BLE
     float dlLp = 0;
     uint32_t ctrl = 0;
     dsp::Scope scope;
     uint8_t wf[ROWS][COLS] = {};
-    uint32_t lastRow = 0;
+    uint32_t lastRow = 0, logAt = 0, quietSince = 0;
 } *S = nullptr;
 
 uint32_t fnv(const char *s) {
@@ -193,17 +193,20 @@ void render(int16_t *out, int n) {
     }
 }
 
-void startBand() {
-    if (S->band == B_WIFI) net::wifiBegin();
+void startBand(Band b) {
+    if (b == B_WIFI) net::wifiBegin(false); // listen only, never rejoin a network
     else net::bleBegin();
 }
 
 void enter() {
+    // radio first: its stack takes the big allocations, our state fits after
+    startBand(B_WIFI);
     if (!S) S = new (std::nothrow) State();
-    if (!S) return; // no heap: the shell will show an empty rite, not reboot
+    if (!S) return; // draw() shows the starved notice
+    S->band = B_WIFI;
+    S->quietSince = hal::ms();
     S->bellEnv.time(2.6f);
     S->bellModEnv.time(0.5f);
-    startBand();
     hal::setAudio(render);
 }
 void leave() {
@@ -221,7 +224,8 @@ bool onKey(const hal::Key &k) {
             s.band = want;
             // a new band is a new choir: everyone currently singing departs
             for (auto &v : s.v) if (v.used) { v.leaving = true; v.ampT = 0; v.hzT = v.hz * 0.6674f; }
-            startBand();
+            startBand(want);
+            s.quietSince = hal::ms();
         }
         return true;
     }
@@ -327,10 +331,27 @@ void draw(uint32_t now) {
     }
     int live = 0;
     for (auto &v : s.v) live += v.used && !v.leaving;
+    if (live) s.quietSince = now;
     if (!live) {
+        // say what the radio is actually doing rather than just waiting
         uint8_t a = (uint8_t)(120 + 100 * sinf(now * 0.004f));
-        textCentre("listening to", wx + COLS, wy + 38, blend(C_BONE, C_VOID, a));
-        textCentre("the air...", wx + COLS, wy + 50, blend(C_BONE, C_VOID, a));
+        int st = s.band == B_WIFI ? net::wifiScanStatus() : -1;
+        const char *l1 = "listening to", *l2 = "the air...";
+        if (s.band == B_WIFI && st == -2) { l1 = "the radio"; l2 = "refuses (retry)"; }
+        else if (now - s.quietSince > 15000) { l1 = "no one near"; l2 = s.band == B_WIFI ? "b: try ble" : "w: try wifi"; }
+        textCentre(l1, wx + COLS, wy + 38, blend(C_BONE, C_VOID, a));
+        textCentre(l2, wx + COLS, wy + 50, blend(C_BONE, C_VOID, a));
+        if (hal::heapFree()) {
+            char hb[24];
+            snprintf(hb, sizeof hb, "heap %uk", (unsigned)(hal::heapFree() / 1024));
+            textCentre(hb, wx + COLS, wy + 66, C_DIM);
+        }
+    }
+    if (now - s.logAt > 2000) {
+        s.logAt = now;
+        hal::debugf("spectra band=%s scan=%d aps=%d devs=%d live=%d heap=%u big=%u", s.band == B_WIFI ? "wifi" : "ble",
+                    net::wifiScanStatus(), (int)s.aps.size(), (int)s.devs.size(), live, (unsigned)hal::heapFree(),
+                    (unsigned)hal::heapLargest());
     }
 
     // ---- panel

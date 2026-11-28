@@ -118,6 +118,20 @@ template <int N> struct Delay {
     }
 };
 
+// The same echo line stored as int16 (half the RAM): for rites that share
+// the heap with a radio stack. Plenty of resolution for a dark echo.
+template <int N> struct Delay16 {
+    static_assert((N & (N - 1)) == 0, "Delay16 length must be a power of two");
+    int16_t buf[N] = {};
+    int w = 0;
+    inline float tap(int d) const { return buf[(w - d) & (N - 1)] * (1.f / 16384.f); }
+    inline void put(float v) {
+        v = v > 1.99f ? 1.99f : v < -1.99f ? -1.99f : v;
+        buf[w] = (int16_t)(v * 16384.f);
+        w = (w + 1) & (N - 1);
+    }
+};
+
 inline float softclip(float x) {
     if (x > 1.5f) return 1.f;
     if (x < -1.5f) return -1.f;

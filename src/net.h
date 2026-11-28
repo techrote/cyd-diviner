@@ -25,10 +25,15 @@ struct AP {
     bool known;   // we have saved credentials
 };
 
-void wifiBegin();            // bring the radio up (STA), load saved creds
+// Bring the radio up (STA). connect=true rejoins the last saved network;
+// connect=false only listens, and also aborts a pending join, because the
+// radio refuses to scan while it is still trying to connect.
+void wifiBegin(bool connect = true);
 void radioStop();            // tear down whatever radio is up
 WifiState wifiState();
 int wifiScan(std::vector<AP> &out); // async: returns count, -1 while running; call again
+// Last raw scan state for diagnostics: -1 running, -2 failed, >=0 found.
+int wifiScanStatus();
 void wifiConnect(const char *ssid, const char *pass);
 void wifiForget(const char *ssid);
 std::string wifiIP();

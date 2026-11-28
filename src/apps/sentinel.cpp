@@ -199,7 +199,7 @@ bool onKey(const hal::Key &k) {
             s.learning = true;
             s.learnUntil = hal::ms() + 12000;
             s.newCount = s.droneCount = 0;
-            if (s.mode == K_WIFI) net::wifiBegin();
+            if (s.mode == K_WIFI) net::wifiBegin(false);
             else net::bleBegin();
         }
         return true;

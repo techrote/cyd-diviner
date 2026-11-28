@@ -25,7 +25,8 @@ const int FAKE_AUTH[] = {1, 1, 1, 0, 1, 0, 1, 1, 0, 1};
 int scanCalls = 0;
 } // namespace
 
-void wifiBegin() {
+int wifiScanStatus() { return scanCalls ? -1 : 0; }
+void wifiBegin(bool) {
     if (wstate == WST_OFF) { wstate = WST_CONNECTING; stateAt = now(); ssid = "wired-house"; }
 }
 void radioStop() { wstate = WST_OFF; }

@@ -13,6 +13,7 @@
 #include <atomic>
 #include <cmath>
 #include <chrono>
+#include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -319,13 +320,14 @@ void setAudio(AudioFn fn) {
     while (rendering) SDL_Delay(1); // let an in-flight block finish
 }
 void setOverlayAudio(AudioFn fn) { overlayFn = fn; }
-bool accel(float &x, float &y, float &z) {
-    float t = SDL_GetTicks() * 0.001f;
-    x = 0.55f * sinf(t * 0.41f);
-    y = 0.35f * sinf(t * 0.23f + 1.f);
-    z = 0.9f;
-    if ((int)t % 17 == 9) { x += 0.9f * sinf(t * 40.f); y += 0.9f * cosf(t * 37.f); } // a shake
-    return true;
+uint32_t heapFree() { return 0; }
+uint32_t heapLargest() { return 0; }
+void debugf(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+    fputc('\n', stderr);
 }
 void setVolume(uint8_t v) { vol = v; }
 uint8_t volume() { return vol; }

@@ -103,14 +103,21 @@ void radioStop() {
 }
 
 // ---- Wi-Fi ---------------------------------------------------------------
-void wifiBegin() {
+void wifiBegin(bool connect) {
+    if (radio == R_WIFI && !connect && WiFi.status() != WL_CONNECTED) {
+        // a join is still being retried (e.g. LINK's saved network is out of
+        // range): esp_wifi_scan_start() refuses with ESP_ERR_WIFI_STATE until
+        // it gives up, so a listener must abort it to hear anything
+        WiFi.disconnect(false, false);
+        return;
+    }
     if (radio != R_WIFI) {
         radioStop();
         WiFi.persistent(false);
         WiFi.mode(WIFI_STA);
         WiFi.setSleep(false);
         radio = R_WIFI;
-        if (WiFi.status() != WL_CONNECTED) {
+        if (connect && WiFi.status() != WL_CONNECTED) {
             prefs.begin("grimnet", true);
             String last = prefs.getString("last", "");
             prefs.end();
@@ -151,10 +158,20 @@ std::vector<AP> cacheList() {
 }
 } // namespace
 
+int lastScanStatus = -1;
+uint32_t scanRetryAt = 0;
+int wifiScanStatus() { return lastScanStatus; }
 int wifiScan(std::vector<AP> &out) {
-    wifiBegin();
+    if (radio != R_WIFI) wifiBegin();
     int16_t n = WiFi.scanComplete();
+    lastScanStatus = n;
     if (n == WIFI_SCAN_FAILED || !scanStarted) {
+        // a refused scan used to be re-issued every frame; back off instead
+        if (n == WIFI_SCAN_FAILED && scanStarted && millis() < scanRetryAt) {
+            out = cacheList();
+            return out.empty() ? -1 : (int)out.size();
+        }
+        scanRetryAt = millis() + 700;
         // async, include hidden, ACTIVE scan, 300ms/channel dwell: a longer
         // dwell and probe requests catch phones/APs that beacon infrequently.
         WiFi.scanNetworks(true, true, false, 300);
