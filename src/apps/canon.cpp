@@ -226,7 +226,7 @@ bool onKey(const hal::Key &k) {
 }
 
 void draw(uint32_t now) {
-    if (!S) return;
+    if (!S) { starved("CANON", "canon"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);

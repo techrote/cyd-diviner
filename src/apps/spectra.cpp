@@ -249,7 +249,7 @@ int colFor(float hz) {
 }
 
 void draw(uint32_t now) {
-    if (!S) return;
+    if (!S) { starved("SPECTRA", "spectra"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);
@@ -291,7 +291,7 @@ void draw(uint32_t now) {
             if (!v.used) continue;
             int c0 = colFor(v.hz);
             float a = fminf(1.f, v.amp * 1.4f * v.swell);
-            float flick = 0.8f + 0.2f * sinf(now * 0.004f + v.hash);
+            float flick = 0.8f + 0.2f * sinf(now * 0.004f + (v.hash & 1023) * 0.0061f); // small arg: fast, exact
             if (v.leaving) c0 = colFor(v.hz); // the sigh bends the trail
             for (int d = -3; d <= 3; ++d) {
                 int c = c0 + d;

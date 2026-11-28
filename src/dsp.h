@@ -106,12 +106,15 @@ struct SVF {
 };
 
 template <int N> struct Delay {
+    // power-of-two lengths wrap with a mask instead of an integer divide
+    // (three per sample per rite on the audio core)
+    static constexpr bool POW2 = (N & (N - 1)) == 0;
     float buf[N] = {};
     int w = 0;
-    inline float tap(int d) const { return buf[(w - d + N) % N]; }
+    inline float tap(int d) const { return buf[POW2 ? (w - d) & (N - 1) : (w - d + N) % N]; }
     inline void put(float v) {
         buf[w] = v;
-        w = (w + 1) % N;
+        w = POW2 ? (w + 1) & (N - 1) : (w + 1) % N;
     }
 };
 

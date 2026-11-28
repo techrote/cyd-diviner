@@ -36,11 +36,12 @@ constexpr int MAXS = 10;           // seats + familiars we track
 constexpr uint32_t BEAT_MS = 1800; // the circle's pulse
 constexpr uint32_t GONE_MS = 15000;
 
-// wire: "CV1" kind rootPc scale degree beat
+// wire: "CV1" kind rootPc scale degree beat phase(ms into the beat, LE)
 struct Cv {
     char m[3];
     uint8_t kind; // 0 presence, 1 call
     uint8_t rootPc, scale, degree, beat;
+    uint8_t phase[2];
 };
 
 struct Soul {
@@ -137,7 +138,10 @@ void leave() {
 
 void send(uint8_t kind) {
     State &s = *S;
-    Cv c = {{'C', 'V', '1'}, kind, (uint8_t)s.rootPc, (uint8_t)s.scale, (uint8_t)s.degree, s.beat};
+    uint32_t ph = hal::ms() - s.beatAt;
+    if (ph > 0xFFFF) ph = 0xFFFF;
+    Cv c = {{'C', 'V', '1'}, kind, (uint8_t)s.rootPc, (uint8_t)s.scale, (uint8_t)s.degree, s.beat,
+            {(uint8_t)ph, (uint8_t)(ph >> 8)}};
     net::nowSend(&c, sizeof c);
 }
 
@@ -155,7 +159,7 @@ bool onKey(const hal::Key &k) {
     switch (k.ch) {
     case 'z': if (s.oct > 1) s.oct--; break;
     case 'x': if (s.oct < 4) s.oct++; break;
-    case 'm': s.hush = !s.hush; if (s.hush) s.rd.len = 0; break;
+    case 'm': s.hush = !s.hush; if (s.hush) s.rd.stop(); break;
     case ' ':
         send(1);
         s.callAt = hal::ms();
@@ -201,7 +205,12 @@ void listen(uint32_t now) {
                 // an elder: follow its root, mode and pulse
                 s.rootPc = c.rootPc % 12;
                 s.scale = c.scale % N_SCALES;
-                if (c.beat != s.beat) { s.beat = c.beat; s.beatAt = now; }
+                // adopt the elder's beat and where it is inside it, so every
+                // seat's pulse lands together (packet latency is ~ms)
+                uint32_t ph = c.phase[0] | c.phase[1] << 8;
+                uint32_t at = now - (ph < BEAT_MS ? ph : 0);
+                int32_t off = (int32_t)(at - s.beatAt);
+                if (c.beat != s.beat || off > 60 || off < -60) { s.beat = c.beat; s.beatAt = at; }
             }
         } else if (p.len > 4 && !memcmp(p.data, "DY1|", 4)) {
             // a DYAD line: the text is everything after the 10th '|'
@@ -220,11 +229,13 @@ void listen(uint32_t now) {
                     s.rd.hz = x->hz;
                     s.rd.sylSec = 0.07f;
                     s.rd.loop = false;
-                    s.rd.start(s.whisper, n);
+                    s.rd.post(s.whisper, n);
                 }
             }
-        } else {
-            x->rangAt = now; // a stranger's tick
+        } else if (now - x->rangAt > 2500) {
+            // a stranger's tick; TETHER beacons every 50 ms, so at most one
+            // tick per stranger every few seconds
+            x->rangAt = now;
             if (!s.hush) strike(x->hz * 4.f, 0.06f);
         }
     }
@@ -233,7 +244,7 @@ void listen(uint32_t now) {
 }
 
 void draw(uint32_t now) {
-    if (!S) return;
+    if (!S) { starved("COVEN", "coven"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);
@@ -351,8 +362,12 @@ void draw(uint32_t now) {
 
     // ---- the whisper, appearing as it is spoken
     if (s.whisper[0] && now - s.whisperAt < 12000) {
-        int shown = s.hush ? (int)strlen(s.whisper) : (s.rd.len ? s.rd.idx + 1 : (int)strlen(s.whisper));
+        // reveal as spoken; the reader may still be on an older line for a
+        // block, so never trust its index past this line's end
+        int wl = strlen(s.whisper);
+        int shown = s.hush || !s.rd.len ? wl : s.rd.idx + 1;
         if (shown < 0) shown = 0;
+        if (shown > wl) shown = wl;
         uint8_t fade = now - s.whisperAt < 9000 ? 255 : (uint8_t)(255 - (now - s.whisperAt - 9000) * 255 / 3000);
         text(s.whisperBy, 4, 104, blend(C_EMBER, C_VOID, fade));
         // show the tail that fits (34 chars after the tag)

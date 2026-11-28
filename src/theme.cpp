@@ -173,4 +173,12 @@ const char *noteName(int midi) {
     return N[((midi % 12) + 12) % 12];
 }
 
+void starved(const char *daedric, const char *latin) {
+    hal::canvas().fillScreen(C_VOID);
+    header(daedric, latin);
+    textCentre("not enough memory to open", 120, 58, C_EMBER);
+    textCentre("leave a radio rite or restart", 120, 72, C_DIM);
+    footer("any key: back");
+}
+
 } // namespace theme

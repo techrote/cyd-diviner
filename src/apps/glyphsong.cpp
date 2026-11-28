@@ -77,7 +77,7 @@ void configure() {
 void sing() {
     S->len = strlen(S->text);
     configure();
-    S->rd.start(S->text, S->len);
+    S->rd.post(S->text, S->len);
     S->dirty = false;
 }
 
@@ -150,7 +150,7 @@ void chartXY(float f1, float f2, int x0, int y0, int w, int h, int &x, int &y) {
 }
 
 void draw(uint32_t now) {
-    if (!S) return;
+    if (!S) { starved("GLYPHSONG", "glyphsong"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);

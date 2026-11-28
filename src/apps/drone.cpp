@@ -10,6 +10,7 @@
 #include "../rite.h"
 #include "../theme.h"
 #include <stdio.h>
+#include <new>
 #include <string.h>
 #ifdef GRIM_DEVICE
 #include <esp_system.h>
@@ -247,13 +248,29 @@ void render(int16_t *out, int n) {
     }
 }
 
+// The ~17 KB of voices and delay are freed on leave so radio rites get that
+// heap back; only the player's settings survive until the next visit.
+struct Saved {
+    bool valid;
+    int root, scale, style;
+    float bright, drift;
+    bool wind, bells, freeze;
+} saved = {};
+
 void enter() {
     if (!S) {
-        S = new State();
-        if (!S) {
-            // Do not let an exhausted heap turn opening DRONE into a reboot.
-            hal::setAudio(nullptr);
-            return;
+        S = new (std::nothrow) State();
+        if (!S) return; // draw() says so; any key leaves
+        if (saved.valid) {
+            S->root = saved.root;
+            S->scale = saved.scale;
+            S->style = saved.style;
+            S->bright = saved.bright;
+            S->drift = saved.drift;
+            S->wind = saved.wind;
+            S->bells = saved.bells;
+            S->freeze = saved.freeze;
+            S->windAmp = S->wind ? 1.f : 0.f;
         }
     }
     S->lfo.hz(0.045f);
@@ -269,11 +286,17 @@ void enter() {
     seed(true);
     hal::setAudio(render);
 }
-void leave() {}
+void leave() {
+    if (!S) return;
+    saved = {true, S->root, S->scale, S->style, S->bright, S->drift, S->wind, S->bells, S->freeze};
+    delete S; // the shell has already detached audio
+    S = nullptr;
+}
 
 const char PIANO[] = "awsedftgyhujk";
 
 bool onKey(const hal::Key &k) {
+    if (!S) return false;
     State &s = *S;
     if (k.ch) {
         const char *p = strchr(PIANO, k.ch);
@@ -310,6 +333,7 @@ bool onKey(const hal::Key &k) {
 }
 
 void draw(uint32_t now) {
+    if (!S) { starved("DRONE", "drone"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);

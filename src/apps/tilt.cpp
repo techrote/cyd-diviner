@@ -155,8 +155,10 @@ void enter() {
         b.env.time(2.8f);
         b.modEnv.time(0.6f);
     }
-    float x, y, z;
+    float x = 0, y = 0, z = 1;
     S->imu = hal::accel(x, y, z);
+    S->lastRawX = x; // so the first frame isn't read as a shake
+    S->lastRawY = y;
     retarget();
     for (auto &v : S->v) v.hz = v.hzT;
     hal::setAudio(render);
@@ -181,7 +183,7 @@ bool onKey(const hal::Key &k) {
     case 'z': if (s.root > 33) s.root -= 12; break;
     case 'x': if (s.root < 57) s.root += 12; break;
     case 'c': s.calX = s.lastRawX; s.calY = s.lastRawY; break;
-    case 'f': s.flip = (s.flip + 1) & 3; break;
+    case 'f': s.flip = (s.flip + 1) & 3; s.calX = s.calY = 0; break; // level was in the old axes
     case 'r': s.mx = s.my = s.vx = s.vy = 0; break;
     case ' ': s.lock = !s.lock; break;
     }
@@ -247,7 +249,7 @@ void physics(uint32_t now) {
 }
 
 void draw(uint32_t now) {
-    if (!S) return;
+    if (!S) { starved("TILT", "tilt"); return; }
     State &s = *S;
     Canvas &cv = hal::canvas();
     cv.fillScreen(C_VOID);

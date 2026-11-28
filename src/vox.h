@@ -7,6 +7,7 @@
 // Shared by GLYPHSONG and COVEN. Everything here runs on the audio thread.
 #pragma once
 #include "dsp.h"
+#include <atomic>
 #include <string.h>
 
 namespace vox {
@@ -48,7 +49,7 @@ struct Voice {
     dsp::SVF b1, b2, b3, hiss;
     dsp::Noise nz;
     float f0 = 220, f0T = 220, vibDepth = 0;
-    float F[3] = {520, 1450, 2550}, FT[3] = {520, 1450, 2550};
+    float F[3] = {520, 1450, 2550}, FT[3] = {520, 1450, 2550}, Fset[3] = {0, 0, 0};
     float amp = 0, noise = 0, noiseK = 0.999f;
     int len = 0, pos = 0;
     float legato = 0; // 0 = clipped syllables, 1 = joined (chant)
@@ -80,14 +81,26 @@ struct Voice {
     void hush() { len = 0; }
 
     inline float tick() {
+        // silent between lines: skip the filters entirely (COVEN's voice is
+        // idle most of the time) and let nothing decay into denormals
+        if (pos >= len && amp < 1e-4f && noise <= 0.002f) {
+            amp = 0;
+            return 0;
+        }
         if ((ctl++ & 15) == 0) {
             float glide = legato > 0.5f ? 0.02f : 0.12f;
             f0 += (f0T - f0) * glide;
             for (int k = 0; k < 3; ++k) F[k] += (FT[k] - F[k]) * 0.22f;
             glot.hz(f0 * (1.f + vibDepth * vib.sine()));
-            b1.set(F[0], 0.9f);
-            b2.set(F[1], 0.92f);
-            b3.set(F[2], 0.9f);
+            // re-tune a band only once it has actually moved (set() costs a
+            // sinf and a sqrtf; settled formants are the common case)
+            static const float RES[3] = {0.9f, 0.92f, 0.9f};
+            dsp::SVF *bp[3] = {&b1, &b2, &b3};
+            for (int k = 0; k < 3; ++k)
+                if (fabsf(F[k] - Fset[k]) > 1.f) {
+                    bp[k]->set(F[k], RES[k]);
+                    Fset[k] = F[k];
+                }
         }
         // envelope: 5 ms attack, hold, release over the last part
         float e = 0;
@@ -125,6 +138,21 @@ struct Reader {
     void *ctx = nullptr;
     dsp::Noise rng;
 
+    // Hand a new line to the reader from the UI thread. The audio thread
+    // swaps it in at its next step, so it never reads a half-copied line.
+    // A newer post simply replaces an untaken one (retract, write, publish).
+    char pend[128] = {};
+    std::atomic<int> pendLen{-1}; // -1 nothing posted; 0 = stop
+    void post(const char *s, int n = -1) {
+        pendLen.store(-1, std::memory_order_relaxed);
+        int l = n < 0 ? (int)strlen(s) : n;
+        if (l > (int)sizeof pend - 1) l = sizeof pend - 1;
+        memcpy(pend, s, l);
+        pend[l] = 0;
+        pendLen.store(l, std::memory_order_release);
+    }
+    void stop() { post("", 0); }
+    // audio thread (or before audio starts)
     void start(const char *s, int n = -1) {
         len = n < 0 ? (int)strlen(s) : n;
         if (len > (int)sizeof txt - 1) len = sizeof txt - 1;
@@ -152,6 +180,11 @@ struct Reader {
 
     // call once per sample before voice.tick()
     inline void step(Voice &v, Voice *v2 = nullptr, float v2ratio = 0.667f) {
+        int pl = pendLen.load(std::memory_order_acquire);
+        if (pl >= 0) {
+            start(pend, pl);
+            pendLen.store(-1, std::memory_order_relaxed);
+        }
         if (wait > 0) { --wait; return; }
         if (!len) return;
         int i = idx + 1;

@@ -51,5 +51,7 @@ const char *noteName(int midi);
 // Top bar: Daedric name + latin name, battery; bottom hint line.
 void header(const char *daedric, const char *latin);
 void footer(const char *hint);
+// Whole-screen notice for a rite that could not get its memory.
+void starved(const char *daedric, const char *latin);
 
 } // namespace theme

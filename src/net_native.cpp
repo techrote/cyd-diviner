@@ -315,7 +315,7 @@ bool nowPoll(NowPkt &p) {
         uint8_t m[6] = {0x34, 0x85, 0x18, 0x01, 0x02, 0x03};
         memcpy(p.mac, m, 6);
         p.rssi = -50;
-        const char cv[] = {'C', 'V', '1', 0, 1, 2, 7, 0};
+        const char cv[] = {'C', 'V', '1', 0, 1, 2, 7, 0, 0, 0};
         memcpy(p.data, cv, sizeof cv);
         p.len = sizeof cv;
         return true;

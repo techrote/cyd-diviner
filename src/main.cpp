@@ -246,7 +246,9 @@ void grimLoop() {
             if (k.nav == hal::N_LEFT || k.nav == hal::N_UP) { sel = (sel + N_RITES - 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_RIGHT || k.nav == hal::N_DOWN) { sel = (sel + 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_ENTER) open(sel);
-            else if (k.ch >= '1' && k.ch < '1' + N_RITES) open(sel = k.ch - '1');
+            // digits 1-9 jump straight to the first nine rites; with more than
+            // nine, a bare '1' + N_RITES bound would also catch : < > ? @ A-E
+            else if (k.ch >= '1' && k.ch <= '9' && k.ch - '1' < N_RITES) open(sel = k.ch - '1');
             // keep the carousel from spinning the long way round on wrap
             if (sel - slide > N_RITES / 2.f) slide += N_RITES;
             if (slide - sel > N_RITES / 2.f) slide -= N_RITES;
