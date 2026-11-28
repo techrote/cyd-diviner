@@ -1,5 +1,5 @@
 // ESP32 backend for net.h. Arduino WiFi (STA + async scan), esp_wifi
-// promiscuous RX counting, Bluedroid BLE scan, a ping+port LAN sweep and a
+// promiscuous RX counting, platform BLE scan, a ping+port LAN sweep and a
 // Gemini (TLS) client, each on a worker task where it would otherwise block.
 //
 // Credentials live in NVS via Preferences (namespace "grimnet"), never in
@@ -14,6 +14,7 @@
 #include <WiFiClientSecure.h>
 #include <esp_now.h>
 #include <esp_idf_version.h>
+#include <sdkconfig.h>
 #include <esp_wifi.h>
 #include <lwip/sockets.h>
 #include <lwip/netdb.h>
@@ -23,7 +24,11 @@
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
 #include <esp_bt.h>
+#if (defined(CONFIG_BLUEDROID_ENABLED) && CONFIG_BLUEDROID_ENABLED) || \
+    (defined(CONFIG_BT_BLUEDROID_ENABLED) && CONFIG_BT_BLUEDROID_ENABLED)
+#define DIVINER_BLE_BLUEDROID 1
 #include <esp_bt_main.h>
+#endif
 #ifdef GRIM_CYD
 #include <esp_heap_caps.h>
 #endif
@@ -439,7 +444,7 @@ std::vector<BleDev> bleFound;
 bool bleScanning = false;
 bool bleScanFailed = false;
 BLEScan *bleScanner = nullptr;
-SemaphoreHandle_t bleLock = nullptr; // onResult runs on the Bluedroid task
+SemaphoreHandle_t bleLock = nullptr; // onResult runs on the BLE host task
 uint32_t bleWindowAt = 0;
 
 #ifdef GRIM_CYD
@@ -462,8 +467,12 @@ void stopBleStack() {
     // Arduino 3.3.9 marks BLEDevice initialized only after the last startup
     // step, and deinit() does nothing while that flag is false. A failed host
     // allocation/registration can therefore leave a partial SDK stack alive.
-    // Also complete any partial teardown on Arduino 2, checking each status
-    // rather than disabling an already stopped component.
+    // Also complete any partial Bluedroid teardown on Arduino 2, checking each
+    // status rather than disabling an already stopped component. The pinned
+    // Cardputer SDK uses NimBLE; BLEDevice owns its host-task and controller
+    // teardown ordering. Do not manually stop that controller underneath a
+    // possibly still active host after partial SDK initialization.
+#ifdef DIVINER_BLE_BLUEDROID
     if (esp_bluedroid_get_status() == ESP_BLUEDROID_STATUS_ENABLED)
         esp_bluedroid_disable();
     if (esp_bluedroid_get_status() == ESP_BLUEDROID_STATUS_INITIALIZED)
@@ -472,6 +481,7 @@ void stopBleStack() {
         esp_bt_controller_disable();
     if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_INITED)
         esp_bt_controller_deinit();
+#endif
 }
 
 void stopBle() {

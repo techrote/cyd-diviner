@@ -89,6 +89,15 @@ explicit send pin in `IrSender.begin`. The call now passes the already configure
 emission remains an owner test. All three CYD images/audits, both simulator tours,
 sanitizer modes and the Windows plugin passed in that intermediate run.
 
+Run [46114837539](https://github.com/techrote/cyd-diviner/actions/runs/46114837539)
+at `b596cf4657282225d6a00bfb67e5c76686a21c68` passed nine jobs and completed the
+extended target-atomic probe, but Cardputer compilation then exposed an unavailable
+`esp_bt_main.h`. The actual selected S3 SDK uses NimBLE, not Bluedroid. The
+header and residual host/controller cleanup are now guarded by host capability;
+NimBLE retains BLE scanning and uses its library-owned ordered teardown. The
+classic-CYD Bluedroid cleanup and low-memory safeguards remain. SDK low-heap and
+failed host-sync recovery still require physical evaluation.
+
 Firmware manifests record actual partition capacities, resolved dependencies,
 app/full checksums and source identity. Independent `audit.json` reports
 image-header/segment checks, partition MD5 and bounds, full-image component

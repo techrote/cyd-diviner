@@ -118,9 +118,18 @@ existing classic-CYD BLE controller startup and 70 KiB/16 KiB host memory
 safeguards remain intact; SDK scan results are cleared between windows to
 avoid accumulation. BLE mode changes release the previous radio before mutex
 allocation. A failed Arduino 3.3.9 startup is detected before scanner access;
-teardown checks residual Bluedroid/controller status because that library's
-`deinit()` returns early when initialization failed partway. The same guarded
-cleanup tolerates already stopped SDK components. Radio diagnostics use the
+teardown checks residual Bluedroid/controller status only where Bluedroid is
+enabled because the library's `deinit()` returns early when initialization
+failed partway. The same guarded
+cleanup tolerates already stopped SDK components. The pinned Cardputer SDK
+selects NimBLE, while classic CYD selects Bluedroid. NimBLE scanning remains
+enabled through the Arduino BLE API; `BLEDevice::deinit(false)` owns both its
+host-task and controller teardown ordering, with no manual controller fallback
+that could stop a still-active host. Bluedroid-only headers and calls are
+excluded on NimBLE builds. Arduino's NimBLE startup
+waits internally for host synchronization; low-heap and failed-sync behaviour
+remain physical owner tests, not a claimed bounded SDK initialization path.
+Radio diagnostics use the
 HAL's PCM-aware logging path, including when diagnostics and PCM build flags
 are combined. SDK-internal logging is outside that application logging path.
 Heap fragmentation, injected SDK allocation failure, and coexistence cost still

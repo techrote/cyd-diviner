@@ -29,6 +29,11 @@ the XPT2046 v1.4 tag resolved to `d57f64c8b5f2bc5b8d10d121550806eeff7b06d9` in t
 independent audit. Header/source counts are not component
 flash-size measurements.
 
+The pinned Cardputer SDK selects NimBLE (IDF 5.5.4); CYD uses the Arduino 2
+Bluedroid stack. The shared Arduino BLE interface remains active on both, while
+headers and residual cleanup are selected by host capability. SDK initialization,
+low-memory recovery and radio/audio coexistence need physical qualification.
+
 ```sh
 python3 -m venv ../diviner-venv
 . ../diviner-venv/bin/activate
