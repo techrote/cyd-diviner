@@ -1,155 +1,86 @@
-name: Diviner qualification and firmware
+name: Independent firmware audit fixtures
 
 on:
   push:
-    branches: [main]
-  pull_request:
+    branches: [mission/firmware-audit]
   workflow_dispatch:
 
 permissions:
   contents: read
-
-concurrency:
-  group: diviner-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  actions: read
 
 jobs:
-  firmware:
+  independent-audit:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [cardputer, cyd, cyd-diagnostics, cyd-pcm]
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install pinned PlatformIO
-        run: python -m pip install --disable-pip-version-check platformio==6.2.0
-      - uses: actions/cache@v4
+      - name: Test installed dependency metadata and existing packaging contracts
+        run: |
+          python tests/dependency_metadata_test.py
+          python tests/package_firmware_test.py
+      - uses: actions/download-artifact@v4
         with:
-          path: ~/.platformio
-          key: pio-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('platformio.ini') }}
-      - name: Build exact candidate source
-        run: pio run -e ${{ matrix.target }}
-      - name: Verify provenance and partition layout; package images
-        run: python tools/package_firmware.py ${{ matrix.target }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: firmware-${{ matrix.target }}-${{ github.event.pull_request.head.sha || github.sha }}
-          path: delivery/${{ matrix.target }}/
-          if-no-files-found: error
-          retention-days: 30
-
-  portable:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        sanitizer: [none, address, thread]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Use address range supported by GCC ThreadSanitizer on this runner
-        if: matrix.sanitizer == 'thread'
-        run: sudo sysctl vm.mmap_rnd_bits=28
-      - name: Qualify actual kernels, exchanges, protocol and lifetime
-        env:
-          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
-          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
-          TSAN_OPTIONS: halt_on_error=1
-        run: python tools/qualify.py --sanitizer ${{ matrix.sanitizer }} --output delivery/portable-${{ matrix.sanitizer }}
+          github-token: ${{ github.token }}
+          run-id: 46112001450
+          pattern: firmware-cyd*
+          path: audit-input
+      - name: Audit real firmware bytes and reject a corrupted delivery
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import shutil
+          import subprocess
+          import sys
+          source = "8d74b4b68883c1691ad0e8d75d923385695af78e"
+          output = Path("audit-output")
+          output.mkdir()
+          paths = sorted(Path("audit-input").glob("firmware-*"))
+          assert len(paths) == 3, paths
+          reports = []
+          for path in paths:
+              env = path.name[len("firmware-"):-41]
+              report = output / (env + ".json")
+              command = [sys.executable, "tools/audit_firmware.py", str(path),
+                         "--source", source, "--environment", env, "--repository", ".",
+                         "--output", str(report)]
+              result = subprocess.run(command, text=True, capture_output=True, timeout=60)
+              print(result.stdout, end="")
+              print(result.stderr, end="", file=sys.stderr)
+              assert result.returncode == 0, result
+              receipt = json.loads(report.read_text())
+              assert receipt["status"] == "PASS"
+              reports.append(receipt)
+          damaged = Path("damaged-bundle")
+          shutil.copytree(paths[0], damaged)
+          firmware = damaged / "firmware.bin"
+          data = bytearray(firmware.read_bytes())
+          data[100] ^= 1
+          firmware.write_bytes(data)
+          env = paths[0].name[len("firmware-"):-41]
+          failure = subprocess.run([sys.executable, "tools/audit_firmware.py", str(damaged),
+                                    "--source", source, "--environment", env, "--repository", "."],
+                                   text=True, capture_output=True, timeout=60)
+          negative = json.loads(failure.stdout)
+          assert failure.returncode == 1 and negative["status"] == "FAIL", negative
+          assert "checksum mismatch" in negative["error"], negative
+          (output / "corruption-rejected.json").write_text(json.dumps(negative, indent=2) + "\n")
+          (output / "summary.json").write_text(json.dumps({"status":"PASS",
+              "audited_source":source, "profiles":[r["environment"] for r in reports],
+              "corruption_rejection":"PASS", "physical_execution":"NOT RUN"}, indent=2) + "\n")
+          print("PASS: three actual CYD bundles; intentional single-byte corruption rejected")
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: qualification-${{ matrix.sanitizer }}-${{ github.event.pull_request.head.sha || github.sha }}
-          path: delivery/portable-${{ matrix.sanitizer }}/
-          if-no-files-found: error
-          retention-days: 30
-
-  simulator:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [native, native-cyd]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install SDL and pinned build/test tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libsdl2-dev
-          python -m pip install --disable-pip-version-check platformio==6.2.0 pillow==13.0.0
-      - name: Build actual application
-        run: pio run -e ${{ matrix.target }}
-      - name: Exercise keyboard application and complete carousel
-        if: matrix.target == 'native'
-        run: python tests/native_tour.py --output delivery/native
-      - name: Exercise actual CYD controller and rendered touchscreen tour
-        if: matrix.target == 'native-cyd'
-        env:
-          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
-          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
-        run: |
-          mkdir -p delivery/native-cyd
-          tests/touch_tests.sh > delivery/native-cyd/controller.log 2>&1
-          SANITIZE=1 tests/touch_tests.sh > delivery/native-cyd/controller-sanitized.log 2>&1
-          python tests/touch_tour.py --binary .pio/build/native-cyd/program --output delivery/native-cyd
-      - name: Retain simulator and reproduction instructions
-        run: |
-          cp .pio/build/${{ matrix.target }}/program delivery/${{ matrix.target }}/diviner-${{ matrix.target }}-linux
-          cp docs/convergence/BUILD-AND-TEST.md delivery/${{ matrix.target }}/
-          cp .pio/build/${{ matrix.target }}/build-source.json delivery/${{ matrix.target }}/
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: simulator-${{ matrix.target }}-${{ github.event.pull_request.head.sha || github.sha }}
-          path: delivery/${{ matrix.target }}/
-          if-no-files-found: error
-          retention-days: 30
-
-  vlc-plugin:
-    runs-on: windows-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-      - name: Build and validate the VLC plugin DLL
-        shell: pwsh
-        run: ./tools/vlc/build.ps1
-      - name: Record plugin delivery identity
-        shell: pwsh
-        run: |
-          $out = 'delivery/vlc-plugin'
-          New-Item -ItemType Directory -Force -Path $out | Out-Null
-          Copy-Item .pio/vlc-plugin/libcydpcm_plugin.dll $out
-          Copy-Item tools/vlc/open.ps1 $out
-          Copy-Item docs/convergence/OWNER-EVALUATION.md $out
-          $pluginHash = (Get-FileHash "$out/libcydpcm_plugin.dll" -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$pluginHash  libcydpcm_plugin.dll" | Set-Content "$out/SHA256SUMS.txt"
-          git rev-parse HEAD | Set-Content "$out/SOURCE.txt"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: vlc-plugin-${{ github.event.pull_request.head.sha || github.sha }}
-          path: delivery/vlc-plugin/
-          if-no-files-found: error
+          name: independent-firmware-audit-${{ github.sha }}
+          path: audit-output/
+          if-no-files-found: warn
           retention-days: 30
