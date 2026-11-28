@@ -1,0 +1,55 @@
+name: Cardputer atomic codegen investigation
+
+on:
+  push:
+    branches: [mission/atomic-compat]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  atomic-codegen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned PlatformIO
+        run: python -m pip install --disable-pip-version-check platformio==6.2.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-${{ runner.os }}-cardputer-${{ hashFiles('platformio.ini') }}
+      - name: Resolve actual Cardputer compile commands without building the app
+        run: pio run -e cardputer -t compiledb
+      - name: Inspect exact-target atomics and runtime implementations
+        run: python tools/probe_atomics.py --environment cardputer --output delivery/atomic-probe-cardputer
+      - name: Print reviewable codegen evidence
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("delivery/atomic-probe-cardputer")
+          path=root/"report.json"
+          if path.exists():
+              report=json.loads(path.read_text())
+              print(json.dumps({key:report.get(key) for key in ("status","source_sha","source_tree","source_snapshot","dirty","compiler","error","archives","relevant_macros")},indent=2))
+          for pattern in ("probe-disassembly.log","*-atomic-functions.txt"):
+              for path in sorted(root.glob(pattern)):
+                  print("\nFILE",path.name)
+                  print(path.read_text())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cardputer-atomic-codegen-${{ github.sha }}
+          path: delivery/atomic-probe-cardputer/
+          if-no-files-found: error
+          retention-days: 30
