@@ -1,0 +1,57 @@
+name: Native script stall regression (isolated)
+
+on:
+  push:
+    branches: [mission/native-script-fix]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-script-fix
+  cancel-in-progress: true
+
+jobs:
+  native-cyd:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install SDL and pinned tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+          python -m pip install --disable-pip-version-check platformio==6.2.0 pillow==13.0.0
+      - name: Build exact isolated candidate
+        run: pio run -e native-cyd
+      - name: Deterministic production controller and forced-stall regression
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          set -euo pipefail
+          mkdir -p delivery/native-cyd
+          tests/touch_tests.sh 2>&1 | tee delivery/native-cyd/controller.log
+          SANITIZE=1 tests/touch_tests.sh 2>&1 | tee delivery/native-cyd/controller-sanitized.log
+      - name: Unchanged rendered-state and audio tour
+        run: python tests/touch_tour.py --binary .pio/build/native-cyd/program --output delivery/native-cyd
+      - name: Retain binary identity
+        run: |
+          cp .pio/build/native-cyd/program delivery/native-cyd/diviner-native-cyd-linux
+          cp .pio/build/native-cyd/build-source.json delivery/native-cyd/
+      - name: Emit exact-source reports and rendered PNG receipts
+        if: always()
+        run: python tools/ci_receipts.py delivery/native-cyd --previews
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-script-fix-${{ github.sha }}
+          path: delivery/native-cyd/
+          if-no-files-found: error
+          retention-days: 30
