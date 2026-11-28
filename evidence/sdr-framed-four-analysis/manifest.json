@@ -1,0 +1,35 @@
+{
+  "schema": "cyd-sdr-physical-demodulation-manifest/1",
+  "inputs": {
+    "evidence\\physical\\sdr-framed-four-retry-02\\results.json": "9923833edcb327cdbfb8440cb22971f2828e382c378df466b861f8b9c1ede9e9",
+    "evidence\\physical\\sdr-framed-four-retry-02\\artifact-hashes.json": "42ce4f4e34b3fcdfd5dfcc6c4df3437a0034d2fdb1f532de834a5d9a3f2fcdd6"
+  },
+  "core_sha256": "d99ab63acddc7f578db97a263b32f15fc0141fd6ab10963104be6ab325e80312",
+  "driver_sha256": "ee4cdc489918d835f43a662bc290c28bbc17267e4036b457cef8640388b04295",
+  "outputs": {
+    "decoded-summary.csv": "c8dc66b21fce9ebf5ae71fb3208085db59fd31ca7fd5908dfbaf5138e1b699fa",
+    "results.json": "32e0e066c0da04e072315f7a17efe817179b50e73d336bd738a1da48e91c91b7",
+    "rf-quality.csv": "d92e3b5e09a48535081a26cba021ff039bae771992d125bd293b3d818a8c8c31",
+    "s001_1/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "s001_1/core-stdout.json": "5d2b91bc46f5dcc9c4ffb98151edfe84a915f78fa2d82dd041df447adce6b561",
+    "s001_1/decoded-received-concatenated.wav": "399c4379009d6b9680edc34c825750ba283ca790427be15f8a1ed21a16dc6665",
+    "s001_1/decoded.pcm16le": "8d1e7ae484011661ad1ffd88ff695070d15a0a74c334ae21e9e1b87e3a9d21a7",
+    "s001_1/frames-annotated.jsonl": "24d79ead546b3d15f44d8aa41c9f4d592b0af7df2d773a3b497776309d923d09",
+    "s001_1/frames.jsonl": "bac1cf502d3e5bd621c0c1d0077c53ce70244e43657ddb817fa460d3b7fc0a5b",
+    "s001_1/reference-received-domain.wav": "6f916a638042ea2f5465211e5b2310a9d4a1eae7dc7f222460fc748f885dd08e",
+    "s002_2/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "s002_2/core-stdout.json": "2ed0bb8572cb564ed1ac9ccae9abc45729d8256990d1d0d83059d683c57e8152",
+    "s002_2/decoded-received-concatenated.wav": "399c4379009d6b9680edc34c825750ba283ca790427be15f8a1ed21a16dc6665",
+    "s002_2/decoded.pcm16le": "8d1e7ae484011661ad1ffd88ff695070d15a0a74c334ae21e9e1b87e3a9d21a7",
+    "s002_2/frames-annotated.jsonl": "ac505eaebfa7e673fa9a24c33dde2abd27a4f8cccd07738702281996b56399aa",
+    "s002_2/frames.jsonl": "bcd07d445559ccbf074f62d3acaffa2a56d9b1ee7c9f4bf21a4bee9e640c45fe",
+    "s002_2/reference-received-domain.wav": "6f916a638042ea2f5465211e5b2310a9d4a1eae7dc7f222460fc748f885dd08e",
+    "s003_3/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "s003_3/core-stdout.json": "c1c4937f49a4f27e05704eb8d0c23a1bff58e8cfb9aa88af1e7b2e6bd30a3942",
+    "s003_3/decoded-received-concatenated.wav": "399c4379009d6b9680edc34c825750ba283ca790427be15f8a1ed21a16dc6665",
+    "s003_3/decoded.pcm16le": "8d1e7ae484011661ad1ffd88ff695070d15a0a74c334ae21e9e1b87e3a9d21a7",
+    "s003_3/frames-annotated.jsonl": "7d55da2b255b3d43174b790510f19fb0b4bc44ea02c99d3c5d837b60d9b2cfa3",
+    "s003_3/frames.jsonl": "c92096d36c5747b9bb0b220d9388152248166accfa7ff63f3af8a2b3e4af4a40",
+    "s003_3/reference-received-domain.wav": "6f916a638042ea2f5465211e5b2310a9d4a1eae7dc7f222460fc748f885dd08e"
+  }
+}

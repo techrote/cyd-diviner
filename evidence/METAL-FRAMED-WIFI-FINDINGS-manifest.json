@@ -1,0 +1,18 @@
+{
+  "schema": "cyd-sdr-metal-framed-findings-manifest/1",
+  "inputs": {
+    "rx": {
+      "results_sha256": "abc0711e196660178d596ba306ad5ce7204079e10f21fe06880396b5a4a3e2d1",
+      "manifest_sha256": "921ca9dc3e9a18ada92b11b91dc03e73f33dd922079736e3a7f1e021266ff88d"
+    },
+    "rx2": {
+      "results_sha256": "f388a0057daa28375e20f359551ea46b17f2d5082c1fef720a7e8b4e7e1abcd2",
+      "manifest_sha256": "3562e91ef23f762a496a58e98317dfda9335de5119b15815f9520a58d8ba8711"
+    }
+  },
+  "outputs": {
+    "METAL-FRAMED-WIFI-FINDINGS.md": "3cdb275749f05da1a6c7b870cb1a206a8d003f95cf9b5f8850e436023910b01c",
+    "METAL-FRAMED-WIFI-FINDINGS.json": "942c79615ce01960e0c238af9b2a6c5595d03645a20719f6d62eb48010be864f",
+    "METAL-FRAMED-WIFI-FINDINGS.csv": "66d06718517a51fa847cd2567c6d498e084a101011120282bf00058ccf084036"
+  }
+}

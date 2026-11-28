@@ -6,4 +6,6 @@ experiments/sdr/** -text
 experiments/sdr-metal/** -text
 evidence/**/*.log -text -whitespace
 evidence/**/*.zip -text
-evidence/**/*.bin -text
+evidence/**/*.bin -text -whitespace
+evidence/**/*.svg -text -whitespace
+evidence/**/AUDIO-REPORT.md -whitespace

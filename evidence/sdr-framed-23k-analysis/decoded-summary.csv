@@ -1,0 +1,4 @@
+run_id,workload,acquisition_status,signal_verification,demodulation_status,rf_origin_verified,acquisition_error,iq_sha256,frames_without_host_IQ_erasure,known_payload_bits_compared,known_payload_bit_errors,known_payload_bits_compared_outside_iq_erasures,known_payload_bit_errors_outside_iq_erasures,known_frames_unique,generated_frames_source
+s001_1,framed-pdm/ram/2000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,da7405586e90333c84de9463beeaa8d42cbf9353b28e215fd7001b00c2a745a7,15,3840,0,3840,0,15,16
+s002_2,framed-pdm/ram/2000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,d8971b94e3be2e62ae486346c4c2077bb46e7ed48e7a708617cf4de3ff0ed1d5,15,3840,0,3840,0,15,16
+s003_3,framed-pdm/ram/2000Hz-2ch-osr4,ACQUIRED,VALID PROPRIETARY HEADER FRAMES OBSERVED,FRAMES DECODED,,,1903fb04f5dc1b32446bd9d22ec52524f9ee7c00247a8a58bf2ebde803ed6f82,15,3840,0,3840,0,15,16

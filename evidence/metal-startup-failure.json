@@ -1,0 +1,21 @@
+{
+  "schema": "cyd-perf-metal-startup-failure/1",
+  "utc": "2026-11-27T22:46:52.748021+00:00",
+  "status": "FAILED BEFORE FIRST CAPTURE",
+  "port": "COM22",
+  "mac": "1c:29:04:be:c3:a0",
+  "profile": "s3-metal-snapshot",
+  "source_sha": "37fc53e81fa318833c3638933e4001891f6793f6",
+  "application_sha256": "0ca029ca409ad1d09ab06a44fb8eba3df5863c867ec4ef74b73fc979f894f7e9",
+  "flash_target_digest_verified": true,
+  "runtime_info_verified": false,
+  "capture_windows": 0,
+  "observed": "Task watchdog backtrace during initial direct esp_phy_enable; PHY calibration blocked inside ram_iq_est_enable polling native IQ completion",
+  "symbolicated_stack": "hardware-access/metal-rx-com22-symbolicated.log",
+  "raw_backtrace": "hardware-access/metal-rx-com22-runtime.bin",
+  "root_cause_scope": "Pinned SDK requires WiFi/baseband power-domain enable before direct PHY enable; source omitted it. Hardware behavior is consistent with this omission, not a measured RF capability limit.",
+  "primary_source": "https://github.com/espressif/esp-idf/blob/b774170ff46c393eeb5e495ea37936038d3f4f4f/components/esp_phy/test/test_phy_rtc.c#L64",
+  "recovery": "esptool reset to verified-MAC RAM loader, no_reset_stub; radio experiment stopped; no new flash written during recovery",
+  "other_devices": "COM23 audio image retained. New TX original backed up; not flashed yet.",
+  "new_image_status": "Power-domain lifecycle correction and idle receiver boot in development; old image frozen as failed evidence"
+}

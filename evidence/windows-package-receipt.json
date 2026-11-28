@@ -1,25 +1,25 @@
 {
   "schema": "cyd-perf-portable-package-receipt/1",
   "archive": "WINDOWS-CAPTURE-PACKAGE.zip",
-  "bytes": 529794,
-  "sha256": "12bbca644205f5af379515809a862435d33228b5f076e86c60c8fd7d64ec4081",
-  "host_tools_source_sha": "e4dec3f0bc3212854dafe20513a6acab44eff6bd",
-  "file_count": 229,
-  "zip_member_count": 230,
+  "bytes": 689513,
+  "sha256": "04b021e7a96470d0c505d6b251e438d3aa0b4d8db5839c50605f5b888503ec8a",
+  "host_tools_source_sha": "29cb8d2faa9449956016011380571d6e497ec45d",
+  "file_count": 325,
+  "zip_member_count": 326,
   "source_manifest_member": "PACKAGE-MANIFEST.json",
-  "source_manifest_sha256": "479bf878b8f396195def465af48cc53faff6553fd7e1041f2bfeeb2795b65988",
+  "source_manifest_sha256": "11150826b8f8dc915aec365985a42390f634f7f4fd41eb6f17604f29f07f7722",
   "generated_readme_member": "PACKAGE-README.md",
-  "sdk_project_members": 51,
+  "sdk_project_members": 60,
   "member_verification": "Each member SHA256/length and every checkout-backed byte sequence verified; clean source subset checked against commit; ZIP CRC passed.",
   "member_kind_counts": {
-    "source_checkout": 177,
-    "campaign_plan_checkout": 21,
-    "generated_stimulus_checkout": 30,
+    "source_checkout": 199,
+    "campaign_plan_checkout": 34,
+    "generated_stimulus_checkout": 91,
     "generated_package_instructions": 1
   },
   "standalone_source_comparison": {
-    "source_snapshot": "37fc53e81fa318833c3638933e4001891f6793f6",
-    "all_standalone_source_bytes_unchanged": false,
+    "source_snapshot": "e4dec3f0bc3212854dafe20513a6acab44eff6bd",
+    "all_standalone_source_bytes_unchanged": true,
     "members": {
       "src/perf_audio_core.h": "b241974e60a3aef5429730da51a3f704dc07afb48b8d3e434ca5ecf42c90bd39",
       "src/perf_audio_core.cpp": "62ac73454508624c4b0e3c1d73694df0345694a86a73392bbac61334e562a18b",
@@ -33,22 +33,14 @@
     }
   },
   "excluded_content_verified": "compiled firmware/bootloader/partition images or readbacks, executables, private/identity configuration and physical capture logs/results; source partition CSV is build configuration",
-  "smoke_checks": {
-    "extracted_package_python_tests": 126,
-    "extracted_package_python_tests_passed": true,
-    "extracted_member_hashes_verified": true,
-    "hardware_access": false,
-    "standalone_native_suites_repeated": false,
-    "standalone_native_validation_basis": "Audio/kernel core sources match previously compiled and validated package. SDR protocol.h/cpp match; only emitter argument bounds changed in test_protocol.cpp. Current-source .pio/sdr-model-test-metal ASAN+UBSAN passed 52896 normal and1846 low-SPS checks plus four valid/six invalid emitterCLI cases before packaging; all current manifest source and validation hashes match extracted bytes."
+  "extracted_package_validation": {
+    "status": "PASS",
+    "python": "3.12",
+    "tests": 163,
+    "command": "python -m unittest discover -s tools/perf -p 'test_*.py' -v",
+    "log": "evidence/build-logs/portable-package-final-tests.log",
+    "log_sha256": "a8ad4f9f9bd46aac0e10dcdbf8a31c4ac6e4c415107812df761c8f535ed55b89",
+    "scope": "Fresh isolated extraction; no COM/RF/flash access"
   },
-  "current_sdr_host_validation": {
-    "manifest_member": "experiments/sdr/protocol-manifest-metal.json",
-    "manifest_sha256": "5cb3e206748da314f37d0a706b81046a46aff1bf3b2dbe25ba91a4b25ac38a86",
-    "normal_checks": 52896,
-    "low_sps_checks": 1846,
-    "valid_baud_cases": 4,
-    "invalid_baud_cases": 6,
-    "old_host_binaries_preserved": true
-  },
-  "wording_review": "Generated README separates optional packetized ESP-NOW PDM comparison and continuous offline PDM model from proprietary raw SDR physical acquisition/demodulation; raw metal snapshots, shared-exposure dual observations and software timing remain distinct from analog/latency/ultimate RF claims."
+  "firmware_context": "Latest physically executed SDR images are separately pinned to e8b4c8a; package source29cb8d2 adds current measurement documentation/attributes only after that source. Rebuilding stamps its own Git identity and needs exact-image review."
 }

@@ -1,0 +1,19 @@
+0x4200a48e: task_wdt_timeout_handling at C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_system/task_wdt/task_wdt.c:436
+ (inlined by) task_wdt_isr at C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_system/task_wdt/task_wdt.c:509
+0x4037741d: _xt_lowint1 at C:/Users/_/.codex/esp-idf-v5.5.5/components/xtensa/xtensa_vectors.S:1264
+0x42054882: ram_iq_est_enable at ??:?
+0x4003665d: ?? ??:0
+0x42054f4f: rxdc_est_min at ??:?
+0x420550e9: pbus_rx_dco_cal_1step at ??:?
+0x42055861: set_rx_gain_cal_dc at ??:?
+0x42008dba: __wrap_set_rx_gain_cal_dc at C:/cyd-diviner/sdr-metal-approved-build/experiments/sdr-metal/rx/vendor/esp-sdr/rx_calibration_state.c:105
+0x420539ae: set_rx_gain_param at ??:?
+0x42053b6c: set_rx_gain_table at ??:?
+0x42008c18: __wrap_set_rx_gain_table at C:/cyd-diviner/sdr-metal-approved-build/experiments/sdr-metal/rx/vendor/esp-sdr/rx_gain_verify.c:50
+0x42050a29: bb_init at ??:?
+0x420511be: register_chipv7_phy at ??:?
+0x4200c997: esp_phy_load_cal_and_init at C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_phy/src/phy_init.c:971
+0x4200ca1d: esp_phy_enable at C:/Users/_/.codex/esp-idf-v5.5.5/components/esp_phy/src/phy_init.c:338
+0x42007a6c: initialize at C:/cyd-diviner/sdr-metal-approved-build/experiments/sdr-metal/rx/main/main.c:110
+0x42007e02: app_main at C:/cyd-diviner/sdr-metal-approved-build/experiments/sdr-metal/rx/main/main.c:320
+0x42065a03: main_task at C:/Users/_/.codex/esp-idf-v5.5.5/components/freertos/app_startup.c:215

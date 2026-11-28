@@ -1,0 +1,144 @@
+{
+  "schema": "cyd-perf-metal-temperature-ledger/1",
+  "evidence_class": "DERIVED_FROM_PHYSICAL_DRIVER_READINGS",
+  "utc": "2026-11-28T00:21:03.449875+00:00",
+  "readings": 576,
+  "source": "Closed parent captures only; each sharedTX endpoint counted once, not doubled through receiver children",
+  "summary": [
+    {
+      "capture": "metal-dual-fast-smoke-01",
+      "endpoint": "tx",
+      "port": "COM13",
+      "readings": 6,
+      "driver_c_min": 36.9,
+      "driver_c_max": 56.9
+    },
+    {
+      "capture": "metal-dual-fast-smoke-01",
+      "endpoint": "rx",
+      "port": "COM22",
+      "readings": 6,
+      "driver_c_min": 44.1,
+      "driver_c_max": 47.1
+    },
+    {
+      "capture": "metal-dual-fast-smoke-01",
+      "endpoint": "rx2",
+      "port": "COM23",
+      "readings": 6,
+      "driver_c_min": 37.0,
+      "driver_c_max": 41.0
+    },
+    {
+      "capture": "metal-dual-fast-rate-01",
+      "endpoint": "tx",
+      "port": "COM13",
+      "readings": 84,
+      "driver_c_min": 39.9,
+      "driver_c_max": 95.9
+    },
+    {
+      "capture": "metal-dual-fast-rate-01",
+      "endpoint": "rx",
+      "port": "COM22",
+      "readings": 84,
+      "driver_c_min": 55.1,
+      "driver_c_max": 61.1
+    },
+    {
+      "capture": "metal-dual-fast-rate-01",
+      "endpoint": "rx2",
+      "port": "COM23",
+      "readings": 84,
+      "driver_c_min": 48.0,
+      "driver_c_max": 53.0
+    },
+    {
+      "capture": "metal-dual-fast-framed-01",
+      "endpoint": "tx",
+      "port": "COM13",
+      "readings": 42,
+      "driver_c_min": 74.9,
+      "driver_c_max": 98.9
+    },
+    {
+      "capture": "metal-dual-fast-framed-01",
+      "endpoint": "rx",
+      "port": "COM22",
+      "readings": 42,
+      "driver_c_min": 61.1,
+      "driver_c_max": 62.1
+    },
+    {
+      "capture": "metal-dual-fast-framed-01",
+      "endpoint": "rx2",
+      "port": "COM23",
+      "readings": 42,
+      "driver_c_min": 53.0,
+      "driver_c_max": 54.0
+    },
+    {
+      "capture": "metal-dual-fast-compat-01",
+      "endpoint": "tx",
+      "port": "COM13",
+      "readings": 24,
+      "driver_c_min": 59.9,
+      "driver_c_max": 96.9
+    },
+    {
+      "capture": "metal-dual-fast-compat-01",
+      "endpoint": "rx",
+      "port": "COM22",
+      "readings": 24,
+      "driver_c_min": 63.1,
+      "driver_c_max": 64.1
+    },
+    {
+      "capture": "metal-dual-fast-compat-01",
+      "endpoint": "rx2",
+      "port": "COM23",
+      "readings": 24,
+      "driver_c_min": 53.0,
+      "driver_c_max": 54.0
+    },
+    {
+      "capture": "metal-dual-fast-rx-reference-01",
+      "endpoint": "tx",
+      "port": "COM13",
+      "readings": 36,
+      "driver_c_min": 47.9,
+      "driver_c_max": 50.9
+    },
+    {
+      "capture": "metal-dual-fast-rx-reference-01",
+      "endpoint": "rx",
+      "port": "COM22",
+      "readings": 36,
+      "driver_c_min": 64.1,
+      "driver_c_max": 65.1
+    },
+    {
+      "capture": "metal-dual-fast-rx-reference-01",
+      "endpoint": "rx2",
+      "port": "COM23",
+      "readings": 36,
+      "driver_c_min": 54.0,
+      "driver_c_max": 54.0
+    }
+  ],
+  "input_results_sha256": {
+    "metal-dual-fast-smoke-01/results.json": "030b3567ab69ee0416cb7c0a9c780d15e29caccff2d393a2e3c5a7e60b5085ec",
+    "metal-dual-fast-rate-01/results.json": "151b8cb0a034b1d788f6110b766cdf55f90c8c54d0ec0859eb9f37d6c3188098",
+    "metal-dual-fast-framed-01/results.json": "5984862c3dbf8efcea5a040a25b5d60f07122253fd144f7b237b3296e65998ec",
+    "metal-dual-fast-compat-01/results.json": "d803df907023f6bf1a740cab9e53fcaf2a520f600a69ccb485fbbe0e11fd6ce5",
+    "metal-dual-fast-rx-reference-01/results.json": "a86c992b52d5f05ee64feaa78a0941e089efc5a83089956ee129ccb314b51d4b"
+  },
+  "csv_sha256": "8f231abd7a0de13d6ce2c445f2ec80ae326e47b5431efb49eb446d7fe43eae22",
+  "limitations": [
+    "Explicitly before/after finite windows, no polling inside RF/snapshot loops",
+    "SDK driver Celsius indications are not independently calibrated die/ambient temperature",
+    "RX query timestamps are target-local; TX does not report one; independent clocks are not synchronized",
+    "Finite1-second bursts plus setup/readout are not a separate360-second continuous CPU stress test",
+    "Preflight/restoration readings and earlier3b/PCM/classicRTC readings excluded from these aggregates"
+  ]
+}

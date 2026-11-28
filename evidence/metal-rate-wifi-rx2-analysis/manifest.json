@@ -1,0 +1,11 @@
+{
+  "schema": "cyd-sdr-metal-analysis-manifest/1",
+  "input_results_sha256": "8e7bd3265cd328e9969205c32de3968da2e2a549245b5619c6583ce04856da0a",
+  "tool_sha256": "6797ff94f861e04c32bc2cc080a2eabe1b0e4e16ead40df36a65dc2e2e0e1bfe",
+  "outputs": {
+    "METAL-REPORT.md": "b3ed977663313dba9fef6241e621578bdb7148a08d2c7ad3c473e38e2eddc20e",
+    "native-iq.csv": "01bae0850274db22a6c344ae377df36f9fd271b717fb958f846a2b6ebca20c0c",
+    "rates.csv": "f99c02fa858e941026278103064f5b04faa01da6d55789c81215ade7e96e96be",
+    "results.json": "ffed88adb83696ef475cb5621755d88551b88a3ee99e8359c9bd1f759e165256"
+  }
+}

@@ -1,10 +1,14 @@
 # CYD SYNTH VIBEWARE recommendations — DRAFT / HOLD
 
 Prepared from the **closed classic-CYD baseline and completed S3 internal/PSRAM
-kernel supplement**, plus closed owned-peer wireless and I2S-event supplements.
-Cross-board ratios below describe
-the measured configured systems. This document asserts no isolated hardware
-ISA advantage, ultimate wireless capacity, successful computational offload or calibrated
+kernel supplement**, closed owned-peer wireless/I2S-event supplements, and the
+separately identified colour, PCM, original raw-RF and first bare-metal
+dual-receiver SDR experiments, including the closed faster paced TX and
+driver-free RX follow-up. Source validation and image builds remain separate
+from physical performance measurements.
+Cross-board ratios describe the measured configured systems. This document
+asserts no isolated hardware ISA advantage, ultimate wireless capacity,
+successful computational offload, physical one-way audio latency or calibrated
 cross-chip thermal comparison.
 Retain the failed baseline attempts alongside their independently completed
 windows; a partial capture is not a completed campaign.
@@ -58,6 +62,15 @@ two sources. Allocation, output and outside-sample heap-observer wrappers
 changed; all timings still enclose only `step`. These differences preclude
 isolating CPU/FPU/ISA advantage from the observed configured-system ratios.
 C3 remains compile evidence until physically captured.
+
+The expanded experiments retain their own source/image and observation scopes:
+[colour findings](COLOR-FINDINGS.md), [PCM findings](PCM-FINDINGS.md),
+[SDR calibration](SDR-CALIBRATION-INTERPRETATION.md) and
+[finite proprietary SDR proof](SDR-PROOF.md). Their measurements are not pooled
+with the baseline. The colour/packet-audio image uses source
+`ad9cbfd670e456de5e08fca19810fb93f7f1db47`; the original classic SDR transmitter
+uses `bb34b3c27c4c8388956bb05a8a5280d7a2c687a2`. The reports and flash receipts
+pin exact image hashes, receiver source, SDK and analysis provenance.
 
 ## Local numeric format: choose per workload
 
@@ -168,6 +181,26 @@ RGB565 used 55,680 bytes; the latter was faster in the observed path, about
 tradeoffs. Fullscreen uses a different bounded geometric trail path, so its
 RGB444/RGB565 labels do not imply full-screen pixel-history allocations.
 
+The later [packed-colour matrix](COLOR-FINDINGS.md) completed all **36/36
+windows**, twelve settings with three repetitions each. On that same later
+image, native fullscreen Gate measured **25.00 FPS** with one effect and
+**22.33 FPS** with Gate+Trails. The added RGB111 conversion path measured
+**7.89/3.67 FPS**, and RGB444/RGBA5551 each **7.00/3.00 FPS**, for one/two
+effects. Plasma+Kaleido and Ashfire+Rain also exercised the current maximum
+of two effect paths: 3.67 FPS for RGB111 and 3.00 FPS for RGB444. This tests
+existing base/overlay combinations, not arbitrary resident layer capacity.
+
+Those are genuine packed **eight-row intermediates around an RGB565 raster**.
+The two-effect RGB111/RGB444/RGBA5551 layouts use 2,240/8,000/10,240 bytes of
+packed payload, including external coverage where applicable. Total borrowed
+scratch is 12,480/18,240/20,480 bytes including the unchanged two RGB565 DMA
+strips. **Every case retains the 64,800-byte backing reservation and 16-bit
+LCD transfers.** RGBA5551 coverage comes from changed pixels after the existing
+RGB565 blend; it is not a native one-bit-alpha rasterizer. The measurements
+show this converter's cost, not a hardware ceiling for direct packed rendering
+or lower-depth LCD operation. Use the native path as VIBEWARE's measured
+baseline; a direct packed renderer would need a separate matched experiment.
+
 Preserve the configured **128-sample / 24 kHz = 5.333333 ms** audio cadence.
 Across the matching landscape/local cases, each with **5,625 callback
 observations**, exact callback maxima were **523 µs drone, 759 µs sequencer
@@ -192,12 +225,151 @@ contiguous-allocation limitation in that history, not proof of a leak or a
 general inability to execute the algorithms. The active algorithm contexts
 are smaller than the common allocated workspace; both quantities are recorded.
 
+Heap capabilities must match the allocation. The older `ESP.getFreeHeap()`
+and largest-block observations query internal memory and can include regions
+that are not byte-addressable. A byte array, formatter or packet workspace
+needs the matching `MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT` free/largest-block
+observations and an actual successful allocation. The subsequent PCM setup
+failures are consistent with byte-capable allocation pressure, even after a
+fresh boot; the precise failed allocation is not independently identified.
+The short ACK/run records fit their declared formatter capacities, so a large
+generic heap value does not resolve that failure. Preserve telemetry capacity
+and admission checks as part of the workload's resource budget.
+
 Recommendation: budget large persistent workspaces and radio lifecycles
 together, monitor successful allocation and largest-block minima, and test
 the actual scene-transition history. The profiling image itself reserves
 **24,008 bytes** in sample/histogram arrays, with other observers/tasks
 additional. Its heap cannot be converted into ordinary firmware headroom by
 subtracting that figure alone. No allocation optimization is implemented here.
+
+## Packet audio: finite digital reconstruction, substantial concealment
+
+The [PCM prototype](PCM-FINDINGS.md) uses ESP-NOW broadcast, synthetic PCM16,
+one TX admission at a time, bounded callback/assembly queues and a two-block
+receiver reserve. It has no application retransmission or unicast MAC ACK.
+Across eight closed stream-attempt directories, **50 of 195 attempted
+three-second windows validate**, including three classic-CYD receiver windows;
+setup-only diagnostics are separate. The matched S3 live-metadata cohort
+validates **22/48**, and deferred metadata **25/48**. Both captures remain
+**FAILED**, with missing receipts, setup/readiness failures and timeouts
+retained. The two policies are distinct measurement contexts.
+
+At **24 kHz stereo, 32 frames/block, requested 6 Mbps**, observed nonconcealed
+source coverage was **87.87–88.84%** in the live cohort and **86.62–87.56%**
+in the deferred cohort. Thus roughly **11–13%** of rendered blocks required
+PLC even in this best observed setting. The deferred cohort has no valid
+reverse-direction repetition there. Source/error digital SNR was approximately
+8.1–9.3 dB across those cases and includes concealment/recovery behavior; it
+is not RF SNR or analog fidelity. These finite results do not support choosing
+this prototype as a transparent streamed-audio dependency.
+
+Application receive deficits cannot be relabelled RF packet loss. One valid
+live run had 4,016 API-accepted TX packets but only 31 accepted receiver blocks,
+with **3,891 future-window rejections**; that explains most of its deficit in
+receiver scheduling/window admission, rather than demonstrating 99% RF loss.
+Other unaccounted deficits remain unattributed. Zero CRC/callback-drop counts
+do not prove perfect radio delivery. Live readiness observed power-save enum
+0 only at the query; ten other attempts failed because readback was enum 1.
+Deferred cases stop radios before export and lack active power-save readback;
+API acceptance of a requested PHY rate is not an over-air rate measurement.
+
+Packet size imposes a useful sanity check before RF testing. Stereo PCM16,
+eight frames at 24 kHz, needs 3,000 packets/s. A 32-byte payload plus the
+20-byte application header already offers **1.248 Mbps** before MAC/PHY
+overhead, exceeding a requested 1 Mbps PHY. Larger blocks reduce framing cost
+but increase serialization/reserve. The configured two-block reserve is
+0.667/1.333/2.667 ms for 8/16/32 frames at 24 kHz, measured relative to the
+receiver worker's first admission. These are arithmetic buffering intervals,
+not synchronized one-way latency. There is no ADC, DAC/I2S playback or analog
+loopback in these digital sink measurements. Keep the local audio clock and
+sample generation in the current VIBEWARE architecture.
+
+## Proprietary SDR: working finite low-rate proof, continuous audio unproved
+
+The [original raw-RF proof](SDR-PROOF.md) recovered experimental NRZ/TDM-PDM
+frames through classic ESP32 OOK carrier keying and S3 IQ capture with batch
+host decoding. It is separate from optional packetized PDM-over-ESP-NOW and
+does not rely on its packet transport. At **23,000 symbols/s**, three runs
+each recovered **15/16 frames**, with **zero errors in 3,840 compared payload
+bits per run**. Missing leading sequence 0 is not counted correct: source-frame
+coverage is **93.75%**. Lower-rate mono also had observed sequence-0 corruption;
+the report retains the failed original matrix and incomplete acquisition.
+
+The 23 ksymbol/s source is only **2 kHz stereo at OSR4**, reconstructed by a
+boxcar, not 24/48 kHz audio. On recovered sequences it exactly matches ideal
+boxcar output, yet source/error SNR is **6.74/6.03 dB** because the codec itself
+is coarse. A 368-symbol frame nominally occupies **16 ms** and carries 32
+stereo source frames. That serialization arithmetic is not measured audio
+latency. No continuous on-device demodulator/playout, live input, shared clock,
+range sweep or calibrated RF power/noise measurement ran. The finite physical
+path is established; its suitability for continuous low-latency audio is not.
+
+Calibration also separated radio observation from capture failure. Initial
+API 10 ksymbol/s aborted its software schedule; later RAM keying showed
+1–20 ksymbol/s envelope periodicity at 250 kS/s, despite substantial indexed
+USB sample gaps. Earlier 125 kS/s silence was confounded by a carrier roughly
+82.6 kHz from the receive centre, outside that capture's passband. After
+empirical recentering, 125 kS/s framed captures were gap-free. These findings
+are not an ESP32 symbol-rate floor or ceiling; see the
+[calibration interpretation](SDR-CALIBRATION-INTERPRETATION.md).
+
+The new isolated **SDR-metal** work removes GUI/audio and streaming USB from
+timed acquisition. Its [TX projects](../experiments/sdr-metal/tx-s3/README.md)
+initialize the SDK tone once, then use target-specific, ROM/library-derived
+first-tone MMIO gate/amplitude words. Preallocated internal buffers, a 240 MHz
+cycle loop, unpaced mode and configurable bounded IRQ-masked segments expose
+software write timing without the earlier fixed baud ceiling. The
+[raw RX snapshot](../experiments/sdr-metal/rx/README.md) retains at most 16,380
+native IQ words in a checked SRAM aperture, with no decimation/FIR or USB
+output during capture. Nominal 16/40/80 MS/s selections provide only
+1,023.75/409.5/204.75 µs of aperture per burst; snapshot deadtime is explicit.
+Neither write cycles nor nominal ADC rate proves RF edge timing or continuous
+bandwidth. The [dual-receiver method](../tools/perf/SDR-METAL-DUAL.md) keeps
+shared exposure distinct from synchronized clocks.
+
+The first metal RX image watchdog-reset inside PHY DC calibration before
+runtime identity/capture. The [startup failure](metal-startup-failure.json)
+is preserved. The corrected source balances explicit Wi-Fi power-domain
+ownership around direct PHY enable/disable, following the pinned SDK's test
+and Wi-Fi setup order; it does not suppress calibration or the watchdog.
+Source `3b4161fbcbd6832264019aa3a4fb993a85798857` was separately approved and
+flashed, with [idle runtime verification](metal-power-flash-receipt.json).
+The first closed physical cohort uses WiFi_NULL RX initialization because the
+direct path's gain checks fail on both receivers. Native capture timing is
+consistent with configured sample horizons, while repeated no-export loops
+retain about 1.18 ms of aggregate setup/check cost per aperture. Deferred USB
+readout takes about 264 ms versus 83 ms on the two boards; its component cause
+is unresolved. The native framed decoder recovers known headers and payloads,
+with exact conditional BER and cropping domains in the
+[framed findings](METAL-FRAMED-WIFI-FINDINGS.md). No continuous on-board audio,
+synchronized one-way latency or ultimate hardware limit follows. A separate
+firmware cohort tested the direct-RX SDK receive-enable prerequisite and a
+minimal paced TX loop that preserves source words when late.
+
+That [fast follow-up](METAL-FAST-FINDINGS.md) completed all 78 finite TX windows
+and 18 receiver-only reference windows. Both receivers now pass direct-PHY
+tuning. The fast loop sustains requested 1/2.208/4.416/8 million software
+writes/s in the alternating-source sweep; higher requests plateau near 9.88
+million writes/s for this loop. Native envelope peaks track the tested
+alternating patterns through 8 Mbaud, independently of the software count.
+This is a tested implementation limit, not an ultimate PHY ceiling.
+
+Finite four-channel 48 kHz/OSR16 patterns at requested 4.416 Mbaud recover
+matching headers in all three windows on each receiver. Known-payload
+comparison gives 53 errors/3,072 bits on COM22 and 41/2,816 on COM23; these are
+different accepted frame populations and do not rank receiver quality. No
+matching headers recover at 8.832 Mbaud in three windows per receiver. The
+prototype accepts distorted payload bits without retransmission, but has not
+established continuous on-device audio output, intelligibility or synchronized
+one-way latency. Treat it as a basis for further link/decoder work, not a
+replacement for the measured packet-audio delivery/deadline characterization.
+
+[The 576-reading temperature ledger](metal-fast-temperatures.json) preserves
+TX driver indications up to 98.9 °C, outside its configured 10–80 °C request
+range. Accuracy is externally unverified; no thermal explanation for decoding
+failure follows. The two audio profilers were restored and the TX left idle,
+as verified in [the final-state receipt](metal-final-audio-restore-receipt.json).
 
 ## Candidate heterogeneous work
 
@@ -238,7 +410,7 @@ framing/fragmentation or a supported socket stream. The current directed GATT
 adapter intentionally rejects oversize/fragmented writes; its measurements
 must not be treated as measured 8–19 KB job transfers.
 
-## Offload break-even worksheet — transport values pending
+## Offload break-even worksheet — matched-job transfer terms unmeasured
 
 Use the same job, output precision, data dimensions, memory region and workload
 context when filling this worksheet. These are screening equations; summed
@@ -329,7 +501,8 @@ matched completed/drained blocks, with zero observed queue-full/DMA-fault
 notifications. Independent analog continuity and lost-notification counts
 remain unknown.
 
-Every retained stress sensor reading was raw **128**. The later fresh-boot
+Every retained sensor reading in the **first** stress window was raw **128**.
+The later fresh-boot
 kernel snapshots contained raw **137–139**. Keep those observations and their
 separate run contexts. The classic RTC-library indication is undocumented and
 uncalibrated; the retained Fahrenheit-derived number is not a calibrated die
@@ -342,14 +515,69 @@ capture retained **265 target state records** with driver Celsius indications
 it is not an S3 360-second near-full-CPU stress test or a calibrated thermal
 rise measurement.
 
+The later [temperature ledger](TEMPERATURE.md) also retains **72 in-window
+colour readings at classic raw 136–138**, and **100 post-stop PCM readings**
+in `pcm-temperature/`: three classic raw readings at 128 and 97 S3 driver
+Celsius indications. Validated S3-pair PCM cohorts span **43–68.1 °C** across
+endpoints and metadata policies. Those short, post-window readings do not
+extend either stress window, demonstrate sample-by-sample thermal behavior
+or establish a calibrated cross-chip comparison.
+
+## Reproduction and immutable evidence
+
+The [evidence index](README.md) maps reports to complete raw archives. Extract
+their retained `physical/` prefixes; keep failed, partial and zero-run attempts.
+Hashes, member lists and verification are in the paired receipts:
+
+| Closed scope | Raw archive | Receipt |
+| --- | --- | --- |
+| Primary, continuation, classic kernels and initial S3 attempt | [Baseline](PHYSICAL-CAPTURES-BASELINE.zip) | [baseline receipt](baseline-archive-receipt.json) |
+| Events/stress, complete S3 matrix and owned-peer wireless | [Supplement](PHYSICAL-CAPTURES-SUPPLEMENT.zip) | [supplement receipt](supplement-archive-receipt.json) |
+| Packed-colour matrix | [Colour](PHYSICAL-CAPTURES-COLOR.zip) | [colour receipt](color-archive-receipt.json) |
+| Classic/S3 PCM attempts and setup diagnostic | [CYD PCM](PHYSICAL-CAPTURES-PCM-CYD.zip) | [CYD receipt](pcm-cyd-archive-receipt.json) |
+| Matched-S3 PCM attempts | [S3 PCM](PHYSICAL-CAPTURES-PCM-S3.zip) | [S3 receipt](pcm-s3-archive-receipt.json) |
+| Original SDR calibration and framed attempts | [SDR](PHYSICAL-CAPTURES-SDR.zip) | [SDR receipt](sdr-archive-receipt.json) |
+| Initial metal timing, rate, framed and receiver-exchange attempts | [Metal](PHYSICAL-CAPTURES-METAL-INITIAL.zip) | [metal receipt](metal-initial-archive-receipt.json) |
+| Direct-PHY, fast TX, framed and compatibility follow-up | [Fast metal](PHYSICAL-CAPTURES-METAL-FAST.zip) | [fast receipt](metal-fast-archive-receipt.json) |
+
+The [Windows capture package](WINDOWS-CAPTURE-PACKAGE.zip) and its
+[receipt](windows-package-receipt.json) pin portable tools, plans, tests and
+source, without private credentials, backups or automatic flashing. The
+[colour method](../tools/perf/COLOR.md),
+[PCM method](../tools/perf/AUDIO-MVP.md),
+[original SDR protocol](../experiments/sdr/PROTOCOL.md) and
+[metal method](../tools/perf/SDR-METAL.md) describe their distinct experiments.
+Reviewed original colour/audio/SDR apps and exact adapted GPL receiver source
+are in [the prototype bundle](UNAPPROVED-AUDIO-SDR-IMAGES.zip)
+([receipt](prototype-bundle-receipt.json)); corrected metal apps, ELF/maps and
+source/licenses are in [the power-domain correction bundle](UNAPPROVED-SDR-METAL-POWER-IMAGES.zip)
+([receipt](metal-power-bundle-receipt.json)). Historical `UNAPPROVED` filenames
+denote no production promotion; subsequent exact-image owner test approvals
+are recorded separately, not inferred from a bundle name.
+
 ## Conditions for replacing this draft
 
 Incorporate only terminal, hashed supplementary captures and their failed
 attempts. The completed S3 internal/PSRAM matrix and owned-peer wireless
 cohorts are now closed, with their exact contexts in the linked reports.
 BLE peer initialization failed; its symbolicated failure is retained rather
-than presented as a capacity measurement. The additional colour and audio MVP
-experiments require their own source/image identities and physical receipts.
+than presented as a capacity measurement. The colour, PCM and original SDR
+experiments now have closed reports and distinct source/image/flash receipts.
+The closed first metal dual-receiver stage now has
+[native timing](METAL-RX-SMOKE-WIFI-FINDINGS.md),
+[rate/envelope](METAL-RATE-WIFI-FINDINGS.md),
+[framed reconstruction](METAL-FRAMED-WIFI-FINDINGS.md) and
+[position-exchange](METAL-FRAMED-POSITION-COMPARISON.md) reports. The old generic
+paced loop becomes a software bottleneck above requested 1 Mbaud. Its
+11.37-million-store/s unpaced result and received envelope near 5.72 MHz do
+not establish decoded payload throughput or a hardware ceiling. The stronger
+receiver changes after physical position exchange, so no board-brand ranking
+is justified. The separately approved fast/direct-RX follow-up is now closed;
+its source-buffer/output checks, finite decoded payload and failed-to-decode
+cases retain their own source/image/temperature context.
+Total observer overhead, physical
+contact-to-photon, analog audio/one-way latency, calibrated temperature and a
+complete matched job RPC remain unmeasured. C3 remains without physical data.
 Retain unsupported, failed and unmeasured cases as such. Promote an offload
 candidate only after a complete job beats its measured local alternative and
 meets the intended output/deadline/delivery requirements under combined load.

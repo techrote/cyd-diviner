@@ -125,7 +125,7 @@ RTT jitter is the mean/max absolute difference between adjacent received RTTs wi
 
 Compare local compute with remote compute plus packing/unpacking, queueing and measured transport for the actual input/output message shapes. A full matched-payload RTT includes its payload transfer; do not add that transmission again. A separate fixed-overhead/throughput model needs independently estimated fixed overhead and directional byte-transfer costs. The 64-byte echo and paced one-way throughput are not a measured job RPC for arbitrary larger inputs/outputs. A throughput average or finite maximum gives no hard real-time guarantee; these links do not by themselves justify moving the local DAC deadline loop off-board.
 
-Artifacts: [link-summary.json](link-summary.json), [per-run CSV](link-runs.csv), [group CSV](link-groups.csv), [analysis manifest](link-analysis-manifest.json).
+Artifacts: [link-summary.json](link-summary.json), [per-run CSV](link-runs.csv), [group CSV](link-groups.csv), [publication manifest](manifest.json).
 
 ## Publication provenance
 

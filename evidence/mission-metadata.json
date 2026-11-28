@@ -1,0 +1,99 @@
+{
+  "mission": "CYD-DIVINER-PERF-CHARACTERISATION-001",
+  "accepted_baseline": "7b1b37eec6ac126f334a0b008d91135071ea60fa",
+  "specification": "https://github.com/techrote/cyd-SYNTH-VIBEWARE/blob/main/docs/PERFORMANCE.md",
+  "consumer": "https://github.com/techrote/cyd-SYNTH-VIBEWARE/issues/8",
+  "draft_pr": "https://github.com/techrote/cyd-diviner/pull/7",
+  "status": "DRAFT/HOLD; available-hardware campaigns closed; final evidence publication and owner review",
+  "physical_performance_status": "Actual classicCYD/S3 performance, packedcolour/PCM and both original3b/new e8b SDR phases retained with terminal outcomes; compiled-only and unmeasured work explicit",
+  "flash_written": true,
+  "backup_status": "Four owner devices have independently verified private full-flash backups outside Git",
+  "requested_end_state": "CYD keeps colour/audio profiler; COM22/COM23 return to approved kernel/audio profilers after SDR; owner new COM14-nowCOM13 board retains requested TX role",
+  "current_state": "COM22/COM23 restored approvedad9cbfd kernel/audio profilers and idle; COM13 retains requested e8b4c8a metalTX image/radioidle; CYD unchanged, colour/audio profiler lastverifiedinstalled and currently disconnected",
+  "stress": {
+    "requested_seconds": 365,
+    "measured_seconds": 365.0,
+    "retained_samples": 355,
+    "retained_sample_span_seconds": 362.939,
+    "near_100_percent_confirmed": true,
+    "cpu_method": "1 kHz tick observations of running task versus idle; not cycle-exact",
+    "core0_weighted_busy_percent": 98.99471117521807,
+    "core1_weighted_busy_percent": 99.96016209904526,
+    "temperature_raw_min": 128,
+    "temperature_raw_max": 128,
+    "temperature_method": "Undocumented SDK RTC-library raw sensor reading; original firmware legacy ROM tag retained in raw evidence",
+    "accurate_die_temperature_c": null,
+    "ambient_temperature_c": null,
+    "temperature_interpretation": "All retained stress raw codes were 128; no measured thermal rise or calibrated thermal margin established",
+    "temperature_c_calibrated": null
+  },
+  "stress_supplement": {
+    "duration_seconds": 365,
+    "samples": 356,
+    "sample_span_seconds": 363.605,
+    "cpu0_weighted_busy_percent": 98.98713694,
+    "cpu1_weighted_busy_percent": 99.95145485,
+    "temperature_raw_min": 139,
+    "temperature_raw_max": 146,
+    "temperature_c_calibrated": null,
+    "report": "campaign-events/REPORT.md"
+  },
+  "temperature_overview": "TEMPERATURE.md",
+  "wireless_overview": "WIRELESS-FINDINGS.md",
+  "s3_comparison": "S3-COMPARISON.md",
+  "pending": [
+    "Owner review of Draft/HOLD; no merge or production promotion authorized"
+  ],
+  "not_run_or_not_established": [
+    "PhysicalESP32-C3 execution (compiledonly; noboard)",
+    "Externallytimedcontact-to-photon touchlatency",
+    "AnalogDACloopback/analogcontinuity/end-to-endlatency",
+    "Independentlycalibratedtemperature/ambientthermalmargin",
+    "IndependentRFpower/spectral/cessationfixture",
+    "Totalobserveroverheadvsordinary/minimallycountedfirmware (existingtogglemeasureshistograminsertiononly)",
+    "Matched-jobwirelessoffloadspeedup",
+    "On-devicecontinuousgreenfieldaudioRX/DACorsynchronizedone-waylatency; currentRFframesandhostreconstructionarefiniteMVP evidence"
+  ],
+  "reports": [
+    "BASELINE-FINDINGS.md",
+    "COLOR-FINDINGS.md",
+    "PCM-FINDINGS.md",
+    "SDR-PROOF.md",
+    "METAL-RX-SMOKE-WIFI-FINDINGS.md",
+    "METAL-RATE-WIFI-FINDINGS.md",
+    "METAL-FRAMED-WIFI-FINDINGS.md",
+    "METAL-FRAMED-POSITION-COMPARISON.md",
+    "RECOMMENDATIONS-DRAFT.md",
+    "METAL-FAST-FINDINGS.md"
+  ],
+  "raw_archives": [
+    "PHYSICAL-CAPTURES-BASELINE.zip",
+    "PHYSICAL-CAPTURES-COLOR.zip",
+    "PHYSICAL-CAPTURES-METAL-INITIAL.zip",
+    "PHYSICAL-CAPTURES-PCM-CYD.zip",
+    "PHYSICAL-CAPTURES-PCM-S3.zip",
+    "PHYSICAL-CAPTURES-SDR.zip",
+    "PHYSICAL-CAPTURES-SUPPLEMENT.zip",
+    "PHYSICAL-CAPTURES-METAL-FAST.zip"
+  ],
+  "method_note": "Tick-basedCPUutilization, rawclassicRTCtemperature, S3driverCelsius, nativeclockarithmetic, CPU-observedcapturetime, USBreadouttime, conditionalBERanddigitalreconstructionhaveexplicitseparatescopes. Failedrawattemptsandpartialrowsremainretained.",
+  "sdr_record_pr": "https://github.com/techrote/WiDAC-ESP32S3-SDR/pull/1",
+  "final_hardware_receipt": "metal-final-audio-restore-receipt.json",
+  "sdr_temperature_ledger": "metal-fast-temperatures.json",
+  "sdr_fast_phase": {
+    "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+    "reviewed_TX_windows": 78,
+    "additional_receiver_only_reference_windows": 18,
+    "independent_receivers": 2,
+    "status": "ALL96SHARED_WINDOWS_ACQUIRED",
+    "outside_window_temperature_readings": 576,
+    "driver_c_peak_TX": 98.9,
+    "temperature_note": "TXdriverrequest10..80C; upperindicationsoutsideconfiguredrange,notindependentlycalibrated"
+  },
+  "derived_archives": [
+    "DERIVED-ANALYSES.zip",
+    "DERIVED-ANALYSES-METAL-FAST.zip"
+  ],
+  "coverage_audit": "FINAL-COVERAGE-AUDIT.md",
+  "integrity_audit": "FINAL-INTEGRITY-AUDIT.md"
+}

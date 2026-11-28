@@ -1,0 +1,9 @@
+{
+  "schema": "cyd-perf-physical-arrangement/1",
+  "utc": "2026-11-27T23:14:58.789617+00:00",
+  "owner_confirmation": "Swapped, ready",
+  "action": "COM22 and COM23 physical receiver positions swapped without unplugging; TX remains fixed; preserve orientation ascloselyaspractical requested",
+  "applies_to": "metal-dual-position-swap-01 andlatercohorts untilanylatermovement",
+  "matched_reference": "metal-dual-rate-wifi-01 matchinggate100k/gate1M/unpaced0, allIRQenabled",
+  "limitations": "Owner-reported uncontrolled hanging-board swap; cable/angle changes not independently measured."
+}

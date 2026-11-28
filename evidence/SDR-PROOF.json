@@ -1,0 +1,1493 @@
+{
+  "schema": "cyd-sdr-finite-proof-overview/1",
+  "evidence_class": "OVERVIEW_OF_HOST_DEMODULATION_OF_PHYSICAL_IQ",
+  "generated_utc": "2026-11-27T21:53:26.269208+00:00",
+  "scope": "Three closed analysis cohorts: 13 acquired finite transmissions and 1 incomplete skipped acquisition. No prior analysis rewritten.",
+  "transport": "original_NRZ_OOK_TDM_PDM_actual_carrier_keying_and_IQ_not_ESP_NOW",
+  "identities": {
+    "schema": "cyd-sdr-identities/1",
+    "tx": {
+      "board": "Owner classic CYD",
+      "port": "COM21",
+      "baud": 533333,
+      "mac": "a4f00f5fff54",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_tx\\firmware.bin",
+      "firmware_sha256": "0623e6cccefd6717da560c5913f344b818ce43adf38c47b9e698785f560d2bc0",
+      "expected_info": {
+        "profile": "classic-sdr-tx-probe",
+        "source_sha": "bb34b3c27c4c8388956bb05a8a5280d7a2c687a2",
+        "tx_source_digest": "b9585839a9ee69d79f18799a640a6bd23679a2878966f3379304b0b1030b05ee",
+        "mac": "a4f00f5fff54"
+      }
+    },
+    "rx": {
+      "board": "Owner S3 N4R2",
+      "port": "COM22",
+      "baud": 115200,
+      "mac": "1c2904bec3a0",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\sdr_rx\\firmware.bin",
+      "firmware_sha256": "b81bee95f5bd0e0393538c0183a9898856474fc9b6ddb16daaf889d3e3acd949",
+      "expected_version": {
+        "revision": "3ab3b65bb62f2d9427ee33c2c3b627427e729294-cyd-iq-fdf42772e506",
+        "build_date": "2026-11-27",
+        "build_timestamp": "2026-11-27T21:17:17Z",
+        "profile": "esp32s3"
+      }
+    }
+  },
+  "decoder_sha256": "d99ab63acddc7f578db97a263b32f15fc0141fd6ab10963104be6ab325e80312",
+  "code_model_manifest": "../experiments/sdr/protocol-manifest-low-sps.json",
+  "code_model_manifest_sha256": "ff062d727f9618c603b547b280db2fe56ff8b46044d7c5ce52db8b1d1aefffec",
+  "raw_archive": {
+    "archive": "PHYSICAL-CAPTURES-SDR.zip",
+    "bytes": 4207015,
+    "sha256": "12a32067cfa50f957e6d691ed7fa62b704c706e8839b19ba205f0ff8e79aeb0c",
+    "scope": "All ten closed physical/sdr-* capture directories present at creation; failed, partial and zero-run attempts retained. Original physical/... paths and empty directories preserved. Excludes colour/PCM captures and offline framed-analysis products outside physical/."
+  },
+  "raw_archive_receipt_sha256": "59abf59d93fd0f631a6102be2696360e5ab9034ec994da486f249a3aa0381d7b",
+  "cohorts": [
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "analysis_status": "ANALYSIS COMPLETE",
+      "capture_status": "FAILED",
+      "analysis_results_sha256": "1cd07cc73495103c4bdec7887164c2f7b34e61ddc90350e66b87c84c8672093f",
+      "analysis_manifest_sha256": "f48356ba46fc4c6bdb72eae66e5027178246e6a99ea6a3f370dec99de5dc2c65",
+      "inputs": {
+        "evidence/physical/sdr-framed-centered-low-01/results.json": "773856a253115384b81fbdbbf7030957a69a88da17db4455f8cf9013a8e6aacc",
+        "evidence/physical/sdr-framed-centered-low-01/artifact-hashes.json": "dec4131a4967931985f3ed01ed02804847b2a0f27bac409e7ee12b01e76277f4"
+      },
+      "acquired_runs": 7,
+      "skipped_incomplete_runs": 1
+    },
+    {
+      "analysis": "sdr-framed-four-analysis",
+      "analysis_status": "ANALYSIS COMPLETE",
+      "capture_status": "CAPTURE COMPLETE",
+      "analysis_results_sha256": "32e0e066c0da04e072315f7a17efe817179b50e73d336bd738a1da48e91c91b7",
+      "analysis_manifest_sha256": "8be57cff6e42b5312981b2d9473ab124f3f737d3469e7a608a852ca820bb1a99",
+      "inputs": {
+        "evidence/physical/sdr-framed-four-retry-02/results.json": "9923833edcb327cdbfb8440cb22971f2828e382c378df466b861f8b9c1ede9e9",
+        "evidence/physical/sdr-framed-four-retry-02/artifact-hashes.json": "42ce4f4e34b3fcdfd5dfcc6c4df3437a0034d2fdb1f532de834a5d9a3f2fcdd6"
+      },
+      "acquired_runs": 3,
+      "skipped_incomplete_runs": 0
+    },
+    {
+      "analysis": "sdr-framed-23k-analysis",
+      "analysis_status": "ANALYSIS COMPLETE",
+      "capture_status": "CAPTURE COMPLETE",
+      "analysis_results_sha256": "0e2a5d12855e3364d7fd7a4fe4d0962b285db506c19319c71014094cedf239bd",
+      "analysis_manifest_sha256": "00c5b5726e4dfe6b4080fd9c5db535caf20fb07fcba2743e81ea17cf84e7902d",
+      "inputs": {
+        "evidence/physical/sdr-framed-23k-01/results.json": "91eeef40d4f6c4bf4a400a6f00ed732884b9d2cd4813cadecd88068d6723c6b4",
+        "evidence/physical/sdr-framed-23k-01/artifact-hashes.json": "aaa9ba681e03df31dd42bb348eaa884b2679ad66bed87e017f42c3cdbd258bf4"
+      },
+      "acquired_runs": 3,
+      "skipped_incomplete_runs": 0
+    }
+  ],
+  "groups": [
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "source_rate_hz": 1000,
+      "channels": 1,
+      "acquired_runs": 3,
+      "symbol_rate": 5750,
+      "generated_frames": 48,
+      "unique_received_frames": 47,
+      "source_frame_coverage": 0.9791666666666666,
+      "payload_bits_compared_conditional_on_received_frames": 12032,
+      "payload_bit_errors": 202,
+      "conditional_payload_ber": 0.016788563829787235
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "source_rate_hz": 1000,
+      "channels": 2,
+      "acquired_runs": 3,
+      "symbol_rate": 11500,
+      "generated_frames": 48,
+      "unique_received_frames": 45,
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 11520,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "acquired_runs": 1,
+      "symbol_rate": 11500,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0
+    },
+    {
+      "analysis": "sdr-framed-four-analysis",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "acquired_runs": 3,
+      "symbol_rate": 11500,
+      "generated_frames": 48,
+      "unique_received_frames": 45,
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 11520,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0
+    },
+    {
+      "analysis": "sdr-framed-23k-analysis",
+      "source_rate_hz": 2000,
+      "channels": 2,
+      "acquired_runs": 3,
+      "symbol_rate": 23000,
+      "generated_frames": 48,
+      "unique_received_frames": 45,
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 11520,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0
+    }
+  ],
+  "runs": [
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s001_1",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 1,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30
+      ],
+      "symbol_rate": 5750,
+      "nominal_symbol_period_us": 173.91304347826087,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 64.0,
+      "generated_frames": 16,
+      "unique_received_frames": 16,
+      "missing_source_sequences": [],
+      "received_source_sequences": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 1.0,
+      "payload_bits_compared_conditional_on_received_frames": 4096,
+      "payload_bit_errors": 101,
+      "conditional_payload_ber": 0.024658203125,
+      "received_pcm_frames_per_channel": 1024,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 1024,
+          "error_rms_pcm16": 6928.444233877698,
+          "snr_db": 6.033876358951503,
+          "correlation": 0.8949923304309156,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 1024,
+          "error_rms_pcm16": 2941.210635261705,
+          "snr_db": 14.381313251479009,
+          "correlation": 0.9819768707694808,
+          "perfect_sample_match": false
+        }
+      ],
+      "payload_errors_by_source_sequence": {
+        "0": 101
+      },
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 1528,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "df43de811a78e8d07202bba55b5f4b419ed1712462ffd3be6f08b17d97b6634f",
+      "reference_pcm_sha256": "ed4ff6996aebf8901b199332847041cb0e0df6302c52f0b4c55057db03e117e8",
+      "boxcar_pcm_sha256": "24fffd61b761415d321e8cd92fa8e6c9e6fdf6feb10fc8427a58e5e5c4555591"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s002_2",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 1,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30
+      ],
+      "symbol_rate": 5750,
+      "nominal_symbol_period_us": 173.91304347826087,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 64.0,
+      "generated_frames": 16,
+      "unique_received_frames": 16,
+      "missing_source_sequences": [],
+      "received_source_sequences": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 1.0,
+      "payload_bits_compared_conditional_on_received_frames": 4096,
+      "payload_bit_errors": 101,
+      "conditional_payload_ber": 0.024658203125,
+      "received_pcm_frames_per_channel": 1024,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 1024,
+          "error_rms_pcm16": 7065.126432127958,
+          "snr_db": 5.864192112556101,
+          "correlation": 0.8916169452437663,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 1024,
+          "error_rms_pcm16": 3114.369278196881,
+          "snr_db": 13.884433672879307,
+          "correlation": 0.9799803377742492,
+          "perfect_sample_match": false
+        }
+      ],
+      "payload_errors_by_source_sequence": {
+        "0": 101
+      },
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 1477,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "df43de811a78e8d07202bba55b5f4b419ed1712462ffd3be6f08b17d97b6634f",
+      "reference_pcm_sha256": "ed4ff6996aebf8901b199332847041cb0e0df6302c52f0b4c55057db03e117e8",
+      "boxcar_pcm_sha256": "24fffd61b761415d321e8cd92fa8e6c9e6fdf6feb10fc8427a58e5e5c4555591"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s003_3",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 1,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30
+      ],
+      "symbol_rate": 5750,
+      "nominal_symbol_period_us": 173.91304347826087,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 64.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 960,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 960,
+          "error_rms_pcm16": 6597.659521959915,
+          "snr_db": 6.469169985948251,
+          "correlation": 0.9035611793471217,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 960,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 1330,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "df43de811a78e8d07202bba55b5f4b419ed1712462ffd3be6f08b17d97b6634f",
+      "reference_pcm_sha256": "ed4ff6996aebf8901b199332847041cb0e0df6302c52f0b4c55057db03e117e8",
+      "boxcar_pcm_sha256": "24fffd61b761415d321e8cd92fa8e6c9e6fdf6feb10fc8427a58e5e5c4555591"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s004_1",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6493.970769907782,
+          "snr_db": 6.585116358018686,
+          "correlation": 0.9062365936850685,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6709.934095708392,
+          "snr_db": 6.295984492240985,
+          "correlation": 0.895669710174302,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 733,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "8d350b44cd2c56f12d54d6090487936bed2bf9f0c2b71fc23229f7f7e27d93e0",
+      "reference_pcm_sha256": "d39180adba70fe3d0f70e1ca91fa5aeb0c9db2c6473af070298b487a066db7d7",
+      "boxcar_pcm_sha256": "4a5a9e3e26c77039d8841997198f7726f0353b8857c8daf5529b4dfeb3ce2d18"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s005_2",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6493.970769907782,
+          "snr_db": 6.585116358018686,
+          "correlation": 0.9062365936850685,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6709.934095708392,
+          "snr_db": 6.295984492240985,
+          "correlation": 0.895669710174302,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 812,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "8d350b44cd2c56f12d54d6090487936bed2bf9f0c2b71fc23229f7f7e27d93e0",
+      "reference_pcm_sha256": "d39180adba70fe3d0f70e1ca91fa5aeb0c9db2c6473af070298b487a066db7d7",
+      "boxcar_pcm_sha256": "4a5a9e3e26c77039d8841997198f7726f0353b8857c8daf5529b4dfeb3ce2d18"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s006_3",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 1000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6493.970769907782,
+          "snr_db": 6.585116358018686,
+          "correlation": 0.9062365936850685,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6709.934095708392,
+          "snr_db": 6.295984492240985,
+          "correlation": 0.895669710174302,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 723,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "8d350b44cd2c56f12d54d6090487936bed2bf9f0c2b71fc23229f7f7e27d93e0",
+      "reference_pcm_sha256": "d39180adba70fe3d0f70e1ca91fa5aeb0c9db2c6473af070298b487a066db7d7",
+      "boxcar_pcm_sha256": "4a5a9e3e26c77039d8841997198f7726f0353b8857c8daf5529b4dfeb3ce2d18"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s007_1",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47,
+        64,
+        81
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 240,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 6630.307433168792,
+          "snr_db": 6.422841142612052,
+          "correlation": 0.9020236837831724,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 5053.891503913923,
+          "snr_db": 8.76478311362211,
+          "correlation": 0.9445352458326713,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 6077.569243743752,
+          "snr_db": 7.130540611629232,
+          "correlation": 0.9218989014313187,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 5795.676311915634,
+          "snr_db": 7.574989600656963,
+          "correlation": 0.922674694894473,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 763,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f"
+    },
+    {
+      "analysis": "sdr-framed-low-analysis-v2",
+      "capture_status": "FAILED",
+      "run_id": "s008_2",
+      "acquisition_status": "FAILED",
+      "analysis_status": "NOT RUN: INCOMPLETE ACQUISITION",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47,
+        64,
+        81
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": null,
+      "missing_source_sequences": null,
+      "received_source_sequences": null,
+      "source_frame_coverage": null,
+      "payload_bits_compared_conditional_on_received_frames": null,
+      "payload_bit_errors": null,
+      "conditional_payload_ber": null,
+      "received_pcm_frames_per_channel": null,
+      "quality_vs_source_received_domain": [],
+      "quality_vs_ideal_boxcar_received_domain": [],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": null,
+      "iq_crc_errors": null,
+      "iq_target_queue_drops": null,
+      "header_crc_reject_search_candidates": null,
+      "internal_sequence_gap_counter": null,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": "Unterminated string starting at: line 1 column 58 (char 57)",
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f"
+    },
+    {
+      "analysis": "sdr-framed-four-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s001_1",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47,
+        64,
+        81
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 240,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 6630.307433168792,
+          "snr_db": 6.422841142612052,
+          "correlation": 0.9020236837831724,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 5053.891503913923,
+          "snr_db": 8.76478311362211,
+          "correlation": 0.9445352458326713,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 6077.569243743752,
+          "snr_db": 7.130540611629232,
+          "correlation": 0.9218989014313187,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 5795.676311915634,
+          "snr_db": 7.574989600656963,
+          "correlation": 0.922674694894473,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 759,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f"
+    },
+    {
+      "analysis": "sdr-framed-four-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s002_2",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47,
+        64,
+        81
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 240,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 6630.307433168792,
+          "snr_db": 6.422841142612052,
+          "correlation": 0.9020236837831724,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 5053.891503913923,
+          "snr_db": 8.76478311362211,
+          "correlation": 0.9445352458326713,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 6077.569243743752,
+          "snr_db": 7.130540611629232,
+          "correlation": 0.9218989014313187,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 5795.676311915634,
+          "snr_db": 7.574989600656963,
+          "correlation": 0.922674694894473,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 794,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f"
+    },
+    {
+      "analysis": "sdr-framed-four-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s003_3",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 500,
+      "channels": 4,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47,
+        64,
+        81
+      ],
+      "symbol_rate": 11500,
+      "nominal_symbol_period_us": 86.95652173913044,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 32.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 240,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 6630.307433168792,
+          "snr_db": 6.422841142612052,
+          "correlation": 0.9020236837831724,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 5053.891503913923,
+          "snr_db": 8.76478311362211,
+          "correlation": 0.9445352458326713,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 6077.569243743752,
+          "snr_db": 7.130540611629232,
+          "correlation": 0.9218989014313187,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 5795.676311915634,
+          "snr_db": 7.574989600656963,
+          "correlation": 0.922674694894473,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 2,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 3,
+          "samples": 240,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 740,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f"
+    },
+    {
+      "analysis": "sdr-framed-23k-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s001_1",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 2000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 23000,
+      "nominal_symbol_period_us": 43.47826086956522,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 16.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6426.527924353865,
+          "snr_db": 6.74382514277497,
+          "correlation": 0.9075358289825143,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6972.295402908333,
+          "snr_db": 6.032614296649744,
+          "correlation": 0.8954596439562014,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 426,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "6e5c60187ecad43dbaaa53b006cdc780f5f1fe23015367e295f6625ddcf3d373",
+      "reference_pcm_sha256": "f892e07c87428ab629cae7670119955236acf8d0602eed2c3b9a540f00b92d8d",
+      "boxcar_pcm_sha256": "12b206108687319f308175530c28e95cd979d4a35852360a8a76315526e59738"
+    },
+    {
+      "analysis": "sdr-framed-23k-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s002_2",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 2000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 23000,
+      "nominal_symbol_period_us": 43.47826086956522,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 16.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6426.527924353865,
+          "snr_db": 6.74382514277497,
+          "correlation": 0.9075358289825143,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6972.295402908333,
+          "snr_db": 6.032614296649744,
+          "correlation": 0.8954596439562014,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 426,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "6e5c60187ecad43dbaaa53b006cdc780f5f1fe23015367e295f6625ddcf3d373",
+      "reference_pcm_sha256": "f892e07c87428ab629cae7670119955236acf8d0602eed2c3b9a540f00b92d8d",
+      "boxcar_pcm_sha256": "12b206108687319f308175530c28e95cd979d4a35852360a8a76315526e59738"
+    },
+    {
+      "analysis": "sdr-framed-23k-analysis",
+      "capture_status": "CAPTURE COMPLETE",
+      "run_id": "s003_3",
+      "acquisition_status": "ACQUIRED",
+      "analysis_status": "FRAMES DECODED",
+      "source_rate_hz": 2000,
+      "channels": 2,
+      "oversample": 4,
+      "source_frequencies_hz": [
+        30,
+        47
+      ],
+      "symbol_rate": 23000,
+      "nominal_symbol_period_us": 43.47826086956522,
+      "symbols_per_frame": 368,
+      "nominal_frame_wire_time_ms": 16.0,
+      "generated_frames": 16,
+      "unique_received_frames": 15,
+      "missing_source_sequences": [
+        0
+      ],
+      "received_source_sequences": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "source_frame_coverage": 0.9375,
+      "payload_bits_compared_conditional_on_received_frames": 3840,
+      "payload_bit_errors": 0,
+      "conditional_payload_ber": 0.0,
+      "received_pcm_frames_per_channel": 480,
+      "quality_vs_source_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 6426.527924353865,
+          "snr_db": 6.74382514277497,
+          "correlation": 0.9075358289825143,
+          "perfect_sample_match": false
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 6972.295402908333,
+          "snr_db": 6.032614296649744,
+          "correlation": 0.8954596439562014,
+          "perfect_sample_match": false
+        }
+      ],
+      "quality_vs_ideal_boxcar_received_domain": [
+        {
+          "channel": 0,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        },
+        {
+          "channel": 1,
+          "samples": 480,
+          "error_rms_pcm16": 0.0,
+          "snr_db": null,
+          "correlation": 1.0,
+          "perfect_sample_match": true
+        }
+      ],
+      "payload_errors_by_source_sequence": {},
+      "iq_missing_samples": 0,
+      "iq_crc_errors": 0,
+      "iq_target_queue_drops": 0,
+      "header_crc_reject_search_candidates": 436,
+      "internal_sequence_gap_counter": 0,
+      "rf_origin_verified_receipt": null,
+      "incomplete_reason": null,
+      "generated_bits_sha256": "6e5c60187ecad43dbaaa53b006cdc780f5f1fe23015367e295f6625ddcf3d373",
+      "reference_pcm_sha256": "f892e07c87428ab629cae7670119955236acf8d0602eed2c3b9a540f00b92d8d",
+      "boxcar_pcm_sha256": "12b206108687319f308175530c28e95cd979d4a35852360a8a76315526e59738"
+    }
+  ],
+  "one_way_latency_us": null,
+  "continuous_on_device_playback_measured": false,
+  "dac_output_measured": false,
+  "limits": [
+    "BER is conditional on recovered sequence-matched payload; missing frames are separate.",
+    "Header CRC rejects count overlapping search candidates, not independent packets.",
+    "Quality is computed in the received source domain without inserting missing frames; output WAVs concatenate frames.",
+    "Digital source comparison includes intentional OSR4 codec distortion. Ideal-boxcar comparison isolates additional transport+host-demod error, not RF alone.",
+    "Finite low-rate precomputed source; no24/48kHz multichannel continuous transport or synchronized one-way latency claim."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "cyd-sdr-metal-dual-identities/1",
+  "tx": {
+    "board": "Owner-identified S3 tx",
+    "port": "COM13",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\tx\\firmware.bin",
+    "firmware_sha256": "afe172501b293606c1b5f032d6b27c338d9bc2a19e8b881cab67abcff70fc567",
+    "expected_info": {
+      "profile": "s3-sdr-metal-tx",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "mac": "1c2904becc48",
+      "tx_source_digest": "44f6d062dabe6ec481d3f2fbcb8d9f783aee2584a15badef2f5314588b69ae2f",
+      "source_dirty": false,
+      "fast_paced_supported": true,
+      "source_integrity_supported": true,
+      "fast_schedule_helpers_digest": "4105bfc13af1768922ba9c58ca626257a1bc207ff599059e48b6e70dd4c0b7c7"
+    }
+  },
+  "rx": {
+    "board": "Owner-identified S3 rx",
+    "port": "COM22",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+    "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+    "expected_info": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "mac": "1c2904bec3a0",
+      "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1"
+    }
+  },
+  "rx2": {
+    "board": "Owner-identified S3 rx2",
+    "port": "COM23",
+    "baud": 115200,
+    "firmware_file": "C:\\cyd-diviner\\metal-approved-artifacts\\fast-integrity\\rx\\firmware.bin",
+    "firmware_sha256": "0aaeb8660fab2877d6735c2ae06445c04ac40d0337ba7b8a63377278894016c4",
+    "expected_info": {
+      "profile": "s3-metal-snapshot",
+      "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+      "mac": "1c2904bec3d8",
+      "source_digest": "95940fe8ab260e3d4820f4bbea0d1f66ba5c00e463c01994a80572e381e17bb1"
+    }
+  }
+}

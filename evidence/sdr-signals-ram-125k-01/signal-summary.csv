@@ -1,0 +1,5 @@
+run_id,workload,acquisition_status,valid_samples,valid_exposure_s,baseline_mean_power,peak_window_mean_power,peak_to_baseline_power_ratio,clip_fraction,above_threshold_samples,best_expected_frequency_r2,scanned_best_frequency_hz,scanned_best_r2
+s001_1,calibration/alternating/ram/1000,ACQUIRED,250128,2.001024,0.0,0.74096,,0.0,13603,0.008520159849748632,400.0,0.013340393866363098
+s002_1,calibration/alternating/ram/5000,ACQUIRED,250128,2.001024,0.01712,1.49648,87.41121495327103,0.0,4,0.004128974136668462,2500.0,0.004128974136668462
+s003_1,calibration/alternating/ram/10000,ACQUIRED,250125,2.001,0.04384,2.88784,65.87226277372264,0.0,5,0.008975177659835687,5000.0,0.008975177659835687
+s004_1,calibration/alternating/ram/20000,ACQUIRED,250126,2.001008,0.0,5.59024,,0.0,70535,0.010395569292515061,10000.0,0.010395569292515061

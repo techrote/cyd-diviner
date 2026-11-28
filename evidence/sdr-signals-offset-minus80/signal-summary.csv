@@ -1,0 +1,2 @@
+run_id,workload,acquisition_status,valid_samples,valid_exposure_s,baseline_mean_power,peak_window_mean_power,peak_to_baseline_power_ratio,clip_fraction,above_threshold_samples,best_expected_frequency_r2,scanned_best_frequency_hz,scanned_best_r2
+s001_1,calibration/alternating/api/1000,ACQUIRED,250127,2.001016,0.07128,1353.66336,18990.78787878788,0.0,24011,0.7476114512134739,500.0,0.7476114512134739

@@ -1,0 +1,61 @@
+run_id,snapshot,trial,selected,index,symbol_rate,basis,multiplier,status,matching_header_config_frames,matching_training_fit_error_mean,exit_code
+d001_1,snapshot-0001.native32le,0,True,0,360000,requested paced baud,1.0,DEMODULATED,1,0.0118402711199,0
+d002_2,snapshot-0001.native32le,0,False,0,360000,requested paced baud,1.0,DEMODULATED,0,,3
+d003_3,snapshot-0001.native32le,0,True,0,360000,requested paced baud,1.0,DEMODULATED,1,0.000936961875487,0
+d004_1,snapshot-0001.native32le,0,False,0,552000,requested paced baud,1.0,DEMODULATED,0,,3
+d005_2,snapshot-0001.native32le,0,True,0,552000,requested paced baud,1.0,DEMODULATED,1,0.00155797054343,0
+d006_3,snapshot-0001.native32le,0,True,0,552000,requested paced baud,1.0,DEMODULATED,1,0.00140800121019,0
+d007_1,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,1,0.00579134262543,0
+d008_2,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,1,0.00595690766605,0
+d009_3,snapshot-0001.native32le,0,True,0,1104000,requested paced baud,1.0,DEMODULATED,2,0.004957352684745,0
+d010_1,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d011_2,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d012_3,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d013_1,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d014_2,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d015_3,snapshot-0001.native32le,0,False,0,2208000,requested paced baud,1.0,DEMODULATED,0,,3
+d016_1,snapshot-0001.native32le,0,False,0,11357745.29014092,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.0958256533101,0
+d016_1,snapshot-0001.native32le,1,True,1,11403176.271301484,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,1,0.0656446638428,0
+d016_1,snapshot-0001.native32le,2,False,2,11448607.252462046,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,1,0.0656787008683,0
+d017_2,snapshot-0001.native32le,0,False,0,11357717.006199762,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,2,0.284464176617,0
+d017_2,snapshot-0001.native32le,1,False,1,11403147.874224562,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,2,0.08187656756585,0
+d017_2,snapshot-0001.native32le,2,True,2,11448578.74224936,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,2,0.07294142629059999,0
+d018_3,snapshot-0001.native32le,0,False,0,11357716.053523662,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.610168966366,0
+d018_3,snapshot-0001.native32le,1,False,1,11403146.917737756,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,2,0.11772003948375001,0
+d018_3,snapshot-0001.native32le,2,True,2,11448577.78195185,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,2,0.06907824369995,0
+d019_1,snapshot-0001.native32le,0,False,0,11357663.911557209,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,2,0.36508136282750003,0
+d019_1,snapshot-0001.native32le,1,False,1,11403094.567203438,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,3,0.15677658490613333,0
+d019_1,snapshot-0001.native32le,2,True,2,11448525.222849667,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,3,0.1273434395506,0
+d020_2,snapshot-0001.native32le,0,False,0,11357716.816904498,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.133849120517,0
+d020_2,snapshot-0001.native32le,1,False,1,11403147.684172116,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,1,0.0671884695016,0
+d020_2,snapshot-0001.native32le,2,True,2,11448578.551439734,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,1,0.0643147671442,0
+d021_3,snapshot-0001.native32le,0,False,0,11357660.290146232,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,2,0.276399476632,0
+d021_3,snapshot-0001.native32le,1,False,1,11403090.931306817,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,4,0.100030182788125,0
+d021_3,snapshot-0001.native32le,2,True,2,11448521.572467402,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,4,0.07398947889509999,0
+d022_1,snapshot-0001.native32le,0,False,0,11357691.722259682,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d022_1,snapshot-0001.native32le,1,False,1,11403122.489148721,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d022_1,snapshot-0001.native32le,2,False,2,11448553.256037759,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3
+d023_2,snapshot-0001.native32le,0,False,0,11357662.627615767,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d023_2,snapshot-0001.native32le,1,False,1,11403093.27812623,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d023_2,snapshot-0001.native32le,2,False,2,11448523.928636692,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3
+d024_3,snapshot-0001.native32le,0,False,0,11357691.864230813,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.136533398859,0
+d024_3,snapshot-0001.native32le,1,False,1,11403122.631687736,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,2,0.16048509956435,0
+d024_3,snapshot-0001.native32le,2,True,2,11448553.39914466,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,2,0.0727411207997,0
+d025_1,snapshot-0001.native32le,0,False,0,11357666.290145857,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.929705337,0
+d025_1,snapshot-0001.native32le,1,False,1,11403096.95530644,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,2,0.17769219689165,0
+d025_1,snapshot-0001.native32le,2,True,2,11448527.620467024,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,2,0.13194366933405,0
+d026_2,snapshot-0001.native32le,0,False,0,11357716.479437994,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d026_2,snapshot-0001.native32le,1,False,1,11403147.345355745,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d026_2,snapshot-0001.native32le,2,False,2,11448578.211273497,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3
+d027_3,snapshot-0001.native32le,0,False,0,11357689.384791825,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,1,0.306431118806,0
+d027_3,snapshot-0001.native32le,1,False,1,11403120.142330993,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,2,0.1186744169881,0
+d027_3,snapshot-0001.native32le,2,True,2,11448550.89987016,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,2,0.11009454301065,0
+d028_1,snapshot-0001.native32le,0,False,0,11357717.574085591,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d028_1,snapshot-0001.native32le,1,False,1,11403148.444381934,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d028_1,snapshot-0001.native32le,2,False,2,11448579.314678276,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3
+d029_2,snapshot-0001.native32le,0,False,0,11357687.195497157,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d029_2,snapshot-0001.native32le,1,False,1,11403117.944279145,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d029_2,snapshot-0001.native32le,2,False,2,11448548.693061134,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3
+d030_3,snapshot-0001.native32le,0,False,0,11357711.627609845,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.0,DEMODULATED,0,,3
+d030_3,snapshot-0001.native32le,1,False,1,11403142.474120285,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.004,DEMODULATED,0,,3
+d030_3,snapshot-0001.native32le,2,False,2,11448573.320630724,whole TX-loop software write mean times declared multiplier; not RF clock proof,1.008,DEMODULATED,0,,3

@@ -9,3 +9,11 @@ evidence/physical/
 # Local SDK configuration generated for the isolated SDR transmitter.
 /experiments/sdr/tx/sdkconfig
 /experiments/sdr/tx/sdkconfig.old
+
+# Detailed derived outputs are delivered byte-exact in DERIVED-ANALYSES.zip.
+# Keep original root summaries/manifests/reports and all stimulus inputs visible.
+/evidence/metal-*-demod/*/
+/evidence/metal-*-envelope/*/
+/evidence/sdr-framed-*-analysis*/*/
+/evidence/sdr-signals-*/*/
+/evidence/audio-offline-osr*/*/

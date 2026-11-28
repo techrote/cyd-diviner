@@ -1,0 +1,43 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "created_utc": "2026-11-27T22:41:18.095926+00:00",
+  "archive": "PHYSICAL-CAPTURES-PCM-S3.zip",
+  "bytes": 332632,
+  "sha256": "8b51ab1ac3944f62efb64dec120d08dcc5243af1af8751c6fef02507d0d12d32",
+  "capture_directories": [
+    "audio-s3-pair-01",
+    "audio-s3-pair-02",
+    "audio-s3-pair-deferred-01"
+  ],
+  "scope": "All three closed matchedS3 PCM captures including zero-run startup failure; live-readiness and deferred-metadata cohorts kept distinct, original terminal statuses preserved.",
+  "captures": [
+    {
+      "directory": "audio-s3-pair-01",
+      "status": "FAILED",
+      "run_statuses": {}
+    },
+    {
+      "directory": "audio-s3-pair-02",
+      "status": "FAILED",
+      "run_statuses": {
+        "FAILED": 26,
+        "MEASURED": 22
+      }
+    },
+    {
+      "directory": "audio-s3-pair-deferred-01",
+      "status": "FAILED",
+      "run_statuses": {
+        "MEASURED": 25,
+        "FAILED": 23
+      }
+    }
+  ],
+  "verification": {
+    "artifact_hash_entries_verified": 21,
+    "archived_files_verified": 24,
+    "zip_crc": "PASS",
+    "zip_membership": "exact_snapshot",
+    "raw_after_archive": "unchanged"
+  }
+}

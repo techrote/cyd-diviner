@@ -1,0 +1,9 @@
+{
+  "schema": "cyd-perf-image-bundle/1",
+  "archive": "UNAPPROVED-SDR-METAL-POWER-IMAGES.zip",
+  "bytes": 7379453,
+  "sha256": "ba241f252599b9dbdfd69765f0f25342face25a69ba4d448ccaed36db461d50b",
+  "review_sha256": "13707a4dd571239a0210ce39e0b478b366a14e0720c612c3c816a9c680b5685d",
+  "source_files": 51,
+  "scope": "ExactcorrectedS3apps, ELF/mapgz, source/license/provenance, buildreceipts; no bootloader/table/NVS/private data or flash automation"
+}

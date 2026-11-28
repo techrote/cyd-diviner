@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\cyd-diviner\perf-characterisation\tools\perf\sdr_metal_dual_capture.py", line 364, in <module>
+    if __name__ == "__main__": raise SystemExit(main())
+                                                ^^^^^^
+  File "C:\cyd-diviner\perf-characterisation\tools\perf\sdr_metal_dual_capture.py", line 361, in main
+    return capture(args)
+           ^^^^^^^^^^^^^
+  File "C:\cyd-diviner\perf-characterisation\tools\perf\sdr_metal_dual_capture.py", line 259, in capture
+    if any(c["arm_delay_us"] != 500000 for c in plan["workloads"]): raise ValueError("Set every dual case arm_delay_us to 500000")
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Set every dual case arm_delay_us to 500000

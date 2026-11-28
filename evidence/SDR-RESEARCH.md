@@ -4,6 +4,11 @@ Review date: **2026-11-27**. This is primary-source research, not a physical
 measurement on COM21/COM22. No board was accessed, no firmware was changed,
 and no imported SDR implementation was built or flashed for this review.
 
+This research-only snapshot predates the separately authorized physical stage.
+[SDR calibration interpretation](SDR-CALIBRATION-INTERPRETATION.md) now records
+actual received-envelope observations; it does not turn the external projects'
+claims below into measurements on the owned boards.
+
 The developments are real: raw receive samples can bypass the Wi-Fi modem,
 and one S3 project demonstrates radiating data through tone keying. The
 reviewed releases do **not** supply an autonomous classic-ESP32 ↔ ESP32-S3

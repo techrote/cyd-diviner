@@ -81,8 +81,11 @@ The S3 capture completed five windows before a truncated USB status record
 stopped collection. A separate read-only probe reproduced truncation while the
 board continued responding. Its temperature function is called before the JSON
 prefix, so the cutoff at a temperature field does not establish a blocked sensor
-driver. The raw failure is retained. A bounded complete-record USB output fix
-and a fresh full internal/PSRAM capture are pending separate image approval.
+driver. The raw failure is retained. At baseline closure, the bounded
+complete-record USB output change and fresh full internal/PSRAM capture were
+pending separate image approval. The subsequently authorized supplement has
+now completed [132 S3 kernel windows](S3-COMPARISON.md); it does not replace or
+change this failed baseline capture.
 
 ## Provisional VIBEWARE budgets
 
@@ -101,8 +104,10 @@ long-lived workspaces before radio churn when evaluating a design. This is an
 architectural recommendation from the observed allocation failure, not an
 optimization implemented in Diviner.
 
-Offload conclusions remain pending measured peer latency/goodput and complete
-S3 timings. Full-frame transfer has a local SPI ceiling even if computation is
-moved elsewhere. A candidate must beat local compute after serialization,
-transport, peer computation, return bytes and tail latency; no offload win has
-yet been physically demonstrated.
+At baseline closure, measured peer latency/goodput and complete S3 timings were
+pending. These are now reported in the separate [wireless](WIRELESS-FINDINGS.md)
+and [S3](S3-COMPARISON.md) supplements, with the current screening calculation in
+[the recommendations](RECOMMENDATIONS-DRAFT.md). Full-frame transfer retains a
+local SPI ceiling even if computation moves elsewhere. A candidate must beat
+local compute after serialization, transport, peer computation, return bytes
+and tail latency; no matched-job offload win has been physically demonstrated.

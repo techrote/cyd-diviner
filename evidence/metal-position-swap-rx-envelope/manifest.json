@@ -1,0 +1,11 @@
+{
+  "schema": "cyd-sdr-metal-envelope-manifest/1",
+  "input_results_sha256": "db608b49a7bbfdc58132931fa3c561eaaa93c08255cc66944b6e5a67ec8ad10e",
+  "input_artifact_manifest_sha256": "02837a1e66383b63848a064df8f27051f2b743d8385a5b984a59c700680bcd4a",
+  "tool_sha256": "258cdc01fa6865479f1e4239f2cf968f1c731e438891301c55a1ab1c0bbe26ca",
+  "native_decoder_sha256": "6797ff94f861e04c32bc2cc080a2eabe1b0e4e16ead40df36a65dc2e2e0e1bfe",
+  "outputs": {
+    "envelope-summary.csv": "2d702953681a56e1b5a9de2a5fc70835d43350d6c95471868df887705a8e0213",
+    "results.json": "c49254eee49ee869ef057de75a9ac850916a96d24be659e8299d7429bfb31434"
+  }
+}

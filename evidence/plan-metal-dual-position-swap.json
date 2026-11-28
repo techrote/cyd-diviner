@@ -1,0 +1,77 @@
+{
+  "schema": "cyd-sdr-metal-plan/1",
+  "repetitions": 3,
+  "receiver": {
+    "init_path": "wifi",
+    "frequency_mhz": 2433,
+    "offset_khz": -80,
+    "manual_gain_index": 40
+  },
+  "transmitter": {
+    "init_path": "phy",
+    "symbol_capacity": 16384,
+    "trace_capacity": 2048,
+    "trace_stride": 0
+  },
+  "temperature_queries": false,
+  "rf_overlap_scope": "RX arm/TX setup use independent clocks; requested overlap is not synchronized proof; inspect native IQ",
+  "workloads": [
+    {
+      "name": "tx-gate/100000/mask0",
+      "rx_mode": "capture",
+      "rate_hz": 16000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": true,
+      "tx_mode": "gate",
+      "baud": 100000,
+      "backoff0_quarter_db": 96,
+      "backoff1_quarter_db": 112,
+      "duration_us": 1000000,
+      "mask_segment_us": 0,
+      "bit_count": 64,
+      "pattern": "alternating"
+    },
+    {
+      "name": "tx-gate/1000000/mask0",
+      "rx_mode": "capture",
+      "rate_hz": 40000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": true,
+      "tx_mode": "gate",
+      "baud": 1000000,
+      "backoff0_quarter_db": 96,
+      "backoff1_quarter_db": 112,
+      "duration_us": 1000000,
+      "mask_segment_us": 0,
+      "bit_count": 64,
+      "pattern": "alternating"
+    },
+    {
+      "name": "tx-gate/0/mask0",
+      "rx_mode": "capture",
+      "rate_hz": 80000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": true,
+      "tx_mode": "gate",
+      "baud": 0,
+      "backoff0_quarter_db": 96,
+      "backoff1_quarter_db": 112,
+      "duration_us": 1000000,
+      "mask_segment_us": 0,
+      "bit_count": 64,
+      "pattern": "alternating"
+    }
+  ]
+}

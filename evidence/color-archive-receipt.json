@@ -1,0 +1,11 @@
+{
+  "schema": "cyd-perf-archive/1",
+  "archive": "PHYSICAL-CAPTURES-COLOR.zip",
+  "bytes": 733095,
+  "sha256": "0e1eec6eea902cba428cf37f63e50a2a5f0d505d827cafaf7a5690731a593cee",
+  "capture_directories": [
+    "color-quick-01"
+  ],
+  "status": "CAPTURE COMPLETE",
+  "measured_windows": 36
+}

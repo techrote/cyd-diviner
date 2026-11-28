@@ -1,0 +1,8 @@
+esptool.py v4.14.0
+Serial port COM23
+
+A fatal error occurred: Could not open COM23, the port is busy or doesn't exist.
+(could not open port 'COM23': PermissionError(13, 'Access is denied.', None, 5))
+
+Hint: Check if the port is not used by another task
+

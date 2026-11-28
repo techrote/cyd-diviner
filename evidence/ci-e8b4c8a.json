@@ -1,0 +1,16 @@
+{
+  "schema": "cyd-perf-ci-receipt/1",
+  "source_sha": "e8b4c8a9f5073db86706f9cebbaefb0476549ef6",
+  "workflow_run_id": 46085828254,
+  "url": "https://github.com/techrote/cyd-diviner/actions/runs/46085828254",
+  "status": "ALL_19_JOBS_PASSED",
+  "evidence_class": "BUILD_AND_HOST_VALIDATION_NOT_PHYSICAL_MEASUREMENT",
+  "verified_via": "GitHub connector workflow job status, 2026-11-28",
+  "coverage": [
+    "Ordinary CYD, diagnostics, USB PCM, Cardputer, native replay and VLC plugin",
+    "Opt-in CPU/event/link/colour/audio profiles and portable ESP32/S3/C3 builds",
+    "163 Python host tests and sanitized portable numeric/audio/colour/SDR checks",
+    "Isolated SDR lifecycle, snapshot/gain/temperature, output, fast-clock and source-integrity checks"
+  ],
+  "limitations": "CI does not execute on the owner's physical ESP32 boards or establish RF/audio/temperature performance. C3 remains compile-only."
+}

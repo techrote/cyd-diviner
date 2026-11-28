@@ -1,0 +1,87 @@
+{
+  "schema": "cyd-sdr-metal-plan/1",
+  "repetitions": 3,
+  "receiver": {
+    "init_path": "phy",
+    "frequency_mhz": 2433,
+    "offset_khz": -80,
+    "manual_gain_index": 40
+  },
+  "transmitter": {
+    "init_path": "phy",
+    "symbol_capacity": 64,
+    "trace_capacity": 512,
+    "trace_stride": 0
+  },
+  "temperature_queries": true,
+  "rf_overlap_scope": "RX arm/TX setup use independent clocks; requested overlap is not synchronized proof; inspect native IQ",
+  "workloads": [
+    {
+      "name": "rx-bench/16000000",
+      "rx_mode": "bench",
+      "rate_hz": 16000000,
+      "samples": 16380,
+      "rx_repeats": 20,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    },
+    {
+      "name": "rx-bench/40000000",
+      "rx_mode": "bench",
+      "rate_hz": 40000000,
+      "samples": 16380,
+      "rx_repeats": 20,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    },
+    {
+      "name": "rx-bench/80000000",
+      "rx_mode": "bench",
+      "rate_hz": 80000000,
+      "samples": 16380,
+      "rx_repeats": 20,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    },
+    {
+      "name": "rx-capture/16000000",
+      "rx_mode": "capture",
+      "rate_hz": 16000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    },
+    {
+      "name": "rx-capture/40000000",
+      "rx_mode": "capture",
+      "rate_hz": 40000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    },
+    {
+      "name": "rx-capture/80000000",
+      "rx_mode": "capture",
+      "rate_hz": 80000000,
+      "samples": 16380,
+      "rx_repeats": 1,
+      "arm_delay_us": 500000,
+      "gap_us": 0,
+      "timeout_us": 20000,
+      "tx_enabled": false
+    }
+  ],
+  "purpose": "Receiver-only finite repeat of existing3b no-export/export reference; directPHY correction, no TXdispatch"
+}

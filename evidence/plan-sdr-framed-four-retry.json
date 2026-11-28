@@ -1,0 +1,75 @@
+{
+  "schema": "cyd-sdr-plan/1",
+  "repetitions": 3,
+  "receiver": {
+    "duration_ms": 2000,
+    "decimation": 128,
+    "bits": 8,
+    "rate_code": 6,
+    "shift": 7,
+    "mode": 2,
+    "baseline_ms": 100,
+    "commands": [
+      "FOFS -80",
+      "FREQ 2433",
+      "GAIN MANUAL 40"
+    ]
+  },
+  "workloads": [
+    {
+      "name": "framed-pdm/ram/500Hz-4ch-osr4",
+      "mode": "ram",
+      "baud": 11500,
+      "backoff_quarter_db": 96,
+      "bit_count": 5888,
+      "bits_file": "sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-symbols.bits",
+      "stimulus": {
+        "schema": "greenfield_sdr_emit/1",
+        "evidence_class": "GENERATED_STIMULUS",
+        "symbol_bit_order": "MSB_first_per_byte",
+        "source_rate_hz": 500,
+        "effective_audio_rate_hz_at_requested_baud": 500,
+        "channels": 4,
+        "oversample": 4,
+        "payload_bits": 256,
+        "baud_requested": 11500,
+        "baud_required_for_source_rate": 11500,
+        "frame_count": 16,
+        "frame_symbols": 368,
+        "symbols_total": 5888,
+        "packed_bytes": 736,
+        "pcm_frames": 256,
+        "pcm_bytes": 2048,
+        "seed": 23063,
+        "stream_id": 1,
+        "source_frequency0_hz": 30,
+        "no_RF_measurement": true,
+        "payload_crc_present": false,
+        "core_sha256": "2f048784a20a62ae363565f914779d1c589c4dc1d884452ec4f8546c41fd73c3",
+        "command": [
+          "wsl.exe",
+          "-e",
+          "/mnt/c/cyd-diviner/perf-characterisation/.pio/sdr-model-test",
+          "--emit",
+          "/mnt/c/cyd-diviner/perf-characterisation/evidence/sdr-framed-stimuli/500Hz-4ch-osr4/stimulus",
+          "500",
+          "4",
+          "4",
+          "256",
+          "11500",
+          "16",
+          "23063",
+          "1"
+        ]
+      },
+      "reference_pcm_file": "sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-reference.pcm",
+      "reference_pcm_sha256": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+      "boxcar_pcm_file": "sdr-framed-stimuli/500Hz-4ch-osr4/stimulus-boxcar.pcm",
+      "boxcar_pcm_sha256": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f",
+      "generated_bits_sha256": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b"
+    }
+  ],
+  "purpose": "HOLD: framed PDM only after independent IQ switching calibration permits these modes/rates",
+  "calibration_prerequisite": "Owner/operator reviews independent IQ switching before authorizing this plan",
+  "cohort_note": "Separate finite4channel3repetition retry after UARTtelemetry corruption in prior cohort; no pooling across capture histories."
+}

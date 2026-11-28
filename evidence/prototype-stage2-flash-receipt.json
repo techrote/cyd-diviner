@@ -1,0 +1,59 @@
+{
+  "schema": "cyd-prototype-stage2-flash/1",
+  "utc": "2026-11-27T21:46:40.959562+00:00",
+  "authorization": "Both stages authorized previously; owner replied Ready to second BOOT-held reconnect",
+  "review_sha256": "6595c8e79d04cc939511bade2d07184c604fcf7089a85f7ffb087f2d2d78b875",
+  "status": "BOTH FINAL APP-ONLY FLASHES COMPLETED; ESPTOOL DATA DIGEST VERIFIED",
+  "identities_and_retained_tables": {
+    "cyd": [
+      "a4:f0:0f:5f:ff:54",
+      "c798c1173b1d0175c33f06340268885c4385ff5129206d90bda416ad99ea8ddd"
+    ],
+    "s3": [
+      "1c:29:04:be:c3:a0",
+      "f3134b747fef242287f33aa0be8a5008958132e0c7611f5bc5bb917c02c9e397"
+    ]
+  },
+  "images": [
+    {
+      "id": "cyd_audio",
+      "port": "COM21",
+      "chip": "esp32",
+      "profile": "cyd-profile-audio",
+      "source": "ad9cbfd",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\cyd_audio\\firmware.bin",
+      "application_offset": 65536,
+      "retained_application_capacity_bytes": 3145728,
+      "remaining_bytes": 1041888,
+      "bytes": 2103840,
+      "sha256": "407eb96f8fe2b74ed1cf45f4a163558eacde0ff287a4b878a9ed1faadfaccc93",
+      "elf": {
+        "bytes": 40167200,
+        "sha256": "ef3993ff8dc467e791248637bdf61fe7f74581a1bd6906d850419656adb56da6"
+      }
+    },
+    {
+      "id": "s3_audio",
+      "port": "COM22",
+      "chip": "esp32s3",
+      "profile": "kernel-s3-n4r2-audio",
+      "source": "ad9cbfd",
+      "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\s3_audio\\firmware.bin",
+      "application_offset": 65536,
+      "retained_application_capacity_bytes": 1310720,
+      "remaining_bytes": 6992,
+      "bytes": 1303728,
+      "sha256": "db7a8db3115f061ee01b82850d679e8487467a05f0f220bab2d2957b87eb22b8",
+      "elf": {
+        "bytes": 20651772,
+        "sha256": "d56cbda7ec576deead571df5733ec92f02316816716baf543a77333a079b13ab"
+      }
+    }
+  ],
+  "end_state": "Leave these two profilers installed",
+  "completed_utc": "2026-11-27T21:48:36.493798+00:00",
+  "flash_logs": [
+    "hardware-access/audio-cyd-flash.log",
+    "hardware-access/audio-s3-flash.log"
+  ]
+}

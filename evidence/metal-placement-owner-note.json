@@ -1,0 +1,11 @@
+{
+  "schema": "cyd-perf-physical-arrangement/1",
+  "utc": "2026-11-27T23:12:44.262883+00:00",
+  "owner_description": "They are all dangling about40cm from eachother, freeairbetween, randomcables surrounding",
+  "applies_to": "Current three-S3 metal RX reference/rate/framed cohorts before any later owner movement",
+  "nominal_separation_cm": 40,
+  "fixture": "Uncontrolled hanging boards/cables; no shielding or RF attenuation fixture",
+  "antenna_orientation": "Unknown/uncontrolled",
+  "external_antenna_presence": "Not explicitly confirmed",
+  "interpretation": "Do not attribute one-unit RX difference solely to brand; orientation, cables, coupling and board variation remain possible factors."
+}

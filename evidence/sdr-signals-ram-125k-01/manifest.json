@@ -1,0 +1,22 @@
+{
+  "schema": "cyd-sdr-signal-analysis-manifest/1",
+  "input_results_sha256": "1146a5dc692b27a5637c36ad6794eb859478d5bc5246029bba67ca6dd225380b",
+  "tool_sha256": "334704f510adc7677ebaacc3d5e05c824f673914ed3758d3ffe11d9d9db9a638",
+  "iq_parser_sha256": "99f51f8c91739f6a889aba66c1f680177018b42abc2d77328f506211698844b6",
+  "outputs": {
+    "results.json": "4737de3425881e74aec3458f5b835d39f82376e1199557bdd60f4aaf35280e92",
+    "s001_1/folded-envelope.csv": "f0f1dd860bed6058c80e3cba4aedda541d1a3fac99a89ccb8a157a775b35c77c",
+    "s001_1/frequency-scan.csv": "5f9be272f0d995832eb2324cb6f4f5b590eac7ee5a3165b52aa52919b0415a2f",
+    "s001_1/windows.csv": "ecd83c7d75dadffc3b858a05dc6c8e0527711fe70b1903da79c9b6000172b925",
+    "s002_1/folded-envelope.csv": "d9fced789e10f21a9bf33a01919e79c037c31701a661e3c9abe27dc02cce52d4",
+    "s002_1/frequency-scan.csv": "d64df0aa104993f70c9f3e3aedb76e466ce0a7f790a266a9488df4721fc828a4",
+    "s002_1/windows.csv": "db6672111e4dde683f23a165cd47186fbcb143d18dd15289ccd80d889e19a718",
+    "s003_1/folded-envelope.csv": "f8b7a4fb16fa3f48db4754959e19aff41802242f23484a60ec8d967a5fa44f99",
+    "s003_1/frequency-scan.csv": "acac3404c8d0afd48df05a311467b7bca31222ac2de0d2bb3cb6a19dd3f613e6",
+    "s003_1/windows.csv": "78f973f6fbd5bb5cd2c301a4949e4586ac01361da7196352e1e6c6d5cc1832ef",
+    "s004_1/folded-envelope.csv": "27576ee08b1204be7c1816875a5498db9d534f4dc2771f40c26c6e70b52975b4",
+    "s004_1/frequency-scan.csv": "1616104d393527856ae8dfa6987719d278f372c2208a22cc26129db4d2c72782",
+    "s004_1/windows.csv": "4a1de3a17b2b20d13d5f9ba3cc7fb8058b6d98f78d88727147d33ffe110a92b2",
+    "signal-summary.csv": "f77c574dc35868758ced6c8a3ffb007b8fc6619c0ab6b8b2302b64ffa3acc6c8"
+  }
+}

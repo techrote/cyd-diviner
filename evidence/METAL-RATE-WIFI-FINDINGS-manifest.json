@@ -1,0 +1,19 @@
+{
+  "schema": "cyd-sdr-metal-rate-findings-manifest/1",
+  "input_parent_results_sha256": "ee6cccb2ddb7cd775443af045a4d9a26b29fdf735928496a8ad245ff5e58eb50",
+  "input_parent_artifact_manifest_sha256": "bfdf60132d8b27d6f319632e1128ddef2c180d5c1d94ca84cefabc4508fc650b",
+  "input_child_results_sha256": {
+    "rx": "5cb62a7188ce91cc172c579e9007d56948e65493688813328a3325b9639edd01",
+    "rx2": "8e7bd3265cd328e9969205c32de3968da2e2a549245b5619c6583ce04856da0a"
+  },
+  "analysis_tool_sha256": "6797ff94f861e04c32bc2cc080a2eabe1b0e4e16ead40df36a65dc2e2e0e1bfe",
+  "envelope_tool_sha256": "258cdc01fa6865479f1e4239f2cf968f1c731e438891301c55a1ab1c0bbe26ca",
+  "plot_method": "Complete positive-frequency power-AC PSD CSVs, log axes; selected d019_1,d022_1,d039_3; matplotlib3.10.8; no frequency interpolation or receiver pooling.",
+  "outputs": {
+    "METAL-RATE-WIFI-FINDINGS.md": "1ef4eab40d7e209c32ee9ee899319a62ea11bf9be6a7ce7db2a8aea696d1b6c8",
+    "METAL-RATE-WIFI-FINDINGS.json": "76651ddd7e620fdcafa1a30a61f6b7d27a8facbe3a5bbc212e1e11a12ed25991",
+    "METAL-RATE-WIFI-FINDINGS.csv": "dda1f21c2b9da8f2938787155ebcb35b8627be4ec9c0b67b8dc0aee511068ebe",
+    "METAL-RATE-WIFI-SPECTRA.png": "27680f3faf3e50aac16360637619d1bf8549cb550916467c402c1f5130b3c5b5",
+    "METAL-RATE-WIFI-SPECTRA.svg": "b6d1878fac0044c223ae0bd3da307ac8ae81f088d9f33e2035e79f3e08d045c4"
+  }
+}

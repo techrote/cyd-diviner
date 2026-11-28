@@ -1,0 +1,23 @@
+{
+  "schema": "cyd-perf-link-identities/1",
+  "cyd": {
+    "board": "Owner second headless ESP32-S3 N4R2 on COM23 (logical cyd role)",
+    "port": "COM23",
+    "baud": 115200,
+    "profile": "kernel-s3-n4r2-audio",
+    "source_sha": "ad9cbfd670e456de5e08fca19810fb93f7f1db47",
+    "source_digest": "49fcfc731717626ed1b102f9d4d4ef5f135b4dbb91f1e323f6853eaa2c357ea6",
+    "firmware_file": "C:/cyd-diviner/com23-approved-artifacts/audio/application.bin",
+    "firmware_sha256": "db7a8db3115f061ee01b82850d679e8487467a05f0f220bab2d2957b87eb22b8"
+  },
+  "peer": {
+    "board": "Owner ESP32-S3 N4R2 on COM22",
+    "port": "COM22",
+    "baud": 115200,
+    "profile": "kernel-s3-n4r2-audio",
+    "source_sha": "ad9cbfd670e456de5e08fca19810fb93f7f1db47",
+    "source_digest": "49fcfc731717626ed1b102f9d4d4ef5f135b4dbb91f1e323f6853eaa2c357ea6",
+    "firmware_file": "C:\\cyd-diviner\\prototype-approved-artifacts\\s3_audio\\firmware.bin",
+    "firmware_sha256": "db7a8db3115f061ee01b82850d679e8487467a05f0f220bab2d2957b87eb22b8"
+  }
+}

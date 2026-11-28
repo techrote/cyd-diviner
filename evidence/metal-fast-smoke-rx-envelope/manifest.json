@@ -1,0 +1,17 @@
+{
+  "schema": "cyd-sdr-metal-envelope-manifest/1",
+  "input_results_sha256": "98b3018f6f9462aff397c62b1095c26caf4785c502a754f9b314b5cb879d54c8",
+  "input_artifact_manifest_sha256": "1633ea2e8ab42a29a44ce9d1083909c9063f47524c68c817a9188590e8617293",
+  "tool_sha256": "258cdc01fa6865479f1e4239f2cf968f1c731e438891301c55a1ab1c0bbe26ca",
+  "native_decoder_sha256": "6797ff94f861e04c32bc2cc080a2eabe1b0e4e16ead40df36a65dc2e2e0e1bfe",
+  "outputs": {
+    "d001_1/snapshot-0001-power-AC-spectrum.csv": "a9e2dae14014eaa8afc876b36240100bb49d2db1b23fdb799e075c88fc55c7b5",
+    "d001_1/snapshot-0001-qualified-threshold-edges.csv": "e225e96320935c939b6b82263e3fdfe127210b4ead42cff916875d1d5a6a9c78",
+    "d002_1/snapshot-0001-power-AC-spectrum.csv": "f52d0ae17e3bb1af8331a0cb53a61cb4d782e7e4d80f5fcadd2b650872047b6c",
+    "d002_1/snapshot-0001-qualified-threshold-edges.csv": "e225e96320935c939b6b82263e3fdfe127210b4ead42cff916875d1d5a6a9c78",
+    "d003_1/snapshot-0001-power-AC-spectrum.csv": "89acf3adf8f3aa0af0acba9ea58a8837418b96898614e8c7363681d2ebd4619a",
+    "d003_1/snapshot-0001-qualified-threshold-edges.csv": "e225e96320935c939b6b82263e3fdfe127210b4ead42cff916875d1d5a6a9c78",
+    "envelope-summary.csv": "54d7dcdf04cc19a04c195c16bdd9191b99464bf6ca7d1ad2cf17f766d6ed0bed",
+    "results.json": "1da645339c2dfba623c1fa22c6f59eded3d8f12e87ff620ac59369fb8f12ab6d"
+  }
+}

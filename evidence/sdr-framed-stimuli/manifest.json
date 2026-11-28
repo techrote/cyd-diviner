@@ -1,0 +1,43 @@
+{
+  "schema": "cyd-sdr-stimuli-manifest/1",
+  "inputs": {
+    "evidence\\plan-sdr-framed.json": "0a322bbae97634ade9da3752f0d08ea431d86f74309250df52e1f855fdb2f0eb"
+  },
+  "core_sha256": "2f048784a20a62ae363565f914779d1c589c4dc1d884452ec4f8546c41fd73c3",
+  "driver_sha256": "67e8e87e03da8e06c75e6a4148916a7dff396d39975b9e28d3b13c633c12c0ef",
+  "outputs": {
+    "1000Hz-1ch-osr4/boxcar-digital-only.wav": "14bca3ddaade52a352e8219588724031d28832a7af1d9702cefcbdc35c86eb14",
+    "1000Hz-1ch-osr4/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "1000Hz-1ch-osr4/core-stdout.json": "b33494feb5566e4090650844b824b129bb5d3c80cfcfe0e08962ca1017c15cde",
+    "1000Hz-1ch-osr4/reference.wav": "4cadfdec033666c6333b2f17626d1112a4d0572466045233a25a87a63520d9e8",
+    "1000Hz-1ch-osr4/stimulus-boxcar.pcm": "24fffd61b761415d321e8cd92fa8e6c9e6fdf6feb10fc8427a58e5e5c4555591",
+    "1000Hz-1ch-osr4/stimulus-reference.pcm": "ed4ff6996aebf8901b199332847041cb0e0df6302c52f0b4c55057db03e117e8",
+    "1000Hz-1ch-osr4/stimulus-symbols.bits": "df43de811a78e8d07202bba55b5f4b419ed1712462ffd3be6f08b17d97b6634f",
+    "1000Hz-1ch-osr4/stimulus.json": "bb542881edf87dd4abcb2550a2366920dd8e38be5cb2769858a2e63b1677651b",
+    "1000Hz-2ch-osr4/boxcar-digital-only.wav": "27243abab382d510cabdf6ce292bf5702ece622a15baeb6a39d0b36b268b987e",
+    "1000Hz-2ch-osr4/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "1000Hz-2ch-osr4/core-stdout.json": "99ddf04ab4a44d9e09c03d8ca0d7e603f5b2562f69478aa18838f24beaac94a9",
+    "1000Hz-2ch-osr4/reference.wav": "62edd56edac63b19cb7fbd026be1eec186098000545d72074a110e5e310febf4",
+    "1000Hz-2ch-osr4/stimulus-boxcar.pcm": "4a5a9e3e26c77039d8841997198f7726f0353b8857c8daf5529b4dfeb3ce2d18",
+    "1000Hz-2ch-osr4/stimulus-reference.pcm": "d39180adba70fe3d0f70e1ca91fa5aeb0c9db2c6473af070298b487a066db7d7",
+    "1000Hz-2ch-osr4/stimulus-symbols.bits": "8d350b44cd2c56f12d54d6090487936bed2bf9f0c2b71fc23229f7f7e27d93e0",
+    "1000Hz-2ch-osr4/stimulus.json": "65b3a5f1ab29116059396a1ef6fa1d46de434b4c31e2af1881cd824d6c90daa0",
+    "2000Hz-2ch-osr4/boxcar-digital-only.wav": "8228e4fea6493f50d09f5b25d8618e370614c26e0aeb7cf9f49b11a0e7534fc8",
+    "2000Hz-2ch-osr4/core-stderr.log": "0a7a95752bf2f71a737a4e05c9082d45da60f2a9db081bbeef684bd91d88979a",
+    "2000Hz-2ch-osr4/core-stdout.json": "930645572f6dce04c79970c27ea962ebd77efa90b75d33e5f88392976ab1de8c",
+    "2000Hz-2ch-osr4/reference.wav": "9e2073283edafc1cec01fd52211d97297c9c6a526518ab1f8863ddb7f574bf27",
+    "2000Hz-2ch-osr4/stimulus-boxcar.pcm": "12b206108687319f308175530c28e95cd979d4a35852360a8a76315526e59738",
+    "2000Hz-2ch-osr4/stimulus-reference.pcm": "f892e07c87428ab629cae7670119955236acf8d0602eed2c3b9a540f00b92d8d",
+    "2000Hz-2ch-osr4/stimulus-symbols.bits": "6e5c60187ecad43dbaaa53b006cdc780f5f1fe23015367e295f6625ddcf3d373",
+    "2000Hz-2ch-osr4/stimulus.json": "65858f6f190c23d9d7d344092803c9b668be68f7653e86b647d243f1a78108e1",
+    "500Hz-4ch-osr4/boxcar-digital-only.wav": "3fc0e4e3253df12a64740892ad43715bd594d6d9b7a6976a2da00950710dd07a",
+    "500Hz-4ch-osr4/core-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "500Hz-4ch-osr4/core-stdout.json": "0db47dbb0011091975fc17ddd1ec8f18ea3e5d15591272621cd3a80a4b2ae2ce",
+    "500Hz-4ch-osr4/reference.wav": "d216cadf1b4691f3604ff94f40ba58680ea32c81f9f4ee1be43e5aba30e8e0b5",
+    "500Hz-4ch-osr4/stimulus-boxcar.pcm": "98ad352bae3585d2bdf4f6bac57a623052859340a40184d30bafaa2f160ad47f",
+    "500Hz-4ch-osr4/stimulus-reference.pcm": "ce785407367dd59fa2bbd8a62f3fb0cd4b293dcc3ad90e9a979738c13aa51182",
+    "500Hz-4ch-osr4/stimulus-symbols.bits": "ceb41cd8861c4d5a51dea938a04f0ba4d19fe1939ef58837acca9e0d19a3a22b",
+    "500Hz-4ch-osr4/stimulus.json": "7297f25dac5a3e5ba8f8b73634369afd51b1e2ff8ddd2af02b22f27ae259476b",
+    "stimuli.json": "17a8b24a2d7b7313bce719f17f430ab529ce9a4427772679e9d533ecd8803aef"
+  }
+}
