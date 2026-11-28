@@ -46,6 +46,9 @@ void setVolume(uint8_t v); // 0..255
 uint8_t volume();
 
 int batteryPercent(); // -1 if unknown
+// Accelerometer in g (device flat: z ~ +1). false when there is no IMU; the
+// desktop sim returns a slow figure-eight so TILT still moves.
+bool accel(float &x, float &y, float &z);
 void backToLauncher(); // restart; the Launcher bootscreen comes up first
 
 } // namespace hal

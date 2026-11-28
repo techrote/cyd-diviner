@@ -12,7 +12,8 @@ using namespace theme;
 
 namespace {
 const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
-                             &RITE_CANON,  &RITE_SPECTRA,
+                             &RITE_CANON,  &RITE_SPECTRA, &RITE_GLYPHSONG,
+                             &RITE_TILT,   &RITE_COVEN,
                              &RITE_WIRED,  &RITE_VISIONS, &RITE_ORACLE,
                              &RITE_LINK,   &RITE_SCRY,   &RITE_LISTEN,
                              &RITE_KIN,    &RITE_NET,    &RITE_GEMINI, &RITE_IR,

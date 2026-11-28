@@ -9,11 +9,14 @@ run splash "1500:shot:$OUT/splash.ppm;1600:quit"
 run drone  "2800:key:1;3200:enter;9000:shot:$OUT/drone.ppm;12000:quit"
 run seq    "2800:key:2;5000:right;5100:right;5200:down;5300:down;5400:down;6000:shot:$OUT/seq.ppm;10000:quit"
 run beat   "2800:key:3;4000:tab;4200:tab;6500:shot:$OUT/beat.ppm;7000:key:t*(t>>5|t>>8)&+;7300:enter;7600:shot:$OUT/beat-err.ppm;10000:quit"
-run wired  "2800:key:6;5000:shot:$OUT/wired-torus.ppm;5200:key:2;6500:shot:$OUT/wired-navi.ppm;6600:key:3;8000:shot:$OUT/wired-solids.ppm;8100:key:4;9000:shot:$OUT/wired-tunnel.ppm;9200:quit"
-run visions "2800:key:7;4500:shot:$OUT/vis-plasma.ppm;4600:key:2;5500:shot:$OUT/vis-gate.ppm;5600:key:3;7500:shot:$OUT/vis-fire.ppm;7600:key:4;9500:shot:$OUT/vis-rain.ppm;9600:key:5;10500:shot:$OUT/vis-kaleido.ppm;10600:quit"
+run wired  "2800:key:9;5000:shot:$OUT/wired-torus.ppm;5200:key:2;6500:shot:$OUT/wired-navi.ppm;6600:key:3;8000:shot:$OUT/wired-solids.ppm;8100:key:4;9000:shot:$OUT/wired-tunnel.ppm;9200:quit"
+run visions "2800:right;2860:right;2920:right;2980:right;3040:right;3100:right;3160:right;3220:right;3280:right;3500:enter;4500:shot:$OUT/vis-plasma.ppm;4600:key:2;5500:shot:$OUT/vis-gate.ppm;5600:key:3;7500:shot:$OUT/vis-fire.ppm;7600:key:4;9500:shot:$OUT/vis-rain.ppm;9600:key:5;10500:shot:$OUT/vis-kaleido.ppm;10600:quit"
 run canon  "2800:key:4;9000:shot:$OUT/canon.ppm;12000:quit"
 run spectra "2800:key:5;14000:shot:$OUT/spectra.ppm;16000:quit"
-run oracle "2800:key:8;3500:enter;6000:shot:$OUT/oracle.ppm;8000:quit"
+run glyphsong "2800:key:6;8000:shot:$OUT/glyphsong.ppm;9000:quit"
+run tilt   "2800:key:7;9000:shot:$OUT/tilt.ppm;10000:quit"
+run coven  "2800:key:8;11000:shot:$OUT/coven.ppm;12000:quit"
+run oracle "2800:right;2860:right;2920:right;2980:right;3040:right;3100:right;3160:right;3220:right;3280:right;3340:right;3500:enter;3800:enter;6000:shot:$OUT/oracle.ppm;8000:quit"
 python3 -I - "$OUT" <<'PY'
 import sys, glob
 from PIL import Image

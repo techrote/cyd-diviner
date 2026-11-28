@@ -148,6 +148,11 @@ void setVolume(uint8_t v) {
 uint8_t volume() { return vol; }
 
 int batteryPercent() { return M5Cardputer.Power.getBatteryLevel(); }
+bool accel(float &x, float &y, float &z) {
+    if (!M5.Imu.isEnabled()) return false;
+    M5.Imu.update();
+    return M5.Imu.getAccel(&x, &y, &z);
+}
 void backToLauncher() {
     audioFn = nullptr;
     delay(50);

@@ -58,6 +58,21 @@ void snifferBegin();
 void snifferSetChannel(int ch);
 void snifferPoll(uint32_t mgmt[14], uint32_t data[14], int &rssiLast);
 
+// ---- ESP-NOW (coven) -----------------------------------------------------
+// Connectionless broadcast on channel 1, the same channel DYAD and TETHER
+// dongles use, so the coven hears them too. Frames are queued from the Wi-Fi
+// task; poll from the UI thread.
+struct NowPkt {
+    uint8_t mac[6];
+    int8_t rssi;
+    uint8_t len;
+    uint8_t data[250];
+};
+void nowBegin();
+bool nowSend(const void *data, int len); // broadcast
+bool nowPoll(NowPkt &out);               // one queued frame, false if none
+void nowMac(uint8_t mac[6]);             // this device's own address
+
 // ---- BLE (familiars / kin) ----------------------------------------------
 struct BleDev {
     std::string name;

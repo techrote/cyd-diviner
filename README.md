@@ -31,6 +31,8 @@ blood-and-ember aesthetic, with a hand-rasterised Daedric glyph font.
 | **drone** — generative drone box: 5 drifting voices, resonant LP, wind, FM bells, dark delay; **6 styles on `p`** (temple, tubular, bowl, kalimba, gong, ice) | **seq** — groovebox: kick/snare/hat/acid, euclid fills, **4 pattern banks + song mode + save/load** | **beat** — bytebeat livecoder: type a C expression in `t`, hear it instantly |
 | ![canon](docs/previews/canon.png) | ![spectra](docs/previews/spectra.png) | |
 | **canon** — one phrase on four tape-loop reels of slightly different lengths, drifting out of phase into endless counterpoint; type your own phrase on the piano row | **spectra** — the air sings: every nearby Wi-Fi AP or BLE device becomes a choir voice (address → note, signal → loudness), arrivals bloom, departures sigh; waterfall of the air | |
+| ![glyphsong](docs/previews/glyphsong.png) | ![tilt](docs/previews/tilt.png) | ![coven](docs/previews/coven.png) |
+| **glyphsong** — type a line and it is sung back in an animalese voice (each letter a formant syllable: a e i o u as themselves, consonants sing their letter-name vowel); speak / chant / choir; runes wake into latin, vowel chart traces the mouth | **tilt** — a marble in a singing bowl (uses the ADV's IMU): roll walks a 4-voice chord like a slow harp, tilt-away opens the filter, rim strikes chime, shakes scatter bells | **coven** — ESP-NOW circle: every Cardputer running it holds a note of one shared drone, the eldest keeps root and mode, a pulse rings round the seats; DYAD dongles' lines are whispered aloud as familiars |
 
 ### ◈ sight
 | | | |
