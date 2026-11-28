@@ -30,7 +30,7 @@ def main():
               "scope": "Portable production kernels, actual instrument renderers with test HAL, callback lifetime; no physical timing qualification",
               "cases": []}
 
-    def run(name, cmd, timeout=240, nested_report=None):
+    def run(name, cmd, timeout=240, nested_report=None, allow_runtime_blocker=False):
         started = time.monotonic()
         if nested_report is not None:
             nested_report.unlink(missing_ok=True)
@@ -56,7 +56,10 @@ def main():
                 status = "FAIL"
                 log += "\nRequired qualification report missing: " + str(nested_report)
             else:
-                status = "PASS" if code == 0 else "BLOCKED" if blocked else "FAIL"
+                # Only a directly executed sanitizer binary can be blocked by
+                # its runtime. Fixture/assertion/compiler failures may quote
+                # those markers and must retain FAIL classification.
+                status = "PASS" if code == 0 else "BLOCKED" if blocked and allow_runtime_blocker else "FAIL"
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGKILL)
             log, _ = process.communicate()
@@ -83,7 +86,7 @@ def main():
     if a.sanitizer == "thread": flags += ["-fno-pie", "-no-pie"]
     exe = out / "lifecycle"
     if run("lifecycle-build", [env.get("CXX", "g++"), *flags, "tests/lifecycle.cpp", "-o", str(exe)]):
-        run("lifecycle", [str(exe)], timeout=60)
+        run("lifecycle", [str(exe)], timeout=60, allow_runtime_blocker=a.sanitizer != "none")
     if a.sanitizer == "none":
         run("firmware-packaging", [sys.executable, "tests/package_firmware_test.py"])
         run("dependency-metadata", [sys.executable, "tests/dependency_metadata_test.py"])

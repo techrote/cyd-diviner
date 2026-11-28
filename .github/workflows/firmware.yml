@@ -38,7 +38,7 @@ jobs:
       - name: Build exact candidate source
         run: pio run -e ${{ matrix.target }}
       - name: Inspect actual ESP32-S3 atomic configuration and generated paths
-        if: matrix.target == 'cardputer'
+        if: always() && matrix.target == 'cardputer'
         run: |
           pio run -e cardputer -t compiledb
           python tools/probe_atomics.py --environment cardputer --output delivery/atomic-probe-cardputer
@@ -58,7 +58,7 @@ jobs:
           retention-days: 30
 
       - uses: actions/upload-artifact@v4
-        if: matrix.target == 'cardputer'
+        if: always() && matrix.target == 'cardputer'
         with:
           name: atomic-probe-cardputer-${{ github.event.pull_request.head.sha || github.sha }}
           path: delivery/atomic-probe-cardputer/

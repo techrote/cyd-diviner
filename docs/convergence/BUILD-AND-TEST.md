@@ -87,7 +87,7 @@ fixtures; those are not firmware artifacts. Five installed-dependency fixtures
 check declared versus resolved versions, VCS metadata locations and full revisions.
 The firmware jobs additionally audit their real freshly built bytes.
 
-Normal qualification also runs seven evidence-classification guard cases and an
+Normal qualification also runs eight evidence-classification guard cases and an
 independent bounded SPSC interleaving model. The Cardputer job retains a separate
 atomic-probe artifact containing actual compiler configuration and disassembly
 for the selected runtime, snapshot exchange, state allocator and callback gate.

@@ -55,6 +55,15 @@ output.write_text("#!/usr/bin/env python3\\nprint('Fixture lifetime executable c
 output.chmod(0o755)
 '''
 
+PLAIN_CHILD = '''import os
+from pathlib import Path
+if (Path(__file__).name == "package_firmware_test.py" and
+        os.environ["DIVINER_GUARD_SCENARIO"] == "plain-blocker-marker"):
+    print("ThreadSanitizer: unexpected memory mapping (fixture marker)")
+    raise SystemExit(3)
+print("Fixture check completed")
+'''
+
 
 class QualificationGuardTests(unittest.TestCase):
     def setUp(self):
@@ -68,11 +77,16 @@ class QualificationGuardTests(unittest.TestCase):
         shutil.copy2(PROVENANCE, self.root / "tools/source_provenance.py")
         for name in ("dsp_run.py", "run_radio.py", "pcm_protocol_test.py"):
             (self.root / "tests" / name).write_text(NESTED_CHILD)
+        # The master also runs this small dependency-free ownership model.
+        # Keep its real report contract instead of introducing an unrelated
+        # missing-child failure into every guard scenario.
+        shutil.copy2(QUALIFY.parent.parent / "tests/audio_exchange_model.py",
+                     self.root / "tests/audio_exchange_model.py")
         # These checks have no nested report contract. Do not recursively run
         # this test if it is itself wired into the master's ordinary mode.
         for name in ("package_firmware_test.py", "dependency_metadata_test.py",
                      "qualification_guard_test.py"):
-            (self.root / "tests" / name).write_text("print('Fixture check completed')\n")
+            (self.root / "tests" / name).write_text(PLAIN_CHILD)
         self.compiler = self.root / "fixture-cxx"
         self.compiler.write_text(FAKE_COMPILER)
         self.compiler.chmod(0o755)
@@ -86,7 +100,7 @@ class QualificationGuardTests(unittest.TestCase):
         return subprocess.check_output(["git", *args], cwd=self.root, text=True,
                                        stderr=subprocess.DEVNULL).strip()
 
-    def run_scenario(self, scenario, expected, exit_code):
+    def run_scenario(self, scenario, expected, exit_code, affected="dsp"):
         env = dict(os.environ, DIVINER_GUARD_SCENARIO=scenario, CXX=str(self.compiler))
         result = subprocess.run([sys.executable, str(self.root / "tools/qualify.py"),
                                  "--output", str(self.output)], cwd=self.root, env=env,
@@ -96,10 +110,10 @@ class QualificationGuardTests(unittest.TestCase):
         self.assertEqual(report["status"], expected, report)
         self.assertFalse(report["dirty"], "Fixture source changed while running the harness")
         cases = {case["name"]: case for case in report["cases"]}
-        self.assertEqual(cases["dsp"]["status"], expected, report)
+        self.assertEqual(cases[affected]["status"], expected, report)
         self.assertGreater(len(cases), 3, "The master did not execute its independent checks")
         for name, case in cases.items():
-            if name != "dsp":
+            if name != affected:
                 self.assertEqual(case["status"], "PASS", (name, case))
         return cases, (self.output / "dsp.log").read_text()
 
@@ -130,6 +144,13 @@ class QualificationGuardTests(unittest.TestCase):
 
     def test_explicit_runtime_blocker_remains_blocked(self):
         self.run_scenario("blocked", "BLOCKED", 2)
+
+    def test_plain_fixture_failure_is_not_hidden_by_sanitizer_marker(self):
+        cases, _ = self.run_scenario("plain-blocker-marker", "FAIL", 1,
+                                     affected="firmware-packaging")
+        self.assertEqual(cases["firmware-packaging"]["exit"], 3)
+        self.assertIn("ThreadSanitizer: unexpected memory mapping",
+                      (self.output / "firmware-packaging.log").read_text())
 
 
 if __name__ == "__main__":

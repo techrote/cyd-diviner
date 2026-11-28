@@ -69,7 +69,7 @@ void sendCode(const Code &c) {
 void enter() {
     if (!S) S = new State();
 #ifdef GRIM_DEVICE
-    IrSender.begin(); // IR_SEND_PIN is fixed above.
+    IrSender.begin(GRIM_IR_PIN); // Pinned IRremote 4.4.1 requires the configured send pin.
 #endif
 }
 void leave() { S->banish = -1; }

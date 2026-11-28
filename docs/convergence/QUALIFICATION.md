@@ -66,12 +66,28 @@ revision and results; this page records the evidence and corrections preceding
 that freeze. Temporary isolated investigation workflows are not integrated.
 
 The final runner also rejects absent or malformed required reports, stale
-receipts and child failures mislabeled PASS. Seven classification fixtures
+receipts and child failures mislabeled PASS. Eight classification fixtures
 exercise these guards using the real runner and independent fake children.
 The bounded SPSC scheduling model explores 544 and 1,880 states, including 132
 first-CAS collisions in the larger case, without a second-CAS failure or lost
 final publication. This is abstract ownership evidence, not a C++ weak-memory
 proof; actual target code-generation and sanitizer checks remain separate.
+
+The first combined run at `1bda1a2d8f899b36492d86cfc935518c3bbe5204`
+([46114415968](https://github.com/techrote/cyd-diviner/actions/runs/46114415968))
+exposed a test-fixture integration failure: its isolated guard checkout did not
+include the newly registered scheduling model. The guard now copies that actual
+dependency-free model. The runner also limits text-based sanitizer-startup
+BLOCKED detection to directly executed sanitizer binaries; an ordinary failing
+fixture that quotes such text remains FAIL. Final-source qualification reruns
+the complete matrix after these evidence-runner corrections.
+
+That same combined run exposed a separate Cardputer dependency mismatch after
+the atomic compilation issue was corrected: pinned IRremote 4.4.1 requires an
+explicit send pin in `IrSender.begin`. The call now passes the already configured
+`GRIM_IR_PIN`; the pin assignment and physical hardware are unchanged. Actual IR
+emission remains an owner test. All three CYD images/audits, both simulator tours,
+sanitizer modes and the Windows plugin passed in that intermediate run.
 
 Firmware manifests record actual partition capacities, resolved dependencies,
 app/full checksums and source identity. Independent `audit.json` reports
