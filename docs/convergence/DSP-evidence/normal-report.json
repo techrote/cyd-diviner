@@ -1,0 +1,104 @@
+{
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "sanitizer": "none",
+  "cases": [
+    {
+      "name": "numeric-24000",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-O2",
+        "-DDIVINER_DSP_RATE=24000",
+        "tests/dsp_numeric_test.cpp",
+        "-o",
+        "/tmp/diviner-dsp-qualified/numeric-24000"
+      ],
+      "build_exit": 0,
+      "run": [
+        "/tmp/diviner-dsp-qualified/numeric-24000"
+      ],
+      "exit": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.819
+    },
+    {
+      "name": "numeric-48000",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-O2",
+        "-DDIVINER_DSP_RATE=48000",
+        "tests/dsp_numeric_test.cpp",
+        "-o",
+        "/tmp/diviner-dsp-qualified/numeric-48000"
+      ],
+      "build_exit": 0,
+      "run": [
+        "/tmp/diviner-dsp-qualified/numeric-48000"
+      ],
+      "exit": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.718
+    },
+    {
+      "name": "audio-exchange",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-O2",
+        "-DDIVINER_DSP_RATE=24000",
+        "tests/audio_exchange_test.cpp",
+        "-o",
+        "/tmp/diviner-dsp-qualified/audio-exchange"
+      ],
+      "build_exit": 0,
+      "run": [
+        "/tmp/diviner-dsp-qualified/audio-exchange"
+      ],
+      "exit": 0,
+      "status": "PASS",
+      "elapsed_seconds": 0.555
+    },
+    {
+      "name": "instrument-kernels",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-O2",
+        "-Itests/dsp_stubs",
+        "tests/dsp_instrument_test.cpp",
+        "-o",
+        "/tmp/diviner-dsp-qualified/instrument-kernels"
+      ],
+      "build_exit": 0,
+      "run": [
+        "/tmp/diviner-dsp-qualified/instrument-kernels",
+        "/tmp/diviner-dsp-qualified/audio"
+      ],
+      "exit": 0,
+      "status": "PASS",
+      "elapsed_seconds": 1.964
+    }
+  ],
+  "method": "actual DSP and instrument source with graphics-free test HAL; no embedded real-time claim",
+  "source_sha": "25329fe60d9d993d4f7f9c6098c46b3257edc189",
+  "dirty_paths": [],
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "status": "PASS"
+}

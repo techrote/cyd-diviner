@@ -3,6 +3,7 @@
 // audio callback while in the splash/menu and calls the trigger helpers on
 // input. Rites that want their own sound just call hal::setAudio() over it.
 #pragma once
+#include "audio_exchange.h"
 #include "dsp.h"
 #include "hal.h"
 
@@ -20,9 +21,10 @@ struct Voice {
 inline Voice voices[4];
 inline uint8_t next = 0;
 
-// single-producer (UI) / single-consumer (audio) event ring
-inline volatile uint8_t evq[16];
-inline volatile uint8_t qHead = 0, qTail = 0;
+// Single-producer (UI) / single-consumer (audio) event ring. Reuse the same
+// aligned 32-bit bounded queue as the instruments; byte atomics on ESP32-S3
+// may route through hidden masked-CAS retry loops.
+inline audio_exchange::SpscQueue<uint8_t, 15> events;
 
 inline void start(Id id) {
     Voice &v = voices[next++ & 3];
@@ -50,18 +52,15 @@ inline void start(Id id) {
 
 inline void trigger(Id id) {
     using namespace detail;
-    uint8_t n = (qTail + 1) & 15;
-    if (n == qHead) return;
-    evq[qTail] = (uint8_t)id;
-    qTail = n;
+    (void)events.push(static_cast<uint8_t>(id)); // full queue deliberately drops new UI blips
 }
 
 inline void render(int16_t *out, int n) {
     using namespace detail;
-    while (qHead != qTail) {
-        start((Id)evq[qHead]);
-        qHead = (qHead + 1) & 15;
-    }
+    uint8_t event = 0;
+    // Preserve the old ring's maximum of fifteen admitted events per block.
+    for (int queued = 0; queued < 15 && events.pop(event); ++queued)
+        start(static_cast<Id>(event));
     for (int i = 0; i < n; ++i) {
         float x = 0;
         for (auto &v : voices) {

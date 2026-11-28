@@ -2,6 +2,7 @@
 
 #include "rite.h"
 #include "theme.h"
+#include "cyd_settings_file.h"
 #include <algorithm>
 #include <initializer_list>
 #include <stdio.h>
@@ -38,6 +39,7 @@ int keyboardTop() { return isPortrait() ? PortraitKeyboardY : LandscapeKeyboardY
 constexpr char SettingsNamespace[] = "grimui";
 constexpr char LegacyColourKey[] = "colour";
 constexpr char PaletteKey[] = "palette";
+#endif
 constexpr uint8_t PaletteRecordVersion = 4;
 // V1 stores the version, scheme, custom flag, four RGB triples and adjustments.
 // V2 adds BackgroundStyle. V3 adds both gradient roles and supports more styles.
@@ -51,7 +53,7 @@ static_assert(sizeof(PaletteRecordSizes) / sizeof(PaletteRecordSizes[0]) == Pale
 using PaletteRecord = std::array<uint8_t, PaletteV4Size>;
 static_assert(theme::Colourway{}.rgb.size() == 4, "The palette record has four RGB colours");
 
-bool writePalette(ColourScheme scheme, const theme::Colourway *custom) {
+PaletteRecord encodePalette(ColourScheme scheme, const theme::Colourway *custom) {
     PaletteRecord bytes{};
     bytes[0] = PaletteRecordVersion;
     bytes[1] = static_cast<uint8_t>(scheme);
@@ -72,18 +74,39 @@ bool writePalette(ColourScheme scheme, const theme::Colourway *custom) {
         bytes[offset] = static_cast<uint8_t>(custom->gradientMode);
     }
 
+    return bytes;
+}
+
+#ifdef GRIM_NATIVE
+bool writeNativeSettings(ColourScheme scheme, const theme::Colourway *custom,
+                         Orientation rotation, MenuBackdrop backdrop) {
+    cyd_settings_file::Record record{};
+    record[4] = static_cast<uint8_t>(rotation);
+    record[5] = static_cast<uint8_t>(backdrop);
+    const PaletteRecord palette = encodePalette(scheme, custom);
+    std::copy(palette.begin(), palette.end(), record.begin() + 6);
+    return cyd_settings_file::write(record);
+}
+#endif
+
+bool writePalette(ColourScheme scheme, const theme::Colourway *custom) {
+#ifdef GRIM_DEVICE
+    const PaletteRecord bytes = encodePalette(scheme, custom);
     nvs_handle_t settings;
     if (nvs_open(SettingsNamespace, NVS_READWRITE, &settings) != ESP_OK) return false;
     const bool saved = nvs_set_blob(settings, PaletteKey, bytes.data(), bytes.size()) == ESP_OK &&
                        nvs_commit(settings) == ESP_OK;
     nvs_close(settings);
     return saved;
+#elif defined(GRIM_NATIVE)
+    return writeNativeSettings(scheme, custom, currentOrientation, currentBackdrop);
+#else
+    (void)scheme; (void)custom;
+    return false;
+#endif
 }
 
-bool loadPalette(nvs_handle_t settings) {
-    PaletteRecord bytes{};
-    size_t size = bytes.size();
-    if (nvs_get_blob(settings, PaletteKey, bytes.data(), &size) != ESP_OK) return false;
+bool applyPalette(const PaletteRecord &bytes, size_t size) {
     const uint8_t version = bytes[0];
     if (!version || version > PaletteRecordVersion || size != PaletteRecordSizes[version] || bytes[2] > 1) return false;
     const auto lastStyle = version >= 3 ? theme::BackgroundStyle::Waves : theme::BackgroundStyle::Dither;
@@ -124,6 +147,12 @@ bool loadPalette(nvs_handle_t settings) {
     theme::setColourScheme(scheme);
     return true;
 }
+#ifdef GRIM_DEVICE
+bool loadPalette(nvs_handle_t settings) {
+    PaletteRecord bytes{};
+    size_t size = bytes.size();
+    return nvs_get_blob(settings, PaletteKey, bytes.data(), &size) == ESP_OK && applyPalette(bytes, size);
+}
 #endif
 
 bool saveOption(const char *key, uint8_t value) {
@@ -133,6 +162,11 @@ bool saveOption(const char *key, uint8_t value) {
     const bool saved = nvs_set_u8(settings, key, value) == ESP_OK && nvs_commit(settings) == ESP_OK;
     nvs_close(settings);
     return saved;
+#elif defined(GRIM_NATIVE)
+    const auto rotation = !strcmp(key, OrientationKey) ? static_cast<Orientation>(value) : currentOrientation;
+    const auto backdrop = !strcmp(key, BackdropKey) ? static_cast<MenuBackdrop>(value) : currentBackdrop;
+    const auto *custom = theme::hasCustomColourway() ? &theme::customColourway() : nullptr;
+    return writeNativeSettings(theme::colourScheme(), custom, rotation, backdrop);
 #else
     (void)key;
     (void)value;
@@ -152,8 +186,8 @@ struct Button {
     Action action = Action::Send;
 };
 
-constexpr Button nav(const char *label, hal::Nav n, bool fn = false) {
-    return {label, {0, n, fn}};
+constexpr Button nav(const char *label, hal::Nav n, bool fn = false, bool ctrl = false) {
+    return {label, {0, n, fn, ctrl}};
 }
 
 constexpr Button character(const char *label, char c, bool fn = false) {
@@ -213,8 +247,19 @@ hal::Key heldKey;
 int tapX = -1, tapY = -1;
 int displayedVolume = -1;
 ColourScheme displayedScheme = ColourScheme::Neon;
-bool paletteContact = false;
+bool paletteContact = false, instrumentContact = false;
+InstrumentPointer instrumentPoint{};
+bool dockBeforeInstrument = false;
 struct Point { int x = -1, y = -1; } paletteStart, paletteMotion;
+
+bool instrumentRite(const Rite *rite) {
+    return rite == &RITE_DRONE || rite == &RITE_CANON || rite == &RITE_SPECTRA ||
+           rite == &RITE_GLYPHSONG || rite == &RITE_COVEN;
+}
+
+instrument_touch::Viewport viewport() {
+    return {viewportLeft(), viewportTop(), viewportWidth(), viewportHeight(), viewportBottom()};
+}
 
 bool focusedRite(const Rite *rite) { return rite == &RITE_PALETTE || rite == &RITE_VISIONS; }
 
@@ -240,16 +285,14 @@ bool carouselMain() {
 }
 
 Point viewportPoint(int x, int y) {
-    const int px = x - viewportLeft(), py = y - viewportTop();
-    const int logicalX = isPortrait() ? px : (px * 3 + 2) / 4;
-    const int logicalY = isPortrait() ? py : (py * 3 + 2) / 4;
-    return {std::clamp(logicalX, 0, hal::W - 1), std::clamp(logicalY, 0, hal::H - 1)};
+    const auto p = instrument_touch::map(viewport(), x, y, false, true, 0);
+    return {p.x, p.y};
 }
 
 void chooseScheme(ColourScheme scheme) {
     if (theme::colourScheme() == scheme) return;
     if (scheme == ColourScheme::Custom && !theme::hasCustomColourway()) return;
-#ifdef GRIM_DEVICE
+#if defined(GRIM_DEVICE) || defined(GRIM_NATIVE)
     const auto *custom = theme::hasCustomColourway() ? &theme::customColourway() : nullptr;
     if (!writePalette(scheme, custom)) return;
 #endif
@@ -361,11 +404,12 @@ void keyboard(Layout &layout) {
         layout.rows[3].add({nav("Del", hal::N_BACK)});
     }
     layout.rows[4].add({local(symbols ? "ABC" : isPortrait() ? "Sym" : "Symbols", Action::Symbols),
-                        nav("<", hal::N_LEFT, true), nav(">", hal::N_RIGHT, true),
+                        nav("<", hal::N_LEFT, active != &RITE_GLYPHSONG, active == &RITE_GLYPHSONG),
+                        nav(">", hal::N_RIGHT, active != &RITE_GLYPHSONG, active == &RITE_GLYPHSONG),
                         character("Space", ' '),
-                        active == &RITE_BEAT ? local("Hide", Action::Main) :
+                        (active == &RITE_BEAT || active == &RITE_GLYPHSONG) ? local("Hide", Action::Main) :
                             nav(isPortrait() ? "Back" : "Cancel", hal::N_ESC, true),
-                        nav(active == &RITE_BEAT ? "Cast" : textMode == TextMode::Password ? "Join" :
+                        nav(active == &RITE_BEAT ? "Cast" : active == &RITE_GLYPHSONG ? "Sing" : textMode == TextMode::Password ? "Join" :
                             textMode == TextMode::Url ? "Open" : "Send", hal::N_ENTER)});
 }
 
@@ -397,13 +441,28 @@ void buildLayout(Layout &layout) {
         layout.rows[1].add({done});
         return;
     case Panel::Notes:
+        if (active == &RITE_COVEN) {
+            layout.set({character("I", 'a'), character("II", 'w'), character("III", 's'),
+                        character("IV", 'e'), character("V", 'd'), character("VI", 'f'), character("VII", 't')},
+                       {character("Oct -", 'z'), character("Oct +", 'x'), done});
+            return;
+        }
         layout.set({character("C", 'a'), character("C#", 'w'), character("D", 's'), character("D#", 'e'),
                     character("E", 'd'), character("F", 'f'), character("F#", 't'), character("G", 'g')},
                    {character("G#", 'y'), character("A", 'h'), character("A#", 'u'), character("B", 'j'),
                     character("Oct -", 'z'), character("Oct +", 'x'), done});
         return;
     case Panel::Scales:
-        layout.set({character("Phrygian", '1'), character("Aeolian", '2'), character("Dorian", '3')},
+        if (active == &RITE_CANON) {
+            layout.set({character("Ionian", '1'), character("Aeolian", '2')},
+                       {character("Pent", '3'), character("Lydian", '4'), done});
+        } else if (active == &RITE_COVEN) {
+            layout.set({character("Aeolian", '1'), character("Dorian", '2')},
+                       {character("Phrygian", '3'), character("Lydian", '4'), done});
+        } else if (active == &RITE_SPECTRA) {
+            layout.set({character("Dorian", '1'), character("Lydian", '2')},
+                       {character("Pent", '3'), character("Phrygian", '4'), done});
+        } else layout.set({character("Phrygian", '1'), character("Aeolian", '2'), character("Dorian", '3')},
                    {character("Locrian", '4'), character("Hijaz", '5'), character("Fifths", '6'), done});
         return;
     case Panel::More:
@@ -423,11 +482,20 @@ void buildLayout(Layout &layout) {
         layout.n = 1;
         layout.rows[0].add({nav("Previous", hal::N_LEFT), nav("Open", hal::N_ENTER), nav("Next", hal::N_RIGHT)});
     } else if (active == &RITE_DRONE) {
-        layout.set({menu, nav(isPortrait() ? "Bright-" : "Bright -", hal::N_DOWN),
-                    nav(isPortrait() ? "Bright+" : "Bright +", hal::N_UP),
-                    nav("Drift -", hal::N_LEFT), nav("Drift +", hal::N_RIGHT), character("Hold", ' ')},
-                   {notes, local("Scales", Action::Scales), character("Wind", 'n'), character("Bells", 'b'),
-                    character("Safe", 'q'), character("Reseed", 'r'), volume});
+        layout.set({menu, character("Style", 'p'), notes, local("Scale", Action::Scales), character("Hold", ' ')},
+                   {character("Wind", 'n'), character("Bells", 'b'), character("Safe", 'q'), character("Reseed", 'r'), volume});
+    } else if (active == &RITE_CANON) {
+        layout.set({menu, nav("Align", hal::N_ENTER), character("Hold", ' '), character("New", 'r'), local("Mode", Action::Scales)},
+                   {notes, character("Rest", '0'), nav("Erase", hal::N_BACK), volume});
+    } else if (active == &RITE_SPECTRA) {
+        layout.set({menu, character("Wi-Fi", 'w'), character("BLE", 'b'), local("Mode", Action::Scales), character("Hold", ' ')},
+                   {character("Oct -", 'z'), character("Oct +", 'x'), volume});
+    } else if (active == &RITE_GLYPHSONG) {
+        layout.set({menu, local("Compose", Action::Keyboard), nav("Sing", hal::N_ENTER), nav("Mode", hal::N_TAB)},
+                   {nav("Pitch -", hal::N_DOWN, true), nav("Pitch +", hal::N_UP, true), volume});
+    } else if (active == &RITE_COVEN) {
+        layout.set({menu, character("Call", ' '), notes, local("Mode", Action::Scales), character("Hush", 'm')},
+                   {nav("Root -", hal::N_LEFT, true), nav("Root +", hal::N_RIGHT, true), volume});
     } else if (active == &RITE_SEQ) {
         layout.set({menu, left, right, up, down, nav("Step", hal::N_ENTER), character("Play", ' ')},
                    {notes, nav("Bank", hal::N_TAB), character("Fill", 'q'), character("Roll", 'r'),
@@ -545,7 +613,12 @@ bool tapViewport(Point p, uint32_t now, hal::Key &out) {
         out = nav("", key).key;
         return true;
     }
-    if (active == &RITE_BEAT && p.y >= 91 && p.y < 123) {
+    if (active == &RITE_GLYPHSONG && p.y >= 20 && p.y < 54) {
+        show(Panel::Keyboard);
+    } else if (active && active->pointer) {
+        instrumentPoint = {p.x, p.y, true, true, now};
+        instrumentContact = active->pointer(instrumentPoint);
+    } else if (active == &RITE_BEAT && p.y >= 91 && p.y < 123) {
         show(Panel::Keyboard);
     } else if (active == &RITE_VISIONS) {
         if (p.y < VisionsArtTop && p.x < 39) {
@@ -601,6 +674,14 @@ void loadSettings() {
         }
     }
     nvs_close(settings);
+#elif defined(GRIM_NATIVE)
+    cyd_settings_file::Record record{};
+    if (!cyd_settings_file::read(record) || record[4] > 3 || record[5] > 3) return;
+    PaletteRecord palette{};
+    std::copy(record.begin() + 6, record.begin() + 28, palette.begin());
+    if (!applyPalette(palette, palette.size())) return;
+    currentOrientation = static_cast<Orientation>(record[4]);
+    currentBackdrop = static_cast<MenuBackdrop>(record[5]);
 #endif
 }
 
@@ -670,7 +751,7 @@ void drawCarouselSettings(int transparent) {
 
 bool saveColourway(const theme::Colourway &colourway) {
     if (!theme::validColourway(colourway)) return false;
-#ifdef GRIM_DEVICE
+#if defined(GRIM_DEVICE) || defined(GRIM_NATIVE)
     if (!writePalette(ColourScheme::Custom, &colourway)) return false;
 #endif
     theme::setCustomColourway(colourway);
@@ -686,6 +767,11 @@ void setRite(const Rite *rite) {
         dockVisible = dockBeforeSettings;
     }
     if (focusedRite(active)) dockVisible = dockBeforeFocusedRite;
+    if (instrumentRite(active)) dockVisible = dockBeforeInstrument;
+    if (instrumentRite(rite)) {
+        dockBeforeInstrument = dockVisible;
+        dockVisible = true;
+    }
     if (focusedRite(rite)) {
         dockBeforeFocusedRite = dockVisible;
         dockVisible = false;
@@ -696,7 +782,8 @@ void setRite(const Rite *rite) {
     textMode = TextMode::None;
     symbols = shift = false;
     tapX = tapY = -1;
-    paletteContact = false;
+    paletteContact = instrumentContact = false;
+    instrumentPoint = {};
     paletteStart = paletteMotion = {};
 }
 
@@ -756,8 +843,14 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
             releasing = true;
             releaseAt = now;
         } else if (contact && now - releaseAt >= RELEASE_MS) {
+            if (instrumentContact && active && active->pointer) {
+                instrumentPoint.start = false;
+                instrumentPoint.down = false;
+                instrumentPoint.ms = now;
+                active->pointer(instrumentPoint);
+            }
             contact = releasing = canRepeat = false;
-            paletteContact = false;
+            paletteContact = instrumentContact = false;
             heldRow = heldCol = -1;
             dirty = true;
         }
@@ -804,6 +897,11 @@ bool touch(bool down, int x, int y, uint32_t now, hal::Key &out) {
 
     if (paletteContact) {
         paletteMotion = viewportPoint(x, y);
+        return false;
+    }
+    if (instrumentContact && active && active->pointer) {
+        instrumentPoint = instrument_touch::map(viewport(), x, y, false, true, now);
+        active->pointer(instrumentPoint);
         return false;
     }
 

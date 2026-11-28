@@ -209,7 +209,7 @@ bool onKey(const hal::Key &k) {
 #ifdef GRIM_CYD
                 std::vector<net::BleDev>().swap(s.scanDevs);
 #endif
-                net::wifiBegin();
+                net::wifiBegin(false);
             } else {
 #ifdef GRIM_CYD
                 std::vector<net::AP>().swap(s.scanAps);

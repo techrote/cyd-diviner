@@ -1,0 +1,12 @@
+HOST canon-fast-spread blocks=1500 rms_pcm=6977.362 peak_pcm=27751 median_us=9.674 p95_us=9.754 p99_us=21.982 worst_us=38.447 p99_block_budget_percent=0.412
+HOST drone-temple blocks=938 rms_pcm=4975.798 peak_pcm=19607 median_us=6.480 p95_us=6.540 p99_us=6.680 worst_us=21.632 p99_block_budget_percent=0.125
+HOST drone-tubular blocks=938 rms_pcm=5040.856 peak_pcm=21343 median_us=6.519 p95_us=6.550 p99_us=9.103 worst_us=31.226 p99_block_budget_percent=0.171
+HOST drone-bowl blocks=938 rms_pcm=7554.380 peak_pcm=25115 median_us=6.509 p95_us=6.550 p99_us=7.641 worst_us=25.818 p99_block_budget_percent=0.143
+HOST drone-kalimba blocks=938 rms_pcm=3970.251 peak_pcm=16594 median_us=6.520 p95_us=6.560 p99_us=7.201 worst_us=23.655 p99_block_budget_percent=0.135
+HOST drone-gong blocks=938 rms_pcm=4385.593 peak_pcm=20983 median_us=6.510 p95_us=6.560 p99_us=11.167 worst_us=22.413 p99_block_budget_percent=0.209
+HOST drone-ice blocks=938 rms_pcm=4592.101 peak_pcm=19819 median_us=6.519 p95_us=6.560 p99_us=18.388 worst_us=100.288 p99_block_budget_percent=0.345
+HOST glyphsong-speak blocks=938 rms_pcm=3241.701 peak_pcm=22427 median_us=0.991 p95_us=2.033 p99_us=2.263 worst_us=29.353 p99_block_budget_percent=0.042
+HOST glyphsong-chant blocks=938 rms_pcm=3636.750 peak_pcm=22605 median_us=1.462 p95_us=2.273 p99_us=2.644 worst_us=74.320 p99_block_budget_percent=0.050
+HOST glyphsong-choir blocks=938 rms_pcm=4119.239 peak_pcm=27676 median_us=1.813 p95_us=3.375 p99_us=3.765 worst_us=15.443 p99_block_budget_percent=0.071
+HOST glyphsong-sing blocks=938 rms_pcm=4506.471 peak_pcm=24262 median_us=2.043 p95_us=2.313 p99_us=2.454 worst_us=17.285 p99_block_budget_percent=0.046
+PASS real instrument kernels: 3 allocation failures, 11 audio specimens, 15000 concurrent UI iterations, 300 lifecycle repeats, callback_allocations=0; state_bytes canon=17320 drone=18240 glyphsong=20880

@@ -1,0 +1,54 @@
+{
+  "classification": "PASS",
+  "scope": "Actual native-CYD rendered specimens; simulated radio; physical usability NOT RUN",
+  "source_sha": "dcb793572cbcec2d3395980cf6fbcac46d696392",
+  "source_tree": "50c43f4efb2076f9949c7a08f9a40dd4dcee3554",
+  "source_snapshot": "bf87d65cdcfd9eba82784c98c0ddc12db3b454273be76d4e55438fdfdc36dfac",
+  "dirty": false,
+  "binary_sha256": "1332a638f973a6ae623f43fa711628c789b9b2a8ad1f7aa3dfd8dc788ee21361",
+  "code_fix_commit": "502ffde689f7e03f22a4d3114a11877276a43b56",
+  "run_url": "https://github.com/techrote/cyd-diviner/actions/runs/46113077668",
+  "artifact_url": "https://github.com/techrote/cyd-diviner/actions/runs/46113077668/artifacts/15250058615",
+  "previews": [
+    {
+      "name": "canon.png",
+      "sha256": "0d308290ea907e060e726a79899428da37ff6e9317fe957b814e83402bde62f8",
+      "bytes": 5163
+    },
+    {
+      "name": "coven.png",
+      "sha256": "075c417edb28fc9c730b277dc6687fa0ed1c37fdfb145d3d9cee3325f5f62ac8",
+      "bytes": 5707
+    },
+    {
+      "name": "drone.png",
+      "sha256": "b418f972c163ae6b31f20311b2b7fe77fffb76f56052e34a070353a939760add",
+      "bytes": 6850
+    },
+    {
+      "name": "glyphsong-keyboard.png",
+      "sha256": "635843401b3c00ed6de56938691d86618a865b41aa8c3913098b076dd578f98a",
+      "bytes": 4375
+    },
+    {
+      "name": "glyphsong.png",
+      "sha256": "6eefe2f987ffdc9195151d314d721580d14941e317c6afe90e690fdce69a7b6a",
+      "bytes": 4195
+    },
+    {
+      "name": "spectra.png",
+      "sha256": "d56a8fa7a03fbfe9228344432efa89b08c3af6c9f9e8a4becdb189f89484fa4a",
+      "bytes": 5988
+    },
+    {
+      "name": "visions-fullscreen.png",
+      "sha256": "969789752738cfe341827d69be1a96f481067a854d43b6312547683f97ca4e29",
+      "bytes": 36201
+    },
+    {
+      "name": "visions-layered.png",
+      "sha256": "26b9580c446be49a5811400f2cdc4af607071b0e98b3f090531ab14559e9ff3b",
+      "bytes": 11984
+    }
+  ]
+}

@@ -8,6 +8,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef GRIM_NATIVE
+#include <cstdlib>
+#endif
 #ifdef GRIM_CYD
 #include "cyd_controls.h"
 #endif
@@ -22,6 +25,8 @@ namespace {
 const Rite Settings{"SETTINGS", "settings", "display, sound, and palettes", nullptr, nullptr, nullptr, nullptr};
 #endif
 const Rite *const RITES[] = {&RITE_DRONE,  &RITE_SEQ,    &RITE_BEAT,
+                             &RITE_CANON,  &RITE_SPECTRA, &RITE_GLYPHSONG,
+                             &RITE_COVEN,
                              &RITE_WIRED,  &RITE_VISIONS, &RITE_ORACLE,
                              &RITE_LINK,   &RITE_SCRY,   &RITE_LISTEN,
                              &RITE_KIN,    &RITE_NET,    &RITE_GEMINI,
@@ -282,6 +287,9 @@ void open(const Rite *rite) {
     cyd_controls::setRite(active);
 #endif
     if (active->enter) active->enter();
+#ifdef GRIM_NATIVE
+    if (std::getenv("GRIM_TRACE")) hal::debugf("rite_enter name=%s", active->name);
+#endif
 #ifdef GRIM_CYD_DIAGNOSTICS
     Serial.printf("Diviner rite %s heap=%u\n", active->name, ESP.getFreeHeap());
 #endif
@@ -291,6 +299,9 @@ void close() {
     // makes cleanup ordering explicit and prevents one final callback from
     // touching resources while a leave hook is releasing them.
     hal::setAudio(nullptr);
+#ifdef GRIM_NATIVE
+    if (active && std::getenv("GRIM_TRACE")) hal::debugf("rite_leave name=%s", active->name);
+#endif
     if (active && active->leave) active->leave();
     uisfx::trigger(uisfx::BACK);
 #ifdef GRIM_CYD
@@ -333,11 +344,21 @@ bool volumeKey(const hal::Key &k) {
 } // namespace
 
 void grimSetup() {
+    dsp::prepare(); // initialize the shared sine table before any audio publication
     hal::begin();
     hal::setOverlayAudio(uisfx::render); // UI blips layer over everything
     srand(hal::ms() ^ 0x5A17);
     motesInit();
     t0 = hal::ms();
+}
+
+// Native process shutdown uses the same detach-before-destroy rite boundary as
+// normal navigation. It does not restart or modify a physical device.
+void grimShutdown() {
+    if (active) close();
+#ifdef GRIM_CYD
+    releaseVisionsMenuBackdrop();
+#endif
 }
 
 void grimLoop() {
@@ -374,7 +395,7 @@ void grimLoop() {
             if (k.nav == hal::N_LEFT || k.nav == hal::N_UP) { sel = (sel + N_RITES - 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_RIGHT || k.nav == hal::N_DOWN) { sel = (sel + 1) % N_RITES; selAt = hal::ms(); uisfx::trigger(uisfx::MOVE); }
             else if (k.nav == hal::N_ENTER) open(RITES[sel]);
-            else if (k.ch >= '1' && k.ch < '1' + N_RITES) open(RITES[sel = k.ch - '1']);
+            else if (k.ch >= '1' && k.ch <= '9' && k.ch - '1' < N_RITES) open(RITES[sel = k.ch - '1']);
             // keep the carousel from spinning the long way round on wrap
             if (sel - slide > N_RITES / 2.f) slide += N_RITES;
             if (slide - sel > N_RITES / 2.f) slide -= N_RITES;
@@ -389,8 +410,11 @@ void grimLoop() {
         bool wasNav = k.nav == hal::N_UP || k.nav == hal::N_DOWN || k.nav == hal::N_LEFT ||
                       k.nav == hal::N_RIGHT;
         if (!active->key(k)) close();
-        // click on list/grid moves in any rite, except over the drone's held sound
-        else if (wasNav && active != &RITE_DRONE) uisfx::trigger(uisfx::MOVE);
+        // Performance parameter changes must not add a menu click to the sound;
+        // GLYPHSONG also uses ; . , / as typed punctuation.
+        else if (wasNav && active != &RITE_DRONE && active != &RITE_GLYPHSONG &&
+                 active != &RITE_CANON && active != &RITE_COVEN && active != &RITE_SPECTRA)
+            uisfx::trigger(uisfx::MOVE);
     }
 
     uint32_t now = hal::ms();

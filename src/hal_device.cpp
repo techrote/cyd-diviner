@@ -1,18 +1,26 @@
 // Cardputer ADV backend. M5Cardputer 1.1.x detects the ADV (TCA8418 keyboard,
 // ES8311 codec) itself; this file only adapts it to hal.h.
 #include "hal.h"
+#include "build_identity.h"
+#include "audio_lifecycle.h"
+#include "timing_stats.h"
 #include <M5Cardputer.h>
+#include <atomic>
+#include <esp_heap_caps.h>
+#include <stdarg.h>
 
 namespace hal {
 namespace {
 Canvas *cv = nullptr;
-volatile AudioFn audioFn = nullptr;
-uint8_t vol = 140;
+audio_lifecycle::Callbacks callbacks;
+alignas(4) std::atomic<uint32_t> vol{140};
+#ifdef GRIM_AUDIO_DIAGNOSTICS
+diagnostics::TimingStats audioTiming;
+#endif
 
 constexpr int BLK = 256;
 int16_t abuf[3][BLK];
 
-volatile AudioFn overlayFn = nullptr;
 int16_t obuf[BLK];
 
 void audioTask(void *) {
@@ -21,17 +29,25 @@ void audioTask(void *) {
         // playRaw queues at most two buffers per channel and does not copy, so
         // with three buffers the one being filled is never in flight.
         while (M5Cardputer.Speaker.isPlaying(0) >= 2) vTaskDelay(1);
-        AudioFn fn = audioFn;
-        if (fn) fn(abuf[i], BLK);
-        else memset(abuf[i], 0, sizeof(abuf[i]));
-        AudioFn ofn = overlayFn; // UI sfx, mixed on top of whatever's playing
-        if (ofn) {
-            ofn(obuf, BLK);
-            for (int k = 0; k < BLK; ++k) {
-                int32_t s = abuf[i][k] + obuf[k];
-                abuf[i][k] = s > 32767 ? 32767 : s < -32768 ? -32768 : s;
+        AudioFn fn = nullptr, ofn = nullptr;
+#ifdef GRIM_AUDIO_DIAGNOSTICS
+        const uint32_t started = micros();
+#endif
+        if (callbacks.acquire(fn, ofn)) {
+            if (fn) fn(abuf[i], BLK);
+            else memset(abuf[i], 0, sizeof(abuf[i]));
+            if (ofn) {
+                ofn(obuf, BLK);
+                for (int k = 0; k < BLK; ++k) {
+                    int32_t s = abuf[i][k] + obuf[k];
+                    abuf[i][k] = s > 32767 ? 32767 : s < -32768 ? -32768 : s;
+                }
             }
-        }
+            callbacks.release();
+        } else memset(abuf[i], 0, sizeof(abuf[i]));
+#ifdef GRIM_AUDIO_DIAGNOSTICS
+        audioTiming.record(micros() - started, BLK, RATE);
+#endif
         M5Cardputer.Speaker.playRaw(abuf[i], BLK, RATE, false, 1, 0);
         i = (i + 1) % 3;
     }
@@ -108,9 +124,11 @@ void begin() {
     cv = new Canvas(&M5Cardputer.Display);
     cv->setColorDepth(16);
     cv->createSprite(W, H);
+    audio_exchange::detail::checkStorage(&vol);
     M5Cardputer.Speaker.begin();
-    M5Cardputer.Speaker.setVolume(vol);
+    M5Cardputer.Speaker.setVolume(static_cast<uint8_t>(vol.load(std::memory_order_relaxed)));
     xTaskCreatePinnedToCore(audioTask, "grim-audio", 4096, nullptr, 5, nullptr, 0);
+    debugf("diviner_identity source=%s tree=%s profile=%s state=%s", DIVINER_SOURCE_SHA, DIVINER_SOURCE_TREE, DIVINER_BUILD_ENV, DIVINER_TREE_STATE);
 }
 
 Canvas &canvas() { return *cv; }
@@ -130,17 +148,31 @@ bool pollKey(Key &k) {
 }
 bool anyHeld() { return M5Cardputer.Keyboard.isPressed(); }
 
-void setAudio(AudioFn fn) { audioFn = fn; }
-void setOverlayAudio(AudioFn fn) { overlayFn = fn; }
+void setAudio(AudioFn fn) {
+    callbacks.setMain(fn, [] { vTaskDelay(1); });
+}
+void setOverlayAudio(AudioFn fn) { callbacks.setOverlay(fn, [] { vTaskDelay(1); }); }
 void setVolume(uint8_t v) {
-    vol = v;
+    vol.store(v, std::memory_order_relaxed);
     M5Cardputer.Speaker.setVolume(v);
 }
-uint8_t volume() { return vol; }
+uint8_t volume() { return static_cast<uint8_t>(vol.load(std::memory_order_relaxed)); }
 
 int batteryPercent() { return M5Cardputer.Power.getBatteryLevel(); }
+uint32_t heapFree() { return esp_get_free_heap_size(); }
+uint32_t heapLargest() { return heap_caps_get_largest_free_block(MALLOC_CAP_8BIT); }
+void debugf(const char *fmt, ...) {
+    char b[160];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(b, sizeof b, fmt, ap);
+    va_end(ap);
+    Serial.println(b);
+}
+
 void backToLauncher() {
-    audioFn = nullptr;
+    setAudio(nullptr);
+    setOverlayAudio(nullptr);
     delay(50);
     esp_restart();
 }

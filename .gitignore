@@ -2,3 +2,9 @@
 *.ppm
 *.wav
 compile_commands.json
+
+delivery/
+.pio-*/
+
+__pycache__/
+*.pyc

@@ -1,7 +1,11 @@
 // ESP32-2432S028R backend: ILI9341 LCD, XPT2046 touch and GPIO26 speaker output.
 #include "hal.h"
+#include "build_identity.h"
 #include "cyd_controls.h"
 #include "theme.h"
+#include "timing_stats.h"
+#include <cstdarg>
+#include <esp_heap_caps.h>
 #ifdef GRIM_CYD_PCM
 #include "cyd_pcm_protocol.h"
 #include "cyd_pcm_serial.h"
@@ -161,9 +165,11 @@ constexpr int AudioBlock = 128;
 constexpr i2s_port_t AudioPort = I2S_NUM_0;
 SemaphoreHandle_t audioLock = nullptr;
 AudioFn audioFn = nullptr, overlayFn = nullptr;
-std::atomic<uint8_t> level{140};
+alignas(4) std::atomic<uint32_t> level{140};
 #ifdef GRIM_CYD_DIAGNOSTICS
 std::atomic<uint32_t> audioBlocks{0}, signalBlocks{0};
+diagnostics::TimingStats audioTiming, audioLockTiming;
+std::atomic<uint32_t> audioWriteErrors{0};
 uint32_t presentUs = 0, frameDrawUs = 0;
 #endif
 
@@ -176,12 +182,22 @@ void audioTask(void *) {
     for (;;) {
         // Complete any in-flight callback before setAudio(nullptr) returns
         // and the main thread tears down the active rite.
+#ifdef GRIM_CYD_DIAGNOSTICS
+        const uint32_t lockStart = micros();
+#endif
         xSemaphoreTake(audioLock, portMAX_DELAY);
+#ifdef GRIM_CYD_DIAGNOSTICS
+        const uint32_t renderStart = micros();
+        audioLockTiming.record(renderStart - lockStart);
+#endif
         if (audioFn) audioFn(main, AudioBlock);
         else memset(main, 0, sizeof(main));
         if (overlayFn) overlayFn(overlay, AudioBlock);
         else memset(overlay, 0, sizeof(overlay));
         xSemaphoreGive(audioLock);
+#ifdef GRIM_CYD_DIAGNOSTICS
+        audioTiming.record(micros() - renderStart, AudioBlock, RATE);
+#endif
 
         const int volume = level.load(std::memory_order_relaxed);
 #ifdef GRIM_CYD_PCM
@@ -206,6 +222,9 @@ void audioTask(void *) {
         }
         size_t written;
         if (i2s_write(AudioPort, pcm, sizeof(pcm), &written, portMAX_DELAY) != ESP_OK) {
+#ifdef GRIM_CYD_DIAGNOSTICS
+            audioWriteErrors.fetch_add(1, std::memory_order_relaxed);
+#endif
             vTaskDelay(1);
         }
 #if defined(GRIM_CYD_PCM) || defined(GRIM_CYD_DIAGNOSTICS)
@@ -317,6 +336,10 @@ void diagnostic(const char *cmd, uint32_t now) {
                       cyd_controls::viewportBottom(), cyd_controls::viewportTop(),
                       orientationTransform(displayOrientation).portrait, static_cast<unsigned>(cyd_controls::menuBackdrop()),
                       lcd.width(), lcd.height(), frameDrawUs, static_cast<unsigned>(displayOrientation));
+        const auto a = audioTiming.snapshot(), l = audioLockTiming.snapshot();
+        Serial.printf("audio_perf samples=%u block=%d rate=%d deadline_us=5333.333 p50_upper_us=%u p95_upper_us=%u p99_upper_us=%u max_us=%u over_deadline=%u lock_p99_upper_us=%u lock_max_us=%u write_errors=%u\n",
+                      a.count, AudioBlock, RATE, a.percentileUpper(50), a.percentileUpper(95), a.percentileUpper(99), a.maxUs, a.overDeadline,
+                      l.percentileUpper(99), l.maxUs, audioWriteErrors.load(std::memory_order_relaxed));
     } else if (strcmp(cmd, "shot") == 0 && displayReady) {
         shot();
     }
@@ -443,6 +466,7 @@ void begin() {
     touch.begin(touchSpi);
     touch.setRotation(0);
     const bool audioReady = beginAudio();
+    debugf("diviner_identity source=%s tree=%s profile=%s state=%s", DIVINER_SOURCE_SHA, DIVINER_SOURCE_TREE, DIVINER_BUILD_ENV, DIVINER_TREE_STATE);
 #ifdef GRIM_CYD_PCM
     if (audioReady && !cyd_pcm_serial::begin(BlueLedPin)) Serial.println("Diviner CYD: USB PCM unavailable");
 #endif
@@ -583,8 +607,19 @@ void setOverlayAudio(AudioFn fn) {
 }
 
 void setVolume(uint8_t v) { level.store(v, std::memory_order_relaxed); }
-uint8_t volume() { return level.load(std::memory_order_relaxed); }
+uint8_t volume() { return static_cast<uint8_t>(level.load(std::memory_order_relaxed)); }
 
+uint32_t heapFree() { return esp_get_free_heap_size(); }
+uint32_t heapLargest() { return heap_caps_get_largest_free_block(MALLOC_CAP_8BIT); }
+void debugf(const char *fmt, ...) {
+#ifdef GRIM_CYD_PCM
+    if (cyd_pcm_serial::session()) return; // preserve binary serial framing
+#endif
+    char text[160];
+    va_list ap; va_start(ap, fmt);
+    vsnprintf(text, sizeof(text), fmt, ap); va_end(ap);
+    Serial.println(text);
+}
 int batteryPercent() { return -1; }
 void backToLauncher() {} // The CYD boots directly into Diviner.
 } // namespace hal

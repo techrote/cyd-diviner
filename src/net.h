@@ -23,12 +23,19 @@ struct AP {
     uint8_t channel;
     uint8_t auth; // 0 open, else secured
     bool known;   // we have saved credentials
+    uint32_t lastSeen = 0; // actual observation time, not cached-read time
 };
 
-void wifiBegin();            // bring the radio up (STA), load saved creds
+// Bring the radio up (STA). connect=true rejoins the last saved network;
+// connect=false does not associate and aborts a pending/existing join.
+// Wi-Fi scans are ACTIVE observations and may transmit probe requests; this
+// is different from snifferBegin() receive-only promiscuous monitoring.
+void wifiBegin(bool connect = true);
 void radioStop();            // tear down whatever radio is up
 WifiState wifiState();
 int wifiScan(std::vector<AP> &out); // async: returns count, -1 while running; call again
+// Last raw scan state for diagnostics: -1 running, -2 failed, >=0 found.
+int wifiScanStatus();
 void wifiConnect(const char *ssid, const char *pass);
 void wifiForget(const char *ssid);
 std::string wifiIP();
@@ -57,6 +64,30 @@ std::string captiveURL();
 void snifferBegin();
 void snifferSetChannel(int ch);
 void snifferPoll(uint32_t mgmt[14], uint32_t data[14], int &rssiLast);
+
+// ---- ESP-NOW (coven) -----------------------------------------------------
+// Connectionless broadcast on channel 1, the same channel DYAD and TETHER
+// dongles use, so the coven hears them too. Frames are queued from the Wi-Fi
+// task; poll from the UI thread.
+struct NowPkt {
+    uint8_t mac[6];
+    int8_t rssi;
+    uint8_t len;
+    uint8_t data[250];
+    uint32_t receivedAt = 0; // local monotonic ms at callback/fixture enqueue
+    bool rssiAvailable = false; // IDF 4 receive callbacks do not provide RSSI
+};
+struct NowStatus {
+    bool ready = false, rssiAvailable = false;
+    uint32_t received = 0, queued = 0, dropped = 0, invalid = 0, sent = 0, sendErrors = 0;
+    uint32_t queueDepth = 0, queueHighWater = 0;
+    int32_t lastError = 0;
+};
+bool nowBegin(); // checked startup; false leaves radio off
+NowStatus nowStatus();
+bool nowSend(const void *data, int len); // broadcast
+bool nowPoll(NowPkt &out);               // one queued frame, false if none
+void nowMac(uint8_t mac[6]);             // this device's own address
 
 // ---- BLE (familiars / kin) ----------------------------------------------
 struct BleDev {

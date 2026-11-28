@@ -1,15 +1,20 @@
 // ESP32 backend for net.h. Arduino WiFi (STA + async scan), esp_wifi
-// promiscuous RX counting, Bluedroid BLE scan, a ping+port LAN sweep and a
+// promiscuous RX counting, platform BLE scan, a ping+port LAN sweep and a
 // Gemini (TLS) client, each on a worker task where it would otherwise block.
 //
 // Credentials live in NVS via Preferences (namespace "grimnet"), never in
 // flashable source. Only one radio stack runs at a time (see net.h).
 #ifdef GRIM_DEVICE
 #include "net.h"
+#include "hal.h"
+#include "radio_queue.h"
 
 #include <Preferences.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include <esp_now.h>
+#include <esp_idf_version.h>
+#include <sdkconfig.h>
 #include <esp_wifi.h>
 #include <lwip/sockets.h>
 #include <lwip/netdb.h>
@@ -18,9 +23,13 @@
 #include <BLEDevice.h>
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
-#ifdef GRIM_CYD
 #include <esp_bt.h>
+#if (defined(CONFIG_BLUEDROID_ENABLED) && CONFIG_BLUEDROID_ENABLED) || \
+    (defined(CONFIG_BT_BLUEDROID_ENABLED) && CONFIG_BT_BLUEDROID_ENABLED)
+#define DIVINER_BLE_BLUEDROID 1
 #include <esp_bt_main.h>
+#endif
+#ifdef GRIM_CYD
 #include <esp_heap_caps.h>
 #endif
 
@@ -30,7 +39,7 @@
 
 namespace net {
 namespace {
-enum Radio { R_NONE, R_WIFI, R_SNIFF, R_BLE };
+enum Radio { R_NONE, R_WIFI, R_SNIFF, R_BLE, R_NOW };
 Radio radio = R_NONE;
 Preferences prefs;
 bool scanStarted = false;
@@ -51,6 +60,8 @@ void beginJoin(const char *ssid, const char *pass) {
 #endif
 
 void stopBle();
+void stopNow();
+void clearWifiCache();
 
 // --- saved credentials: s0..s7 / p0..p7 + count ---
 int credCount() {
@@ -109,7 +120,9 @@ void radioStop() {
         esp_wifi_set_promiscuous_rx_cb(nullptr);
     }
     if (radio == R_BLE) stopBle();
-    if (radio == R_WIFI || radio == R_SNIFF) {
+    if (radio == R_NOW) stopNow();
+    if (radio == R_WIFI || radio == R_SNIFF || radio == R_NOW) {
+        if (scanStarted) esp_wifi_scan_stop();
         WiFi.disconnect(true, false);
         WiFi.mode(WIFI_OFF);
         WiFi.scanDelete();
@@ -118,18 +131,28 @@ void radioStop() {
         joining = false;
 #endif
     }
+    clearWifiCache();
     radio = R_NONE;
 }
 
 // ---- Wi-Fi ---------------------------------------------------------------
-void wifiBegin() {
+void wifiBegin(bool connect) {
+    if (radio == R_WIFI && !connect) {
+        WiFi.setAutoReconnect(false);
+        WiFi.disconnect(false, false);
+#ifdef GRIM_CYD
+        joining = false;
+#endif
+        return;
+    }
     if (radio != R_WIFI) {
         radioStop();
         WiFi.persistent(false);
+        WiFi.setAutoReconnect(connect);
         WiFi.mode(WIFI_STA);
         WiFi.setSleep(false);
         radio = R_WIFI;
-        if (WiFi.status() != WL_CONNECTED) {
+        if (connect && WiFi.status() != WL_CONNECTED) {
             String last;
             // Create the namespace on first use so later read-only scans work
             // on a freshly erased board.
@@ -180,6 +203,8 @@ WifiState wifiState() {
 namespace {
 struct Seen { AP ap; uint32_t at; };
 std::vector<Seen> apCache;
+void clearWifiCache() { std::vector<Seen>().swap(apCache); }
+constexpr size_t AP_CACHE_LIMIT = 64;
 
 std::vector<AP> cacheList() {
     uint32_t now = millis();
@@ -191,8 +216,11 @@ std::vector<AP> cacheList() {
 }
 } // namespace
 
+int lastScanStatus = -1;
+uint32_t scanRetryAt = 0;
+int wifiScanStatus() { return lastScanStatus; }
 int wifiScan(std::vector<AP> &out) {
-    wifiBegin();
+    if (radio != R_WIFI) wifiBegin();
 #ifdef GRIM_CYD
     if (wifiState() == WST_CONNECTING) {
         out = cacheList();
@@ -200,7 +228,14 @@ int wifiScan(std::vector<AP> &out) {
     }
 #endif
     int16_t n = WiFi.scanComplete();
+    lastScanStatus = n;
     if (n == WIFI_SCAN_FAILED || !scanStarted) {
+        // a refused scan used to be re-issued every frame; back off instead
+        if (n == WIFI_SCAN_FAILED && scanStarted && int32_t(millis() - scanRetryAt) < 0) {
+            out = cacheList();
+            return out.empty() ? -1 : (int)out.size();
+        }
+        scanRetryAt = millis() + 700;
         // async, include hidden, ACTIVE scan, 300ms/channel dwell: a longer
         // dwell and probe requests catch phones/APs that beacon infrequently.
         WiFi.scanNetworks(true, true, false, 300);
@@ -213,7 +248,7 @@ int wifiScan(std::vector<AP> &out) {
         return out.empty() ? -1 : (int)out.size();
     }
 #ifdef GRIM_CYD_DIAGNOSTICS
-    Serial.printf("cyd wifi scan result=%d\n", n);
+    hal::debugf("cyd wifi scan result=%d", n);
 #endif
     uint32_t now = millis();
     apCache.erase(std::remove_if(apCache.begin(), apCache.end(), [now](const Seen &s) {
@@ -228,12 +263,17 @@ int wifiScan(std::vector<AP> &out) {
         a.channel = WiFi.channel(i);
         a.auth = WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? 0 : 1;
         a.known = false;
+        a.lastSeen = now;
         for (int k = 0; k < known; ++k)
             if (credSSID(k) == a.ssid.c_str()) a.known = true;
         bool merged = false;
         for (auto &s : apCache)
             if (memcmp(s.ap.bssid, a.bssid, 6) == 0) { s.ap = a; s.at = now; merged = true; break; }
-        if (!merged) apCache.push_back({a, now});
+        if (!merged && apCache.size() < AP_CACHE_LIMIT) apCache.push_back({a, now});
+        else if (!merged) {
+            auto weak = std::min_element(apCache.begin(), apCache.end(), [](const Seen &a, const Seen &b) { return a.ap.rssi < b.ap.rssi; });
+            if (weak != apCache.end() && a.rssi > weak->ap.rssi) *weak = {a, now};
+        }
     }
     WiFi.scanDelete();
     scanStarted = false;
@@ -305,13 +345,106 @@ void snifferPoll(uint32_t mgmt[14], uint32_t data[14], int &rssiLast) {
     rssiLast = gRssi;
 }
 
+// ---- ESP-NOW -------------------------------------------------------------
+namespace {
+const uint8_t BCAST[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+radio_queue::Ring<NowPkt, 15> nq; // explicit drop-new overflow
+bool nqAccepting = false;
+NowStatus nqStats;
+portMUX_TYPE nqMux = portMUX_INITIALIZER_UNLOCKED;
+void nowEnqueue(const uint8_t *mac, const uint8_t *data, int len, int8_t rssi, bool available) {
+    // ESP-NOW invokes this on the Wi-Fi task, not an ISR. Keep this bounded:
+    // copy at most 250 bytes, no allocation/logging or musical/DSP processing.
+    portENTER_CRITICAL(&nqMux);
+    if (!nqAccepting) { portEXIT_CRITICAL(&nqMux); return; }
+    ++nqStats.received;
+    if (!mac || !data || len <= 0 || len > 250) {
+        ++nqStats.invalid;
+    } else {
+        NowPkt p{};
+        memcpy(p.mac, mac, 6); p.rssi = rssi; p.rssiAvailable = available;
+        p.len = uint8_t(len); p.receivedAt = millis(); memcpy(p.data, data, size_t(len));
+        if (!nq.push(p)) ++nqStats.dropped;
+        else ++nqStats.queued;
+        nqStats.queueHighWater = nq.highWater;
+    }
+    portEXIT_CRITICAL(&nqMux);
+}
+#if ESP_IDF_VERSION_MAJOR >= 5
+void nowRecv(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
+    nowEnqueue(info ? info->src_addr : nullptr, data, len,
+               info && info->rx_ctrl ? info->rx_ctrl->rssi : -127, info && info->rx_ctrl);
+}
+#else
+void nowRecv(const uint8_t *mac, const uint8_t *data, int len) {
+    nowEnqueue(mac, data, len, -127, false);
+}
+#endif
+void stopNow() {
+    portENTER_CRITICAL(&nqMux); nqAccepting = false; portEXIT_CRITICAL(&nqMux);
+    esp_now_unregister_recv_cb();
+    esp_now_deinit();
+    portENTER_CRITICAL(&nqMux); nq.clear(); portEXIT_CRITICAL(&nqMux);
+}
+} // namespace
+bool nowBegin() {
+    if (radio == R_NOW) return true;
+    radioStop();
+    portENTER_CRITICAL(&nqMux);
+    nq.clear(); nqAccepting = false; nqStats = NowStatus{};
+    nqStats.rssiAvailable = ESP_IDF_VERSION_MAJOR >= 5;
+    portEXIT_CRITICAL(&nqMux);
+    WiFi.persistent(false); WiFi.setAutoReconnect(false);
+    if (!WiFi.mode(WIFI_STA)) { nqStats.lastError = ESP_FAIL; return false; }
+    WiFi.disconnect(false, false); WiFi.setSleep(false);
+    esp_err_t err = esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
+    bool initialised = false;
+    if (err == ESP_OK) { err = esp_now_init(); initialised = err == ESP_OK; }
+    if (err == ESP_OK) err = esp_now_register_recv_cb(nowRecv);
+    if (err == ESP_OK) {
+        esp_now_peer_info_t peer = {};
+        memcpy(peer.peer_addr, BCAST, 6); peer.channel = 1; peer.ifidx = WIFI_IF_STA;
+        err = esp_now_add_peer(&peer);
+    }
+    if (err != ESP_OK) {
+        if (initialised) { esp_now_unregister_recv_cb(); esp_now_deinit(); }
+        WiFi.mode(WIFI_OFF); nqStats.lastError = err; return false;
+    }
+    radio = R_NOW;
+    portENTER_CRITICAL(&nqMux); nqAccepting = true; portEXIT_CRITICAL(&nqMux);
+    return true;
+}
+bool nowSend(const void *data, int len) {
+    esp_err_t err = (radio == R_NOW && data && len > 0 && len <= 250)
+        ? esp_now_send(BCAST, static_cast<const uint8_t *>(data), len) : ESP_ERR_INVALID_ARG;
+    // Main-thread API admission is not a remote delivery acknowledgement.
+    portENTER_CRITICAL(&nqMux);
+    if (err == ESP_OK) ++nqStats.sent; else { ++nqStats.sendErrors; nqStats.lastError = err; }
+    portEXIT_CRITICAL(&nqMux);
+    return err == ESP_OK;
+}
+void nowMac(uint8_t mac[6]) { memset(mac, 0, 6); esp_wifi_get_mac(WIFI_IF_STA, mac); }
+NowStatus nowStatus() {
+    portENTER_CRITICAL(&nqMux);
+    NowStatus s = nqStats; s.queueDepth = uint32_t(nq.count);
+    portEXIT_CRITICAL(&nqMux);
+    s.ready = radio == R_NOW; return s;
+}
+bool nowPoll(NowPkt &out) {
+    bool got = false;
+    portENTER_CRITICAL(&nqMux);
+    got = nq.pop(out);
+    portEXIT_CRITICAL(&nqMux);
+    return got;
+}
+
 // ---- BLE -----------------------------------------------------------------
 namespace {
 std::vector<BleDev> bleFound;
 bool bleScanning = false;
 bool bleScanFailed = false;
 BLEScan *bleScanner = nullptr;
-SemaphoreHandle_t bleLock = nullptr; // onResult runs on the Bluedroid task
+SemaphoreHandle_t bleLock = nullptr; // onResult runs on the BLE host task
 uint32_t bleWindowAt = 0;
 
 #ifdef GRIM_CYD
@@ -323,22 +456,44 @@ constexpr size_t BLE_RESULT_LIMIT = 256;
 
 #ifdef GRIM_CYD_DIAGNOSTICS
 void bleDiagnostic(const char *phase, int result) {
-    Serial.printf("cyd ble %s result=%d heap=%u largest=%u\n", phase, result,
-                  (unsigned)heap_caps_get_free_size(BLE_HEAP_CAPS),
-                  (unsigned)heap_caps_get_largest_free_block(BLE_HEAP_CAPS));
+    hal::debugf("cyd ble %s result=%d heap=%u largest=%u", phase, result,
+                (unsigned)heap_caps_get_free_size(BLE_HEAP_CAPS),
+                (unsigned)heap_caps_get_largest_free_block(BLE_HEAP_CAPS));
 }
 #endif
+
+void stopBleStack() {
+    BLEDevice::deinit(false); // retain controller memory so BLE can be reentered
+    // Arduino 3.3.9 marks BLEDevice initialized only after the last startup
+    // step, and deinit() does nothing while that flag is false. A failed host
+    // allocation/registration can therefore leave a partial SDK stack alive.
+    // Also complete any partial Bluedroid teardown on Arduino 2, checking each
+    // status rather than disabling an already stopped component. The pinned
+    // Cardputer SDK uses NimBLE; BLEDevice owns its host-task and controller
+    // teardown ordering. Do not manually stop that controller underneath a
+    // possibly still active host after partial SDK initialization.
+#ifdef DIVINER_BLE_BLUEDROID
+    if (esp_bluedroid_get_status() == ESP_BLUEDROID_STATUS_ENABLED)
+        esp_bluedroid_disable();
+    if (esp_bluedroid_get_status() == ESP_BLUEDROID_STATUS_INITIALIZED)
+        esp_bluedroid_deinit();
+    if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_ENABLED)
+        esp_bt_controller_disable();
+    if (esp_bt_controller_get_status() == ESP_BT_CONTROLLER_STATUS_INITED)
+        esp_bt_controller_deinit();
+#endif
+}
 
 void stopBle() {
 #ifdef GRIM_CYD
     // Release the completion semaphore before closing the BLE host. Wait
     // until the host task has stopped before clearing its retained scanner.
     if (bleScanner && bleScanning) bleScanner->stop();
-    BLEDevice::deinit(false); // keep BLE controller memory for reentry
+    stopBleStack();
     if (bleScanner) bleScanner->clearResults();
 #else
     // Arduino 3 owns and destroys the scanner during deinit.
-    BLEDevice::deinit(false);
+    stopBleStack();
 #endif
     bleScanner = nullptr;
     bleScanning = false;
@@ -372,7 +527,7 @@ bool startBleController() {
         if (err == ESP_OK) return true;
         esp_bt_controller_deinit();
     }
-    log_e("BLE controller startup: %s", esp_err_to_name(err));
+    hal::debugf("BLE controller startup: %s", esp_err_to_name(err));
     return false;
 }
 
@@ -417,13 +572,15 @@ BleCb bleCb;
 } // namespace
 
 void bleBegin() {
-    if (!bleLock) bleLock = xSemaphoreCreateMutex();
-    if (!bleLock) return;
     // Already on BLE (e.g. kin -> sentinel, or re-entering the rite): keep the
     // live stack instead of tearing it down and re-initialising, which both
     // wastes the ~4s warm-up and risked the deinit/init crash.
     if (radio == R_BLE && bleScanner) return;
     radioStop();
+    // Release the previous radio's heap before allocating synchronization.
+    // A failed allocation must not leave that previous mode running invisibly.
+    if (!bleLock) bleLock = xSemaphoreCreateMutex();
+    if (!bleLock) { bleScanFailed = true; return; }
     xSemaphoreTake(bleLock, portMAX_DELAY);
     bleFound.clear();
     bleScanning = false;
@@ -441,6 +598,11 @@ void bleBegin() {
     }
 #endif
     BLEDevice::init("");
+#if ESP_IDF_VERSION_MAJOR >= 5
+    // This also catches errors after the host was enabled, before Arduino's
+    // own initialized flag is published. Do not ask getScan() to allocate.
+    if (!BLEDevice::getInitialized()) { bleScanFailed = true; stopBle(); return; }
+#endif
 #ifdef GRIM_CYD
     auto host = esp_bluedroid_get_status();
 #ifdef GRIM_CYD_DIAGNOSTICS
@@ -452,6 +614,7 @@ void bleBegin() {
     }
 #endif
     bleScanner = BLEDevice::getScan();
+    if (!bleScanner) { bleScanFailed = true; stopBle(); return; }
     bleScanner->setAdvertisedDeviceCallbacks(&bleCb, true);
     bleScanner->setActiveScan(true);
     bleScanner->setInterval(100);
@@ -476,8 +639,9 @@ int bleScan(std::vector<BleDev> &out) {
     // hand back the live set and drop anything not seen for 12s, under the lock
     out.clear();
     xSemaphoreTake(bleLock, portMAX_DELAY);
+    const uint32_t observedNow = millis();
     for (auto it = bleFound.begin(); it != bleFound.end();) {
-        if (now - it->lastSeen >= 12000) it = bleFound.erase(it);
+        if (uint32_t(observedNow - it->lastSeen) >= 12000) it = bleFound.erase(it);
         else { out.push_back(*it); ++it; }
     }
     xSemaphoreGive(bleLock);
@@ -488,6 +652,7 @@ int bleScan(std::vector<BleDev> &out) {
         bleDiagnostic("devices", out.size());
 #endif
         bleScanner->stop();
+        bleScanner->clearResults();
         bleScanning = bleScanner->start(4, nullptr, false);
         bleScanFailed = !bleScanning;
         if (bleScanFailed) return BLE_UNAVAILABLE;
