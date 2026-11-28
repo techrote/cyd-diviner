@@ -41,7 +41,7 @@ void enter() {
     if (!S) S = new State();
     S->f.set(2200, 0.7f);
     S->pingEnv.time(0.25f);
-    net::wifiBegin();
+    net::wifiBegin(false); // a scanner only listens
     S->scanning = true;
     S->lastScan = 0;
     hal::setAudio(render);

@@ -49,12 +49,20 @@ void idle(uint32_t msec);
 bool pollKey(Key &k);  // one queued key press (with auto-repeat for arrows)
 bool anyHeld();
 
+// Control thread only, outside a callback. Return only after any old in-flight
+// invocation completes. The caller may then destroy the detached voice state.
+// Exactly one audio consumer. Callbacks allocate nothing and must not call
+// setAudio/setOverlayAudio. Overlay replacement has the same lifetime guarantee.
 void setAudio(AudioFn fn);        // main voice (rite/menu); nullptr = silence
 void setOverlayAudio(AudioFn fn); // mixed on top of the main voice (UI sfx)
 void setVolume(uint8_t v); // 0..255
 uint8_t volume();
 
 int batteryPercent(); // -1 if unknown
+uint32_t heapFree();    // bytes free / largest allocatable block (0 on the desktop)
+uint32_t heapLargest();
+void debugf(const char *fmt, ...); // USB serial on the device, stderr in the sim
+
 void backToLauncher(); // restart; the Launcher bootscreen comes up first
 
 } // namespace hal

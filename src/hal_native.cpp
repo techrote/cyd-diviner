@@ -7,11 +7,22 @@
 //                                (times are from start; key: types each char)
 //   GRIM_WAV=<file.wav>          write the audio stream to a WAV instead of SDL
 #include "hal.h"
+#include "build_identity.h"
+#include "audio_lifecycle.h"
+#include "timing_stats.h"
+#ifdef GRIM_CYD
+#include "cyd_controls.h"
+#include "theme.h"
+#endif
 #include <lgfx/v1/platforms/sdl/Panel_sdl.hpp>
 
 #include <SDL2/SDL.h>
 #include <atomic>
+#include <algorithm>
+#include <array>
+#include <cmath>
 #include <chrono>
+#include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -23,6 +34,7 @@
 
 void grimSetup();
 void grimLoop();
+void grimShutdown();
 
 // LovyanGFX simulator shortcuts (rotate R/L, scale 1..6) need exactly this modifier.
 static constexpr SDL_Keymod SIM_SHORTCUT_MOD = KMOD_LCTRL;
@@ -32,8 +44,13 @@ struct Board : public lgfx::LGFX_Device {
     lgfx::Panel_sdl panel;
     Board() {
         auto cfg = panel.config();
+#ifdef GRIM_CYD
+        cfg.memory_width = cfg.panel_width = 320;
+        cfg.memory_height = cfg.panel_height = 240;
+#else
         cfg.memory_width = cfg.panel_width = hal::W;
         cfg.memory_height = cfg.panel_height = hal::H;
+#endif
         panel.config(cfg);
         panel.setScaling(3, 3);
         panel.setWindowTitle("daedric grimoire");
@@ -42,9 +59,39 @@ struct Board : public lgfx::LGFX_Device {
 };
 Board *lcd = nullptr;
 Canvas *cv = nullptr;
-std::atomic<hal::AudioFn> audioFn{nullptr};
-std::atomic<hal::AudioFn> overlayFn{nullptr};
-uint8_t vol = 140;
+audio_lifecycle::Callbacks callbacks;
+std::atomic<uint8_t> vol{140};
+std::atomic<bool> stopWanted{false};
+std::thread wavThread;
+SDL_AudioDeviceID audioDevice = 0;
+diagnostics::TimingStats audioTiming, frameTiming;
+std::atomic<uint32_t> audioSkipped{0};
+uint32_t scriptStart = 0;
+#ifdef GRIM_CYD
+bool scriptedTouch = false;
+int scriptedX = 0, scriptedY = 0;
+bool directFrameWritten = false;
+struct Mote { int x, y; uint16_t colour; uint8_t alpha; };
+std::array<Mote, 18> motes{};
+size_t moteCount = 0;
+cyd_controls::Orientation displayOrientation = cyd_controls::Orientation::Landscape;
+void rotateDisplay() {
+    const auto orientation = cyd_controls::orientation();
+    if (orientation == displayOrientation) return;
+    displayOrientation = orientation;
+    lcd->setRotation(static_cast<unsigned>(orientation));
+    lcd->clearClipRect();
+}
+void sendTouch(bool down, int x, int y) {
+    hal::Key key;
+    if (cyd_controls::touch(down, x, y, hal::ms(), key)) {
+        // touch already runs on the UI owner; queue mutation below is shared
+        // with keyboard producers under qLock.
+        extern void push(const hal::Key &);
+        push(key);
+    }
+}
+#endif
 
 std::mutex qLock;
 hal::Key queue[64];
@@ -150,82 +197,96 @@ void scanSdl() {
 
 // --- scripted previews ---------------------------------------------------
 void saveShot(const std::string &path) {
-    std::vector<uint16_t> buf(hal::W * hal::H);
-    lcd->readRect(0, 0, hal::W, hal::H, buf.data());
+    const int width = lcd->width(), height = lcd->height();
+    std::vector<lgfx::rgb888_t> row(width);
     FILE *f = fopen(path.c_str(), "wb");
-    if (!f) return;
-    fprintf(f, "P6\n%d %d\n255\n", hal::W, hal::H);
-    for (uint16_t px : buf) {
-        uint16_t c = (px >> 8) | (px << 8);
-        uint8_t rgb[3] = {uint8_t(((c >> 11) & 31) * 255 / 31), uint8_t(((c >> 5) & 63) * 255 / 63),
-                          uint8_t((c & 31) * 255 / 31)};
-        fwrite(rgb, 1, 3, f);
+    if (!f) { perror(path.c_str()); return; }
+    fprintf(f, "P6\n%d %d\n255\n", width, height);
+    for (int y = 0; y < height; ++y) {
+        lcd->readRect(0, y, width, 1, row.data());
+        for (const auto &px : row) { const uint8_t rgb[] = {px.R8(), px.G8(), px.B8()}; fwrite(rgb, 1, 3, f); }
     }
     fclose(f);
 }
 
-void runScript() {
+struct ScriptStep { uint32_t at; std::string action; };
+std::vector<ScriptStep> script;
+size_t nextStep = 0;
+void prepareScript() {
     const char *env = getenv("GRIM_SCRIPT");
     if (!env) return;
-    std::thread([s = std::string(env)]() {
-        auto t0 = std::chrono::steady_clock::now();
-        size_t pos = 0;
-        while (pos < s.size()) {
-            size_t end = s.find(';', pos);
-            std::string step = s.substr(pos, end == std::string::npos ? std::string::npos : end - pos);
-            pos = end == std::string::npos ? s.size() : end + 1;
-            size_t colon = step.find(':');
-            if (colon == std::string::npos) continue;
-            int at = atoi(step.substr(0, colon).c_str());
-            std::string act = step.substr(colon + 1);
-            std::this_thread::sleep_until(t0 + std::chrono::milliseconds(at));
-            hal::Key k;
-            if (act.rfind("shot:", 0) == 0) { saveShot(act.substr(5)); continue; }
-            if (act.rfind("key:", 0) == 0) {
-                // %3B = ';' since ';' separates steps
-                std::string t = act.substr(4);
-                for (size_t i = 0; i < t.size(); ++i) {
-                    hal::Key c;
-                    if (t[i] == '%' && i + 2 < t.size()) {
-                        c.ch = (char)strtol(t.substr(i + 1, 2).c_str(), nullptr, 16);
-                        i += 2;
-                    } else c.ch = t[i];
-                    push(c);
-                    std::this_thread::sleep_for(std::chrono::milliseconds(15));
-                }
-                continue;
+    std::string s(env);
+    size_t pos = 0;
+    while (pos < s.size()) {
+        size_t end = s.find(';', pos);
+        std::string step = s.substr(pos, end == std::string::npos ? std::string::npos : end-pos);
+        pos = end == std::string::npos ? s.size() : end+1;
+        size_t colon = step.find(':');
+        if (colon == std::string::npos) continue;
+        uint32_t at = strtoul(step.substr(0, colon).c_str(), nullptr, 10);
+        std::string act = step.substr(colon+1);
+        if (act.rfind("key:", 0) == 0) {
+            std::string text = act.substr(4);
+            for (size_t i = 0; i < text.size(); ++i, at += 15) {
+                char ch = text[i];
+                if (ch == '%' && i+2 < text.size()) { ch = char(strtol(text.substr(i+1,2).c_str(), nullptr, 16)); i += 2; }
+                script.push_back({at, std::string("char:")+ch});
             }
-            if (act == "enter") k.nav = hal::N_ENTER;
-            else if (act == "back") k.nav = hal::N_BACK;
-            else if (act == "esc") { k.nav = hal::N_ESC; k.ch = '`'; }
-            else if (act == "tab") k.nav = hal::N_TAB;
-            else if (act == "up") { k.nav = hal::N_UP; k.ch = ';'; }
-            else if (act == "down") { k.nav = hal::N_DOWN; k.ch = '.'; }
-            else if (act == "left") { k.nav = hal::N_LEFT; k.ch = ','; }
-            else if (act == "right") { k.nav = hal::N_RIGHT; k.ch = '/'; }
-            else if (act == "quit") _exit(0);
-            else continue;
-            push(k);
+        } else script.push_back({at, act});
+    }
+    std::stable_sort(script.begin(), script.end(), [](const auto &a, const auto &b) { return a.at < b.at; });
+    scriptStart = hal::ms();
+}
+
+void runScript() {
+    while (nextStep < script.size() && hal::ms()-scriptStart >= script[nextStep].at) {
+        const std::string act = script[nextStep++].action;
+        if (act.rfind("shot:", 0) == 0) { saveShot(act.substr(5)); continue; }
+        if (act == "quit") { stopWanted.store(true, std::memory_order_release); continue; }
+#ifdef GRIM_CYD
+        int x = 0, y = 0, down = 0;
+        if (sscanf(act.c_str(), "touch:%d,%d,%d", &x, &y, &down) == 3) {
+            scriptedTouch = down != 0; scriptedX = x; scriptedY = y; sendTouch(down != 0, x, y); continue;
         }
-    }).detach();
+        if (sscanf(act.c_str(), "tap:%d,%d", &x, &y) == 2) {
+            sendTouch(true, x, y); sendTouch(false, x, y); scriptedTouch = false; continue;
+        }
+#endif
+        hal::Key k;
+        if (act.rfind("char:", 0) == 0 && act.size() > 5) k.ch = act[5];
+        else if (act == "enter") k.nav = hal::N_ENTER;
+        else if (act == "back") k.nav = hal::N_BACK;
+        else if (act == "esc") { k.nav = hal::N_ESC; k.ch = '`'; }
+        else if (act == "tab") k.nav = hal::N_TAB;
+        else if (act == "up") { k.nav = hal::N_UP; k.ch = ';'; k.fn = true; }
+        else if (act == "down") { k.nav = hal::N_DOWN; k.ch = '.'; k.fn = true; }
+        else if (act == "left") { k.nav = hal::N_LEFT; k.ch = ','; k.fn = true; }
+        else if (act == "right") { k.nav = hal::N_RIGHT; k.ch = '/'; k.fn = true; }
+        else continue;
+        push(k);
+    }
 }
 
 // --- audio -------------------------------------------------------------------
 void render(int16_t *out, int n, bool scale = true) {
-    hal::AudioFn fn = audioFn.load();
-    if (fn) fn(out, n);
-    else memset(out, 0, n * 2);
-    hal::AudioFn ofn = overlayFn.load(); // UI sfx mixed over the main voice
-    if (ofn && n <= 4096) {
-        int16_t ob[4096];
-        ofn(ob, n);
-        for (int i = 0; i < n; ++i) {
-            int32_t m = out[i] + ob[i];
-            out[i] = (int16_t)(m > 32767 ? 32767 : m < -32768 ? -32768 : m);
+    const auto started = std::chrono::steady_clock::now();
+    hal::AudioFn fn = nullptr, ofn = nullptr;
+    if (callbacks.acquire(fn, ofn)) {
+        if (fn) fn(out, n); else memset(out, 0, n * sizeof(*out));
+        if (ofn && n <= 4096) {
+            int16_t ob[4096];
+            ofn(ob, n);
+            for (int i = 0; i < n; ++i) out[i] = std::clamp<int32_t>(int32_t(out[i]) + ob[i], -32768, 32767);
         }
+        callbacks.release();
+    } else {
+        memset(out, 0, n * sizeof(*out));
+        audioSkipped.fetch_add(1, std::memory_order_relaxed);
     }
-    if (!scale) return; // WAV dumps record what the codec would get
-    for (int i = 0; i < n; ++i) out[i] = (int16_t)((int32_t)out[i] * vol / 255);
+    const int level = vol.load(std::memory_order_relaxed);
+    if (scale) for (int i = 0; i < n; ++i) out[i] = (int16_t)((int32_t)out[i] * level / 255);
+    const auto us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now()-started).count();
+    audioTiming.record(uint32_t(us), n, hal::RATE);
 }
 
 void sdlCallback(void *, uint8_t *stream, int len) { render((int16_t *)stream, len / 2); }
@@ -241,7 +302,7 @@ void wavWriter(std::string path) {
     uint32_t total = 0;
     int16_t blk[256];
     auto t0 = std::chrono::steady_clock::now();
-    for (uint64_t frames = 0;; frames += 256) {
+    for (uint64_t frames = 0; !stopWanted.load(std::memory_order_acquire); frames += 256) {
         std::this_thread::sleep_until(t0 + std::chrono::microseconds(frames * 1000000 / hal::RATE));
         render(blk, 256, false);
         fwrite(blk, 2, 256, f);
@@ -253,11 +314,12 @@ void wavWriter(std::string path) {
         fseek(f, here, SEEK_SET);
         fflush(f);
     }
+    fclose(f);
 }
 
 void startAudio() {
     if (const char *wav = getenv("GRIM_WAV")) {
-        std::thread(wavWriter, std::string(wav)).detach();
+        wavThread = std::thread(wavWriter, std::string(wav));
         return;
     }
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) return;
@@ -267,15 +329,31 @@ void startAudio() {
     want.channels = 1;
     want.samples = 512;
     want.callback = sdlCallback;
-    SDL_AudioDeviceID dev = SDL_OpenAudioDevice(nullptr, 0, &want, &have, 0);
-    if (dev) SDL_PauseAudioDevice(dev, 0);
+    audioDevice = SDL_OpenAudioDevice(nullptr, 0, &want, &have, 0);
+    if (audioDevice) SDL_PauseAudioDevice(audioDevice, 0);
 }
 
-int userFunc(bool *running) {
-    runScript();
-    grimSetup();
-    while (*running) grimLoop();
-    return 0;
+void reportTiming() {
+    const auto a = audioTiming.snapshot(), f = frameTiming.snapshot();
+    FILE *out = stderr;
+    if (const char *path = getenv("GRIM_METRICS")) { if (FILE *file = fopen(path, "w")) out = file; }
+    fprintf(out, "{\"source\":\"native-desktop\",\"sample_rate\":%d,\"audio_blocks\":%u,\"audio_p50_upper_us\":%u,\"audio_p95_upper_us\":%u,\"audio_p99_upper_us\":%u,\"audio_max_us\":%u,\"audio_over_deadline\":%u,\"callback_publication_silence_blocks\":%u,\"frames\":%u,\"frame_cycle_p99_upper_us\":%u,\"frame_cycle_max_us\":%u}\n",
+        hal::RATE, a.count, a.percentileUpper(50), a.percentileUpper(95), a.percentileUpper(99), a.maxUs, a.overDeadline,
+        audioSkipped.load(), f.count, f.percentileUpper(99), f.maxUs);
+    if (out != stderr) fclose(out);
+}
+void userFunc() {
+    grimSetup(); prepareScript();
+    while (!stopWanted.load(std::memory_order_acquire)) {
+        const auto start = std::chrono::steady_clock::now();
+        grimLoop();
+        frameTiming.record(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now()-start).count());
+    }
+    grimShutdown();
+    hal::setAudio(nullptr); hal::setOverlayAudio(nullptr);
+    if (audioDevice) { SDL_PauseAudioDevice(audioDevice, 1); SDL_CloseAudioDevice(audioDevice); audioDevice = 0; }
+    if (wavThread.joinable()) wavThread.join();
+    reportTiming();
 }
 } // namespace
 
@@ -283,20 +361,72 @@ namespace hal {
 void begin() {
     lcd->init();
     lcd->setRotation(0);
+#ifdef GRIM_CYD
+    cyd_controls::loadSettings(); rotateDisplay();
+#endif
     cv = new Canvas(lcd);
     cv->setColorDepth(16);
     cv->createSprite(W, H);
+    cv->setPivot(0, 0);
     startAudio();
+    debugf("diviner_identity source=%s tree=%s profile=%s state=%s", DIVINER_SOURCE_SHA, DIVINER_SOURCE_TREE, DIVINER_BUILD_ENV, DIVINER_TREE_STATE);
 }
 Canvas &canvas() { return *cv; }
-void present() { cv->pushSprite(0, 0); }
+void present() {
+#ifdef GRIM_CYD
+    if (cyd_controls::visionsImmersive()) return;
+    rotateDisplay();
+    const int left = cyd_controls::viewportLeft(), top = cyd_controls::viewportTop();
+    const int clip = cyd_controls::viewportBottom();
+    lcd->startWrite();
+    theme::drawBackdropMargins(*lcd, top, theme::palette());
+    lcd->setClipRect(0, 0, lcd->width(), clip);
+    const float scale = float(cyd_controls::viewportWidth()) / W;
+    if (cyd_controls::isPortrait()) cv->pushSprite(left, top);
+    else cv->pushRotateZoom(left, top, 0, scale, scale);
+    lcd->clearClipRect();
+    for (size_t i = 0; i < moteCount; ++i) {
+        const auto &m = motes[i];
+        const int x = left + int(m.x * scale), y = top + int(m.y * scale);
+        if (x < 0 || x >= lcd->width() || y < 0 || y >= clip) continue;
+        const auto behind = lcd->readPixel(x, y);
+        lcd->fillRect(x, y, scale > 1 ? 2 : 1, scale > 1 ? 2 : 1, theme::blend(m.colour, behind, m.alpha));
+    }
+    moteCount = 0;
+    cyd_controls::draw(*lcd);
+    lcd->endWrite();
+#else
+    cv->pushSprite(0, 0);
+#endif
+}
+#ifdef GRIM_CYD
+void drawVisionsFullscreen(FullscreenRenderer render, uint32_t now) {
+    rotateDisplay(); lcd->clearClipRect(); lcd->startWrite();
+    if (render) render(*lcd, now);
+    lcd->clearClipRect(); lcd->endWrite(); moteCount = 0;
+}
+void presentNativeMenu(FullscreenRenderer render, uint32_t now) {
+    drawVisionsFullscreen(render, now); cyd_controls::draw(*lcd);
+}
+void queueBackdropMote(int x, int y, uint16_t colour, uint8_t alpha) {
+    if (alpha && moteCount < motes.size() && (y < 0 || y >= H)) motes[moteCount++] = {x, y, colour, alpha};
+}
+#endif
 uint32_t ms() { return SDL_GetTicks(); }
 void idle(uint32_t msec) {
-    scanSdl();
+    runScript(); scanSdl();
     if (msec) SDL_Delay(msec);
 }
 bool pollKey(Key &k) {
-    scanSdl();
+    runScript(); scanSdl();
+#ifdef GRIM_CYD
+    if (scriptedTouch) sendTouch(true, scriptedX, scriptedY);
+    else {
+        int32_t x = 0, y = 0;
+        const bool down = lcd->getTouch(&x, &y);
+        sendTouch(down, x, y);
+    }
+#endif
     std::lock_guard<std::mutex> g(qLock);
     if (qHead == qTail) return false;
     k = queue[qHead];
@@ -304,22 +434,43 @@ bool pollKey(Key &k) {
     return true;
 }
 bool anyHeld() {
+#ifdef GRIM_CYD
+    if (cyd_controls::anyHeld()) return true;
+#endif
     int n = 0;
     const uint8_t *st = SDL_GetKeyboardState(&n);
     for (int i = 0; st && i < n; ++i)
         if (st[i]) return true;
     return false;
 }
-void setAudio(AudioFn fn) { audioFn = fn; }
-void setOverlayAudio(AudioFn fn) { overlayFn = fn; }
+void setAudio(AudioFn fn) {
+    callbacks.setMain(fn, [] { std::this_thread::yield(); });
+}
+void setOverlayAudio(AudioFn fn) { callbacks.setOverlay(fn, [] { std::this_thread::yield(); }); }
+uint32_t heapFree() { return 0; }
+uint32_t heapLargest() { return 0; }
+void debugf(const char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
+    fputc('\n', stderr);
+}
 void setVolume(uint8_t v) { vol = v; }
 uint8_t volume() { return vol; }
 int batteryPercent() { return 77; }
-void backToLauncher() { _exit(0); }
+void backToLauncher() { stopWanted.store(true, std::memory_order_release); }
 } // namespace hal
 
 int main(int, char **) {
     lgfx::Panel_sdl::setShortcutKeymod(SIM_SHORTCUT_MOD);
     lcd = new Board();
-    return lgfx::Panel_sdl::main(userFunc, 128);
+    if (lgfx::Panel_sdl::setup() != 0) return 1;
+    std::thread worker(userFunc);
+    while (!stopWanted.load(std::memory_order_acquire) && lgfx::Panel_sdl::loop() == 0) {}
+    stopWanted.store(true, std::memory_order_release);
+    worker.join();
+    delete cv; cv = nullptr;
+    delete lcd; lcd = nullptr;
+    return lgfx::Panel_sdl::close();
 }

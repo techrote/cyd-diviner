@@ -18,11 +18,34 @@ for VLC on Windows.
 
 | PlatformIO target | Hardware or runtime | Use |
 | --- | --- | --- |
-| `cyd` | Classic ESP32-2432S028R with 4 MB flash, an ILI9341 LCD, and XPT2046 resistive touch | Standalone touchscreen firmware with 14 rites and a palette editor |
+| `cyd` | Classic ESP32-2432S028R with 4 MB flash, an ILI9341 LCD, and XPT2046 resistive touch | Standalone touchscreen firmware with 18 rites and a palette editor |
 | `cyd-pcm` | The same CYD, with the Windows VLC plugin on the host | Touchscreen firmware with live USB serial audio |
 | `cyd-diagnostics` | The same CYD | Serial touch injection, display readback, and hardware diagnostics |
-| `cardputer` | M5Stack Cardputer ADV with the Daedric Launcher | Original keyboard workflow with 16 rites. This is PlatformIO's default target |
-| `native` | Desktop with SDL2 development libraries and a POSIX-compatible C++ toolchain | Simulator with desktop audio, WAV export, and simulated radio data |
+| `cardputer` | M5Stack Cardputer ADV with the Daedric Launcher | Keyboard workflow with 20 rites. This is PlatformIO's default target |
+| `native` | Desktop with SDL2 development libraries and a POSIX-compatible C++ toolchain | Keyboard simulator with desktop audio, WAV export, and simulated radio data |
+| `native-cyd` | The same desktop | Actual CYD touch controls, four orientations, palettes and optional file persistence; simulated radio |
+
+
+## Upstream convergence candidate — Draft/HOLD
+
+This branch integrates upstream `c1b1175` while preserving the CYD developments.
+See the [baseline and architecture](docs/convergence/BASELINE.md),
+[qualification results](docs/convergence/QUALIFICATION.md),
+[direct-touch instrument guide](docs/convergence/INTERACTION.md),
+[owner evaluation](docs/convergence/OWNER-EVALUATION.md), and
+[portable component RAG](docs/convergence/PORTABILITY-RAG.md).
+
+The new `native-cyd` environment renders the actual CYD controls in SDL; mouse
+input and `GRIM_SCRIPT` touch actions support repeatable previews. Set
+`GRIM_SETTINGS=/absolute/path/settings.bin` for explicit local persistence.
+Native radio uses invented fixtures. SPECTRA's Wi-Fi scanning does not associate
+with an access point, but active scans may transmit probes; RSSI is a musical
+input, not a reliable range measurement. GLYPHSONG is a compact speech-like
+formant instrument, not natural-language TTS or a UTAU-compatible engine.
+
+Firmware CI uploads source-identified packages with app/full images, actual
+partition maps and SHA-256 checksums. No device has been flashed by this mission.
+The old 1600 KiB Cardputer Launcher app slot must not be assumed sufficient.
 
 ## CYD quick start
 
@@ -247,15 +270,19 @@ script actions. `tools/shots.sh shots` generates screenshots and WAV samples.
 ## Rites
 
 The carousel shows each rite in Daedric script and reveals its name on selection.
-The first 14 entries below are available on CYD and Cardputer. **Palette**
+The first 18 entries below are available on CYD and Cardputer. **Palette**
 is in CYD Settings. **Banish** and **Probe** are included in the Cardputer
 build and have simulator views.
 
 | Rite | What it does |
 | --- | --- |
-| [drone](docs/previews/drone.png) | Five drifting synth voices with resonant filtering, wind, bells, and delay |
+| [drone](docs/previews/drone.png) | Five drifting voices, six FM bell styles (temple/tubular/bowl/kalimba/gong/ice), wind and delay |
 | [seq](docs/previews/seq.png) | A 16-step kick, snare, hat, and acid groovebox with four pattern banks, Euclidean fills, song mode, and saved patterns on hardware |
 | [beat](docs/previews/beat.png) | Bytebeat livecoding with expressions in `t` |
+| [canon](docs/previews/canon.png) | Four independently phasing phrase loops; CYD phrase grid, tempo/spread and alignment |
+| [spectra](docs/previews/spectra.png) | Wi-Fi/BLE environmental choir with stable identity pitches, fading population and waterfall |
+| [glyphsong](docs/previews/glyphsong.png) | Portable formant singing: speak, chant, choir and syllabic sing, annotations and piano roll |
+| [coven](docs/previews/coven.png) | Autonomous local synthesis with bounded CV1 ESP-NOW musical coordination |
 | [wired](docs/previews/wired-navi.png) | ASCII 3D torus, navi sphere, wireframe solids, and tunnel |
 | [visions](docs/previews/vis-plasma.png) | Plasma, gate, ash-fire, glyph rain, kaleidoscope, and feedback trails |
 | [oracle](docs/previews/oracle.png) | Three-rune casts with bell chimes |

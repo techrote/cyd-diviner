@@ -1,48 +1,155 @@
-name: Firmware build
+name: Diviner qualification and firmware
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: diviner-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  cardputer:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+  firmware:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [cardputer, cyd, cyd-diagnostics, cyd-pcm]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install PlatformIO
+      - name: Install pinned PlatformIO
         run: python -m pip install --disable-pip-version-check platformio==6.2.0
-      - name: Build Cardputer firmware
-        run: pio run -e cardputer
+      - uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('platformio.ini') }}
+      - name: Build exact candidate source
+        run: pio run -e ${{ matrix.target }}
+      - name: Verify provenance and partition layout; package images
+        run: python tools/package_firmware.py ${{ matrix.target }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ matrix.target }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: delivery/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 30
 
-  cyd:
-    runs-on: ubuntu-latest
+  portable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [none, address, thread]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Use address range supported by GCC ThreadSanitizer on this runner
+        if: matrix.sanitizer == 'thread'
+        run: sudo sysctl vm.mmap_rnd_bits=28
+      - name: Qualify actual kernels, exchanges, protocol and lifetime
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+          TSAN_OPTIONS: halt_on_error=1
+        run: python tools/qualify.py --sanitizer ${{ matrix.sanitizer }} --output delivery/portable-${{ matrix.sanitizer }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qualification-${{ matrix.sanitizer }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: delivery/portable-${{ matrix.sanitizer }}/
+          if-no-files-found: error
+          retention-days: 30
+
+  simulator:
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        target: [cyd, cyd-diagnostics, cyd-pcm]
+        target: [native, native-cyd]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install PlatformIO
-        run: python -m pip install --disable-pip-version-check platformio==6.2.0
-      - name: Build CYD firmware
+      - name: Install SDL and pinned build/test tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+          python -m pip install --disable-pip-version-check platformio==6.2.0 pillow==13.0.0
+      - name: Build actual application
         run: pio run -e ${{ matrix.target }}
+      - name: Exercise keyboard application and complete carousel
+        if: matrix.target == 'native'
+        run: python tests/native_tour.py --output delivery/native
+      - name: Exercise actual CYD controller and rendered touchscreen tour
+        if: matrix.target == 'native-cyd'
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          mkdir -p delivery/native-cyd
+          tests/touch_tests.sh > delivery/native-cyd/controller.log 2>&1
+          SANITIZE=1 tests/touch_tests.sh > delivery/native-cyd/controller-sanitized.log 2>&1
+          python tests/touch_tour.py --binary .pio/build/native-cyd/program --output delivery/native-cyd
+      - name: Retain simulator and reproduction instructions
+        run: |
+          cp .pio/build/${{ matrix.target }}/program delivery/${{ matrix.target }}/diviner-${{ matrix.target }}-linux
+          cp docs/convergence/BUILD-AND-TEST.md delivery/${{ matrix.target }}/
+          cp .pio/build/${{ matrix.target }}/build-source.json delivery/${{ matrix.target }}/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulator-${{ matrix.target }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: delivery/${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 30
 
   vlc-plugin:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Build and validate the VLC plugin DLL
         shell: pwsh
         run: ./tools/vlc/build.ps1
+      - name: Record plugin delivery identity
+        shell: pwsh
+        run: |
+          $out = 'delivery/vlc-plugin'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          Copy-Item .pio/vlc-plugin/libcydpcm_plugin.dll $out
+          Copy-Item tools/vlc/open.ps1 $out
+          Copy-Item docs/convergence/OWNER-EVALUATION.md $out
+          $pluginHash = (Get-FileHash "$out/libcydpcm_plugin.dll" -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$pluginHash  libcydpcm_plugin.dll" | Set-Content "$out/SHA256SUMS.txt"
+          git rev-parse HEAD | Set-Content "$out/SOURCE.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vlc-plugin-${{ github.event.pull_request.head.sha || github.sha }}
+          path: delivery/vlc-plugin/
+          if-no-files-found: error
+          retention-days: 30

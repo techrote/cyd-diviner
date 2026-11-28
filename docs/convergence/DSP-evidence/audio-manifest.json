@@ -1,0 +1,63 @@
+{
+  "component_source_sha": "25329fe60d9d993d4f7f9c6098c46b3257edc189",
+  "sample_rate_hz": 24000,
+  "format": "PCM signed 16-bit mono WAV",
+  "method": "actual instrument render callback in graphics-free native harness; no microphone or physical device",
+  "files": [
+    {
+      "name": "canon-fast-spread.wav",
+      "bytes": 384044,
+      "sha256": "204efd444931e296cef4bccb430a2004e168bf3a119eb3164b010539d7711a39"
+    },
+    {
+      "name": "drone-bowl.wav",
+      "bytes": 240044,
+      "sha256": "ee39d7f915cd18c59ee2f4f71c3334eca6083c847a67d35c52191abb26a22464"
+    },
+    {
+      "name": "drone-gong.wav",
+      "bytes": 240044,
+      "sha256": "54017d9855a2172b24bb03b26fb16a14da183d8a840a9bbf318b9ec8a77ede62"
+    },
+    {
+      "name": "drone-ice.wav",
+      "bytes": 240044,
+      "sha256": "9c724092920836ceed828817c0ca0dfab8ccefc100d76ebd26c1f6d01f73e300"
+    },
+    {
+      "name": "drone-kalimba.wav",
+      "bytes": 240044,
+      "sha256": "d43e67f8dec7f8d4a21ed0267e443737beb7764221827de24912425a1e9f390d"
+    },
+    {
+      "name": "drone-temple.wav",
+      "bytes": 240044,
+      "sha256": "c7c54c657abdd183eee9712d3336df7a727176b659a59809a42fe4e9256b3431"
+    },
+    {
+      "name": "drone-tubular.wav",
+      "bytes": 240044,
+      "sha256": "8746c1c41df1e02627d090aa9b2d9750c46fa67a5140670bbb3fee38f5ca4448"
+    },
+    {
+      "name": "glyphsong-chant.wav",
+      "bytes": 240044,
+      "sha256": "a1c4dbe670a3f17016d8fc3657145699eff559c7ea094ec4e475a394d2b5ffcb"
+    },
+    {
+      "name": "glyphsong-choir.wav",
+      "bytes": 240044,
+      "sha256": "c4270a454f18075e0987f6a9dbe0d799eb4d9a714d3edeea25f3a045cc06c3fd"
+    },
+    {
+      "name": "glyphsong-sing.wav",
+      "bytes": 240044,
+      "sha256": "3cb554d2bd1c77dc6e740d2df749a130ddc10c84e4727175f60862682c7e64d8"
+    },
+    {
+      "name": "glyphsong-speak.wav",
+      "bytes": 240044,
+      "sha256": "32cd25337d0a394e23c70e244605d808751e8725b078e37e49a5906c5bde599a"
+    }
+  ]
+}

@@ -28,14 +28,15 @@ esptool --chip esp32s3 --port /dev/ttyACM0 --baud 921600 \
 
 ## App-only image
 
-`daedric-grimoire.bin` contains the application for the Daedric Launcher's
-`grimoi` OTA slot. Writing it to `0x170000` on that partition layout preserves
-the bootloader, Launcher and NVS data.
+`daedric-grimoire.bin` is the historical upstream app from the integrated
+`c1b1175` lineage. It is **not** a qualified binary for this convergence candidate.
+It already exceeds the old 1600 KiB Launcher `grimoi` slot. Do not use a hard-coded
+`0x170000` update instruction or assume that the previous Launcher layout fits.
 
-```sh
-esptool --chip esp32s3 --port /dev/ttyACM0 --baud 921600 \
-  --no-stub write-flash 0x170000 daedric-grimoire.bin
-```
+Use the current CI artifact's `firmware.bin` only with an independently verified
+application offset and sufficient partition capacity. Its standalone full image
+has a different partition table; review
+[owner evaluation](../docs/convergence/OWNER-EVALUATION.md) before installation.
 
 ## Verify the images
 

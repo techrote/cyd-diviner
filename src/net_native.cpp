@@ -3,8 +3,10 @@
 // sockets. A tiny bundled gemtext page exercises the parser.
 #ifdef GRIM_NATIVE
 #include "net.h"
+#include "coven_protocol.h"
 #include <SDL2/SDL.h>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <map>
@@ -22,12 +24,17 @@ const char *FAKE_SSID[] = {"wired-house", "navi", "COPLAND-OS", "Setec", "xanadu
 const int FAKE_AUTH[] = {1, 1, 1, 0, 1, 0, 1, 1, 0, 1};
 
 int scanCalls = 0;
+bool nowActive = false;
+NowStatus nativeNowStats;
 } // namespace
 
-void wifiBegin() {
-    if (wstate == WST_OFF) { wstate = WST_CONNECTING; stateAt = now(); ssid = "wired-house"; }
+int wifiScanStatus() { return scanCalls ? -1 : 0; }
+void wifiBegin(bool connect) {
+    nowActive = false;
+    if (!connect) { wstate = WST_SCANNING; stateAt = now(); ssid.clear(); ip.clear(); return; }
+    if (wstate == WST_OFF || wstate == WST_SCANNING) { wstate = WST_CONNECTING; stateAt = now(); ssid = "wired-house"; }
 }
-void radioStop() { wstate = WST_OFF; }
+void radioStop() { wstate = WST_OFF; nowActive = false; ssid.clear(); ip.clear(); scanCalls = 0; }
 WifiState wifiState() {
     if (wstate == WST_CONNECTING && now() - stateAt > 1500) {
         wstate = WST_ONLINE;
@@ -41,7 +48,7 @@ int wifiScan(std::vector<AP> &out) {
     out.clear();
     int count = (getenv("GRIM_FAKE_DRONE") && now() > 22000) ? 11 : 10; // a drone wanders in after 16s
     for (int i = 0; i < count; ++i) {
-        AP a;
+        AP a; a.lastSeen = now();
         if (i == 10) {
             a.ssid = "DJI-Mavic3-1A2B";
             for (int b = 0; b < 6; ++b) a.bssid[b] = (b == 0 ? 0x60 : b == 1 ? 0x60 : b == 2 ? 0x1f : i * 9 + b);
@@ -123,7 +130,7 @@ const FD FAKES[] = {{"navi-buds", 0x004C, true}, {"", 0x0075, false}, {"Tile", 0
                     {"Mi Band 7", 0x0157, true}, {"", 0x00E0, false}, {"JBL FLIP", 0x0057, true},
                     {"ESP32-ghost", 0xFFFF, true}, {"AirTag", 0x004C, false}};
 } // namespace
-void bleBegin() {}
+void bleBegin() { radioStop(); bleCalls = 0; }
 int bleScan(std::vector<BleDev> &out) {
     if (++bleCalls < 40) return -1;
     bleCalls = 0;
@@ -186,6 +193,7 @@ int csiRead(float &motion, float *bins, int nbins) {
     return n;
 }
 
+#ifndef GRIM_CYD
 // ---- probe ----
 namespace {
 uint32_t probeStart = 0;
@@ -224,6 +232,8 @@ std::vector<ProbeLine> probeResults() {
     add(100, "done", 0);
     return probeLines;
 }
+
+#endif
 
 // ---- Gemini ----
 namespace {
@@ -280,6 +290,70 @@ std::string gemMeta() { return gmeta; }
 std::string gemBody() { return gbody; }
 std::string gemURL() { return gurl; }
 int gemProgress() { return gprog; }
+
+// ESP-NOW local fixture: bounded virtual peers run the exact CV1 session
+// implementation used by the instrument. No sockets or physical RF claims.
+// GRIM_COVEN_NODES=1..11 includes this local instrument; GRIM_FAKE_COVEN=1
+// enables one virtual peer for compatibility with upstream preview scripts.
+namespace {
+uint32_t nowNext = 0, familiarNext = 0;
+int nowN = 0, virtualCount = 0, virtualNext = 0;
+coven::Session virtualPeer[coven::MaxPeers];
+const uint8_t LOCAL_MAC[6] = {0x34, 0x85, 0x18, 0xAA, 0x0C, 0x77};
+const char *DY_LINES[] = {
+    "the window smells of rain again", "do you remember the copper hill?", "i kept the lantern lit for you",
+    "something hums under the floor", "tell me about the river", "i am not afraid of the dark today",
+};
+} // namespace
+bool nowBegin() {
+    radioStop(); nowActive = true; nativeNowStats = NowStatus{};
+    nowNext = now() + 500; familiarNext = now() + 1500; nowN = virtualNext = 0;
+    const char *count = getenv("GRIM_COVEN_NODES");
+    virtualCount = count ? atoi(count) - 1 : getenv("GRIM_FAKE_COVEN") ? 1 : 0;
+    if (virtualCount < 0) virtualCount = 0;
+    if (virtualCount > int(coven::MaxPeers)) virtualCount = int(coven::MaxPeers);
+    for (int i = 0; i < virtualCount; ++i) {
+        uint8_t mac[6] = {0x02, 0x44, 0x49, 0x56, 0, uint8_t(i + 1)};
+        virtualPeer[i].begin(mac, now()); virtualPeer[i].degree = uint8_t((i * 2) % 13);
+    }
+    return true;
+}
+bool nowSend(const void *data, int len) {
+    if (!nowActive || !data || len <= 0 || len > 250) { ++nativeNowStats.sendErrors; return false; }
+    ++nativeNowStats.sent;
+    for (int i = 0; i < virtualCount; ++i) virtualPeer[i].receive(LOCAL_MAC, data, size_t(len), now());
+    return true;
+}
+void nowMac(uint8_t mac[6]) { memcpy(mac, LOCAL_MAC, 6); }
+NowStatus nowStatus() { NowStatus s = nativeNowStats; s.ready = nowActive; s.rssiAvailable = true; return s; }
+bool nowPoll(NowPkt &p) {
+    if (!nowActive) return false;
+    uint32_t at = now();
+    if (virtualCount && int32_t(at - nowNext) >= 0) {
+        nowNext = at + uint32_t(1000 / virtualCount);
+        auto &peer = virtualPeer[virtualNext++ % virtualCount];
+        uint8_t bytes[coven::WireSize]; peer.frame(bytes, 0, at);
+        for (int i = 0; i < virtualCount; ++i)
+            if (&virtualPeer[i] != &peer) virtualPeer[i].receive(peer.me, bytes, sizeof bytes, at);
+        p = NowPkt{}; memcpy(p.mac, peer.me, 6); memcpy(p.data, bytes, sizeof bytes);
+        p.len = sizeof bytes; p.rssi = -50; p.rssiAvailable = true; p.receivedAt = at;
+        ++nativeNowStats.received; ++nativeNowStats.queued; return true;
+    }
+    if (int32_t(at - familiarNext) < 0) return false;
+    familiarNext = at + 3000;
+    int k = nowN++; p = NowPkt{}; p.receivedAt = at; p.rssiAvailable = true;
+    const uint8_t mac[6] = {0x02, 0x44, 0x59, 0x41, 0x44, uint8_t(1 + (k & 1))};
+    memcpy(p.mac, mac, 6); p.rssi = (k & 1) ? -47 : -61;
+    if (k % 4 == 3) {
+        p.len = 24;
+        for (int i = 0; i < 24; ++i) p.data[i] = uint8_t(i * 37 + k);
+    } else {
+        char w[250];
+        int n = snprintf(w, sizeof w, "DY1|1|2|%d|0|0|tell|0|x|y|%s", k, DY_LINES[k % 6]);
+        p.len = uint8_t(n); memcpy(p.data, w, p.len);
+    }
+    ++nativeNowStats.received; ++nativeNowStats.queued; return true;
+}
 
 } // namespace net
 #endif

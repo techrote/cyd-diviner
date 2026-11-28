@@ -5,6 +5,7 @@
 #pragma once
 #include "dsp.h"
 #include "hal.h"
+#include <atomic>
 
 namespace uisfx {
 
@@ -21,8 +22,8 @@ inline Voice voices[4];
 inline uint8_t next = 0;
 
 // single-producer (UI) / single-consumer (audio) event ring
-inline volatile uint8_t evq[16];
-inline volatile uint8_t qHead = 0, qTail = 0;
+inline uint8_t evq[16];
+inline std::atomic<uint8_t> qHead{0}, qTail{0};
 
 inline void start(Id id) {
     Voice &v = voices[next++ & 3];
@@ -50,18 +51,23 @@ inline void start(Id id) {
 
 inline void trigger(Id id) {
     using namespace detail;
-    uint8_t n = (qTail + 1) & 15;
-    if (n == qHead) return;
-    evq[qTail] = (uint8_t)id;
-    qTail = n;
+    const uint8_t tail = qTail.load(std::memory_order_relaxed);
+    const uint8_t next = (tail + 1) & 15;
+    if (next == qHead.load(std::memory_order_acquire)) return;
+    evq[tail] = (uint8_t)id;
+    qTail.store(next, std::memory_order_release);
 }
 
 inline void render(int16_t *out, int n) {
     using namespace detail;
-    while (qHead != qTail) {
-        start((Id)evq[qHead]);
-        qHead = (qHead + 1) & 15;
+    uint8_t head = qHead.load(std::memory_order_relaxed);
+    const uint8_t tail = qTail.load(std::memory_order_acquire);
+    // Snapshot the producer tail: no unbounded draining under a flood.
+    while (head != tail) {
+        start((Id)evq[head]);
+        head = (head + 1) & 15;
     }
+    qHead.store(head, std::memory_order_release);
     for (int i = 0; i < n; ++i) {
         float x = 0;
         for (auto &v : voices) {

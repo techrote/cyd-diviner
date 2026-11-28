@@ -1,0 +1,9 @@
+formant_filter nominal_hz=330 predicted_hz=331.04 measured_peak_hz=330
+formant_filter nominal_hz=560 predicted_hz=563.02 measured_peak_hz=560
+formant_filter nominal_hz=850 predicted_hz=857.00 measured_peak_hz=860
+formant_filter nominal_hz=1300 predicted_hz=1316.57 measured_peak_hz=1320
+formant_filter nominal_hz=1900 predicted_hz=1935.99 measured_peak_hz=1940
+formant_filter nominal_hz=2300 predicted_hz=2353.34 measured_peak_hz=2350
+formant_filter nominal_hz=2700 predicted_hz=2774.38 measured_peak_hz=2770
+formant_filter nominal_hz=3050 predicted_hz=3145.94 measured_peak_hz=3150
+PASS rate=48000 sine_error=4.73199785e-06 pitch_hz=439.999993891 envelope_error=0.000502318144 svf_peak=0.939204 delay16_error=6.09755516e-05 vox_peak=0.816449 score_fuzz=10000
