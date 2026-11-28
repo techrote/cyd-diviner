@@ -29,6 +29,10 @@ are **NOT RUN** in this mission environment.
 - SPECTRA's vibrato/breath oscillators advance by the actual 64-sample control
   stride. Their frequency settings now represent cycles per second, rather than
   accidentally running at one sixty-fourth of the intended rate.
+- Radio observation age uses wrap-safe half-range arithmetic. If an RTOS
+  callback/scan producer samples its millisecond clock just after the UI frame
+  sampled its own `now`, that small future skew is treated as age zero instead
+  of wrapping into an apparently ancient observation.
 
 Both instruments detach their callback before freeing state and explicitly stop
 radio resources on leave. SPECTRA also tears down its radio after failed state
@@ -54,7 +58,9 @@ Presence is sent once per second. The beat lasts 1,800 ms. At most ten remote
 members are retained, plus the local device; six separate visual familiar slots
 cannot evict a musical member. Unknown members beyond that capacity are refused
 until a slot expires. Member liveness expires 15,000 ms after the last accepted
-new packet. The lowest lexicographic active MAC is leader: this is an ordering
+new packet. The CV1 `Session` peer table is the sole authority for musical-member
+liveness; COVEN's visual/audio seat roster mirrors its corrected receive time and
+cannot independently extend a member lease after queue delay. The lowest lexicographic active MAC is leader: this is an ordering
 rule, **not device age**. Only that elected peer supplies root, mode and clock.
 A surviving elected peer takes over after expiry; becoming local leader retains
 the inherited musical phase instead of resetting the instrument.

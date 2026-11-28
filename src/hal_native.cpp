@@ -63,7 +63,7 @@ struct Board : public lgfx::LGFX_Device {
 Board *lcd = nullptr;
 Canvas *cv = nullptr;
 audio_lifecycle::Callbacks callbacks;
-std::atomic<uint8_t> vol{140};
+alignas(4) std::atomic<uint32_t> vol{140};
 std::atomic<bool> stopWanted{false};
 std::thread wavThread;
 SDL_AudioDeviceID audioDevice = 0;
@@ -460,8 +460,8 @@ void debugf(const char *fmt, ...) {
     va_end(ap);
     fputc('\n', stderr);
 }
-void setVolume(uint8_t v) { vol = v; }
-uint8_t volume() { return vol; }
+void setVolume(uint8_t v) { vol.store(v, std::memory_order_relaxed); }
+uint8_t volume() { return static_cast<uint8_t>(vol.load(std::memory_order_relaxed)); }
 int batteryPercent() { return 77; }
 void backToLauncher() { stopWanted.store(true, std::memory_order_release); }
 } // namespace hal

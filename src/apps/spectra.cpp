@@ -307,7 +307,7 @@ void draw(uint32_t now) {
     }
     for (auto &v : s.v) {
         if (!v.used) continue;
-        if (!v.leaving && !s.hold && now - v.seen > GONE_MS) {
+        if (!v.leaving && !s.hold && radio_music::age(now, v.seen) >= GONE_MS) {
             v.leaving = true; // sigh down a fifth as it fades
             v.ampT = 0;
             v.hzT = v.hz * 0.6674f;

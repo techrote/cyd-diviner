@@ -30,6 +30,10 @@ SOURCE = r"""
 #endif
 struct alignas(4) ProbeWord { std::atomic<uint32_t> word{0}; };
 struct ProbeState : audio_exchange::InternalState { audio_exchange::Latest<uint32_t> latest; };
+struct ProbeRealtimeControls : audio_exchange::InternalState {
+    audio_exchange::SpscQueue<uint8_t, 15> queue;
+    alignas(4) std::atomic<uint32_t> volume{140};
+};
 extern "C" {
 __attribute__((used,noinline)) bool probe_trait() {
     return std::atomic<uint32_t>::is_always_lock_free;
@@ -63,6 +67,18 @@ __attribute__((used,noinline)) void probe_publish(audio_exchange::Latest<uint32_
 }
 __attribute__((used,noinline)) bool probe_consume(audio_exchange::Latest<uint32_t> *p, uint32_t *value) {
     return p->consume(*value);
+}
+__attribute__((used,noinline)) bool probe_queue_push(ProbeRealtimeControls *p, uint8_t value) {
+    return p->queue.push(value);
+}
+__attribute__((used,noinline)) bool probe_queue_pop(ProbeRealtimeControls *p, uint8_t *value) {
+    return p->queue.pop(*value);
+}
+__attribute__((used,noinline)) uint32_t probe_volume_load(ProbeRealtimeControls *p) {
+    return p->volume.load(std::memory_order_relaxed);
+}
+__attribute__((used,noinline)) void probe_volume_store(ProbeRealtimeControls *p, uint32_t value) {
+    p->volume.store(value, std::memory_order_relaxed);
 }
 __attribute__((used,noinline)) ProbeState *probe_allocate() {
     return new (std::nothrow) ProbeState();

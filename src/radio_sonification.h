@@ -16,7 +16,15 @@ inline float level(int rssi) {
 inline int note(uint32_t hash, int root, const int8_t *steps, unsigned count) {
     return count && steps ? root + steps[hash % count] + 12 * ((hash >> 9) % 3) : root;
 }
+// Monotonic timestamps can be sampled on different RTOS tasks. A producer may
+// therefore publish a timestamp a few milliseconds after a consumer sampled
+// its frame clock. Treat that half-range "future" skew as age zero while
+// preserving ordinary uint32_t rollover arithmetic for real elapsed time.
+inline uint32_t age(uint32_t now, uint32_t seen) {
+    const uint32_t elapsed = now - seen;
+    return (elapsed & 0x80000000u) ? 0u : elapsed;
+}
 inline bool fresh(uint32_t now, uint32_t seen, uint32_t lifetime) {
-    return uint32_t(now - seen) < lifetime;
+    return age(now, seen) < lifetime;
 }
 } // namespace radio_music

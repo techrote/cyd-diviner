@@ -13,7 +13,7 @@ namespace hal {
 namespace {
 Canvas *cv = nullptr;
 audio_lifecycle::Callbacks callbacks;
-std::atomic<uint8_t> vol{140};
+alignas(4) std::atomic<uint32_t> vol{140};
 #ifdef GRIM_AUDIO_DIAGNOSTICS
 diagnostics::TimingStats audioTiming;
 #endif
@@ -124,8 +124,9 @@ void begin() {
     cv = new Canvas(&M5Cardputer.Display);
     cv->setColorDepth(16);
     cv->createSprite(W, H);
+    audio_exchange::detail::checkStorage(&vol);
     M5Cardputer.Speaker.begin();
-    M5Cardputer.Speaker.setVolume(vol.load(std::memory_order_relaxed));
+    M5Cardputer.Speaker.setVolume(static_cast<uint8_t>(vol.load(std::memory_order_relaxed)));
     xTaskCreatePinnedToCore(audioTask, "grim-audio", 4096, nullptr, 5, nullptr, 0);
     debugf("diviner_identity source=%s tree=%s profile=%s state=%s", DIVINER_SOURCE_SHA, DIVINER_SOURCE_TREE, DIVINER_BUILD_ENV, DIVINER_TREE_STATE);
 }
@@ -152,10 +153,10 @@ void setAudio(AudioFn fn) {
 }
 void setOverlayAudio(AudioFn fn) { callbacks.setOverlay(fn, [] { vTaskDelay(1); }); }
 void setVolume(uint8_t v) {
-    vol = v;
+    vol.store(v, std::memory_order_relaxed);
     M5Cardputer.Speaker.setVolume(v);
 }
-uint8_t volume() { return vol; }
+uint8_t volume() { return static_cast<uint8_t>(vol.load(std::memory_order_relaxed)); }
 
 int batteryPercent() { return M5Cardputer.Power.getBatteryLevel(); }
 uint32_t heapFree() { return esp_get_free_heap_size(); }

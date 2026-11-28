@@ -165,7 +165,7 @@ constexpr int AudioBlock = 128;
 constexpr i2s_port_t AudioPort = I2S_NUM_0;
 SemaphoreHandle_t audioLock = nullptr;
 AudioFn audioFn = nullptr, overlayFn = nullptr;
-std::atomic<uint8_t> level{140};
+alignas(4) std::atomic<uint32_t> level{140};
 #ifdef GRIM_CYD_DIAGNOSTICS
 std::atomic<uint32_t> audioBlocks{0}, signalBlocks{0};
 diagnostics::TimingStats audioTiming, audioLockTiming;
@@ -607,7 +607,7 @@ void setOverlayAudio(AudioFn fn) {
 }
 
 void setVolume(uint8_t v) { level.store(v, std::memory_order_relaxed); }
-uint8_t volume() { return level.load(std::memory_order_relaxed); }
+uint8_t volume() { return static_cast<uint8_t>(level.load(std::memory_order_relaxed)); }
 
 uint32_t heapFree() { return esp_get_free_heap_size(); }
 uint32_t heapLargest() { return heap_caps_get_largest_free_block(MALLOC_CAP_8BIT); }

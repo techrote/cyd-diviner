@@ -639,8 +639,9 @@ int bleScan(std::vector<BleDev> &out) {
     // hand back the live set and drop anything not seen for 12s, under the lock
     out.clear();
     xSemaphoreTake(bleLock, portMAX_DELAY);
+    const uint32_t observedNow = millis();
     for (auto it = bleFound.begin(); it != bleFound.end();) {
-        if (now - it->lastSeen >= 12000) it = bleFound.erase(it);
+        if (uint32_t(observedNow - it->lastSeen) >= 12000) it = bleFound.erase(it);
         else { out.push_back(*it); ++it; }
     }
     xSemaphoreGive(bleLock);

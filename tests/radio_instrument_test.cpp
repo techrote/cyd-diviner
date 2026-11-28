@@ -82,6 +82,7 @@ void glyphsCentre(const DaedricFont&,const char*,int,int,uint16_t) {}
 namespace net {
 static bool radioOn = false, failStart = false, strongVisitor = false, freezeObservation = false;
 static uint32_t observationAt = 0;
+static int32_t observationLeadMs = 0, receiveOffsetMs = 0;
 static radio_queue::Ring<NowPkt,15> incoming;
 void radioStop() { radioOn = false; incoming.clear(); }
 void wifiBegin(bool connect) { assert(!connect); radioOn = true; }
@@ -89,7 +90,7 @@ void bleBegin() { radioOn = true; }
 static AP accessPoint(int i) {
     AP a; a.ssid = "synthetic"; for (int j=0;j<6;++j) a.bssid[j]=uint8_t(i*7+j);
     a.rssi = int8_t(-40-i*7); a.channel=1; a.auth=0;a.known=false;
-    a.lastSeen=freezeObservation?observationAt:hal::ms();return a;
+    a.lastSeen=freezeObservation?observationAt:uint32_t(int64_t(hal::ms())+observationLeadMs);return a;
 }
 int wifiScan(std::vector<AP> &out) {
     out.clear(); if(!radioOn)return -1;
@@ -101,7 +102,7 @@ int wifiScanStatus(){return 0;}
 int bleScan(std::vector<BleDev> &out) {
     out.clear();if(!radioOn)return BLE_UNAVAILABLE;
     for(int i=0;i<8;++i){BleDev d; d.addr="02:00:00:00:00:0"+std::to_string(i);d.name="fixture";
-        d.rssi=int8_t(-45-i*4);d.company=0xffff;d.connectable=false;d.lastSeen=hal::ms();out.push_back(d);}
+        d.rssi=int8_t(-45-i*4);d.company=0xffff;d.connectable=false;d.lastSeen=uint32_t(int64_t(hal::ms())+observationLeadMs);out.push_back(d);}
     return int(out.size());
 }
 bool nowBegin(){radioOn=!failStart;return radioOn;}
@@ -110,7 +111,7 @@ void nowMac(uint8_t mac[6]){const uint8_t local[]={2,0,0,0,0,30};memcpy(mac,loca
 NowStatus nowStatus(){NowStatus s;s.ready=radioOn;return s;}
 bool nowPoll(NowPkt &p){return incoming.pop(p);}
 static void member(uint8_t rank,uint32_t tick,uint8_t root=3,uint8_t kind=0){
-    NowPkt p{};p.mac[0]=2;p.mac[5]=rank;p.receivedAt=hal::ms();p.rssi=-50;p.len=coven::WireSize;
+    NowPkt p{};p.mac[0]=2;p.mac[5]=rank;p.receivedAt=uint32_t(int64_t(hal::ms())+receiveOffsetMs);p.rssi=-50;p.len=coven::WireSize;
     uint8_t b[coven::WireSize];coven::encode({kind,root,1,4,uint8_t(tick/1800),uint16_t(tick%1800)},b);
     memcpy(p.data,b,sizeof b);assert(incoming.push(p));
 }
@@ -180,6 +181,14 @@ int main(int argc,char**argv){
     net::failStart=true;covenRite.enter();assert(!tested_coven::S->ready&&hal::enabled());
     hal::render(block,128);covenRite.leave();net::failStart=false;
 
+    // A scan/callback producer can sample its monotonic clock just after the
+    // frame owner sampled now. Such fresh observations must not underflow
+    // into apparently ancient timestamps.
+    net::observationLeadMs=1;
+    spectra.enter();spectra.frame(hal::ms());
+    assert(tested_spectra::S->v[0].used&&!tested_spectra::S->v[0].leaving);
+    spectra.leave();net::observationLeadMs=0;
+
     spectra.enter();spectra.frame(hal::ms());
     assert(tested_spectra::S->v[7].used);
     pointer(spectra,234,98);pointer(spectra,234,98,false,false);assert(tested_spectra::S->air==1.f);
@@ -202,6 +211,27 @@ int main(int argc,char**argv){
     key(spectra,' ');specimen(spectra,"spectra-stale-departure",output,7);
     for(auto &v:tested_spectra::S->v)assert(!v.used);
     spectra.leave();net::freezeObservation=false;
+
+    // ESP-NOW callback timestamps can likewise be one tick newer than the
+    // frame clock. The packet remains fresh and must elect the remote leader.
+    net::receiveOffsetMs=1;
+    covenRite.enter();
+    net::member(1,hal::ms()%coven::CycleMs,3);covenRite.frame(hal::ms());
+    assert(!tested_coven::S->eldest&&tested_coven::S->rootPc==3);
+    covenRite.leave();net::receiveOffsetMs=0;
+
+    // Queue residence belongs to the protocol lease. A delayed packet must not
+    // leave a ghost member in the musical/visual seat roster after Session
+    // expires the authoritative peer.
+    net::receiveOffsetMs=-1500;
+    covenRite.enter();
+    net::member(1,uint32_t(hal::ms()-1500)%coven::CycleMs,3);covenRite.frame(hal::ms());
+    assert(tested_coven::S->session.members()==2);
+    net::receiveOffsetMs=0;
+    hal::clockMs.fetch_add(coven::GoneMs-1000);covenRite.frame(hal::ms());
+    assert(tested_coven::S->session.members()==1);
+    for(auto &x:tested_coven::S->soul)assert(!x.used||!x.member);
+    covenRite.leave();
 
     covenRite.enter();pointer(covenRite,132,52);pointer(covenRite,132,52,false,false);
     assert(tested_coven::S->rootPc==10);
@@ -243,5 +273,5 @@ int main(int argc,char**argv){
         r->enter();r->frame(hal::ms());hal::render(block,128);r->leave();assert(!hal::enabled()&&!net::radioOn);
     }
     assert(audioAllocations.load()==0);
-    printf("PASS actual radio instruments: 2 allocation failures, startup-failure autonomous audio, 6 rendered audio specimens, 10000 concurrent UI iterations, 300 lifecycle repeats, bounded command overflow, stale/departing population, callback_allocations=0; state_bytes coven=%zu spectra=%zu\n",sizeof(tested_coven::State),sizeof(tested_spectra::State));
+    printf("PASS actual radio instruments: 2 allocation failures, startup-failure autonomous audio, 6 rendered audio specimens, future-timestamp admission, authoritative delayed-member expiry, 10000 concurrent UI iterations, 300 lifecycle repeats, bounded command overflow, stale/departing population, callback_allocations=0; state_bytes coven=%zu spectra=%zu\n",sizeof(tested_coven::State),sizeof(tested_spectra::State));
 }

@@ -65,6 +65,17 @@ Windows plugin. The linked PR checks and attached reports provide the exact fina
 revision and results; this page records the evidence and corrections preceding
 that freeze. Temporary isolated investigation workflows are not integrated.
 
+A subsequent in-depth review of the first 10/10 software candidate found three
+pre-hardware correctness issues that required a new exact-source qualification:
+cross-task radio timestamps could be sampled just after a frame timestamp and
+underflow age checks; COVEN's display roster independently extended accepted
+member liveness instead of following the CV1 Session lease; and the UI sound
+queue/Cardputer volume path still used subword atomics despite the S3 target
+evidence above. The review correction uses wrap-safe future-skew clamping,
+Session-authoritative member expiry, and aligned 32-bit bounded queue/control
+words. Portable regressions force +1 ms producer timestamp skew and delayed
+member expiry so these failures cannot silently recur.
+
 The final runner also rejects absent or malformed required reports, stale
 receipts and child failures mislabeled PASS. Eight classification fixtures
 exercise these guards using the real runner and independent fake children.

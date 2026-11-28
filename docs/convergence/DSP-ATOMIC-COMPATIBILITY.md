@@ -79,7 +79,9 @@ for admission and writer-pending state. Its constructor enforces the same storag
 contract. Audio admission attempts one strong CAS; only the control thread may
 retry while waiting for in-flight audio. This also avoids an opaque subword
 atomic-flag RMW implementation and interference between neighboring byte flags.
-The existing CYD audio mutex remains intact.
+The UI overlay queue now reuses the same aligned 32-bit `SpscQueue` mechanism,
+and HAL volume values read by audio use aligned 32-bit atomic words rather than
+byte atomics. The existing CYD audio mutex remains intact.
 
 `Latest<T>` requires one non-reentrant producer and one non-reentrant
 consumer. Its three slots are privately owned by producer, consumer and the
@@ -115,9 +117,9 @@ python tools/qualify.py --sanitizer address --output delivery/atomic-asan
 python tools/qualify.py --sanitizer thread --output delivery/atomic-tsan
 ```
 
-The extended probe includes the actual snapshot publish/consume wrappers,
-internal allocation/free calls, IDF version macros and subword atomic runtime
-functions. Its receipt records source SHA, tree, clean/dirty snapshot,
+The extended probe includes the actual snapshot publish/consume wrappers, the
+bounded SPSC queue and word-sized volume load/store path, internal allocation/free
+calls, IDF version macros and subword atomic runtime functions. Its receipt records source SHA, tree, clean/dirty snapshot,
 compiler, commands, header hashes and runtime archive hashes. Refer to the
 final integrated CI artifacts for the candidate's pass/fail classifications;
 the initial probe above is diagnostic evidence from an earlier source.

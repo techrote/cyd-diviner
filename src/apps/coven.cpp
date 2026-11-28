@@ -11,6 +11,7 @@
 #include "../dsp.h"
 #include "../audio_exchange.h"
 #include "../coven_protocol.h"
+#include "../radio_sonification.h"
 #include "../net.h"
 #include "../rite.h"
 #include "../theme.h"
@@ -36,7 +37,7 @@ constexpr int N_SCALES = 4;
 const char PIANO[] = "awsedftgyhujk";
 constexpr int MAXS = int(coven::MaxPeers) + 6;           // seats + familiars we track
 constexpr uint32_t BEAT_MS = 1800; // the circle's pulse
-constexpr uint32_t GONE_MS = 15000;
+constexpr uint32_t GONE_MS = coven::GoneMs;
 
 struct Soul {
     bool used = false, member = false, talker = false;
@@ -86,6 +87,29 @@ struct State : audio_exchange::InternalState {
 } *S = nullptr;
 
 bool macLess(const uint8_t *a, const uint8_t *b) { return memcmp(a, b, 6) < 0; }
+
+const coven::Peer *memberPeer(const State &s, const uint8_t mac[6]) {
+    for (const auto &peer : s.session.peers)
+        if (peer.used && !memcmp(peer.mac, mac, 6)) return &peer;
+    return nullptr;
+}
+
+// CV1 Session owns member liveness. The visual/musical Soul roster mirrors that
+// authoritative lease instead of independently extending it when a queued
+// packet is processed later. Familiars remain a separate transient population.
+void syncMembers(State &s, uint32_t now) {
+    for (auto &x : s.soul) {
+        if (!x.used) continue;
+        if (x.member) {
+            const coven::Peer *peer = memberPeer(s, x.mac);
+            if (!peer) { x = Soul{}; continue; }
+            x.seen = peer->seen;
+            x.degree = peer->packet.degree;
+        } else if (radio_music::age(now, x.seen) >= GONE_MS) {
+            x = Soul{};
+        }
+    }
+}
 
 int midiOf(int degree) {
     const Scale &sc = SCALES[S->scale];
@@ -201,7 +225,7 @@ Soul *find(const uint8_t *mac, uint32_t now, bool member) {
         if (!x.used && !free) free = &x;
         if (x.used && !x.member) {
             ++familiars;
-            if (!oldest || uint32_t(now - x.seen) > uint32_t(now - oldest->seen)) oldest = &x;
+            if (!oldest || radio_music::age(now, x.seen) > radio_music::age(now, oldest->seen)) oldest = &x;
         }
     }
     // Unrelated traffic must never evict a musical member.
@@ -221,11 +245,11 @@ void listen(uint32_t now) {
         if (!memcmp(p.mac, s.me, 6)) continue;
         bool cv = p.len >= 3 && !memcmp(p.data, "CV1", 3);
         if (cv) {
-            auto result = s.session.receive(p.mac, p.data, p.len, now, uint32_t(now - p.receivedAt));
+            auto result = s.session.receive(p.mac, p.data, p.len, now, radio_music::age(now, p.receivedAt));
             if (result != coven::Receive::Presence && result != coven::Receive::Call) continue;
             Soul *x = find(p.mac, now, true);
             if (!x) continue;
-            x->seen = now; x->rssi = p.rssi; x->member = true; x->degree = p.data[6];
+            x->rssi = p.rssi; x->member = true; x->degree = p.data[6];
             if (result == coven::Receive::Call && (!s.called || uint32_t(now - s.callAt) >= 700)) {
                 s.called = true; s.callAt = now;
                 strike(dsp::midiHz(midiOf(x->degree) + 12), 0.5f);
@@ -260,7 +284,7 @@ void listen(uint32_t now) {
             if (!s.hush) strike(x->hz * 4.f, 0.06f);
         }
     }
-    for (auto &x : s.soul) if (x.used && uint32_t(now - x.seen) >= GONE_MS) x.used = false;
+    syncMembers(s, now);
     s.rootPc = s.session.root; s.scale = s.session.scale;
     s.eldest = s.session.isLeader(); s.beatAt = s.session.beatAt;
     s.telemetry.consume(s.voiceView);

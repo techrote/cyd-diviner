@@ -85,7 +85,9 @@ static void unitTests() {
     CHECK(radio_music::level(-128) >= 0 && radio_music::level(127) <= 1);
     CHECK(radio_music::identityHash("synthetic") == radio_music::identityHash("synthetic"));
     for (unsigned i = 0; i < 10000; ++i) { int note = radio_music::note(i, 45, steps, 7); CHECK(note >= 45 && note <= 79); }
+    CHECK(radio_music::age(10, 0xfffffff0) == 26);
     CHECK(radio_music::fresh(10, 0xfffffff0, 30)); CHECK(!radio_music::fresh(10, 0xfffffff0, 20));
+    CHECK(radio_music::age(100, 101) == 0); CHECK(radio_music::fresh(100, 101, 1));
 }
 struct Options {
     const char *name; unsigned nodes; int duration = 60000, delayMax = 0, dropPercent = 0, driftPpm = 0;

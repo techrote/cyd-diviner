@@ -1,4 +1,9 @@
-# Bundled Cardputer ADV images
+# Historical bundled Cardputer ADV images
+
+> **Historical reference only.** These binaries are not the PR #8 convergence
+> candidate and must not be substituted for its exact-source CI artifacts.
+> Candidate installation starts from the owner-evaluation procedure and the
+> current CI bundle, not from the commands on this historical page.
 
 These two historical images came from the upstream Daedric Grimoire project.
 They target the M5Stack Cardputer ADV with an ESP32-S3, 8 MB flash and USB CDC

@@ -3,9 +3,9 @@
 // audio callback while in the splash/menu and calls the trigger helpers on
 // input. Rites that want their own sound just call hal::setAudio() over it.
 #pragma once
+#include "audio_exchange.h"
 #include "dsp.h"
 #include "hal.h"
-#include <atomic>
 
 namespace uisfx {
 
@@ -21,9 +21,10 @@ struct Voice {
 inline Voice voices[4];
 inline uint8_t next = 0;
 
-// single-producer (UI) / single-consumer (audio) event ring
-inline uint8_t evq[16];
-inline std::atomic<uint8_t> qHead{0}, qTail{0};
+// Single-producer (UI) / single-consumer (audio) event ring. Reuse the same
+// aligned 32-bit bounded queue as the instruments; byte atomics on ESP32-S3
+// may route through hidden masked-CAS retry loops.
+inline audio_exchange::SpscQueue<uint8_t, 15> events;
 
 inline void start(Id id) {
     Voice &v = voices[next++ & 3];
@@ -51,23 +52,15 @@ inline void start(Id id) {
 
 inline void trigger(Id id) {
     using namespace detail;
-    const uint8_t tail = qTail.load(std::memory_order_relaxed);
-    const uint8_t next = (tail + 1) & 15;
-    if (next == qHead.load(std::memory_order_acquire)) return;
-    evq[tail] = (uint8_t)id;
-    qTail.store(next, std::memory_order_release);
+    (void)events.push(static_cast<uint8_t>(id)); // full queue deliberately drops new UI blips
 }
 
 inline void render(int16_t *out, int n) {
     using namespace detail;
-    uint8_t head = qHead.load(std::memory_order_relaxed);
-    const uint8_t tail = qTail.load(std::memory_order_acquire);
-    // Snapshot the producer tail: no unbounded draining under a flood.
-    while (head != tail) {
-        start((Id)evq[head]);
-        head = (head + 1) & 15;
-    }
-    qHead.store(head, std::memory_order_release);
+    uint8_t event = 0;
+    // Preserve the old ring's maximum of fifteen admitted events per block.
+    for (int queued = 0; queued < 15 && events.pop(event); ++queued)
+        start(static_cast<Id>(event));
     for (int i = 0; i < n; ++i) {
         float x = 0;
         for (auto &v : voices) {
