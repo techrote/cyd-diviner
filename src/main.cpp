@@ -262,7 +262,8 @@ void grimLoop() {
                       k.nav == hal::N_RIGHT;
         if (!active->key(k)) close();
         // click on list/grid moves in any rite, except over the drone's held sound
-        else if (wasNav && active != &RITE_DRONE) uisfx::trigger(uisfx::MOVE);
+        // and in GLYPHSONG, where ; . , / are punctuation being typed
+        else if (wasNav && active != &RITE_DRONE && active != &RITE_GLYPHSONG) uisfx::trigger(uisfx::MOVE);
     }
 
     uint32_t now = hal::ms();
