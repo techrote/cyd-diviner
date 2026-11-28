@@ -143,8 +143,11 @@ def audit(args):
     folder = args.directory.resolve()
     require(re.fullmatch("[0-9a-f]{40}", args.source) is not None, "Expected full source SHA")
     require(folder.is_dir(), "Bundle directory missing")
-    require(all(p.is_file() and not p.is_symlink() for p in folder.iterdir()),
-            "Bundle must contain only regular files")
+    paths = list(folder.iterdir())
+    require(len(paths) <= 32 and all(p.is_file() and not p.is_symlink() for p in paths),
+            "Bundle must contain at most 32 regular files")
+    require(sum(p.stat().st_size for p in paths) <= 256 * 1024 * 1024,
+            "Bundle exceeds the 256 MiB audit bound")
     output_name = args.output.name if args.output and args.output.resolve().parent == folder else None
     sums, cache = {}, {}
     for line in (folder / "SHA256SUMS.txt").read_text().splitlines():
@@ -169,6 +172,7 @@ def audit(args):
     capacity = re.fullmatch(r"(\d+)(MB|KB)", manifest["flash_size"])
     require(capacity is not None, "Unrecognized declared flash size")
     flash_bytes = int(capacity[1]) * (1048576 if capacity[2] == "MB" else 1024)
+    require(flash_bytes in (4 * 1048576, 8 * 1048576), "Unsupported qualified flash capacity")
     source_check = "embedded SHA/tree and manifest"
     if args.repository:
         tree, snapshot = git_identity(args.repository, args.source)
